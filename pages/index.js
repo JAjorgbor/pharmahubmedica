@@ -10,12 +10,17 @@ import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import Image from 'next/image'
 import bannerImage from '@/public/pharmarcist.jpg'
 import drugImage from '@/public/drug-image.jpg'
+import coughAndColdColdImage from '@/public/cough_n_cold-2.jpg'
 import ProductCard from '@/components/Products/ProductCard'
+import HorizontalScrollSection from '@/components/HomePage/HorizontalScrollSection'
+import Link from 'next/link'
+import CategoryCard from '@/components/Products/CategoryCard'
+import FAQSection from '@/components/FAQSection'
 
 const Index = () => {
   return (
     <>
-    {/* Start Hero Section */}
+      {/* Start Hero Section */}
       <Container component={'Section'} my={5}>
         <Stack
           container
@@ -47,7 +52,7 @@ const Index = () => {
                 color={'secondary'}
                 sx={{ borderRadius: '0' }}
               >
-                Browse Our Products
+               View Products
               </Button>
               <Button
                 variant="outlined"
@@ -63,6 +68,57 @@ const Index = () => {
           </Grid>
         </Stack>
       </Container>
+
+      <Box
+        component={'section'}
+        my={10}
+        py={10}
+        backgroundColor={'complementary.light'}
+      >
+        <Container >
+          <Divider>
+            <Typography
+              variant="h3"
+              fontSize={18}
+              fontWeight={'bold'}
+              textTransform={'uppercase'}
+            >
+              Shop by category
+            </Typography>
+          </Divider>
+          <Box mt={5} sx={{position:'relative'}}>
+            <Typography
+              fontWeight={'bold'}
+              fontSize={14}
+              variant="body1"
+              textAlign="end"
+              marginRight={'5.2%'}
+              marginBottom={3}
+              color="secondary.main"
+            >
+              <Link
+                href="#"
+                style={{ color: 'inherit', textDecoration: 'none' }}
+              >
+                View More
+              </Link>
+            </Typography>
+            <HorizontalScrollSection>
+              {Array(5)
+                .fill(0)
+                .map((item, index) => (
+                  <CategoryCard
+                    key={index}
+                    alt="demo Category"
+                    imageSrc={coughAndColdColdImage}
+                    categoryName={'Cough and cold'}
+                    sx={{ marginInline: 2, width: 280 }}
+                  />
+                ))}
+            </HorizontalScrollSection>
+          </Box>
+        </Container>
+      </Box>
       <Box
         component={'section'}
         my={10}
@@ -80,24 +136,48 @@ const Index = () => {
               Featured Products
             </Typography>
           </Divider>
-          <Grid
-            container
-            columns={'auto'}
-            mt={5}
-            justifyContent={{ xs: 'center', md: 'space-between' }}
-          >
-            {[1, 2, 3, 4].map((item) => (
-              <ProductCard
-                key={item}
-                alt="demo product"
-                price={1900}
-                imageSrc={drugImage}
-                categoryName={'Category Name'}
-                title={'Kip cool wallet'}
-                starCount={item}
-              />
-            ))}
-          </Grid>
+          <Box mt={5} sx={{position:'relative'}}>
+            <Typography
+              fontWeight={'bold'}
+              fontSize={14}
+              variant="body1"
+              textAlign="end"
+              marginRight={'5.2%'}
+              marginBottom={3}
+              color="secondary.main"
+            >
+              <Link
+                href="#"
+                style={{ color: 'inherit', textDecoration: 'none' }}
+              >
+                View More
+              </Link>
+            </Typography>
+            <Container>
+              <HorizontalScrollSection>
+                {Array(8)
+                  .fill(0)
+                  .map((item, index) => (
+                    <ProductCard
+                      key={index}
+                      alt="demo product"
+                      price={1900}
+                      imageSrc={drugImage}
+                      categoryName={'Category Name'}
+                      title={'TYLENOL Cold & Flu Severe Caplets |'}
+                      starCount={index}
+                      sx={{ marginInline: 2, width: 280 }}
+                    />
+                  ))}
+              </HorizontalScrollSection>
+            </Container>
+          </Box>
+        </Container>
+      </Box>
+      <Box component="section" mb={10}>
+        <Container maxWidth="md">
+          <Typography variant='h4' mb={4} fontWeight={'bold'}>Frequently Asked Questions</Typography>
+          <FAQSection />
         </Container>
       </Box>
     </>

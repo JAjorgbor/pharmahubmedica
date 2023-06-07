@@ -45,7 +45,7 @@ const NavLink = styled(Link)(({ theme }) => ({
       backgroundColor: theme.palette.primary.dark,
       position: 'Absolute',
       left: 0,
-      top: theme.spacing(5),
+      top: theme.spacing(5.2),
       width: '100%',
     },
   },
@@ -198,7 +198,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
         ) : (
           <Slide  direction="down" in={trigger}>
             <AppBar
-              elevation={0}
+              elevation={1}
               sx={{
                 backgroundColor: 'complementary.light',
                 display: { xs: 'none', md: 'block' },

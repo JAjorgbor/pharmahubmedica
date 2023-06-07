@@ -20,6 +20,9 @@ const customTheme = createTheme({
         dark:'#3c3c3c'
     }
   },
+  shape:{
+    borderRadius:0
+  }
 })
 
 const sidebarWidth = 240
