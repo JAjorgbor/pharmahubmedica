@@ -86,10 +86,9 @@ const ProductCard = ({
             margin: '2px',
             position: 'relative',
           }}
-          gutterBottom
           title={alt}
         >
-          <Image alt={'alt'} src={imageSrc} fill />
+          <Image alt={alt} src={imageSrc} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
         </CardMedia>
         <CardContent>
           <Typography

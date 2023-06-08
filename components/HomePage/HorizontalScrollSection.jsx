@@ -79,7 +79,7 @@ const RightArrow = () => {
       color={'secondary'}
       sx={{
         position: 'absolute',
-        height: 60,
+        height: 65,
         transform:'scale(0.8)',
         padding:0,
         right: {xs:5, md:0},

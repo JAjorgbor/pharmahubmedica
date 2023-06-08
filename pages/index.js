@@ -17,13 +17,15 @@ import Link from 'next/link'
 import CategoryCard from '@/components/Products/CategoryCard'
 import FAQSection from '@/components/FAQSection'
 import Meta from '@/components/Meta'
+import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
 const Index = () => {
   return (
     <>
-      <Meta titlePrefix={'Home'}/>
+      <Meta titlePrefix={'Home'} />
       {/* Start Hero Section */}
-      <Container component={'Section'} my={5}>
+      <Container component={'section'} my={5}>
         <Stack
           container
           gap={4}
@@ -54,19 +56,24 @@ const Index = () => {
                 color={'secondary'}
                 sx={{ borderRadius: '0' }}
               >
-                View Products
+                View Products <FormatListBulletedOutlinedIcon sx={{fontSize:'1.1rem'}}/>
               </Button>
               <Button
                 variant="outlined"
                 color={'secondary'}
                 sx={{ borderRadius: '0' }}
               >
-                Speak To A Pharmarcist
+                Speak To A Pharmarcist <LocalPhoneIcon sx={{fontSize:'1.1rem'}}/>
               </Button>
             </Grid>
           </Grid>
           <Grid sx={{ position: 'relative', width: '100%', height: '400px' }}>
-            <Image src={bannerImage} fill style={{ objectFit: 'cover' }} />
+            <Image
+              src={bannerImage}
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
           </Grid>
         </Stack>
       </Container>
@@ -85,7 +92,7 @@ const Index = () => {
               fontWeight={'bold'}
               textTransform={'uppercase'}
             >
-              Shop by category
+              Top Categories
             </Typography>
           </Divider>
           <Box mt={5} sx={{ position: 'relative' }}>
@@ -114,7 +121,7 @@ const Index = () => {
                     alt="demo Category"
                     imageSrc={coughAndColdColdImage}
                     categoryName={'Cough and cold'}
-                    sx={{ marginInline: 2, width: 270 }}
+                    sx={{ marginInline: 1, width: 270 }}
                   />
                 ))}
             </HorizontalScrollSection>
@@ -168,7 +175,7 @@ const Index = () => {
                       categoryName={'Category Name'}
                       title={'TYLENOL Cold & Flu Severe Caplets |'}
                       starCount={index}
-                      sx={{ marginInline: 2, width: 270 }}
+                      sx={{ marginInline: 1, width: 270 }}
                     />
                   ))}
               </HorizontalScrollSection>

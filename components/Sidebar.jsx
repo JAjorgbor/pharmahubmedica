@@ -87,7 +87,7 @@ const Sidebar = ({ sidebarWidth, openSidebar, setOpenSidebar }) => {
                   </ListItemButton>
                 </NavLink>
               </ListItem>
-              <Divider />
+              <Divider sx={{backgroundColor:'complementary.dark'}}/>
             </>
           ))}
         </List>
