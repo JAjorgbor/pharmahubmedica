@@ -74,10 +74,9 @@ const CategoryCard = ({
             margin: '2px',
             position: 'relative',
           }}
-          gutterBottom
           title={alt}
         >
-          <Image alt={'alt'} src={imageSrc} fill style={{objectFit:'cover'}} />
+          <Image alt={'alt'} src={imageSrc} fill style={{objectFit:'cover'}} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
         </CardMedia>
         <CardContent>
           <Typography

@@ -4,6 +4,8 @@ import Sidebar from './Sidebar'
 import Footer from './Footer'
 import { useState, useEffect } from 'react'
 import { ThemeProvider } from '@emotion/react'
+import BackToTopButton from './BackToTopButton'
+import ContactSpeedDial from './ContactSpeedDial'
 
 const customTheme = createTheme({
   palette: {
@@ -43,6 +45,8 @@ const Layout = ({ children }) => {
         <Box component={'main'} open={openSidebar} sx={{color:'complementary.dark'}}>
           {children}
         </Box>
+        <ContactSpeedDial />
+        <BackToTopButton />
         <Footer />
       </ThemeProvider>
     </>

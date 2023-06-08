@@ -16,13 +16,11 @@ import {
   useScrollTrigger,
 } from '@mui/material'
 // Icons
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
 import SearchIcon from '@mui/icons-material/Search'
-import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined'
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import { red } from '@mui/material/colors'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import { styled } from '@mui/material/styles'
 import Link from 'next/link'
@@ -63,157 +61,67 @@ const SearchField = styled('input')(({ theme }) => ({
 }))
 
 export default function Header({ openSidebar, setOpenSidebar }) {
-  const theme = useTheme()
+  // const theme = useTheme()
   const trigger = useScrollTrigger({
     threshold: 200, // Pixels scrolled before trigger is activated
     disableHysteresis: true, // Disable the "hysteresis" effect
   })
   return (
     <>
-      <Box component="header">
-        <Container
-          sx={
-            {
-              // border: '1px solid black'
-            }
-          }
+      <Box component="header" id="header">
+        {/* Start Top Nav*/}
+        <AppBar
+          elevation={0}
+          position='static'
+          sx={{ visibility: { xs: trigger && 'hidden', md: 'visible', backgroundColor:'#ffff' } }}
         >
-          <Grid
-            container
-            spacing={{ md: 2 }}
-            sx={{
-              justifyContent: { xs: '', md: 'space-between' },
-              alignItems: 'center',
-              width: '100%',
-            }}
-          >
-            <Grid
-              container
-              direction="row"
-              sx={{ flexGrow: { xs: '1', md: '' }, alignItems: 'center' }}
-            >
-              <IconButton
-                sx={{ display: { md: 'none' } }}
-                onClick={() => {
-                  setOpenSidebar(!openSidebar)
-                }}
-              >
-                <MenuIcon sx={{ fontSize: '1.5rem' }} />
-              </IconButton>
-              <Box
-                sx={{
-                  position: 'relative',
-                  minWidth: '100px',
-                  height: '80px',
-                  display: 'none',
-                  '@media(min-width:300px)': { display: 'block' },
-                }}
-              >
-                <Image src={logo} fill alt="logo" />
-              </Box>
-            </Grid>
-            <Grid
-              md={5}
-              sx={{
-                display: 'flex',
-                justifyContent: { xs: 'end', md: 'center' },
-                alignItems: 'center',
-              }}
-            >
-              <SearchField
-                sx={{
-                  display: { xs: 'none', md: 'inline' },
-                }}
-              />
-              <IconButton
-                size="large"
-                aria-label="Search Products"
-                //   color="inherit"
-                sx={{ display: { md: 'none' } }}
-              >
-                <SearchIcon sx={{ fontSize: '1.8rem' }} />
-              </IconButton>
-            </Grid>
-            <Grid md={''}>
-              <Card elevation={0} sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <CardHeader
-                  avatar={
-                    <Avatar
-                      aria-label="Call Us"
-                      sx={{
-                        height: 50,
-                        width: 50,
-                        backgroundColor: 'transparent',
-                        marginRight: -2,
-                      }}
-                    >
-                      <LocalPhoneOutlinedIcon
-                        sx={{ fontSize: '2rem', color: 'gray' }}
-                      />
-                    </Avatar>
-                  }
-                  title="Call Us Now"
-                  subheader="+2340001122"
-                  titleTypographyProps={{
-                    textTransform: 'uppercase',
-                    fontSize: '0.7rem',
-                    fontWeight: 'bold',
-                  }}
-                  subheaderTypographyProps={{
-                    fontSize: '1.4rem',
-                    fontWeight: '600',
-                    sx: {
-                      color: 'primary.dark',
-                    },
-                  }}
-                />
-              </Card>
-            </Grid>
-            <Grid>
-              <IconButton>
-                <PersonIcon sx={{ fontSize: '1.5rem' }} />
-              </IconButton>
-            </Grid>
-            <Grid>
-              <IconButton>
-                <ShoppingCartIcon
-                  sx={{ fontSize: '1.8rem', fontSize: '1.5rem' }}
-                />
-              </IconButton>
-            </Grid>
-          </Grid>
-        </Container>
-        {!trigger ? (
+          <TopNavContent
+            openSidebar={openSidebar}
+            setOpenSidebar={setOpenSidebar}
+          />
+        </AppBar>
+
+        <Slide direction="down" in={trigger} sx={{ display: { md: 'none' } ,backgroundColor:'#ffff'}}>
+          <AppBar elevation={1} sx={{}}>
+            <TopNavContent
+              openSidebar={openSidebar}
+              setOpenSidebar={setOpenSidebar}
+            />
+          </AppBar>
+        </Slide>
+        {/* End Top Nav*/}
+        {/* Start Bottom Nav*/}
+
+        <AppBar
+          elevation={0}
+          position="static"
+          sx={{
+            backgroundColor: 'complementary.light',
+
+            visibility: trigger && 'hidden',
+            display: { xs: 'none', md: 'block' },
+          }}
+        >
+          <BottomNavContent />
+        </AppBar>
+        <Slide direction="down" in={trigger}>
           <AppBar
-            elevation={0}
-            position="1static"
+            elevation={1}
             sx={{
               backgroundColor: 'complementary.light',
-
               display: { xs: 'none', md: 'block' },
             }}
           >
-            <AppBarContent />
+            <BottomNavContent />
           </AppBar>
-        ) : (
-          <Slide  direction="down" in={trigger}>
-            <AppBar
-              elevation={1}
-              sx={{
-                backgroundColor: 'complementary.light',
-                display: { xs: 'none', md: 'block' },
-              }}
-            >
-              <AppBarContent />
-            </AppBar>
-          </Slide>
-        )}
+          {/* End Bottom Nav*/}
+        </Slide>
       </Box>
     </>
   )
 }
 
-function AppBarContent() {
+function BottomNavContent() {
   const router = useRouter()
   const { pathname } = router
   const links = [
@@ -252,6 +160,125 @@ function AppBarContent() {
           </Stack>
         </Toolbar>
       </Container>
+    </>
+  )
+}
+function TopNavContent({ openSidebar, setOpenSidebar }) {
+  return (
+    <>
+      <Toolbar>
+        <Container>
+          <Grid
+            container
+            spacing={{ md: 2 }}
+            sx={{
+              justifyContent: { xs: '', md: 'space-between' },
+              alignItems: 'center',
+              width: '100%',
+            }}
+          >
+            <Grid
+              container
+              direction="row"
+              sx={{ flexGrow: { xs: '1', md: '' }, alignItems: 'center' }}
+            >
+              <IconButton
+                sx={{ display: { md: 'none' } }}
+                onClick={() => {
+                  setOpenSidebar(!openSidebar)
+                }}
+              >
+                <MenuIcon sx={{ fontSize: '1.5rem' }} />
+              </IconButton>
+              <Box
+                sx={{
+                  position: 'relative',
+                  minWidth: '100px',
+                  height: '80px',
+                  display: 'none',
+                  '@media(min-width:300px)': { display: 'block' },
+                }}
+              >
+                <Image
+                  src={logo}
+                  fill
+                  alt="logo"
+                  // sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </Box>
+            </Grid>
+            <Grid
+              md={5}
+              sx={{
+                display: 'flex',
+                justifyContent: { xs: 'end', md: 'center' },
+                alignItems: 'center',
+              }}
+            >
+              <SearchField
+                sx={{
+                  display: { xs: 'none', md: 'inline' },
+                }}
+              />
+              <IconButton
+                size="large"
+                aria-label="Search Products"
+                //   color="inherit"
+                sx={{ display: { md: 'none' } }}
+              >
+                <SearchIcon sx={{ fontSize: '1.8rem' }} />
+              </IconButton>
+            </Grid>
+            <Grid md={''}>
+              <Card elevation={0} sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      aria-label="Call Us"
+                      sx={{
+                        height: 50,
+                        width: 50,
+                        backgroundColor: 'transparent',
+                        marginRight: -2,
+                      }}
+                    >
+                      <LocalPhoneIcon
+                        sx={{ fontSize: '2rem', color: 'gray' }}
+                      />
+                    </Avatar>
+                  }
+                  title="Call Us Now"
+                  subheader="+2340001122"
+                  titleTypographyProps={{
+                    textTransform: 'uppercase',
+                    fontSize: '0.7rem',
+                    fontWeight: 'bold',
+                  }}
+                  subheaderTypographyProps={{
+                    fontSize: '1.4rem',
+                    fontWeight: '600',
+                    sx: {
+                      color: 'primary.dark',
+                    },
+                  }}
+                />
+              </Card>
+            </Grid>
+            <Grid>
+              <IconButton>
+                <PersonIcon sx={{ fontSize: '1.5rem' }} />
+              </IconButton>
+            </Grid>
+            <Grid>
+              <IconButton>
+                <ShoppingCartIcon
+                  sx={{ fontSize: '1.8rem', fontSize: '1.5rem' }}
+                />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Container>
+      </Toolbar>
     </>
   )
 }

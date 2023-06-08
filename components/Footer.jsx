@@ -49,7 +49,7 @@ const Footer = () => {
           >
             <Grid alignSelf={'center'} xs={12} sm={'auto'} textAlign={{xs:'center',sm:'start'}} >
               <FooterNavLink href="/">
-                <Image src={logo}  alt='Logo'/>
+                <Image src={logo}  alt='Logo' sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
               </FooterNavLink>
             </Grid>
             <Grid>
@@ -159,11 +159,12 @@ const Footer = () => {
               >
                 Popular Categories
               </Typography>
-              {popularCategoriesLinks.map((link) => (
+              {popularCategoriesLinks.map((link, index) => (
                 <Typography
                   variant="caption"
                   textTransform={'uppercase'}
                   component={'p'}
+                  key={index}
                 >
                   <FooterNavLink href={link.path}>{link.text}</FooterNavLink>
                 </Typography>
