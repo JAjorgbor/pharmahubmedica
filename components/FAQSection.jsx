@@ -23,7 +23,14 @@ const FAQSection = () => {
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography variant='h6' sx={{fontWeight:'bold', fontSize: 15, textTransform:'capitalize' }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: 15,
+              textTransform: 'capitalize',
+            }}
+          >
             Is Pharmahubmedica a Registered Nigerian Pharmarcy
           </Typography>
         </AccordionSummary>
@@ -44,9 +51,15 @@ const FAQSection = () => {
           aria-controls="panel2bh-content"
           id="panel2bh-header"
         >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>Users</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            You are currently not an owner
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: 15,
+              textTransform: 'capitalize',
+            }}
+          >
+            Can I make payments on this website
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -67,11 +80,15 @@ const FAQSection = () => {
           aria-controls="panel3bh-content"
           id="panel3bh-header"
         >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Advanced settings
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            Filtering has been entirely disabled for whole web server
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: 15,
+              textTransform: 'capitalize',
+            }}
+          >
+            Do you make deliveries
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -91,8 +108,15 @@ const FAQSection = () => {
           aria-controls="panel4bh-content"
           id="panel4bh-header"
         >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Personal data
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: 15,
+              textTransform: 'capitalize',
+            }}
+          >
+            Do you deliver outside abuja
           </Typography>
         </AccordionSummary>
         <AccordionDetails>

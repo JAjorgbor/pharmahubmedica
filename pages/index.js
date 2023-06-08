@@ -16,10 +16,12 @@ import HorizontalScrollSection from '@/components/HomePage/HorizontalScrollSecti
 import Link from 'next/link'
 import CategoryCard from '@/components/Products/CategoryCard'
 import FAQSection from '@/components/FAQSection'
+import Meta from '@/components/Meta'
 
 const Index = () => {
   return (
     <>
+      <Meta titlePrefix={'Home'}/>
       {/* Start Hero Section */}
       <Container component={'Section'} my={5}>
         <Stack
@@ -52,7 +54,7 @@ const Index = () => {
                 color={'secondary'}
                 sx={{ borderRadius: '0' }}
               >
-               View Products
+                View Products
               </Button>
               <Button
                 variant="outlined"
@@ -75,7 +77,7 @@ const Index = () => {
         py={10}
         backgroundColor={'complementary.light'}
       >
-        <Container >
+        <Container>
           <Divider>
             <Typography
               variant="h3"
@@ -86,7 +88,7 @@ const Index = () => {
               Shop by category
             </Typography>
           </Divider>
-          <Box mt={5} sx={{position:'relative'}}>
+          <Box mt={5} sx={{ position: 'relative' }}>
             <Typography
               fontWeight={'bold'}
               fontSize={14}
@@ -112,7 +114,7 @@ const Index = () => {
                     alt="demo Category"
                     imageSrc={coughAndColdColdImage}
                     categoryName={'Cough and cold'}
-                    sx={{ marginInline: 2, width: 280 }}
+                    sx={{ marginInline: 2, width: 270 }}
                   />
                 ))}
             </HorizontalScrollSection>
@@ -136,7 +138,7 @@ const Index = () => {
               Featured Products
             </Typography>
           </Divider>
-          <Box mt={5} sx={{position:'relative'}}>
+          <Box mt={5} sx={{ position: 'relative' }}>
             <Typography
               fontWeight={'bold'}
               fontSize={14}
@@ -166,7 +168,7 @@ const Index = () => {
                       categoryName={'Category Name'}
                       title={'TYLENOL Cold & Flu Severe Caplets |'}
                       starCount={index}
-                      sx={{ marginInline: 2, width: 280 }}
+                      sx={{ marginInline: 2, width: 270 }}
                     />
                   ))}
               </HorizontalScrollSection>
@@ -176,7 +178,9 @@ const Index = () => {
       </Box>
       <Box component="section" mb={10}>
         <Container maxWidth="md">
-          <Typography variant='h4' mb={4} fontWeight={'bold'}>Frequently Asked Questions</Typography>
+          <Typography variant="h4" mb={4} fontWeight={'bold'}>
+            Frequently Asked Questions
+          </Typography>
           <FAQSection />
         </Container>
       </Box>

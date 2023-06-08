@@ -74,14 +74,14 @@ const ProductCard = ({
   return (
     <>
       <CustomCard
-        sx={{ width: 275, borderRadius: '0' }}
+        sx={{ width: 270, borderRadius: '0' }}
         px={3}
         elevation={0}
         {...props}
       >
         <CardMedia
           sx={{
-            height: 220,
+            height: 200,
             //  width: 200,
             margin: '2px',
             position: 'relative',
