@@ -15,7 +15,7 @@ const ContactSpeedDial = () => {
         open={openSpeedDial}
         onClick={()=>setOpenSpeedDial(!openSpeedDial)}
         FabProps={{
-            color:"secondary"
+            color:"primary"
         }}
       >
           <SpeedDialAction

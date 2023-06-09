@@ -10,7 +10,7 @@ import {
   styled,
 } from '@mui/material'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
 import Image from 'next/image'
 
 const CustomCard = styled(Card)(({ theme }) => ({
@@ -21,7 +21,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
     content: "' '",
     width: '100%',
     height: '100%',
-    border: `1px solid ${theme.palette.secondary.main} `,
+    border: `1px solid ${theme.palette.primary.main} `,
     position: 'absolute',
     opacity: '0',
     transition: '1s ease-in-out',
@@ -74,7 +74,7 @@ const ProductCard = ({
   return (
     <>
       <CustomCard
-        sx={{ width: 270, borderRadius: '0' }}
+        sx={{ maxWidth: 280, borderRadius: '0' }}
         px={3}
         elevation={0}
         {...props}
@@ -88,7 +88,13 @@ const ProductCard = ({
           }}
           title={alt}
         >
-          <Image alt={alt} src={imageSrc} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
+          <Image
+            alt={alt}
+            src={imageSrc}
+            style={{objectFit:'cover'}}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </CardMedia>
         <CardContent>
           <Typography
@@ -124,42 +130,45 @@ const ProductCard = ({
             variant="h6"
             fontSize={20}
             textAlign={'center'}
-            color={'secondary.main'}
+            color={'primary.main'}
           >
             {' '}
             {formatAmount(price)}
           </Typography>
         </CardContent>
-        <CardActions sx={{ justifyContent: 'center', paddingBottom: 3 }}>
+        <CardActions
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: { xs: 'column', md: 'row' },
+            rowGap: 2,
+            paddingBottom: 3,
+          }}
+        >
           <Button
             size="small"
             variant="contained"
-            color="secondary"
+            color="primary"
             sx={{
-              borderRadius: 0,
               fontSize: 13,
               textTransform: 'uppercase',
-              display: 'flex',
-              alignItems: 'center',
             }}
-            >
+          >
             Add To Cart
-            <ShoppingBagOutlinedIcon sx={{ fontSize: 16 }} /> 
+            <ShoppingBagOutlinedIcon sx={{ fontSize: 16 }} />
           </Button>
           <Button
             size="small"
             variant="outlined"
-            color="secondary"
+            color="primary"
             sx={{
-              borderRadius: 0,
               fontSize: 13,
               textTransform: 'uppercase',
-              display: 'flex',
-              alignItems: 'center',
             }}
-            >
+          >
             View Details
-            <AssignmentOutlinedIcon sx={{ fontSize: 16 }} /> 
+            <AssignmentOutlinedIcon sx={{ fontSize: 16 }} />
           </Button>
         </CardActions>
       </CustomCard>

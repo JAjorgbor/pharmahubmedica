@@ -19,7 +19,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
 import SearchIcon from '@mui/icons-material/Search'
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import { styled } from '@mui/material/styles'
@@ -36,11 +36,11 @@ const NavLink = styled(Link)(({ theme }) => ({
   color: theme.palette.complementary.dark,
   //   If the link is active
   '&.active, &:hover': {
-    color: theme.palette.primary.dark,
+    color: theme.palette.primary.main,
     '&::before': {
       height: '4px',
       content: '""',
-      backgroundColor: theme.palette.primary.dark,
+      backgroundColor: theme.palette.primary.main,
       position: 'Absolute',
       left: 0,
       top: theme.spacing(5.2),
@@ -72,8 +72,14 @@ export default function Header({ openSidebar, setOpenSidebar }) {
         {/* Start Top Nav*/}
         <AppBar
           elevation={0}
-          position='static'
-          sx={{ visibility: { xs: trigger && 'hidden', md: 'visible', backgroundColor:'#ffff' } }}
+          position="static"
+          sx={{
+            visibility: {
+              xs: trigger && 'hidden',
+              md: 'visible',
+              backgroundColor: '#ffff',
+            },
+          }}
         >
           <TopNavContent
             openSidebar={openSidebar}
@@ -81,7 +87,11 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           />
         </AppBar>
 
-        <Slide direction="down" in={trigger} sx={{ display: { md: 'none' } ,backgroundColor:'#ffff'}}>
+        <Slide
+          direction="down"
+          in={trigger}
+          sx={{ display: { md: 'none' }, backgroundColor: '#ffff' }}
+        >
           <AppBar elevation={1} sx={{}}>
             <TopNavContent
               openSidebar={openSidebar}
@@ -199,12 +209,14 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
                   '@media(min-width:300px)': { display: 'block' },
                 }}
               >
-                <Image
-                  src={logo}
-                  fill
-                  alt="logo"
-                  // sizes="(max-width: 768px) 100vw, 50vw"
-                />
+                <Link href={'/'}>
+                  <Image
+                    src={logo}
+                    fill
+                    alt="logo"
+                    // sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </Link>
               </Box>
             </Grid>
             <Grid
@@ -258,7 +270,7 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
                     fontSize: '1.4rem',
                     fontWeight: '600',
                     sx: {
-                      color: 'primary.dark',
+                      color: 'primary.main',
                     },
                   }}
                 />

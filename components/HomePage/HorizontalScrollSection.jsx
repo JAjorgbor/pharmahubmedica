@@ -38,7 +38,7 @@ const LeftArrow = () => {
       }}
       disabled={disabled}
       variant={'contained'}
-      color={'secondary'}
+      color={'primary'}
       sx={{
         position: 'absolute',
         transform:'scale(0.8)',
@@ -76,7 +76,7 @@ const RightArrow = () => {
       }}
       disabled={disabled}
       variant={'contained'}
-      color={'secondary'}
+      color={'primary'}
       sx={{
         position: 'absolute',
         height: 65,
