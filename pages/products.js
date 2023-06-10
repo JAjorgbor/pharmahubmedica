@@ -11,15 +11,18 @@ import {
   Toolbar,
   useScrollTrigger,
   Slide,
+  Pagination,
 } from '@mui/material'
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
 import drugImage from '@/public/drug-image.jpg'
 import Meta from '@/components/Meta'
 import Filter from '@/components/Products/Filter'
+import Link from 'next/link'
+import BreadCrumbs from '@/components/BreadCrumbs'
 
 const Products = () => {
   const [openFilterDrawer, setOpenFilterDrawer] = useState(false)
-  const trigger = useScrollTrigger({threshold:220, disableHysteresis: true })
+  const trigger = useScrollTrigger({ threshold: 220, disableHysteresis: true })
   return (
     <>
       <Meta titlePrefix={'Products'} />
@@ -43,24 +46,31 @@ const Products = () => {
         />
       </Drawer>
       <Container>
-          <Toolbar
-            sx={{
-              width: '100%',
-              display: { md: 'none' },
-              visibility:trigger?'hidden':'visible',
-              backgroundColor: 'complementary.light',
-            }}
-          >
-            <Container>
-              <Button
-                color="primary"
-                variant="outlined"
-                onClick={() => setOpenFilterDrawer(true)}
-              >
-               Filter <FilterAltOutlinedIcon sx={{fontSize:'1.1rem'}}/> 
-              </Button>
-            </Container>
-          </Toolbar>
+        {/* Breadcrumbs */}
+        <BreadCrumbs
+          links={[
+            { title: 'Home', path: '/' },
+            { title: 'Products', path: '#' },
+          ]}
+        />
+        <Toolbar
+          sx={{
+            width: '100%',
+            display: { md: 'none' },
+            visibility: trigger ? 'hidden' : 'visible',
+            backgroundColor: 'complementary.light',
+          }}
+        >
+          <Container>
+            <Button
+              color="primary"
+              variant="outlined"
+              onClick={() => setOpenFilterDrawer(true)}
+            >
+              Filter <FilterAltOutlinedIcon sx={{ fontSize: '1.1rem' }} />
+            </Button>
+          </Container>
+        </Toolbar>
         <Slide direction="down" in={trigger}>
           <Toolbar
             sx={{
@@ -79,12 +89,17 @@ const Products = () => {
                 variant="outlined"
                 onClick={() => setOpenFilterDrawer(true)}
               >
-                Filter <FilterAltOutlinedIcon sx={{fontSize:'1.1rem'}}/> 
+                Filter <FilterAltOutlinedIcon />
               </Button>
             </Container>
           </Toolbar>
         </Slide>
-        <Box sx={{ display: 'flex', position: 'relative' }} gap={4} py={10}>
+        <Box
+          sx={{ display: 'flex', position: 'relative' }}
+          gap={4}
+          pt={4}
+          pb={10}
+        >
           <Box
             sx={{
               width: 240,
@@ -106,29 +121,32 @@ const Products = () => {
               }}
             />
           </Box>
-          <Grid
-            container
-            // gap={2}
-            rowGap={3}
-            justifyContent={'center'}
-            sx={{ flexGrow: 1 }}
-          >
-            {Array(12)
-              .fill(0)
-              .map((item, index) => (
-                <Grid item xs={6} sm={4} >
-                  <ProductCard
-                    key={index}
-                    alt="demo product"
-                    price={1900}
-                    imageSrc={drugImage}
-                    categoryName={'Category Name'}
-                    title={'TYLENOL Cold & Flu Severe Caplets '}
-                    starCount={index}
-                  />
-                </Grid>
-              ))}
-          </Grid>
+          <Box sx={{display:'flex',flexDirection:'column',gap:4,alignItems:'center'}}>
+            <Grid
+              container
+              // gap={2}
+              rowGap={3}
+              justifyContent={'center'}
+              sx={{ flexGrow: 1 }}
+            >
+              {Array(13)
+                .fill(0)
+                .map((item, index) => (
+                  <Grid item xs={6} sm={4}>
+                    <ProductCard
+                      key={index}
+                      alt="demo product"
+                      price={1900}
+                      imageSrc={drugImage}
+                      categoryName={'Category Name'}
+                      title={'TYLENOL Cold & Flu Severe Caplets '}
+                      starCount={index}
+                    />
+                  </Grid>
+                ))}
+            </Grid>
+          <Pagination count={10} color='primary' variant="outlined" shape="rounded" />
+          </Box>
         </Box>
       </Container>
     </>

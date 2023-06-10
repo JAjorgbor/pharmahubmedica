@@ -56,7 +56,7 @@ const CategoryCard = ({ alt, imageSrc, title, categoryName, ...props }) => {
   return (
     <>
       <CustomCard
-        sx={{ maxWidth: 275, borderRadius: '0' }}
+        sx={{ maxWidth: 260, borderRadius: '0' }}
         px={3}
         elevation={0}
         {...props}
