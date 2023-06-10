@@ -10,7 +10,7 @@ const ContactSpeedDial = () => {
   <SpeedDial
         ariaLabel="SpeedDial basic example"
         sx={{ position: 'fixed', bottom: 16, left: 20, }}
-        tooltipTitle="Contact us"
+        tooltiptitle="Contact us"
         icon={<ChatIcon />}
         open={openSpeedDial}
         onClick={()=>setOpenSpeedDial(!openSpeedDial)}

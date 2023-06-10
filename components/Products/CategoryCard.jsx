@@ -52,7 +52,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
   },
 }))
 
-const CategoryCard = ({ alt, imageSrc, title, categoryName, ...props }) => {
+const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
   return (
     <>
       <CustomCard
@@ -71,7 +71,7 @@ const CategoryCard = ({ alt, imageSrc, title, categoryName, ...props }) => {
           title={alt}
         >
           <Image
-            alt={'alt'}
+            alt={title}
             src={imageSrc}
             fill
             style={{ objectFit: 'cover' }}
@@ -87,7 +87,7 @@ const CategoryCard = ({ alt, imageSrc, title, categoryName, ...props }) => {
             fontSize={20}
             gutterBottom
           >
-            {categoryName}
+            {title}
           </Typography>
         </CardContent>
         <CardActions sx={{ justifyContent: 'center', paddingBottom: 3 }}>
