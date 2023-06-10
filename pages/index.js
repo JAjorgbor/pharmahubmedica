@@ -70,6 +70,7 @@ const Index = () => {
           <Grid sx={{ position: 'relative', width: '100%', height: '400px' }}>
             <Image
               src={bannerImage}
+              alt={'picture of pharmarcist'}
               fill
               style={{ objectFit: 'cover' }}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -120,7 +121,7 @@ const Index = () => {
                     key={index}
                     alt="demo Category"
                     imageSrc={coughAndColdColdImage}
-                    categoryName={'Cough and cold'}
+                    title={'Cough and cold'}
                     sx={{ marginInline: 1, width: 270 }}
                   />
                 ))}

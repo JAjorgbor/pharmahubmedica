@@ -41,28 +41,37 @@ const Categories = () => {
             alignItems: 'center',
           }}
           py={8}
-        >
+          >
           <Grid
             container
-            // gap={{xs:1 ,sm:0}}
+            gap={{xs:1 ,sm:2}}
             justifyContent={'center'}
-            alignItems={'center'}
           >
             {Array(13)
               .fill(0)
               .map((item, index) => (
-                <Grid item xs={12} sm={6} md={4} lg={3}>
+                <Grid
+                  item
+                  xs={''}
+                  sm={5}
+                  md={4}
+                  lg={3}
+                  sx={{ justifySelf: 'center' }}
+                >
                   <CategoryCard
                     key={index}
                     alt="demo Category"
                     imageSrc={coughAndColdColdImage}
-                    categoryName={'Cough and cold'}
+                    title={'Cough and cold'}
+                    sx={{
+                      width: { xs: 300, sm: 'auto' },
+                    }}
                   />{' '}
                 </Grid>
               ))}
           </Grid>
           <Pagination
-            count={10}
+            count={5}
             color="primary"
             variant="outlined"
             shape="rounded"

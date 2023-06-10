@@ -20,27 +20,30 @@ const Filter = ({ ...props }) => {
     <>
       <Paper {...props}>
         <Box p={2} border={'1px solid lightgray'}>
-            <Button textTransform='uppercase' variant='contained' color='primary'>Reset All Filters</Button>
+          <Button textTransform="uppercase" variant="contained" color="primary">
+            Reset All Filters
+          </Button>
         </Box>
-        <Accordion
-          elevation={0}
-          sx={{ color:'complementary.dark' }}
-          
-        >
+        <Accordion elevation={0} sx={{ color: 'complementary.dark' }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
-            sx={{borderBottom: '1px solid lightgray'}}
+            sx={{ borderBottom: '1px solid lightgray' }}
           >
-            <Typography sx={{ textTransform: 'uppercase', fontWeight:'bold' }}>price</Typography>
+            <Typography
+              sx={{
+                fontSize: 14,
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+              }}
+            >
+              price
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <FormControl>
-              <RadioGroup
-                defaultValue="above 5000"
-                name="radio-buttons-group"
-              >
+              <RadioGroup defaultValue="above 5000" name="radio-buttons-group">
                 <FormControlLabel
                   value="under 1000"
                   control={<Radio />}
@@ -62,7 +65,7 @@ const Filter = ({ ...props }) => {
         </Accordion>
         <Accordion
           elevation={0}
-        //   sx={{ border: '1px solid lightgray' }}
+          //   sx={{ border: '1px solid lightgray' }}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -70,7 +73,15 @@ const Filter = ({ ...props }) => {
             id="panel2a-header"
             sx={{ borderBottom: '1px solid lightgray' }}
           >
-            <Typography sx={{textTransform:'uppercase', fontWeight:'bold'}}>Category</Typography>
+            <Typography
+              sx={{
+                fontSize: 14,
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+              }}
+            >
+              Category
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <FormControl>

@@ -14,8 +14,8 @@ const BreadCrumbs = ({ links }) => {
   return (
     <>
       <Breadcrumbs mt={{md:2}} separator={<NavigateNextIcon fontSize="small" />}>
-        {links.map((link) => {
-            return <StyledLink href={link.path}>{link.title}</StyledLink>
+        {links.map((link, index) => {
+            return <StyledLink key={index} href={link.path}>{link.title}</StyledLink>
         })}
       </Breadcrumbs>
     </>

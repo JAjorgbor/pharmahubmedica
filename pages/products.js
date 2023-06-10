@@ -145,7 +145,7 @@ const Products = () => {
                   </Grid>
                 ))}
             </Grid>
-          <Pagination count={10} color='primary' variant="outlined" shape="rounded" />
+          <Pagination count={5} color='primary' variant="outlined" shape="rounded" />
           </Box>
         </Box>
       </Container>
