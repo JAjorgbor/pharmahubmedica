@@ -9,7 +9,7 @@ import {
   Typography,
   styled,
 } from '@mui/material'
-import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
+import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
 import Image from 'next/image'
 
 const CustomCard = styled(Card)(({ theme }) => ({
@@ -20,7 +20,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
     content: "' '",
     width: '100%',
     height: '100%',
-    border: `1px solid ${theme.palette.secondary.main} `,
+    border: `1px solid ${theme.palette.primary.main} `,
     position: 'absolute',
     opacity: '0',
     transition: '1s ease-in-out',
@@ -52,17 +52,11 @@ const CustomCard = styled(Card)(({ theme }) => ({
   },
 }))
 
-const CategoryCard = ({
-  alt,
-  imageSrc,
-  title,
-  categoryName,
-  ...props
-}) => {
+const CategoryCard = ({ alt, imageSrc, title, categoryName, ...props }) => {
   return (
     <>
       <CustomCard
-        sx={{ width: 275, borderRadius: '0' }}
+        sx={{ maxWidth: 260, borderRadius: '0' }}
         px={3}
         elevation={0}
         {...props}
@@ -76,7 +70,13 @@ const CategoryCard = ({
           }}
           title={alt}
         >
-          <Image alt={'alt'} src={imageSrc} fill style={{objectFit:'cover'}} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
+          <Image
+            alt={'alt'}
+            src={imageSrc}
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </CardMedia>
         <CardContent>
           <Typography
@@ -94,7 +94,7 @@ const CategoryCard = ({
           <Button
             size="small"
             variant="contained"
-            color="secondary"
+            color="primary"
             sx={{
               borderRadius: 0,
               fontSize: 13,
@@ -103,7 +103,7 @@ const CategoryCard = ({
               alignItems: 'center',
             }}
           >
-            View Products {' '}
+            View Products{' '}
             <FormatListBulletedOutlinedIcon sx={{ fontSize: 16 }} />
           </Button>
         </CardActions>

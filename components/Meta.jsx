@@ -9,7 +9,7 @@ export default function Meta({
 }) {
   return (
     <Head>
-      <title>{`${titlePrefix} — ${titleSuffix}`}</title>
+      <title>{`${titlePrefix} | ${titleSuffix}`}</title>
       <meta name="description" content={description} />
       {/* Default Meta */}
       <meta charSet="utf-8" />

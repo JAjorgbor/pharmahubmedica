@@ -1,4 +1,4 @@
-import { Box, Container, createTheme, styled } from '@mui/material'
+import { Box, Container, CssBaseline, createTheme, styled } from '@mui/material'
 import Header from './Header'
 import Sidebar from './Sidebar'
 import Footer from './Footer'
@@ -10,7 +10,7 @@ import ContactSpeedDial from './ContactSpeedDial'
 const customTheme = createTheme({
   palette: {
     primary: {
-        main: '#1a20f6',
+        main: '#031d91',
     },
     secondary: {
       main: '#c91919',
@@ -33,6 +33,7 @@ const Layout = ({ children }) => {
 
   return (
     <>
+    <CssBaseline />
       <ThemeProvider theme={customTheme}>
         <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
 

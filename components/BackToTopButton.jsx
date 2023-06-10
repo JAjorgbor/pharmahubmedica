@@ -13,8 +13,8 @@ const BackToTopButton = () => {
           aria-label="scroll back to top"
           //   size={{ xs: 'small', md: 'medium', lg: 'large' }}
           size="medium"
-          color="secondary"
-          sx={{ position: 'fixed', bottom: 0, right: 10, borderRadius: 10 }}
+          color="primary"
+          sx={{ position: 'fixed', bottom: 0, right: 16, borderRadius: 10 }}
           onClick={() => {
             document
               .getElementById('header')

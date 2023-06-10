@@ -37,7 +37,7 @@ const Index = () => {
               variant="h1"
               fontSize={35}
               fontWeight={'bold'}
-              color={'primary.dark'}
+              color={'primary.main'}
               gutterBottom
 
               // sx={{ width: '50%' }}
@@ -53,14 +53,14 @@ const Index = () => {
             <Grid container mt={4} gap={3} columns={2}>
               <Button
                 variant="contained"
-                color={'secondary'}
+                color={'primary'}
                 sx={{ borderRadius: '0' }}
               >
                 View Products <FormatListBulletedOutlinedIcon sx={{fontSize:'1.1rem'}}/>
               </Button>
               <Button
                 variant="outlined"
-                color={'secondary'}
+                color={'primary'}
                 sx={{ borderRadius: '0' }}
               >
                 Speak To A Pharmarcist <LocalPhoneIcon sx={{fontSize:'1.1rem'}}/>
@@ -103,7 +103,7 @@ const Index = () => {
               textAlign="end"
               marginRight={'5.2%'}
               marginBottom={3}
-              color="secondary.main"
+              color="primary.main"
             >
               <Link
                 href="#"
@@ -153,7 +153,7 @@ const Index = () => {
               textAlign="end"
               marginRight={'5.2%'}
               marginBottom={3}
-              color="secondary.main"
+              color="primary.main"
             >
               <Link
                 href="#"
