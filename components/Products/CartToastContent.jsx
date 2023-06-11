@@ -36,7 +36,6 @@ const CartToastContent = ({ imageSrc, productName }) => {
             },
           }}
         />
-        <Divider />
         <CardActions>
             <Button variant='contained'>View Cart</Button>
         </CardActions>

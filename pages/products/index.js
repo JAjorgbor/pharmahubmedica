@@ -136,8 +136,8 @@ const Products = () => {
           >
             <Grid
               container
-              gap={2}
-              // rowGap={3}
+              columnGap={1}
+              rowGap={3}
               justifyContent={'center'}
               sx={{ flexGrow: 1 }}
             >
@@ -153,7 +153,7 @@ const Products = () => {
                       categoryName={'Category Name'}
                       title={'TYLENOL Cold & Flu Severe Caplets '}
                       starCount={index}
-                      otherStyles={{ width: { xs: 190, sm: 280 } }}
+                      otherStyles={{ width: { xs: 165,sm:200, md: 280 } }}
                     />
                   </Grid>
                 ))}
