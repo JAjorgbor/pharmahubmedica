@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
+import EastOutlinedIcon from '@mui/icons-material/EastOutlined'
 import Image from 'next/image'
 import bannerImage from '@/public/pharmarcist.jpg'
 import drugImage from '@/public/drug-image.jpg'
@@ -18,7 +19,8 @@ import CategoryCard from '@/components/Products/CategoryCard'
 import FAQSection from '@/components/FAQSection'
 import Meta from '@/components/Meta'
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
+import { toast } from 'react-toastify'
 
 const Index = () => {
   return (
@@ -54,16 +56,19 @@ const Index = () => {
               <Button
                 variant="contained"
                 color={'primary'}
+                endIcon={<FormatListBulletedOutlinedIcon />}
                 sx={{ borderRadius: '0' }}
               >
-                View Products <FormatListBulletedOutlinedIcon sx={{fontSize:'1.1rem'}}/>
+                View Products
               </Button>
               <Button
                 variant="outlined"
                 color={'primary'}
+                endIcon={<LocalPhoneIcon />}
                 sx={{ borderRadius: '0' }}
+                onClick={()=>{ toast("what's up danger")}}
               >
-                Speak To A Pharmarcist <LocalPhoneIcon sx={{fontSize:'1.1rem'}}/>
+                Speak To A Pharmarcist
               </Button>
             </Grid>
           </Grid>
@@ -106,11 +111,14 @@ const Index = () => {
               marginBottom={3}
               color="primary.main"
             >
-              <Link
-                href="#"
-                style={{ color: 'inherit', textDecoration: 'none' }}
-              >
-                View More
+              <Link href="/categories" style={{ textDecoration: 'none' }}>
+                <Button
+                  size="small"
+                  sx={{ typography: 'caption', fontWeight: 'bold' }}
+                  endIcon={<EastOutlinedIcon />}
+                >
+                  View More
+                </Button>
               </Link>
             </Typography>
             <HorizontalScrollSection>
@@ -156,11 +164,14 @@ const Index = () => {
               marginBottom={3}
               color="primary.main"
             >
-              <Link
-                href="#"
-                style={{ color: 'inherit', textDecoration: 'none' }}
-              >
-                View More
+              <Link href="/products" style={{ textDecoration: 'none' }}>
+                <Button
+                  size="small"
+                  sx={{ typography: 'caption', fontWeight: 'bold' }}
+                  endIcon={<EastOutlinedIcon />}
+                >
+                  View More
+                </Button>
               </Link>
             </Typography>
             <Container>
@@ -176,7 +187,8 @@ const Index = () => {
                       categoryName={'Category Name'}
                       title={'TYLENOL Cold & Flu Severe Caplets |'}
                       starCount={index}
-                      sx={{ marginInline: 1, width: 270 }}
+                      otherStyles={{ width: 300, marginInline: 1 }}
+                      // sx={{ marginInline: 1 }}
                     />
                   ))}
               </HorizontalScrollSection>

@@ -12,6 +12,9 @@ import {
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
 import Image from 'next/image'
+import Link from 'next/link'
+import { toast } from 'react-toastify'
+import CartToastContent from './CartToastContent'
 
 const CustomCard = styled(Card)(({ theme }) => ({
   color: theme.palette.complementary.dark,
@@ -45,7 +48,6 @@ const CustomCard = styled(Card)(({ theme }) => ({
   },
 
   '&:hover': {
-    cursor: 'pointer',
     '&::before,::after': {
       opacity: '1',
       transform: 'scale(1)',
@@ -60,6 +62,7 @@ const ProductCard = ({
   categoryName,
   price,
   starCount,
+  otherStyles,
   ...props
 }) => {
   const formatAmount = (amount) => {
@@ -71,10 +74,13 @@ const ProductCard = ({
     }).format(amount)
     return result
   }
+  const truncateText = (text) => {
+    return text.slice(0, 35) + '...'
+  }
   return (
     <>
       <CustomCard
-        sx={{ maxWidth: 280, borderRadius: '0' }}
+        sx={{ width: 300, borderRadius: '0', ...otherStyles }}
         px={3}
         elevation={0}
         {...props}
@@ -88,15 +94,17 @@ const ProductCard = ({
           }}
           title={alt}
         >
-          <Image
-            alt={alt}
-            src={imageSrc}
-            style={{objectFit:'cover'}}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          <Link href="/products/product">
+            <Image
+              alt={alt}
+              src={imageSrc}
+              style={{ objectFit: 'contain' }}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </Link>
         </CardMedia>
-        <CardContent>
+        <CardContent px={0}>
           <Typography
             variant="body1"
             fontSize={11}
@@ -116,7 +124,7 @@ const ProductCard = ({
             fontSize={20}
             gutterBottom
           >
-            {title}
+            {truncateText(title)}
           </Typography>
           <Box sx={{ textAlign: 'center', margin: 'auto' }}>
             <Rating
@@ -142,7 +150,7 @@ const ProductCard = ({
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: { xs: 'column', md: 'row' },
-            rowGap: 2,
+            gap: 1,
             paddingBottom: 3,
           }}
         >
@@ -150,25 +158,40 @@ const ProductCard = ({
             size="small"
             variant="contained"
             color="primary"
+            endIcon={<ShoppingBagOutlinedIcon fontSize="small" />}
             sx={{
-              fontSize: 13,
+              fontSize: 11,
               textTransform: 'uppercase',
+            }}
+            onClick={() => {
+              toast(
+                <CartToastContent imageSrc={imageSrc} productName={title} />,
+                {
+                  hideProgressBar: true,
+                  autoClose: 3000,
+                }
+              )
             }}
           >
             Add To Cart
-            <ShoppingBagOutlinedIcon sx={{ fontSize: 16 }} />
           </Button>
           <Button
             size="small"
             variant="outlined"
             color="primary"
+            endIcon={<AssignmentOutlinedIcon fontSize="small" />}
+            component="Link"
             sx={{
-              fontSize: 13,
+              fontSize: 11,
               textTransform: 'uppercase',
             }}
           >
-            View Details
-            <AssignmentOutlinedIcon sx={{ fontSize: 16 }} />
+            <Link
+              href="/products/product"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+            >
+              View Details
+            </Link>
           </Button>
         </CardActions>
       </CustomCard>

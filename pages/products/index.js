@@ -65,9 +65,10 @@ const Products = () => {
             <Button
               color="primary"
               variant="outlined"
+              endIcon={<FilterAltOutlinedIcon />}
               onClick={() => setOpenFilterDrawer(true)}
             >
-              Filter <FilterAltOutlinedIcon sx={{ fontSize: '1.1rem' }} />
+              Filter
             </Button>
           </Container>
         </Toolbar>
@@ -76,6 +77,9 @@ const Products = () => {
             sx={{
               position: 'fixed',
               top: 80,
+              '@media (min-width: 960px)': {
+                width: '150px',
+              },
               left: 0,
               width: '100%',
               display: { md: 'none' },
@@ -87,9 +91,10 @@ const Products = () => {
               <Button
                 color="primary"
                 variant="outlined"
+                endIcon={<FilterAltOutlinedIcon />}
                 onClick={() => setOpenFilterDrawer(true)}
               >
-                Filter <FilterAltOutlinedIcon />
+                Filter
               </Button>
             </Container>
           </Toolbar>
@@ -121,18 +126,25 @@ const Products = () => {
               }}
             />
           </Box>
-          <Box sx={{display:'flex',flexDirection:'column',gap:4,alignItems:'center'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+              alignItems: 'center',
+            }}
+          >
             <Grid
               container
-              // gap={2}
-              rowGap={3}
+              gap={2}
+              // rowGap={3}
               justifyContent={'center'}
               sx={{ flexGrow: 1 }}
             >
               {Array(13)
                 .fill(0)
                 .map((item, index) => (
-                  <Grid item xs={6} sm={4}>
+                  <Grid item xs={''} >
                     <ProductCard
                       key={index}
                       alt="demo product"
@@ -141,11 +153,17 @@ const Products = () => {
                       categoryName={'Category Name'}
                       title={'TYLENOL Cold & Flu Severe Caplets '}
                       starCount={index}
+                      otherStyles={{ width: { xs: 190, sm: 280 } }}
                     />
                   </Grid>
                 ))}
             </Grid>
-          <Pagination count={5} color='primary' variant="outlined" shape="rounded" />
+            <Pagination
+              count={5}
+              color="primary"
+              variant="outlined"
+              shape="rounded"
+            />
           </Box>
         </Box>
       </Container>

@@ -238,7 +238,7 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
                 //   color="inherit"
                 sx={{ display: { md: 'none' } }}
               >
-                <SearchIcon sx={{ fontSize: '1.8rem' }} />
+                <SearchIcon fontSize='medium' />
               </IconButton>
             </Grid>
             <Grid md={''}>
