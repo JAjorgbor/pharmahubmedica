@@ -2,10 +2,12 @@ import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
 import Image from 'next/image'
 import pageNotFoundIllustration from '@/public/404-illustration.svg'
 import Link from 'next/link'
+import Meta from '@/components/Meta'
 
 const Error404Page = () => {
   return (
     <>
+    <Meta titlePrefix='Page Not Found'/>
       <Container>
         <Stack
           //   columns={{ xs: 1, sm: 2 }}
@@ -32,7 +34,7 @@ const Error404Page = () => {
               <Link href="/">
                 <Button
                   variant="contained"
-                  color="secondary"
+                  color="primary"
                   sx={{ borderRadius: '0' }}
                 >
                   Home Page
@@ -41,7 +43,7 @@ const Error404Page = () => {
               <Link href="/products">
                 <Button
                   variant="outlined"
-                  color="secondary"
+                  color="primary"
                   sx={{ borderRadius: '0' }}
                 >
                   Products
@@ -66,3 +68,5 @@ const Error404Page = () => {
   )
 }
 export default Error404Page
+
+Error404Page.dontShowLayout=true

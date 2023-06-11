@@ -95,6 +95,7 @@ const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
             size="small"
             variant="contained"
             color="primary"
+            endIcon={<FormatListBulletedOutlinedIcon fontSize='small' />}
             sx={{
               borderRadius: 0,
               fontSize: 13,
@@ -103,8 +104,8 @@ const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
               alignItems: 'center',
             }}
           >
-            View Products{' '}
-            <FormatListBulletedOutlinedIcon sx={{ fontSize: 16 }} />
+            View Products
+            
           </Button>
         </CardActions>
       </CustomCard>

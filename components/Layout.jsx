@@ -3,29 +3,8 @@ import Header from './Header'
 import Sidebar from './Sidebar'
 import Footer from './Footer'
 import { useState, useEffect } from 'react'
-import { ThemeProvider } from '@emotion/react'
 import BackToTopButton from './BackToTopButton'
 import ContactSpeedDial from './ContactSpeedDial'
-
-const customTheme = createTheme({
-  palette: {
-    primary: {
-        main: '#031d91',
-    },
-    secondary: {
-      main: '#c91919',
-    },
-    // custom color variable
-    complementary:{
-        main:'#979797',
-        light:'#f0f0f0',
-        dark:'#3c3c3c'
-    }
-  },
-  shape:{
-    borderRadius:0
-  }
-})
 
 const sidebarWidth = 240
 const Layout = ({ children }) => {
@@ -33,23 +12,26 @@ const Layout = ({ children }) => {
 
   return (
     <>
-    <CssBaseline />
-      <ThemeProvider theme={customTheme}>
-        <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+      <CssBaseline />
 
-        <Sidebar
-          sidebarWidth={sidebarWidth}
-          openSidebar={openSidebar}
-          setOpenSidebar={setOpenSidebar}
-        />
+      <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
 
-        <Box component={'main'} open={openSidebar} sx={{color:'complementary.dark'}}>
-          {children}
-        </Box>
-        <ContactSpeedDial />
-        <BackToTopButton />
-        <Footer />
-      </ThemeProvider>
+      <Sidebar
+        sidebarWidth={sidebarWidth}
+        openSidebar={openSidebar}
+        setOpenSidebar={setOpenSidebar}
+      />
+
+      <Box
+        component={'main'}
+        open={openSidebar}
+        sx={{ color: 'complementary.dark' }}
+      >
+        {children}
+      </Box>
+      <ContactSpeedDial />
+      <BackToTopButton />
+      <Footer />
     </>
   )
 }
