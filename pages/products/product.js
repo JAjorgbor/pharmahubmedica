@@ -108,17 +108,24 @@ const Product = () => {
                   </button>
                   <TextField
                     padding={0}
-                    size={'smaltyle'}
+                    type="text"
                     inputProps={{
                       sx: {
                         textAlign: 'center',
-                        width: 25,
-                        height: 10,
-
-                        // paddingTop: 0,
+                        width: 45,
+                        height: 25,
+                        padding: 1,
                       },
                     }}
                     value={count}
+                    onChange={(e) => {
+                      setCount(() => {
+                        if (/^[0-9\b]+$/.test(e.target.value)) {
+                          return e.target.value > 1 ? 1: e.target.value
+                        }
+                        return count
+                      })
+                    }}
                     variant="outlined"
                   />
 
@@ -148,13 +155,18 @@ const Product = () => {
                     fontSize: 13,
                     textTransform: 'uppercase',
                   }}
-                  onClick={()=>{toast(
-                    <CartToastContent imageSrc={drugImage} productName={'TYLENOL Cold & Flu Severe Caplets'} />,
-                    {
-                      hideProgressBar: true,
-                      autoClose: 3000,
-                    }
-                  )}}
+                  onClick={() => {
+                    toast(
+                      <CartToastContent
+                        imageSrc={drugImage}
+                        productName={'TYLENOL Cold & Flu Severe Caplets'}
+                      />,
+                      {
+                        hideProgressBar: true,
+                        autoClose: 3000,
+                      }
+                    )
+                  }}
                 >
                   Add To Cart
                 </Button>
@@ -249,7 +261,7 @@ const Product = () => {
                       categoryName={'Category Name'}
                       title={'TYLENOL Cold & Flu Severe Caplets |'}
                       starCount={index}
-                      otherStyles={{  marginInline: 1 }}
+                      otherStyles={{ marginInline: 1 }}
                       // sx={{ marginInline: 1 }}
                     />
                   ))}

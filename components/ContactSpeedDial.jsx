@@ -21,7 +21,7 @@ const ContactSpeedDial = () => {
           <SpeedDialAction
         //   sx={{height:50}}
             icon={<WhatsAppIcon />}
-            tooltipTitle={'Chat with us on whatsapp'}
+            tooltipTitle={'Chat with us on Whatsapp'}
           />
           <SpeedDialAction
             

@@ -3,7 +3,7 @@ import { Breadcrumbs, styled } from '@mui/material'
 import Link from 'next/link'
 const StyledLink = styled(Link)(({ theme }) => ({
   color: theme.palette.complementary.main,
-  fontSize:14,
+  fontSize: 14,
   textTransform: 'capitalize',
   textDecoration: 'none',
   '&:hover': {
@@ -13,9 +13,16 @@ const StyledLink = styled(Link)(({ theme }) => ({
 const BreadCrumbs = ({ links }) => {
   return (
     <>
-      <Breadcrumbs mt={{md:2}} separator={<NavigateNextIcon fontSize="small" />}>
+      <Breadcrumbs
+        mt={{ md: 2 }}
+        separator={<NavigateNextIcon fontSize="small" />}
+      >
         {links.map((link, index) => {
-            return <StyledLink key={index} href={link.path}>{link.title}</StyledLink>
+          return (
+            <StyledLink key={index} href={link.path}>
+              {link.title}
+            </StyledLink>
+          )
         })}
       </Breadcrumbs>
     </>

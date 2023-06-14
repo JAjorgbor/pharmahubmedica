@@ -1,11 +1,19 @@
-import { Avatar, Divider, Button, Card, CardActions, CardContent, CardHeader } from "@mui/material"
-import Image from "next/image"
+import {
+  Avatar,
+  Divider,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Typography,
+} from '@mui/material'
+import Image from 'next/image'
 
 const CartToastContent = ({ imageSrc, productName }) => {
   return (
     <>
-      <Card elevation={0} 
-      >
+      <Card elevation={0}>
         <CardHeader
           avatar={
             <Avatar
@@ -13,7 +21,7 @@ const CartToastContent = ({ imageSrc, productName }) => {
               sx={{
                 height: 50,
                 width: 50,
-                borderRadius:0
+                borderRadius: 0,
                 // backgroundColor: '',
                 // marginRight: -2,
               }}
@@ -37,7 +45,9 @@ const CartToastContent = ({ imageSrc, productName }) => {
           }}
         />
         <CardActions>
-            <Button variant='contained'>View Cart</Button>
+          <Button size="small" variant="contained">
+            View Cart
+          </Button>
         </CardActions>
       </Card>
     </>

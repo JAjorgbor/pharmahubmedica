@@ -7,6 +7,7 @@ import {
   CardActionArea,
   CardHeader,
   Container,
+  Divider,
   IconButton,
   ListItem,
   Slide,
@@ -106,7 +107,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           elevation={0}
           position="static"
           sx={{
-            backgroundColor: 'complementary.light',
+            backgroundColor: 'white',
 
             visibility: trigger && 'hidden',
             display: { xs: 'none', md: 'block' },
@@ -118,7 +119,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           <AppBar
             elevation={1}
             sx={{
-              backgroundColor: 'complementary.light',
+              backgroundColor: 'white',
               display: { xs: 'none', md: 'block' },
             }}
           >
@@ -126,6 +127,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           </AppBar>
           {/* End Bottom Nav*/}
         </Slide>
+        <Divider />
       </Box>
     </>
   )
@@ -289,6 +291,7 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
               </IconButton>
             </Grid>
           </Grid>
+          <Divider sx={{display:{xs:'none',md:'block'}}}/>
         </Container>
       </Toolbar>
     </>
