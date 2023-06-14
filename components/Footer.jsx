@@ -74,7 +74,7 @@ const Footer = () => {
                 variant="caption"
                 textTransform={'uppercase'}
                 gutterBottom
-              >
+                >
                 Plot C281, Ushafa New Layout, Ushafa Bwari Abuja
               </Typography>
               <Typography
@@ -89,7 +89,7 @@ const Footer = () => {
                 variant="caption"
                 textTransform={'uppercase'}
                 gutterBottom
-              >
+                >
                 <FooterNavLink href="tel:2340001122">+2340001122</FooterNavLink>
               </Typography>
               <Typography
@@ -97,10 +97,11 @@ const Footer = () => {
                 fontSize={14}
                 fontWeight={'bold'}
                 textTransform={'uppercase'}
-              >
+                >
                 Email:
+                  
               </Typography>
-              <Typography variant="caption">
+              <Typography variant="caption" gutterBottom>
                 <FooterNavLink href="mailto:pharmahubmedica@gmail.com">
                   pharmahubmedica@gmail.com{' '}
                 </FooterNavLink>
@@ -132,7 +133,7 @@ const Footer = () => {
                 component="p"
                 textTransform={'uppercase'}
               >
-                <FooterNavLink href={'/contact#faqs'}>Help & faq questions</FooterNavLink>
+                <FooterNavLink href={'/contact#faqs'}>faq questions</FooterNavLink>
               </Typography>
               <Typography
                 variant="caption"

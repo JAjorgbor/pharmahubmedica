@@ -180,7 +180,6 @@ const ProductCard = ({
             variant="outlined"
             color="primary"
             endIcon={<AssignmentOutlinedIcon fontSize="small" />}
-            component="Link"
             sx={{
               fontSize: 11,
               textTransform: 'uppercase',

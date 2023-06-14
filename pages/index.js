@@ -27,7 +27,7 @@ const Index = () => {
     <>
       <Meta titlePrefix={'Home'} />
       {/* Start Hero Section */}
-      <Container component={'section'} my={5}>
+      <Container component={'section'} sx={{marginBlock:{xs:5,md:0}}}>
         <Stack
           container
           gap={4}
@@ -44,8 +44,11 @@ const Index = () => {
 
               // sx={{ width: '50%' }}
             >
-              Your Health, Our Priority: Discover Exceptional Pharmacy Services
-              at Pharmahubmedica{' '}
+              Your Health, Our Priority:
+            </Typography>
+            <Typography variant="h2" color="complimentary.main" fontWeight='bold' fontSize={25}>
+              {' '}
+              Discover Exceptional Pharmacy Services at Pharmahubmedica{' '}
             </Typography>
             <Typography gutterBottom>
               At Pharmahubmedica, we are dedicated to delivering top-quality
@@ -66,7 +69,9 @@ const Index = () => {
                 color={'primary'}
                 endIcon={<LocalPhoneIcon />}
                 sx={{ borderRadius: '0' }}
-                onClick={()=>{ toast("what's up danger")}}
+                onClick={() => {
+                  toast("what's up danger")
+                }}
               >
                 Speak To A Pharmarcist
               </Button>
