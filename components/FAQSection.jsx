@@ -16,7 +16,8 @@ const FAQSection = () => {
       <Accordion
         expanded={expanded === 'panel1'}
         onChange={handleChange('panel1')}
-        elevation={1}
+        elevation={0}
+        sx={{borderTop:'1px solid lightgray'}}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -35,7 +36,7 @@ const FAQSection = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
+          <Typography color='complementary.main'>
             Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
             Aliquam eget maximus est, id dignissim quam.
           </Typography>
@@ -44,7 +45,8 @@ const FAQSection = () => {
       <Accordion
         expanded={expanded === 'panel2'}
         onChange={handleChange('panel2')}
-        elevation={1}
+        elevation={0}
+        sx={{borderTop:'1px solid lightgray'}}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -63,7 +65,7 @@ const FAQSection = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
+          <Typography color='complementary.main'>
             Donec placerat, lectus sed mattis semper, neque lectus feugiat
             lectus, varius pulvinar diam eros in elit. Pellentesque convallis
             laoreet laoreet.
@@ -73,7 +75,8 @@ const FAQSection = () => {
       <Accordion
         expanded={expanded === 'panel3'}
         onChange={handleChange('panel3')}
-        elevation={1}
+        elevation={0}
+        sx={{borderTop:'1px solid lightgray'}}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -92,7 +95,7 @@ const FAQSection = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
+          <Typography color='complementary.main'>
             Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
             sit amet egestas eros, vitae egestas augue. Duis vel est augue.
           </Typography>
@@ -101,7 +104,8 @@ const FAQSection = () => {
       <Accordion
         expanded={expanded === 'panel4'}
         onChange={handleChange('panel4')}
-        elevation={1}
+        elevation={0}
+        sx={{borderTop:'1px solid lightgray'}}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -120,7 +124,7 @@ const FAQSection = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
+          <Typography color='complementary.main'>
             Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
             sit amet egestas eros, vitae egestas augue. Duis vel est augue.
           </Typography>

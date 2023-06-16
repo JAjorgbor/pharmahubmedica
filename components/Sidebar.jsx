@@ -10,6 +10,7 @@ import {
   styled,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import {Fragment} from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -70,8 +71,8 @@ const Sidebar = ({ sidebarWidth, openSidebar, setOpenSidebar }) => {
         </Toolbar>
         <List>
           {links.map((link, index) => (
-            <>
-              <ListItem key={index} sx={{ padding: 0 }}>
+            <Fragment key={index}>
+              <ListItem sx={{ padding: 0 }}>
                 <NavLink href={link.path}>
                   <ListItemButton
                     selected={link.path === pathname}
@@ -88,7 +89,7 @@ const Sidebar = ({ sidebarWidth, openSidebar, setOpenSidebar }) => {
                 </NavLink>
               </ListItem>
               <Divider sx={{backgroundColor:'complementary.dark'}}/>
-            </>
+            </Fragment>
           ))}
         </List>
       </Drawer>

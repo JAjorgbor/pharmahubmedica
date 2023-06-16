@@ -18,10 +18,10 @@ import {
 } from '@mui/material'
 // Icons
 import MenuIcon from '@mui/icons-material/Menu'
-import PersonIcon from '@mui/icons-material/Person'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import SearchIcon from '@mui/icons-material/Search'
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import { styled } from '@mui/material/styles'
 import Link from 'next/link'
@@ -61,7 +61,11 @@ const SearchField = styled('input')(({ theme }) => ({
   border: 'none',
 }))
 
-export default function Header({ openSidebar, setOpenSidebar }) {
+export default function Header({
+  openSidebar,
+  setOpenSidebar,
+  setOpenCartDrawer,
+}) {
   // const theme = useTheme()
   const trigger = useScrollTrigger({
     threshold: 200, // Pixels scrolled before trigger is activated
@@ -85,6 +89,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           <TopNavContent
             openSidebar={openSidebar}
             setOpenSidebar={setOpenSidebar}
+            setOpenCartDrawer={setOpenCartDrawer}
           />
         </AppBar>
 
@@ -97,6 +102,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
             <TopNavContent
               openSidebar={openSidebar}
               setOpenSidebar={setOpenSidebar}
+              setOpenCartDrawer={setOpenCartDrawer}
             />
           </AppBar>
         </Slide>
@@ -175,7 +181,7 @@ function BottomNavContent() {
     </>
   )
 }
-function TopNavContent({ openSidebar, setOpenSidebar }) {
+function TopNavContent({ openSidebar, setOpenSidebar, setOpenCartDrawer }) {
   return (
     <>
       <Toolbar>
@@ -240,7 +246,7 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
                 //   color="inherit"
                 sx={{ display: { md: 'none' } }}
               >
-                <SearchIcon fontSize='medium' />
+                <SearchIcon fontSize="medium" />
               </IconButton>
             </Grid>
             <Grid md={''}>
@@ -280,18 +286,20 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
             </Grid>
             <Grid>
               <IconButton>
-                <PersonIcon sx={{ fontSize: '1.5rem' }} />
+                <PersonOutlineOutlinedIcon sx={{ fontSize: '1.8rem' }} />
               </IconButton>
             </Grid>
             <Grid>
-              <IconButton>
-                <ShoppingCartIcon
-                  sx={{ fontSize: '1.8rem', fontSize: '1.5rem' }}
-                />
+              <IconButton
+                onClick={() => {
+                  setOpenCartDrawer(true)
+                }}
+              >
+                <ShoppingCartOutlinedIcon sx={{ fontSize: '1.8rem' }} />
               </IconButton>
             </Grid>
           </Grid>
-          <Divider sx={{display:{xs:'none',md:'block'}}}/>
+          <Divider sx={{ display: { xs: 'none', md: 'block' } }} />
         </Container>
       </Toolbar>
     </>
