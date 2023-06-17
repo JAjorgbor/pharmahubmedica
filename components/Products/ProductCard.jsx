@@ -15,6 +15,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
 import CartToastContent from './CartToastContent'
+import useTruncateText from '@/Hooks/useTruncateWords'
+import useFormatAmount from '@/Hooks/useFormatAmount'
 
 const CustomCard = styled(Card)(({ theme }) => ({
   color: theme.palette.complementary.dark,
@@ -65,18 +67,7 @@ const ProductCard = ({
   otherStyles,
   ...props
 }) => {
-  const formatAmount = (amount) => {
-    const result = new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN',
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    }).format(amount)
-    return result
-  }
-  const truncateText = (text) => {
-    return text.slice(0, 35) + '...'
-  }
+
   return (
     <>
       <CustomCard
@@ -121,10 +112,10 @@ const ProductCard = ({
             textTransform="capitalize"
             textAlign="center"
             fontWeight={'bold'}
-            fontSize={20}
+            fontSize={17}
             gutterBottom
           >
-            {truncateText(title)}
+            {useTruncateText(title, 30)}
           </Typography>
           <Box sx={{ textAlign: 'center', margin: 'auto' }}>
             <Rating
@@ -141,7 +132,7 @@ const ProductCard = ({
             color={'primary.main'}
           >
             {' '}
-            {formatAmount(price)}
+            {useFormatAmount(price)}
           </Typography>
         </CardContent>
         <CardActions
@@ -157,6 +148,7 @@ const ProductCard = ({
           <Button
             size="small"
             variant="contained"
+            disableElevation
             color="primary"
             endIcon={<ShoppingBagOutlinedIcon fontSize="small" />}
             sx={{

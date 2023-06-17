@@ -23,20 +23,12 @@ import ProductCard from '@/components/Products/ProductCard'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
 import CartToastContent from '@/components/Products/CartToastContent'
+import useFormatAmount from '@/Hooks/useFormatAmount'
 
 const Product = () => {
   const [count, setCount] = useState(1)
   const [tabValue, setTabValue] = useState('description')
 
-  const formatAmount = (amount) => {
-    const result = new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN',
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    }).format(amount)
-    return result
-  }
   return (
     <>
       <Meta titlePrefix={'Product Name'} />
@@ -86,7 +78,7 @@ const Product = () => {
                 (26)
               </Typography>
               <Typography color="primary.main" variant="h5" fontWeight={'bold'}>
-                {formatAmount(1900)}
+                {useFormatAmount(1900)}
               </Typography>
               <Divider sx={{ marginBlock: 3 }} />
               <Stack direction="row" spacing={3}>
@@ -121,7 +113,7 @@ const Product = () => {
                     onChange={(e) => {
                       setCount(() => {
                         if (/^[0-9\b]+$/.test(e.target.value)) {
-                          return e.target.value > 1 ? 1: e.target.value
+                          return Number(e.target.value < 1 ? 1: e.target.value)
                         }
                         return count
                       })

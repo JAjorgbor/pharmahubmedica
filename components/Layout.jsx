@@ -6,7 +6,7 @@ import { useState, useEffect, createContext } from 'react'
 import useUpdateCart from '@/Hooks/useUpdateCart'
 import BackToTopButton from './BackToTopButton'
 import ContactSpeedDial from './ContactSpeedDial'
-import CartDrawer from './CartDrawer'
+import CartDrawer from './Products/CartDrawer'
 
 const sidebarWidth = 240
 const CartContext = createContext()

@@ -216,8 +216,7 @@ const Contact = () => {
                 size="large"
                 sx={{ marginTop: 2, paddingInline: 5 }}
               >
-                {cartValue.word+' '+cartValue.num}
-                {/* Send A Message */}
+                Send A Message
               </Button>
             </Box>
 
