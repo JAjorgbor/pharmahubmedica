@@ -144,7 +144,7 @@ function BottomNavContent() {
   const { pathname } = router
   const links = [
     { path: '/', text: 'home' },
-    { path: '/categories', text: 'categories' },
+    { path: '/collections', text: 'collections' },
     { path: '/products', text: 'products' },
     { path: '/about', text: 'about us' },
     { path: '/contact', text: 'contact us' },

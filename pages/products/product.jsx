@@ -189,14 +189,9 @@ const Product = () => {
                     value="description"
                   />
                   <Tab
-                    label="Dosage"
+                    label="Reviews(0)"
                     sx={{ fontWeight: 'bold' }}
-                    value="dosage"
-                  />
-                  <Tab
-                    label="Direction"
-                    sx={{ fontWeight: 'bold' }}
-                    value="direction"
+                    value="Reviews"
                   />
                 </TabList>
               </Box>
@@ -207,8 +202,7 @@ const Product = () => {
                 velit, beatae quam animi fugit, et laborum modi laudantium
                 exercitationem ipsum pariatur rem in nam.
               </TabPanel>
-              <TabPanel value="dosage">Dosage</TabPanel>
-              <TabPanel value="direction">Direction</TabPanel>
+              <TabPanel value="Reviews">Reviews</TabPanel>
             </TabContext>
           </Box>
           <Box mt={5} sx={{ position: 'relative' }}>

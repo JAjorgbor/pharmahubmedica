@@ -148,7 +148,6 @@ const ProductCard = ({
           <Button
             size="small"
             variant="contained"
-            disableElevation
             color="primary"
             endIcon={<ShoppingBagOutlinedIcon fontSize="small" />}
             sx={{
@@ -175,6 +174,7 @@ const ProductCard = ({
             sx={{
               fontSize: 11,
               textTransform: 'uppercase',
+              marginLeft:'0 !important'
             }}
           >
             <Link

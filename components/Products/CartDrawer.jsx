@@ -6,6 +6,7 @@ import {
   Typography,
   ListItem,
   Divider,
+  Button,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import CartDrawerItem from './CartDrawerItem'
@@ -46,24 +47,31 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
           Shopping Cart
         </Typography>
         <List>
-          <Fragment>
-            <ListItem>
-              <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
-            </ListItem>
-            <Divider />
-          </Fragment>
-          <Fragment>
-            <ListItem>
-              <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
-            </ListItem>
-            <Divider />
-          </Fragment>
-          <Fragment>
-            <ListItem>
-              <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
-            </ListItem>
-            <Divider />
-          </Fragment>
+          <ListItem>
+            <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
+          </ListItem>
+          <Divider />
+
+          <ListItem>
+            <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
+          </ListItem>
+          <Divider />
+
+          <ListItem>
+            <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
+          </ListItem>
+          <Divider />
+
+          <ListItem>
+            <Button variant="outlined" fullWidth >
+              View Cart
+            </Button>
+          </ListItem>
+          <ListItem sx={{ paddingBlock: 0 }}>
+            <Button variant="contained" color="success" fullWidth>
+              Buy on WhatsApp
+            </Button>
+          </ListItem>
         </List>
       </Drawer>
     </>
