@@ -10,6 +10,7 @@ import {
   styled,
 } from '@mui/material'
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
+import Link from 'next/link'
 import Image from 'next/image'
 
 const CustomCard = styled(Card)(({ theme }) => ({
@@ -70,13 +71,15 @@ const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
           }}
           title={alt}
         >
+          <Link href='/products'>
           <Image
             alt={title}
             src={imageSrc}
             fill
             style={{ objectFit: 'cover' }}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+            />
+            </Link>
         </CardMedia>
         <CardContent
           sx={{

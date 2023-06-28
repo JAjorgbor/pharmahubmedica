@@ -30,8 +30,7 @@ const Sidebar = ({ sidebarWidth, openSidebar, setOpenSidebar }) => {
   const { pathname } = router
   const links = [
     { path: '/', text: 'home' },
-    { path: '/categories', text: 'categories' },
-    { path: '/products', text: 'products' },
+    { path: '/collections', text: 'collections' },
     { path: '/about', text: 'about us' },
     { path: '/contact', text: 'contact us' },
     { path: '/cart', text: 'cart' },

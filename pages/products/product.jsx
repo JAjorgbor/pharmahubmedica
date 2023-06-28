@@ -24,6 +24,7 @@ import Link from 'next/link'
 import { toast } from 'react-toastify'
 import CartToastContent from '@/components/Products/CartToastContent'
 import useFormatAmount from '@/Hooks/useFormatAmount'
+import CustomCounter from '@/components/Products/CustomCounter'
 
 const Product = () => {
   const [count, setCount] = useState(1)
@@ -82,63 +83,7 @@ const Product = () => {
               </Typography>
               <Divider sx={{ marginBlock: 3 }} />
               <Stack direction="row" spacing={3}>
-                <Stack direction={'row'}>
-                  <button
-                    type="button"
-                    onClick={() => setCount(count !== 1 ? count - 1 : 1)}
-                    style={{
-                      fontSize: 20,
-                      padding: 0,
-                      width: 30,
-                      backgroundColor: 'transparent',
-                      outline: 'none',
-                      border: '1px solid gray',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    -
-                  </button>
-                  <TextField
-                    padding={0}
-                    type="text"
-                    inputProps={{
-                      sx: {
-                        textAlign: 'center',
-                        width: 45,
-                        height: 25,
-                        padding: 1,
-                      },
-                    }}
-                    value={count}
-                    onChange={(e) => {
-                      setCount(() => {
-                        if (/^[0-9\b]+$/.test(e.target.value)) {
-                          return Number(e.target.value < 1 ? 1: e.target.value)
-                        }
-                        return count
-                      })
-                    }}
-                    variant="outlined"
-                  />
-
-                  <button
-                    type="button"
-                    style={{
-                      fontSize: 20,
-                      padding: 0,
-                      width: 30,
-                      backgroundColor: 'transparent',
-                      outline: 'none',
-                      border: '1px solid gray',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      setCount(count + 1)
-                    }}
-                  >
-                    +
-                  </button>
-                </Stack>
+              <CustomCounter count={count} setCount={setCount} />
                 <Button
                   variant="contained"
                   color="primary"

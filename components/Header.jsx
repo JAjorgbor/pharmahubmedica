@@ -145,7 +145,6 @@ function BottomNavContent() {
   const links = [
     { path: '/', text: 'home' },
     { path: '/collections', text: 'collections' },
-    { path: '/products', text: 'products' },
     { path: '/about', text: 'about us' },
     { path: '/contact', text: 'contact us' },
     { path: '/cart', text: 'cart' },
