@@ -26,7 +26,7 @@ import {
   Button,
 } from '@mui/material'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
-import useFormatAmount from '@/hooks2/useFormatAmount'
+import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomCounter from '@/components/Products/CustomCounter'
 import { useState } from 'react'
 import { useTheme } from '@mui/material/styles'

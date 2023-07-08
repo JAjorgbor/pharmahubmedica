@@ -37,7 +37,7 @@ import logo from '@/public/logo.svg'
 import { useTheme } from '@emotion/react'
 import { useEffect, useRef, useState } from 'react'
 import SearchBar from './Search/SearchBar'
-import useGetCategories from '@/hooks2/useGetCategories'
+import useGetCategories from '@/hooks/useGetCategories'
 import CustomTooltip from './CustomTooltip'
 
 const NavLink = styled(Link)(({ theme }) => ({

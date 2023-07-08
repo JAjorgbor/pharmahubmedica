@@ -19,7 +19,7 @@ import { Fragment, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import useGetCategories from '@/hooks2/useGetCategories'
+import useGetCategories from '@/hooks/useGetCategories'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textTransform: 'uppercase',
