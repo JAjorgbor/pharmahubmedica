@@ -23,7 +23,7 @@ import ProductCard from '@/components/Products/ProductCard'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
 import CartToastContent from '@/components/Products/CartToastContent'
-import useFormatAmount from '@/hooks/useFormatAmount'
+import useFormatAmount from '@/hooks2/useFormatAmount'
 import CustomCounter from '@/components/Products/CustomCounter'
 
 const ProductSlug = () => {

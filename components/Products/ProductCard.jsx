@@ -15,8 +15,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
 import CartToastContent from './CartToastContent'
-import useTruncateText from '@/hooks/useTruncateWords'
-import useFormatAmount from '@/hooks/useFormatAmount'
+import useTruncateText from '@/hooks2/useTruncateWords'
+import useFormatAmount from '@/hooks2/useFormatAmount'
 
 const CustomCard = styled(Card)(({ theme }) => ({
   color: theme.palette.complementary.dark,
