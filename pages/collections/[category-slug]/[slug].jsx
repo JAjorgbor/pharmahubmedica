@@ -23,10 +23,10 @@ import ProductCard from '@/components/Products/ProductCard'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
 import CartToastContent from '@/components/Products/CartToastContent'
-import useFormatAmount from '@/Hooks/useFormatAmount'
+import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomCounter from '@/components/Products/CustomCounter'
 
-const Product = () => {
+const ProductSlug = () => {
   const [count, setCount] = useState(1)
   const [tabValue, setTabValue] = useState('description')
 
@@ -83,7 +83,7 @@ const Product = () => {
               </Typography>
               <Divider sx={{ marginBlock: 3 }} />
               <Stack direction="row" spacing={3}>
-              <CustomCounter count={count} setCount={setCount} />
+                <CustomCounter count={count} setCount={setCount} />
                 <Button
                   variant="contained"
                   color="primary"
@@ -204,4 +204,4 @@ const Product = () => {
     </>
   )
 }
-export default Product
+export default ProductSlug

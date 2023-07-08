@@ -158,7 +158,7 @@ const Footer = () => {
                 fontWeight={'bold'}
                 gutterBottom
               >
-                Popular Categories
+                Featured Categories
               </Typography>
               {popularCategoriesLinks.map((link, index) => (
                 <Typography

@@ -26,7 +26,7 @@ import {
   Button,
 } from '@mui/material'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
-import useFormatAmount from '@/Hooks/useFormatAmount'
+import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomCounter from '@/components/Products/CustomCounter'
 import { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
@@ -34,7 +34,9 @@ import Link from 'next/link'
 
 const Cart = () => {
   const theme = useTheme()
-  const matchMediaQuery = useMediaQuery(theme.breakpoints.up('md'))
+  const matchMediaQuery = useMediaQuery(theme.breakpoints.up('md'), {
+    noSsr: true,
+  })
 
   return (
     <>
@@ -115,13 +117,20 @@ const Cart = () => {
                       sx={{ display: 'flex', justifyContent: 'space-between' }}
                     >
                       <Typography fontWeight={'bold'}>Total</Typography>
-                      <Typography fontSize={20} fontWeight='bold'>{useFormatAmount(20000)}</Typography>
+                      <Typography fontSize={20} fontWeight="bold">
+                        {useFormatAmount(20000)}
+                      </Typography>
                     </ListItem>
                     <Divider />
                   </List>
                 </CardContent>
                 <CardActions>
-                  <Button fullWidth variant="contained" color="success"  endIcon={<WhatsAppIcon />}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="success"
+                    endIcon={<WhatsAppIcon />}
+                  >
                     Buy On Whatsapp
                   </Button>
                 </CardActions>
@@ -151,7 +160,11 @@ function CartItemForLargeScreens() {
               height={80}
               style={{ objectFit: 'contain' }}
             />
-            <Typography>TYLENOL Cold & Flu Severe Caplets</Typography>
+            <Link href="/product" style={{ textDecoration: 'none' }}>
+              <Typography color="primary.main">
+                TYLENOL Cold & Flu Severe Caplets
+              </Typography>
+            </Link>
           </Stack>
         </TableCell>
         <TableCell>
@@ -200,9 +213,14 @@ function CartItemForSmallScreens() {
                 </IconButton>
               }
               title="TYLENOL Cold & Flu Severe Caplets"
-              titleTypographyProps={{ fontSize: 18, fontWeight: 'bold' }}
+              titleTypographyProps={{
+                fontSize: 15,
+                fontWeight: 'bold',
+                color: 'primary.main',
+              }}
               sx={{ paddingBlock: 1 }}
             />
+
             <CardContent sx={{ paddingBlock: 1 }}>
               <Typography fontSize={15} display={'inline'}>
                 Unit Price:{' '}

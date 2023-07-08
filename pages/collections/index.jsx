@@ -20,8 +20,10 @@ import Filter from '@/components/Products/Filter'
 import Link from 'next/link'
 import BreadCrumbs from '@/components/BreadCrumbs'
 import CategoryCard from '@/components/Products/CategoryCard'
+import { getCategories } from '@/utils/requests'
+import { urlForImage } from '@/sanity/lib/image'
 
-const Categories = () => {
+const Categories = ({ categories }) => {
   return (
     <>
       <Meta titlePrefix={'Categories'} />
@@ -41,44 +43,57 @@ const Categories = () => {
             alignItems: 'center',
           }}
           py={8}
-          >
-          <Grid
-            container
-            gap={{xs:1 ,sm:2}}
-            justifyContent={'center'}
-          >
-            {Array(13)
-              .fill(0)
-              .map((item, index) => (
-                <Grid
-                  item
-                  xs={''}
-                  sm={5}
-                  md={4}
-                  lg={3}
-                  sx={{ justifySelf: 'center' }}
-                >
-                  <CategoryCard
-                    key={index}
-                    alt="demo Category"
-                    imageSrc={coughAndColdColdImage}
-                    title={'Cough and cold'}
-                    sx={{
-                      width: { xs: 300, sm: 'auto' },
-                    }}
-                  />{' '}
-                </Grid>
-              ))}
+        >
+          <Grid container gap={{ xs: 1, sm: 2 }} justifyContent={'center'}>
+            {categories.map((category, index) => (
+              <Grid
+                item
+                xs={''}
+                sm={5}
+                md={4}
+                lg={3}
+                sx={{ justifySelf: 'center' }}
+                key={index}
+              >
+                <CategoryCard
+                  alt="demo Category"
+                  imageSrc={urlForImage(category.image).url()}
+                  slug={category?.slug}
+                  title={category?.title}
+                  sx={{
+                    width: { xs: 300, sm: 'auto' },
+                  }}
+                />{' '}
+              </Grid>
+            ))}
           </Grid>
-          <Pagination
+          {/* <Pagination
             count={5}
             color="primary"
             variant="outlined"
             shape="rounded"
-          />
+          /> */}
         </Box>
       </Container>
     </>
   )
 }
 export default Categories
+
+export async function getStaticProps() {
+  try {
+    const categories = await getCategories()
+    return {
+      props: {
+        categories,
+      },
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      props: {
+        categories:[],
+      },
+    }
+  }
+}

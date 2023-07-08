@@ -21,13 +21,24 @@ import Meta from '@/components/Meta'
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import { toast } from 'react-toastify'
+import { useEffect } from 'react'
+import {
+  getCategories,
+  getFaqs,
+  getFeaturedCategories,
+  getHeroInfo,
+} from '@/utils/requests'
+import { urlForImage } from '@/sanity/lib/image'
 
-const Index = () => {
+const HomePage = ({ heroInfo, faqs, featuredCategories }) => {
+  useEffect(()=>{
+    console.log(featuredCategories)
+  },[featuredCategories])
   return (
     <>
       <Meta titlePrefix={'Home'} />
       {/* Start Hero Section */}
-      <Container component={'section'} sx={{marginBlock:{xs:5,md:0}}}>
+      <Container component={'section'} sx={{ marginBlock: { xs: 5, md: 0 } }}>
         <Stack
           container
           gap={4}
@@ -41,19 +52,25 @@ const Index = () => {
               fontWeight={'bold'}
               color={'primary.main'}
               gutterBottom
-
-              // sx={{ width: '50%' }}
             >
-              Your Health, Our Priority:
+              {/* Your Health, Our Priority: */}
+              {heroInfo?.mainHeading}
             </Typography>
-            <Typography variant="h2" color="complimentary.main" fontWeight='bold' fontSize={25}>
+            <Typography
+              variant="h2"
+              color="complimentary.main"
+              fontWeight="bold"
+              fontSize={25}
+            >
               {' '}
-              Discover Exceptional Pharmacy Services at Pharmahubmedica{' '}
+              {/* Discover Exceptional Pharmacy Services at Pharmahubmedica{' '} */}
+              {heroInfo?.subheading}
             </Typography>
             <Typography gutterBottom>
-              At Pharmahubmedica, we are dedicated to delivering top-quality
+              {/* At Pharmahubmedica, we are dedicated to delivering top-quality
               medications and affordable products, ensuring your health and
-              well-being are our top priorities.
+              well-being are our top priorities. */}
+              {heroInfo?.description}
             </Typography>
             <Grid container mt={4} gap={3} columns={2}>
               <Button
@@ -79,7 +96,8 @@ const Index = () => {
           </Grid>
           <Grid sx={{ position: 'relative', width: '100%', height: '400px' }}>
             <Image
-              src={bannerImage}
+              // src={bannerImage}
+              src={urlForImage(heroInfo.image).url()}
               alt={'picture of pharmarcist'}
               fill
               style={{ objectFit: 'cover' }}
@@ -127,14 +145,14 @@ const Index = () => {
               </Link>
             </Typography>
             <HorizontalScrollSection>
-              {Array(5)
-                .fill(0)
+              {featuredCategories
                 .map((item, index) => (
                   <CategoryCard
                     key={index}
                     alt="demo Category"
-                    imageSrc={coughAndColdColdImage}
-                    title={'Cough and cold'}
+                    imageSrc={urlForImage(item?.image).url()}
+                    title={item?.title}
+                    slug={item?.slug}
                     sx={{ marginInline: 1, width: 270 }}
                   />
                 ))}
@@ -156,7 +174,7 @@ const Index = () => {
               fontWeight={'bold'}
               textTransform={'uppercase'}
             >
-              Featured Products
+              Newly Stocked Products
             </Typography>
           </Divider>
           <Box mt={5} sx={{ position: 'relative' }}>
@@ -206,10 +224,22 @@ const Index = () => {
           <Typography variant="h4" mb={4} fontWeight={'bold'}>
             Frequently Asked Questions
           </Typography>
-          <FAQSection />
+          <FAQSection faqsList={faqs} />
         </Container>
       </Box>
     </>
   )
 }
-export default Index
+export default HomePage
+
+export async function getStaticProps() {
+  try {
+    const heroInfo = await getHeroInfo()
+    const faqs = await getFaqs()
+    const featuredCategories = await getFeaturedCategories()
+    return { props: { heroInfo, faqs, featuredCategories } }
+  } catch (error) {
+    console.error(error)
+    return { props: { heroInfo: {}, faqs: [], featuredCategories: [] } }
+  }
+}

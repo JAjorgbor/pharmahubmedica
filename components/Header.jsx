@@ -8,13 +8,19 @@ import {
   CardHeader,
   Container,
   Divider,
+  Tooltip,
+  Grow,
   IconButton,
+  List,
   ListItem,
   Slide,
   Stack,
   Toolbar,
   Typography,
+  useMediaQuery,
   useScrollTrigger,
+  Menu,
+  MenuItem,
 } from '@mui/material'
 // Icons
 import MenuIcon from '@mui/icons-material/Menu'
@@ -29,7 +35,10 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import logo from '@/public/logo.svg'
 import { useTheme } from '@emotion/react'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import SearchBar from './Search/SearchBar'
+import useGetCategories from '@/hooks/useGetCategories'
+import CustomTooltip from './CustomTooltip'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -71,6 +80,11 @@ export default function Header({
     threshold: 200, // Pixels scrolled before trigger is activated
     disableHysteresis: true, // Disable the "hysteresis" effect
   })
+  const [showSearchBar, setshowSearchBar] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+
   return (
     <>
       <Box component="header" id="header">
@@ -90,6 +104,10 @@ export default function Header({
             openSidebar={openSidebar}
             setOpenSidebar={setOpenSidebar}
             setOpenCartDrawer={setOpenCartDrawer}
+            showSearchBar={showSearchBar}
+            setshowSearchBar={setshowSearchBar}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
           />
         </AppBar>
 
@@ -103,9 +121,29 @@ export default function Header({
               openSidebar={openSidebar}
               setOpenSidebar={setOpenSidebar}
               setOpenCartDrawer={setOpenCartDrawer}
+              showSearchBar={showSearchBar}
+              setshowSearchBar={setshowSearchBar}
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
             />
           </AppBar>
         </Slide>
+        {/* <Grow
+            in={showSearchBar}> */}
+        <SearchBar
+          styles={{
+            width: '450px',
+            position: 'fixed',
+            top: '11rem',
+            zIndex: 100,
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            display: showSearchBar && isSmallScreen ? 'flex' : 'none',
+          }}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
+        {/* </Grow> */}
         {/* End Top Nav*/}
         {/* Start Bottom Nav*/}
 
@@ -141,6 +179,13 @@ export default function Header({
 
 function BottomNavContent() {
   const router = useRouter()
+  const { categories, isError } = useGetCategories()
+  useEffect(()=>{
+    console.log(categories)
+    if (isError){
+      console.error(isError)
+    }
+  },[categories, isError])
   const { pathname } = router
   const links = [
     { path: '/', text: 'home' },
@@ -155,35 +200,71 @@ function BottomNavContent() {
         <Toolbar disableGutters sx={{}}>
           <Stack spacing={3} direction="row">
             {/* navlinks */}
-            {links.map((item, index) => (
-              <NavLink
-                href={item.path}
-                className={pathname === item.path && 'active'}
-                key={index}
-              >
-                <Typography
-                  variant="subtitle1"
-                  component={'span'}
-                  sx={{
-                    fontSize: '0.9rem',
-                    textTransform: 'uppercase',
-                    fontWeight: '600',
-                  }}
-                >
-                  {item.text}
-                </Typography>
-              </NavLink>
-            ))}
+            {links.map((item, index) => {
+              return (
+                <>
+                  {item.text == 'collections' ? (
+                    <CustomTooltip collections={categories}>
+                      <NavLink
+                        href={item.path}
+                        className={pathname === item.path && 'active'}
+                        key={index}
+                      >
+                        <Typography
+                          variant="subtitle1"
+                          component={'span'}
+                          sx={{
+                            fontSize: '0.9rem',
+                            textTransform: 'uppercase',
+                            fontWeight: '600',
+                          }}
+                        >
+                          {item.text}
+                        </Typography>
+                      </NavLink>
+                    </CustomTooltip>
+                  ) : (
+                    <NavLink
+                      href={item.path}
+                      className={pathname === item.path && 'active'}
+                      key={index}
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        component={'span'}
+                        sx={{
+                          fontSize: '0.9rem',
+                          textTransform: 'uppercase',
+                          fontWeight: '600',
+                        }}
+                      >
+                        {item.text}
+                      </Typography>
+                    </NavLink>
+                  )}
+                </>
+              )
+            })}
           </Stack>
         </Toolbar>
       </Container>
     </>
   )
 }
-function TopNavContent({ openSidebar, setOpenSidebar, setOpenCartDrawer }) {
+function TopNavContent({
+  openSidebar,
+  setOpenSidebar,
+  setOpenCartDrawer,
+  showSearchBar,
+  setshowSearchBar,
+  searchValue,
+  setSearchValue,
+}) {
   return (
     <>
       <Toolbar>
+        {/* search bar for mobile view that is triggered on search icon button click */}
+
         <Container>
           <Grid
             container
@@ -234,15 +315,19 @@ function TopNavContent({ openSidebar, setOpenSidebar, setOpenCartDrawer }) {
                 alignItems: 'center',
               }}
             >
-              <SearchField
-                sx={{
-                  display: { xs: 'none', md: 'inline' },
+              <SearchBar
+                styles={{
+                  display: { xs: 'none', md: 'flex' },
+                  width: '100%',
                 }}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
               />
               <IconButton
                 size="large"
                 aria-label="Search Products"
                 //   color="inherit"
+                onClick={() => setshowSearchBar(!showSearchBar)}
                 sx={{ display: { md: 'none' } }}
               >
                 <SearchIcon fontSize="medium" />

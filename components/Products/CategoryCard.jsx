@@ -53,7 +53,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
   },
 }))
 
-const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
+const CategoryCard = ({ alt, imageSrc, title, slug, ...props }) => {
   return (
     <>
       <CustomCard
@@ -68,15 +68,19 @@ const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
             //  width: 200,
             margin: '2px',
             position: 'relative',
+            transition: '1.5s ease-in-out',
+            '&:hover': {
+              transform:'scale(1.2)',
+            }
           }}
           title={alt}
         >
-          <Link href='/products'>
+          <Link href={`collections/${slug?.current}/`}>
           <Image
             alt={title}
             src={imageSrc}
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'cover', }}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             </Link>
