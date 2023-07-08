@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Image from 'next/image'
-import useFormatAmount from '@/hooks/useFormatAmount'
+import useFormatAmount from '@/ksihooks/useFormatAmount'
 
 const CartDrawerItem = ({ imageSrc, productName }) => {
   return (
