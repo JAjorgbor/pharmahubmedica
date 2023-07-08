@@ -97,7 +97,7 @@ const HomePage = ({ heroInfo, faqs, featuredCategories }) => {
           <Grid sx={{ position: 'relative', width: '100%', height: '400px' }}>
             <Image
               // src={bannerImage}
-              src={urlForImage(heroInfo.image).url()}
+              src={urlForImage(heroInfo?.image).url()}
               alt={'picture of pharmarcist'}
               fill
               style={{ objectFit: 'cover' }}
