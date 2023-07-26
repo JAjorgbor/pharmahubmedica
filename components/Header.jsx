@@ -4,41 +4,34 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardHeader,
   Container,
   Divider,
-  Tooltip,
-  Grow,
   IconButton,
-  List,
-  ListItem,
   Slide,
   Stack,
   Toolbar,
   Typography,
   useMediaQuery,
   useScrollTrigger,
-  Menu,
-  MenuItem,
 } from '@mui/material'
-// Icons
+import useGetCategoriesList from '@/hooks/useGetCategoriesList'
+import logo from '@/public/logo.svg'
+import { useTheme } from '@emotion/react'
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchIcon from '@mui/icons-material/Search'
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import { styled } from '@mui/material/styles'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Image from 'next/image'
-import logo from '@/public/logo.svg'
-import { useTheme } from '@emotion/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBar from './Search/SearchBar'
-import useGetCategories from '@/hooks/useGetCategories'
-import CustomTooltip from './CustomTooltip'
+import CustomTooltip from './TooltipMenu'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -132,13 +125,13 @@ export default function Header({
             in={showSearchBar}> */}
         <SearchBar
           styles={{
-            width: '450px',
+            width: { xs: '80%', sm: '450px' },
             position: 'fixed',
             top: '11rem',
             zIndex: 100,
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            display: showSearchBar && isSmallScreen ? 'flex' : 'none',
+            display: showSearchBar && isSmallScreen ? 'flex' : 'none' || 'flex',
           }}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
@@ -179,13 +172,13 @@ export default function Header({
 
 function BottomNavContent() {
   const router = useRouter()
-  const { categories, isError } = useGetCategories()
-  useEffect(()=>{
-    console.log(categories)
-    if (isError){
+  const { categories, isError } = useGetCategoriesList()
+  useEffect(() => {
+    // console.log(categories)
+    if (isError) {
       console.error(isError)
     }
-  },[categories, isError])
+  }, [categories, isError])
   const { pathname } = router
   const links = [
     { path: '/', text: 'home' },
@@ -210,17 +203,26 @@ function BottomNavContent() {
                         className={pathname === item.path && 'active'}
                         key={index}
                       >
-                        <Typography
-                          variant="subtitle1"
-                          component={'span'}
-                          sx={{
-                            fontSize: '0.9rem',
-                            textTransform: 'uppercase',
-                            fontWeight: '600',
-                          }}
+                        <Button
+                          sx={{ padding: 0 }}
+                          size="small"
+                          endIcon={<KeyboardArrowDownIcon />}
+                          disableElevation
+                          disableFocusRipple
+                          disableRipple
                         >
-                          {item.text}
-                        </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            component={'span'}
+                            sx={{
+                              fontSize: '0.9rem',
+                              textTransform: 'uppercase',
+                              fontWeight: '600',
+                            }}
+                          >
+                            {item.text}
+                          </Typography>
+                        </Button>
                       </NavLink>
                     </CustomTooltip>
                   ) : (
@@ -351,7 +353,7 @@ function TopNavContent({
                       />
                     </Avatar>
                   }
-                  title="Call Us Now"
+                  title="Give Us A Call"
                   subheader="+2340001122"
                   titleTypographyProps={{
                     textTransform: 'uppercase',

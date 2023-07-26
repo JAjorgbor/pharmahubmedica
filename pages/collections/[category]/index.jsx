@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ProductCard from '@/components/Products/ProductCard'
+import useSWR from 'swr'
 import {
   Box,
   Button,
@@ -12,17 +13,47 @@ import {
   useScrollTrigger,
   Slide,
   Pagination,
+  CircularProgress,
 } from '@mui/material'
+import { Alert, AlertTitle } from '@mui/lab'
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
 import drugImage from '@/public/drug-image.jpg'
 import Meta from '@/components/Meta'
 import Filter from '@/components/Products/Filter'
 import Link from 'next/link'
 import BreadCrumbs from '@/components/BreadCrumbs'
+import {
+  getCategoryName,
+  getProductsForCategory,
+  getProductsForCategoryCount,
+} from '@/utils/requests'
+import { useRouter } from 'next/router'
 
-const Products = () => {
+const Products = ({ categoryName, products, productsCount }) => {
   const [openFilterDrawer, setOpenFilterDrawer] = useState(false)
+  const [lastProduct, setLastProduct] = useState({})
   const trigger = useScrollTrigger({ threshold: 220, disableHysteresis: true })
+  const router = useRouter()
+  const lastId = router?.query?.lastId || ''
+  const { category: categorySlug } = router.query
+  const pageNumber = router.query?.page
+  // useEffect(() => {
+  //   setLastProduct(products[products.length - 1])
+  // }, [products]);
+  // const productsFetcher = async () => {
+  //   console.log('lastId', lastId)
+  //   const products = await getProductsForCategory(categorySlug, lastId)
+  //   return products
+  // }
+
+  // const {
+  //   data: products,
+  //   isLoading: productsLoading,
+  //   error: productsError,
+  // } = useSWR(`api/${lastId}`, productsFetcher)
+  // useEffect(() => {
+  //   console.log('productsError', productsError)
+  // }, [productsError])
   return (
     <>
       <Meta titlePrefix={'Products'} />
@@ -49,8 +80,8 @@ const Products = () => {
         {/* Breadcrumbs */}
         <BreadCrumbs
           links={[
-            { title: 'Home', path: '/' },
-            { title: 'Products', path: '#' },
+            { title: 'collections', path: '/collections' },
+            { title: categoryName ?? categorySlug, path: '#' },
           ]}
         />
         <Toolbar
@@ -128,8 +159,10 @@ const Products = () => {
           </Box>
           <Box
             sx={{
+              flexGrow: 1,
               display: 'flex',
               flexDirection: 'column',
+              justifyContent: 'start',
               gap: 4,
               alignItems: 'center',
             }}
@@ -139,30 +172,42 @@ const Products = () => {
               columnGap={1}
               rowGap={3}
               justifyContent={'center'}
-              sx={{ flexGrow: 1 }}
+              sx={{ width: '100%' }}
             >
-              {Array(13)
-                .fill(0)
-                .map((item, index) => (
-                  <Grid item xs={''} >
+              {products.length < 1 ? (
+                <Alert severity="info" variant="outlined" color="primary">
+                  <AlertTitle>No Products Available</AlertTitle>
+                  Oops, there are no products for this page you can browse other
+                  pages by going {' '}
+                  <Typography color='primary.main' fontWeight='bold' variant='strong'>
+                    <Link href={`/collections`} style={{color:'inherit'}}>Here </Link>
+                  </Typography>
+                </Alert>
+              ) : (
+                products?.map((item, index) => (
+                  <Grid item xs={''} key={index}>
                     <ProductCard
-                      key={index}
-                      alt="demo product"
-                      price={1900}
-                      imageSrc={drugImage}
-                      categoryName={'Category Name'}
-                      title={'TYLENOL Cold & Flu Severe Caplets '}
+                      alt={item?.image.alt}
+                      price={item.price}
+                      imageSrc={item.image}
+                      categoryName={item.category.name}
+                      title={item.name}
                       starCount={index}
-                      otherStyles={{ width: { xs: 165,sm:200, md: 280 } }}
+                      otherStyles={{ width: { xs: 165, sm: 200, md: 280 } }}
                     />
                   </Grid>
-                ))}
+                ))
+              )}
             </Grid>
             <Pagination
-              count={5}
+              sx={{ marginTop: 5 }}
+              count={Math.ceil(productsCount / 2)}
               color="primary"
               variant="outlined"
               shape="rounded"
+              onChange={(e, value) => {
+                router.push(`/collections/${categorySlug}?page=${value}`)
+              }}
             />
           </Box>
         </Box>
@@ -171,3 +216,21 @@ const Products = () => {
   )
 }
 export default Products
+
+export async function getServerSideProps(context) {
+  const { category } = context.params
+  const pageNumber = Number(context.query?.page || 1)
+  const lastId = context?.query?.lastId || ''
+
+  try {
+    const productsCount = await getProductsForCategoryCount(category)
+    const categoryName = await getCategoryName(category)
+    const products = await getProductsForCategory(category, pageNumber, 2)
+    return {
+      props: { products, productsCount, categoryName: categoryName.name },
+    }
+  } catch (error) {
+    console.error(error)
+    return { props: { products: [], productsCount: 0 } }
+  }
+}

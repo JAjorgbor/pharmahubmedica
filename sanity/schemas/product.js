@@ -16,27 +16,62 @@ const product = {
     },
   ],
   fields: [
-    { name: 'title', type: 'string',group:'productGroup' },
-    { name: 'description', type: 'text' },
+    {
+      name: 'name',
+      title: 'Product Name',
+      type: 'string',
+      group: 'productGroup',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'description',
+      type: 'array',
+      title: 'Description',
+      of: [{ type: 'block' }],
+      group: 'productGroup',
+    },
+    {
+      name: 'price',
+      title: 'Price',
+      type: 'number',
+      group: 'productGroup',
+    },
+    {
+      name: 'status',
+      title: 'Status',
+      type: 'boolean',
+      description:
+        'Is this product active if set to false it will not be displayed on the website',
+      initialValue: true,
+      group: 'productGroup',
+    },
     {
       name: 'slug',
-      group:'productGroup',
+      group: 'productGroup',
       title: 'Slug',
       type: 'slug',
       description:
         'A unique name that can be used for the URL of this product, note that there should be no spaces between the words i.e:"slug-of-category" and not:"slug of category"',
+      validation: (Rule) => Rule.required(),
+      options: {
+        source: 'name',
+        slugify: (input) =>
+          input.toLowerCase().replace(/\s+/g, '-').slice(0, 200),
+      },
     },
     {
       name: 'image',
-      title: 'Category Image',
-      group:'productGroup',
+      title: 'Image',
+      group: 'productGroup',
       type: 'image',
+      validation: (Rule) => Rule.required(),
       fields: [
         {
           name: 'alt',
           title: 'Alternative Text',
           description: 'Alternate text for screen readers',
           type: 'string',
+          validation: (Rule) => Rule.required(),
         },
       ],
       options: {
@@ -47,13 +82,14 @@ const product = {
           'exif', // Default: not included
           'location', // Default: not included
         ],
+          
       },
     },
     {
       name: 'category',
+      title: 'Category',
       type: 'reference',
       to: { type: 'category' },
-      title: 'Category',
       group: 'categoryGroup',
     },
     {
@@ -64,6 +100,8 @@ const product = {
       of: [
         {
           type: 'reference',
+          description:
+            'What subcategory under the selected category above does this product fall under, please do not use this field to create a new category instead use the category field above to make a new subcategory if you need to in order to avoid errors',
           to: [{ type: 'subcategory' }],
           weak: true,
           options: {
@@ -90,42 +128,42 @@ const product = {
         },
       ],
     },
-    {
-      name: 'tags',
-      title: 'Tags',
-      group: 'categoryGroup',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: [
-            {
-              type: 'productTag',
-              weak: true,
-              options: {
-                filter: async ({ document }) => {
-                  if (!document?.category) {
-                    return
-                  }
-                  const category = await client.fetch(
-                    `*[_type=="category" && _id == $categoryId][0]`,
-                    {
-                      categoryId: document.category._ref,
-                    }
-                  )
-                  return {
-                    filter: '_id in $tagIds',
-                    params: {
-                      tagIds: category.productTags?.map((tag) => tag._ref),
-                    },
-                  }
-                },
-              },
-            },
-          ],
-        },
-      ],
-    },
+    // {
+    //   name: 'tags',
+    //   title: 'Tags',
+    //   group: 'categoryGroup',
+    //   type: 'array',
+    //   of: [
+    //     {
+    //       type: 'reference',
+    //       to: [
+    //         {
+    //           type: 'productTag',
+    //           weak: true,
+    //           options: {
+    //             filter: async ({ document }) => {
+    //               if (!document?.category) {
+    //                 return
+    //               }
+    //               const category = await client.fetch(
+    //                 `*[_type=="category" && _id == $categoryId][0]`,
+    //                 {
+    //                   categoryId: document.category._ref,
+    //                 }
+    //               )
+    //               return {
+    //                 filter: '_id in $tagIds',
+    //                 params: {
+    //                   tagIds: category.productTags?.map((tag) => tag._ref),
+    //                 },
+    //               }
+    //             },
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
   ],
 }
 

@@ -22,16 +22,19 @@ import BreadCrumbs from '@/components/BreadCrumbs'
 import CategoryCard from '@/components/Products/CategoryCard'
 import { getCategories } from '@/utils/requests'
 import { urlForImage } from '@/sanity/lib/image'
+import { useEffect } from 'react'
 
-const Categories = ({ categories }) => {
+const Collections = ({ categories }) => {
+  useEffect(() => {
+    console.log(categories)
+  }, [categories])
   return (
     <>
-      <Meta titlePrefix={'Categories'} />
+      <Meta titlePrefix={'Collections'} />
       <Container>
         {/* Breadcrumbs */}
         <BreadCrumbs
           links={[
-            { title: 'Home', path: '/' },
             { title: 'All Collections', path: '#' },
           ]}
         />
@@ -56,10 +59,10 @@ const Categories = ({ categories }) => {
                 key={index}
               >
                 <CategoryCard
-                  alt="demo Category"
+                  alt={category?.image.alt}
                   imageSrc={urlForImage(category.image).url()}
                   slug={category?.slug}
-                  title={category?.title}
+                  title={category?.name}
                   sx={{
                     width: { xs: 300, sm: 'auto' },
                   }}
@@ -78,7 +81,7 @@ const Categories = ({ categories }) => {
     </>
   )
 }
-export default Categories
+export default Collections
 
 export async function getStaticProps() {
   try {
@@ -87,12 +90,13 @@ export async function getStaticProps() {
       props: {
         categories,
       },
+      revalidate: 30,
     }
   } catch (error) {
     console.log(error)
     return {
       props: {
-        categories:[],
+        categories: [],
       },
     }
   }

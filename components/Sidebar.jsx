@@ -19,7 +19,7 @@ import { Fragment, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import useGetCategories from '@/hooks/useGetCategories'
+import useGetCategoriesList from '@/hooks/useGetCategoriesList'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textTransform: 'uppercase',
@@ -33,7 +33,7 @@ const NavLink = styled(Link)(({ theme }) => ({
 
 const Sidebar = ({ sidebarWidth, openSidebar, setOpenSidebar }) => {
   const router = useRouter()
-  const { categories, isError } = useGetCategories()
+  const { categories, isError } = useGetCategoriesList()
   const [openCollapse, setOpenCollapse] = useState(false)
   useEffect(() => {
     if (isError) {
@@ -101,7 +101,6 @@ const Sidebar = ({ sidebarWidth, openSidebar, setOpenSidebar }) => {
                   >
                     <NavLink href={item.path}>
                       <ListItemButton
-                        // sx={{ padding: 0 }}
                         selected={item.path === pathname}
                         onClick={() => {
                           setOpenSidebar(false)
@@ -143,7 +142,7 @@ const Sidebar = ({ sidebarWidth, openSidebar, setOpenSidebar }) => {
                                 fontSize: '0.8rem',
                               }}
                             >
-                              {category?.title}
+                              {category?.name}
                             </Typography>
                           </NavLink>
                         </ListItemButton>

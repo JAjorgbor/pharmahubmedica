@@ -4,20 +4,30 @@ const category = {
   type: 'document',
   fields: [
     {
-      name: 'title',
-      title: 'Title',
+      name: 'name',
+      title: 'Category Name',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'description',
       title: 'Description',
-      type: 'string',
+      type: 'array',
+      of: [{ type: 'block' }],
     },
     {
-      name: 'isFeaturedCategory',
-      title: 'Featured Category',
+      name: 'status',
+      title: 'Status',
       type: 'boolean',
-      description: 'Is this a featured category?',
+      description:
+        'Is this category active if set to false it will not be displayed on the website',
+      initialValue: true,
+    },
+    {
+      name: 'isTopCategory',
+      title: 'Top Category',
+      type: 'boolean',
+      description: 'Is this a top category?',
     },
     {
       name: 'slug',
@@ -25,17 +35,25 @@ const category = {
       type: 'slug',
       description:
         'A unique name that can be used for the URL of this category, note that there should be no spaces between the words i.e:"this-is-a-slug" and not:"this is not a slug"',
+      validation: (Rule) => Rule.required(),
+      options: {
+        source: 'name',
+        slugify: (input) =>
+          input.toLowerCase().replace(/\s+/g, '-').slice(0, 200),
+      },
     },
     {
       name: 'image',
       title: 'Category Image',
       type: 'image',
+      validation: (Rule) => Rule.required(),
       fields: [
         {
           name: 'alt',
           title: 'Alternative Text',
           description: 'Alternate text for screen readers',
           type: 'string',
+          validation: (Rule) => Rule.required(),
         },
       ],
       options: {
@@ -61,13 +79,13 @@ const category = {
         },
       ],
     },
-    {
-      name: 'productTags',
-      title: 'Product Type Tags',
-      description: 'Tags representing the product types of this category',
-      type: 'array',
-      of: [{type:'reference',to: [{ type: 'productTag' }],}],
-    },
+    // {
+    //   name: 'productTags',
+    //   title: 'Product Type Tags',
+    //   description: 'Tags representing the product types of this category',
+    //   type: 'array',
+    //   of: [{type:'reference',to: [{ type: 'productTag' }],}],
+    // },
   ],
 }
 export default category

@@ -174,6 +174,7 @@ export async function getStaticProps() {
       props: {
         about: res,
       },
+      revalidate:30
     }
   } catch (error) {
     console.log(error)

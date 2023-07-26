@@ -10,6 +10,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 import { styled } from '@mui/material'
 import { useState } from 'react'
+import useGetCategoriesList from '@/hooks/useGetCategoriesList'
 
 const SearchField = styled('input')(({ theme }) => ({
   border: `0.5px solid ${theme.palette.complementary.main}`,
@@ -22,6 +23,8 @@ const SearchField = styled('input')(({ theme }) => ({
 
 const SearchBar = ({ searchValue, setSearchValue, styles, ...props }) => {
   const [category, setCategory] = useState('all categories')
+  const { categories, isError } = useGetCategoriesList()
+
   return (
     <>
       <Stack
@@ -46,8 +49,13 @@ const SearchBar = ({ searchValue, setSearchValue, styles, ...props }) => {
             }}
           >
             <MenuItem value="all categories">All Categories</MenuItem>
-            <MenuItem value="sexual health">Sexual health</MenuItem>
-            <MenuItem value="cough and cold">Cough and cold</MenuItem>
+            {categories?.map((category, index) => (
+              
+                <MenuItem key={index} value={category?.slug?.current}>
+                  {category?.name}
+                </MenuItem>
+              
+            ))}
           </Select>
         </FormControl>
         <Box

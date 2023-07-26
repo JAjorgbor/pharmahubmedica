@@ -32,7 +32,6 @@ const Contact = () => {
       <Container>
         <BreadCrumbs
           links={[
-            { title: 'Home', path: '/' },
             { title: 'Contact Us', path: '/contact' },
           ]}
         />

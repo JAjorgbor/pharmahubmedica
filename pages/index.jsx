@@ -1,3 +1,19 @@
+import CustomImage from '@/components/CustomImage'
+import FAQSection from '@/components/FAQSection'
+import HorizontalScrollSection from '@/components/HomePage/HorizontalScrollSection'
+import Meta from '@/components/Meta'
+import CategoryCard from '@/components/Products/CategoryCard'
+import ProductCard from '@/components/Products/ProductCard'
+import { urlForImage } from '@/sanity/lib/image'
+import {
+  getFaqs,
+  getHeroInfo,
+  getNewlyStockedProducts,
+  getTopCategories
+} from '@/utils/requests'
+import EastOutlinedIcon from '@mui/icons-material/EastOutlined'
+import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import {
   Box,
   Button,
@@ -6,34 +22,20 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
-import EastOutlinedIcon from '@mui/icons-material/EastOutlined'
-import Image from 'next/image'
-import bannerImage from '@/public/pharmarcist.jpg'
-import drugImage from '@/public/drug-image.jpg'
-import coughAndColdColdImage from '@/public/cough_n_cold-2.jpg'
-import ProductCard from '@/components/Products/ProductCard'
-import HorizontalScrollSection from '@/components/HomePage/HorizontalScrollSection'
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import Link from 'next/link'
-import CategoryCard from '@/components/Products/CategoryCard'
-import FAQSection from '@/components/FAQSection'
-import Meta from '@/components/Meta'
-import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
-import { toast } from 'react-toastify'
 import { useEffect } from 'react'
-import {
-  getCategories,
-  getFaqs,
-  getFeaturedCategories,
-  getHeroInfo,
-} from '@/utils/requests'
-import { urlForImage } from '@/sanity/lib/image'
+import { toast } from 'react-toastify'
 
-const HomePage = ({ heroInfo, faqs, featuredCategories }) => {
-  useEffect(()=>{
+const HomePage = ({
+  heroInfo,
+  faqs,
+  featuredCategories,
+  newlyStockedProducts,
+}) => {
+  useEffect(() => {
     console.log(featuredCategories)
-  },[featuredCategories])
+  }, [featuredCategories])
   return (
     <>
       <Meta titlePrefix={'Home'} />
@@ -73,14 +75,16 @@ const HomePage = ({ heroInfo, faqs, featuredCategories }) => {
               {heroInfo?.description}
             </Typography>
             <Grid container mt={4} gap={3} columns={2}>
+              <Link href='/collections'>
               <Button
                 variant="contained"
                 color={'primary'}
                 endIcon={<FormatListBulletedOutlinedIcon />}
                 sx={{ borderRadius: '0' }}
               >
-                View Products
+                View Collections
               </Button>
+                </Link>
               <Button
                 variant="outlined"
                 color={'primary'}
@@ -95,9 +99,9 @@ const HomePage = ({ heroInfo, faqs, featuredCategories }) => {
             </Grid>
           </Grid>
           <Grid sx={{ position: 'relative', width: '100%', height: '400px' }}>
-            <Image
-              // src={bannerImage}
-              src={urlForImage(heroInfo?.image).url()}
+            <CustomImage
+              asset={heroInfo?.image}
+              // src={urlForImage(heroInfo?.image).url()}
               alt={'picture of pharmarcist'}
               fill
               style={{ objectFit: 'cover' }}
@@ -134,7 +138,7 @@ const HomePage = ({ heroInfo, faqs, featuredCategories }) => {
               marginBottom={3}
               color="primary.main"
             >
-              <Link href="/categories" style={{ textDecoration: 'none' }}>
+              <Link href="/collections" style={{ textDecoration: 'none' }}>
                 <Button
                   size="small"
                   sx={{ typography: 'caption', fontWeight: 'bold' }}
@@ -145,17 +149,15 @@ const HomePage = ({ heroInfo, faqs, featuredCategories }) => {
               </Link>
             </Typography>
             <HorizontalScrollSection>
-              {featuredCategories
-                .map((item, index) => (
-                  <CategoryCard
-                    key={index}
-                    alt="demo Category"
-                    imageSrc={urlForImage(item?.image).url()}
-                    title={item?.title}
-                    slug={item?.slug}
-                    sx={{ marginInline: 1, width: 270 }}
-                  />
-                ))}
+              {featuredCategories?.map((category, index) => (
+                 <CategoryCard
+                 alt={category?.image.alt}
+                 imageSrc={urlForImage(category.image).url()}
+                 slug={category?.slug}
+                 title={category?.name}
+                 sx={{ marginInline: 1, width: 270 }}
+               />
+              ))}
             </HorizontalScrollSection>
           </Box>
         </Container>
@@ -199,21 +201,20 @@ const HomePage = ({ heroInfo, faqs, featuredCategories }) => {
             </Typography>
             <Container>
               <HorizontalScrollSection>
-                {Array(8)
-                  .fill(0)
-                  .map((item, index) => (
+                {newlyStockedProducts?.map((item, index) => (
+                  <Grid item xs={''}>
                     <ProductCard
                       key={index}
-                      alt="demo product"
-                      price={1900}
-                      imageSrc={drugImage}
-                      categoryName={'Category Name'}
-                      title={'TYLENOL Cold & Flu Severe Caplets |'}
+                      alt={item?.image.alt}
+                      price={item.price}
+                      imageSrc={item.image}
+                      categoryName={item.category.name}
+                      title={item.name}
                       starCount={index}
                       otherStyles={{ width: 300, marginInline: 1 }}
-                      // sx={{ marginInline: 1 }}
                     />
-                  ))}
+                  </Grid>
+                ))}
               </HorizontalScrollSection>
             </Container>
           </Box>
@@ -236,8 +237,12 @@ export async function getStaticProps() {
   try {
     const heroInfo = await getHeroInfo()
     const faqs = await getFaqs()
-    const featuredCategories = await getFeaturedCategories()
-    return { props: { heroInfo, faqs, featuredCategories } }
+    const featuredCategories = await getTopCategories()
+    const newlyStockedProducts = await getNewlyStockedProducts()
+    return {
+      props: { heroInfo, faqs, featuredCategories, newlyStockedProducts },
+      revalidate: 30,
+    }
   } catch (error) {
     console.error(error)
     return { props: { heroInfo: {}, faqs: [], featuredCategories: [] } }

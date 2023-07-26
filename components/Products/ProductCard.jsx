@@ -11,12 +11,13 @@ import {
 } from '@mui/material'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
-import Image from 'next/image'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
 import CartToastContent from './CartToastContent'
 import useTruncateText from '@/hooks/useTruncateWords'
 import useFormatAmount from '@/hooks/useFormatAmount'
+import CustomImage from '@/components/CustomImage'
+
 
 const CustomCard = styled(Card)(({ theme }) => ({
   color: theme.palette.complementary.dark,
@@ -86,9 +87,9 @@ const ProductCard = ({
           title={alt}
         >
           <Link href="/products/product">
-            <Image
+            <CustomImage
               alt={alt}
-              src={imageSrc}
+              asset={imageSrc}
               style={{ objectFit: 'contain' }}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

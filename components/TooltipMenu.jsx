@@ -36,7 +36,7 @@ const CustomTooltip = ({ children, collections = [] }) => {
                     }}
                   >
                     <Link
-                      href={`collections/${collection?.slug?.current}`}
+                      href={`/collections/${collection?.slug?.current}`}
                       style={{ textDecoration: 'none' }}
                     >
                       <Typography
@@ -46,7 +46,7 @@ const CustomTooltip = ({ children, collections = [] }) => {
                           '&:hover': { color: 'primary.main' },
                         }}
                       >
-                        {collection?.title}
+                        {collection?.name}
                       </Typography>
                     </Link>
                   </ListItem>

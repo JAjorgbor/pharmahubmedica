@@ -20,32 +20,63 @@ export const getHeroInfo = () => {
 
 // Get categories
 export const getCategories = () => {
-  return client.fetch(`*[_type=="category"]`)
+  return client.fetch(`*[_type=="category"&& status]{name,image,slug}`)
+}
+// Get category name
+export const getCategoryName = (categorySlug) => {
+  return client.fetch(
+    `*[_type=="category"&& status && slug.current== $categorySlug][0]{name}`,
+    { categorySlug }
+  )
 }
 // Get categories (list)
 export const getCategoriesList = () => {
-  return client.fetch(`*[_type=="category"]{title, slug}`)
+  return client.fetch(`*[_type=="category" && status]{name, slug}`)
 }
-// Get featured categories
-export const getFeaturedCategories = () => {
-  return client.fetch(`*[_type=="category" && isFeaturedCategory]{
-    title, image, slug
+// Get Top categories
+export const getTopCategories = () => {
+  return client.fetch(`*[_type=="category" && isTopCategory && status]{
+    name, image, slug
   }`)
 }
 
 // Get products for given category
-export const getProductsForCategory = (categorySlug) => {
+export const getProductsForCategory = (
+  categorySlug,
+  pageNumber,
+  itemsPerPage
+) => {
   return client.fetch(
-    `*[_type == "product" && references(*[_type == "category" && slug.current == $categorySlug]._id)]
+    `*[_type == "product" && status && category->slug.current==$categorySlug] | order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {
+      _id, name, price, image, category->{name}      
+      }
   `,
+    {
+      categorySlug,
+      pageNumber,
+      itemsPerPage,
+    }
+  )
+}
+// Get count of products per category
+export const getProductsForCategoryCount = (categorySlug) => {
+  return client.fetch(
+    `count(*[_type == "product" && status && category->slug.current==$categorySlug])`,
     {
       categorySlug,
     }
   )
 }
+// Get newly stocked products
+export const getNewlyStockedProducts = () => {
+  return client.fetch(
+    `*[_type == "product"] | order(_createdAt desc) [0..9] {name, price, image, category->{name} }
+  `
+  )
+}
 
-// Get products for given category
-export const getProduct = (productSlug) => {
+// Get product details
+export const getProductDetails = (productSlug) => {
   return client.fetch(`*[_type=="product" && slug.current == $productSlug]`, {
     productSlug,
   })

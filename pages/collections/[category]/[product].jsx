@@ -37,7 +37,6 @@ const ProductSlug = () => {
         {/* Breadcrumbs */}
         <BreadCrumbs
           links={[
-            { title: 'Home', path: '/' },
             { title: 'Products', path: '/products' },
             { title: 'Product Name', path: '#' },
           ]}
