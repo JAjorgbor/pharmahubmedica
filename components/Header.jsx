@@ -125,10 +125,10 @@ export default function Header({
             in={showSearchBar}> */}
         <SearchBar
           styles={{
-            width: { xs: '80%', sm: '450px' },
+            width: { xs: '90%', sm: '450px' },
             position: 'fixed',
-            top: '11rem',
-            zIndex: 100,
+            top: '8rem',
+            zIndex: 999,
             left: '50%',
             transform: 'translate(-50%, -50%)',
             display: showSearchBar && isSmallScreen ? 'flex' : 'none' || 'flex',
