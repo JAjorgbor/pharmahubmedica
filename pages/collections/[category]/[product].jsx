@@ -179,7 +179,7 @@ const ProductSlug = () => {
               </Link>
             </Typography>
             <Container>
-              <HorizontalScrollSection>
+              {/* <HorizontalScrollSection>
                 {Array(8)
                   .fill(0)
                   .map((item, index) => (
@@ -195,7 +195,7 @@ const ProductSlug = () => {
                       // sx={{ marginInline: 1 }}
                     />
                   ))}
-              </HorizontalScrollSection>
+              </HorizontalScrollSection> */}
             </Container>
           </Box>
         </Box>
