@@ -29,9 +29,7 @@ const About = ({ about }) => {
         <Container>
           <BreadCrumbs
             links={[
-              { title: 'Home', path: '/' },
-              ,
-              { title: 'About Us', path: '/about ' },
+              { title: 'About Us', path: '#' },
             ]}
           />
           <Typography

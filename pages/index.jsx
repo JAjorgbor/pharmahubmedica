@@ -180,25 +180,6 @@ const HomePage = ({
             </Typography>
           </Divider>
           <Box mt={5} sx={{ position: 'relative' }}>
-            <Typography
-              fontWeight={'bold'}
-              fontSize={14}
-              variant="body1"
-              textAlign="end"
-              marginRight={'5.2%'}
-              marginBottom={3}
-              color="primary.main"
-            >
-              <Link href="/products" style={{ textDecoration: 'none' }}>
-                <Button
-                  size="small"
-                  sx={{ typography: 'caption', fontWeight: 'bold' }}
-                  endIcon={<EastOutlinedIcon />}
-                >
-                  View More
-                </Button>
-              </Link>
-            </Typography>
             <Container>
               <HorizontalScrollSection>
                 {newlyStockedProducts?.map((item, index) => (

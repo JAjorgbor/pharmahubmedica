@@ -70,7 +70,7 @@ export const getProductsForCategoryCount = (categorySlug) => {
 // Get newly stocked products
 export const getNewlyStockedProducts = () => {
   return client.fetch(
-    `*[_type == "product"] | order(_createdAt desc) [0..9] {name, price, image, category->{name} }
+    `*[_type == "product" && status] | order(_createdAt desc) [0..9] {name, price, image, category->{name}, subcategories }
   `
   )
 }
@@ -80,4 +80,40 @@ export const getProductDetails = (productSlug) => {
   return client.fetch(`*[_type=="product" && slug.current == $productSlug]`, {
     productSlug,
   })
+}
+
+// Search Products
+export const searchProducts = (
+  productName,
+  categoryName,
+  pageNumber,
+  itemsPerPage
+) => {
+  return client.fetch(
+    `*[_type=="product" && status && name match $productName ${
+      categoryName !== 'all categories'
+        ? '&& category->name == $categoryName'
+        : ''
+    }]| order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {name, price, image, category->{name} }`,
+    {
+      productName,
+      categoryName,
+      pageNumber,
+      itemsPerPage,
+    }
+  )
+}
+// Search Products count
+export const searchProductsCount = (productName, categoryName) => {
+  return client.fetch(
+    `count(*[_type=="product" && status && name match $productName ${
+      categoryName !== 'all categories'
+        ? '&& category->name == $categoryName'
+        : ''
+    }])`,
+    {
+      productName,
+      categoryName,
+    }
+  )
 }
