@@ -1,48 +1,52 @@
-import { useEffect, useState } from 'react'
-import ProductCard from '@/components/Products/ProductCard'
-import useSWR from 'swr'
-import {
-  Box,
-  Button,
-  Drawer,
-  Container,
-  Grid,
-  Typography,
-  AppBar,
-  Toolbar,
-  useScrollTrigger,
-  Slide,
-  Pagination,
-  CircularProgress,
-} from '@mui/material'
-import { Alert, AlertTitle } from '@mui/lab'
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
-import drugImage from '@/public/drug-image.jpg'
+import BreadCrumbs from '@/components/BreadCrumbs'
 import Meta from '@/components/Meta'
 import Filter from '@/components/Products/Filter'
-import Link from 'next/link'
-import BreadCrumbs from '@/components/BreadCrumbs'
+import ProductCard from '@/components/Products/ProductCard'
 import {
-  getCategoryName,
+  getCategoryDetails,
   getProductsForCategory,
   getProductsForCategoryCount,
 } from '@/utils/requests'
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Drawer,
+  Grid,
+  Pagination,
+  Slide,
+  Toolbar,
+  Typography,
+  useScrollTrigger,
+} from '@mui/material'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import useSWR, { SWRConfig } from 'swr'
 
-const Products = ({ categoryName, products, productsCount }) => {
+const Products = ({ categoryName, subcategories, products, productsCount }) => {
   const [openFilterDrawer, setOpenFilterDrawer] = useState(false)
-  const [lastProduct, setLastProduct] = useState({})
+  const [loading, setLoading] = useState(false)
   const trigger = useScrollTrigger({ threshold: 220, disableHysteresis: true })
   const router = useRouter()
-  const lastId = router?.query?.lastId || ''
-  const { category: categorySlug } = router.query
-  const pageNumber = router.query?.page
+  const asPath = router.asPath
+  const { category, ...queryParameters } = router.query
+
+  const { category: categorySlug } = router?.query
+  const pageNumber = Number(router.query?.page || 1)
+  useEffect(() => {
+    setLoading(false)
+    setOpenFilterDrawer(false)
+  }, [asPath])
   // useEffect(() => {
   //   setLastProduct(products[products.length - 1])
   // }, [products]);
   // const productsFetcher = async () => {
-  //   console.log('lastId', lastId)
-  //   const products = await getProductsForCategory(categorySlug, lastId)
+  //   const products = getProductsForCategory(categorySlug, pageNumber, 3)
   //   return products
   // }
 
@@ -50,7 +54,7 @@ const Products = ({ categoryName, products, productsCount }) => {
   //   data: products,
   //   isLoading: productsLoading,
   //   error: productsError,
-  // } = useSWR(`api/${lastId}`, productsFetcher)
+  // } = useSWR(`api/collections/${categorySlug}?page=${pageNumber}`, productsFetcher)
   // useEffect(() => {
   //   console.log('productsError', productsError)
   // }, [productsError])
@@ -74,6 +78,8 @@ const Products = ({ categoryName, products, productsCount }) => {
             // border: '1px solid red',
           }}
           elevation={0}
+          subcategories={subcategories}
+          setSpinner={() => setLoading(true)}
         />
       </Drawer>
       <Container>
@@ -155,6 +161,8 @@ const Products = ({ categoryName, products, productsCount }) => {
 
                 // border: '1px solid red',
               }}
+              subcategories={subcategories}
+              setSpinner={() => setLoading(true)}
             />
           </Box>
           <Box
@@ -174,13 +182,21 @@ const Products = ({ categoryName, products, productsCount }) => {
               justifyContent={'center'}
               sx={{ width: '100%' }}
             >
-              {products.length < 1 ? (
+              {loading ? (
+                <CircularProgress />
+              ) : products?.length < 1 ? (
                 <Alert severity="info" variant="outlined" color="primary">
                   <AlertTitle>No Products Available</AlertTitle>
                   Oops, there are no products for this page you can browse other
-                  products by going {' '}
-                  <Typography color='primary.main' fontWeight='bold' variant='strong'>
-                    <Link href={`/collections`} style={{color:'inherit'}}>Here </Link>
+                  products by going{' '}
+                  <Typography
+                    color="primary.main"
+                    fontWeight="bold"
+                    variant="strong"
+                  >
+                    <Link href={`/collections`} style={{ color: 'inherit' }}>
+                      Here{' '}
+                    </Link>
                   </Typography>
                 </Alert>
               ) : (
@@ -201,12 +217,17 @@ const Products = ({ categoryName, products, productsCount }) => {
             </Grid>
             <Pagination
               sx={{ marginTop: 5 }}
-              count={Math.ceil(productsCount / 2)}
+              count={Math.ceil(productsCount / 3)}
               color="primary"
+              defaultPage={pageNumber}
               variant="outlined"
               shape="rounded"
               onChange={(e, value) => {
-                router.push(`/collections/${categorySlug}?page=${value}`)
+                setLoading(true)
+                router.push({
+                  pathname: router.pathname,
+                  query: { ...queryParameters, page: value },
+                })
               }}
             />
           </Box>
@@ -219,15 +240,35 @@ export default Products
 
 export async function getServerSideProps(context) {
   const { category } = context.params
+  let subcategoriesFilter = context?.query?.subcategories || []
+  subcategoriesFilter = Array.isArray(subcategoriesFilter)
+    ? subcategoriesFilter
+    : [subcategoriesFilter]
   const pageNumber = Number(context.query?.page || 1)
-  const lastId = context?.query?.lastId || ''
+  const priceRange = context?.query?.priceRange || ''
 
   try {
-    const productsCount = await getProductsForCategoryCount(category)
-    const categoryName = await getCategoryName(category)
-    const products = await getProductsForCategory(category, pageNumber, 2)
+    const productsCount = await getProductsForCategoryCount(
+      category,
+      subcategoriesFilter,
+      priceRange
+    )
+    const categoryDetails = await getCategoryDetails(category)
+    const { name: categoryName, subcategories } = categoryDetails
+    const products = await getProductsForCategory(
+      category,
+      pageNumber,
+      subcategoriesFilter,
+      3,
+      priceRange
+    )
     return {
-      props: { products, productsCount, categoryName: categoryName.name },
+      props: {
+        products,
+        productsCount,
+        categoryName,
+        subcategories,
+      },
     }
   } catch (error) {
     console.error(error)

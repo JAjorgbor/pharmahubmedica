@@ -29,7 +29,10 @@ const SearchBar = ({ searchValue, setSearchValue, styles, ...props }) => {
   const { register, handleSubmit, control } = useForm()
   const router = useRouter()
   const onSubmit = (data) => {
-    router.push(`/search/${data.productName}?category=${data.categoryName}`)
+    router.push({
+      pathname: `/search/${data.productName}`,
+      query: { classification: data.categoryName },
+    })
   }
 
   return (
@@ -61,7 +64,7 @@ const SearchBar = ({ searchValue, setSearchValue, styles, ...props }) => {
           <FormControl sx={{}}>
             <Select
               color="complementary"
-              defaultValue='all categories'
+              defaultValue="all categories"
               inputProps={{
                 sx: { padding: 0.5, border: 'none ' },
               }}

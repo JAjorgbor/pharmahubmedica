@@ -22,10 +22,10 @@ export const getHeroInfo = () => {
 export const getCategories = () => {
   return client.fetch(`*[_type=="category"&& status]{name,image,slug}`)
 }
-// Get category name
-export const getCategoryName = (categorySlug) => {
+// Get category details
+export const getCategoryDetails = (categorySlug) => {
   return client.fetch(
-    `*[_type=="category"&& status && slug.current== $categorySlug][0]{name}`,
+    `*[_type=="category"&& status && slug.current == 'first-category'][0]{name, subcategories[]->{name, slug}}`,
     { categorySlug }
   )
 }
@@ -39,15 +39,47 @@ export const getTopCategories = () => {
     name, image, slug
   }`)
 }
+// Get subcategories for a given category
+export const getSubCategories = (category) => {
+  return client.fetch(
+    `*[_type=="category" && name == $category && status].subcategories[]->{
+    name, status
+  }`,
+    { category }
+  )
+}
 
 // Get products for given category
 export const getProductsForCategory = (
   categorySlug,
   pageNumber,
-  itemsPerPage
+  subcategories,
+  itemsPerPage,
+  priceRange
 ) => {
+  let price
+  switch (priceRange) {
+    case 'price < 1000':
+      price = 'price < 1000'
+      break
+    case '1000 - 5000':
+      price = 'price >= 1000 && price < 5000'
+      break
+    case 'price > 5000':
+      price = 'price > 5000'
+      break
+    default:
+      price = ''
+      break
+  }
   return client.fetch(
-    `*[_type == "product" && status && category->slug.current==$categorySlug] | order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {
+    `*[_type == "product" && status && category->slug.current==$categorySlug  ${
+      subcategories?.length > 0
+        ? '&& count((subcategories[]->name)[@ in $subcategories]) > 0'
+        : ''
+    } ${
+      price ? `&& ${price}` : ''
+    }] | order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {
       _id, name, price, image, category->{name}      
       }
   `,
@@ -55,18 +87,47 @@ export const getProductsForCategory = (
       categorySlug,
       pageNumber,
       itemsPerPage,
+      subcategories,
+      priceRange: price,
     }
   )
 }
 // Get count of products per category
-export const getProductsForCategoryCount = (categorySlug) => {
+export const getProductsForCategoryCount = (
+  categorySlug,
+  subcategories,
+  priceRange
+) => {
+  let price
+  switch (priceRange) {
+    case 'price < 1000':
+      price = 'price < 1000'
+      break
+    case '1000 - 5000':
+      price = 'price >= 1000 && price < 5000'
+      break
+    case 'price > 5000':
+      price = 'price > 5000'
+      break
+    default:
+      price = ''
+      break
+  }
   return client.fetch(
-    `count(*[_type == "product" && status && category->slug.current==$categorySlug])`,
+    `count(*[_type == "product" && status && category->slug.current==$categorySlug  ${
+      subcategories?.length > 0
+        ? '&& count((subcategories[]->name)[@ in $subcategories]) > 0'
+        : ''
+    } ${price ? `&& ${price}` : ''}]) 
+  `,
     {
       categorySlug,
+      subcategories,
+      priceRange: price,
     }
   )
 }
+
 // Get newly stocked products
 export const getNewlyStockedProducts = () => {
   return client.fetch(
@@ -85,35 +146,63 @@ export const getProductDetails = (productSlug) => {
 // Search Products
 export const searchProducts = (
   productName,
-  categoryName,
+  classificationName,
+  subClassifications,
   pageNumber,
+  priceRange,
   itemsPerPage
 ) => {
+  let price
+  switch (priceRange) {
+    case 'price < 1000':
+      price = 'price < 1000'
+      break
+    case '1000 - 5000':
+      price = 'price >= 1000 && price < 5000'
+      break
+    case 'price > 5000':
+      price = 'price > 5000'
+      break
+    default:
+      price = ''
+      break
+  }
   return client.fetch(
-    `*[_type=="product" && status && name match $productName ${
-      categoryName !== 'all categories'
-        ? '&& category->name == $categoryName'
+    groq`*[_type=="product" && status && name match $productName ${
+      classificationName !== 'all categories'
+        ? '&& category->name == $classificationName'
         : ''
+    } ${
+      subClassifications.length > 0 && classificationName !== 'all categories'
+        ? '&& count((subcategories[]->name)[@ in $subClassifications]) > 0'
+        : subClassifications.length > 0 &&
+          classificationName == 'all categories'
+        ? '&& category->name in $subClassifications'
+        : ''
+    }${
+      price ? `&& ${price}` : ''
     }]| order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {name, price, image, category->{name} }`,
     {
       productName,
-      categoryName,
+      classificationName,
+      subClassifications,
       pageNumber,
+      priceRange: price,
       itemsPerPage,
     }
   )
 }
 // Search Products count
-export const searchProductsCount = (productName, categoryName) => {
+export const searchProductsCount = (productName, classificationName) => {
   return client.fetch(
     `count(*[_type=="product" && status && name match $productName ${
-      categoryName !== 'all categories'
-        ? '&& category->name == $categoryName'
+      classificationName !== 'all categories'
+        ? '&& category->name == $classificationName'
         : ''
     }])`,
     {
       productName,
-      categoryName,
+      classificationName,
     }
   )
 }

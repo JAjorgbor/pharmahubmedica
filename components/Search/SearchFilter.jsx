@@ -16,72 +16,85 @@ import {
   Typography,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
+const SearchFilter = ({ setSpinner = () => {}, classifications, ...props }) => {
   const router = useRouter()
   const { category, ...queryParameters } = router.query
   const { pathname } = router
   const { asPath } = router
-  const categorySlug = router.query?.category
+  const productName = router.query?.product
   const [priceRange, setPriceRange] = useState(queryParameters.priceRange ?? '')
-  const [subcategoryList, setSubcategoryList] = useState(
-    queryParameters.subcategories ?? []
+  const [subClassificationsList, setSubClassificationsList] = useState(
+    queryParameters.subClassifications ?? []
   )
   return (
     <>
       <Paper {...props}>
         <Box p={1} border={'1px solid lightgray'}>
-    {(priceRange || subcategoryList.length > 0) && (
-      <>
-          <Button
-            textTransform="uppercase"
-            variant="contained"
-            size="small"
-            color="primary"
-            sx={{ marginBottom: 1 }}
-            onClick={() => {
-              setSpinner()
-              router.replace({
-                pathname: `/collections/${category}`,
-                query: {
-                  ...queryParameters,
-                  priceRange: priceRange,
-                  subcategories: subcategoryList,
-                },
-              })
-            }}
+          <Typography
+            component="h3"
+            fontSize={15}
+            fontWeight={'bold'}
+            textAlign="center"
+            color='primary'
           >
-            Set Filters
-          </Button>
-            <Button
-              textTransform="uppercase"
-              variant="outlined"
-              size="small"
-              color="primary"
-              onClick={() => {
-                if (
-                  !queryParameters?.priceRange &&
-                  !queryParameters?.subcategories
-                ) {
+            FILTER <FilterAltOutlinedIcon />
+          </Typography>
+          <Divider sx={{marginBottom:1}} />
+          {(priceRange || subClassificationsList.length > 0) && (
+            <>
+              <Button
+                textTransform="uppercase"
+                variant="contained"
+                size="small"
+                color="primary"
+                sx={{ marginBottom: 1 }}
+                onClick={() => {
+                  setSpinner()
+                  router.replace({
+                    pathname: router.pathname,
+                    query: {
+                      ...queryParameters,
+                      priceRange: priceRange,
+                      subClassifications: subClassificationsList,
+                    },
+                  })
+                }}
+              >
+                Set Filters
+              </Button>
+              <Button
+                textTransform="uppercase"
+                variant="outlined"
+                size="small"
+                color="primary"
+                onClick={() => {
+                  if (
+                    !queryParameters?.priceRange &&
+                    !queryParameters?.subClassifications
+                  ) {
+                    setPriceRange('')
+                    setSubClassificationsList([])
+                    return
+                  }
+                  setSpinner()
+                  router.replace({
+                    pathname: `/search/${productName}`,
+                    query: {
+                      classification: queryParameters.classification,
+                      page: queryParameters.page || 1,
+                    },
+                  })
                   setPriceRange('')
-                  setSubcategoryList([])
-                  return
-                }
-                setSpinner()
-                router.replace({
-                  pathname: `/collections/${categorySlug}`,
-                  query: {
-                    page: queryParameters.page,
-                  },
-                })
-                setPriceRange('')
-                setSubcategoryList([])
-              }}
-            >
-              Reset All Filters
-            </Button></>
+                  setSubClassificationsList([])
+                }}
+              >
+                Reset All Filters
+              </Button>
+            </>
           )}
         </Box>
         <Accordion elevation={0} sx={{ color: 'complementary.dark' }}>
@@ -145,7 +158,9 @@ const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
                 fontWeight: 'bold',
               }}
             >
-              Subcategories
+              {router.query.classification == 'all categories'
+                ? 'Categories'
+                : 'Subcategories'}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -154,7 +169,7 @@ const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
                 defaultValue="cough and cold"
                 name="radio-buttons-group"
                 onChange={(e) => {
-                  setSubcategoryList((prevState) => {
+                  setSubClassificationsList((prevState) => {
                     const array = [...prevState]
                     if (!e.target.checked) {
                       array.splice(
@@ -168,12 +183,14 @@ const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
                   })
                 }}
               >
-                {subcategories?.map((subcategory, index) => (
+                {classifications?.map((subcategory, index) => (
                   <FormControlLabel
                     value={subcategory?.name}
                     control={
                       <Checkbox
-                        checked={subcategoryList.includes(subcategory?.name)}
+                        checked={subClassificationsList.includes(
+                          subcategory?.name
+                        )}
                       />
                     }
                     label={subcategory?.name}
@@ -188,4 +205,4 @@ const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
     </>
   )
 }
-export default Filter
+export default SearchFilter

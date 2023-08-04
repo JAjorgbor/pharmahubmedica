@@ -19,49 +19,84 @@ import { Alert, AlertTitle } from '@mui/lab'
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
 import drugImage from '@/public/drug-image.jpg'
 import Meta from '@/components/Meta'
-import Filter from '@/components/Products/Filter'
 import Link from 'next/link'
 import BreadCrumbs from '@/components/BreadCrumbs'
 import {
-  getCategoryName,
+  getCategoriesList,
+  getCategoryDetails,
   getProductsForCategory,
   getProductsForCategoryCount,
+  getSearchResultsCount,
+  getSubCategories,
   searchProducts,
-  searchProductsCount,
+  searchProductsCount as searchResultsCount,
 } from '@/utils/requests'
 import { useRouter } from 'next/router'
+import SearchFilter from '@/components/Search/SearchFilter'
 
 const SearchPage = () => {
   const [openFilterDrawer, setOpenFilterDrawer] = useState(false)
   const trigger = useScrollTrigger({ threshold: 220, disableHysteresis: true })
   const router = useRouter()
-  const lastId = router?.query?.lastId || ''
   const { product: productName } = router?.query
   const pageNumber = Number(router?.query?.page || 1)
-  const categoryName = router?.query?.category || ''
+  const classificationName = router?.query?.classification || ''
+  const priceRange = router?.query?.priceRange || ''
 
-  const productsFetcher = async () => {
+  let subClassificationsFilter = router?.query?.subClassifications || []
+  subClassificationsFilter = Array.isArray(subClassificationsFilter)
+    ? subClassificationsFilter
+    : [subClassificationsFilter]
+
+  const classificationsListFetcher = async () => {
+    if (classificationName == 'all categories') {
+      const categoryList = await getCategoriesList()
+      return categoryList
+    }
+    const subcategories = await getSubCategories(classificationName)
+    return subcategories
+  }
+  const { data: classifications } = useSWR(
+    `api/classifications/${classificationName}`,
+    classificationsListFetcher
+  )
+
+  const searchResultsFetcher = async () => {
     const products = await searchProducts(
       productName,
-      categoryName,
+      classificationName,
+      subClassificationsFilter,
       pageNumber,
-      1
+      priceRange,
+      2
     )
-    const productsCount = await searchProductsCount(productName, categoryName)
-    return { products, productsCount }
+    return products
   }
 
   const {
-    data: productsData,
+    data: searchResults,
     isLoading: searchResultsLoading,
     error: searchResultsError,
   } = useSWR(
-    `api/${productName}?category=${categoryName}&page=${pageNumber}`,
-    productsFetcher
+    `api/${productName}?classification=${classificationName}&&page=${pageNumber}&&subcategories=${subClassificationsFilter} && priceRange=${priceRange}`,
+    searchResultsFetcher
+  )
+
+  const searchResultsCountFetcher = async () => {
+    const productsCount = await searchResultsCount(
+      classificationName,
+      subClassificationsFilter,
+      priceRange
+    )
+  }
+
+  const { data: productsCount, error } = useSWR(
+    `api/${productName}?category=${classificationName}`,
+    searchResultsCountFetcher
   )
 
   useEffect(() => {
-    console.log('searchResultsError', searchResultsError)
+    // console.log('searchResultsError', searchResultsError)
   }, [searchResultsError])
   return (
     <>
@@ -74,15 +109,14 @@ const SearchPage = () => {
           sx: { width: 250 },
         }}
       >
-        <Filter
+        <SearchFilter
           sx={{
             position: 'sticky',
             top: 69,
             minHeight: 300,
-            // width:240
-            // border: '1px solid red',
           }}
           elevation={0}
+          classifications={classifications}
         />
       </Drawer>
       <Container>
@@ -151,7 +185,7 @@ const SearchPage = () => {
             }}
           >
             {/* Filter card component for large screens */}
-            <Filter
+            <SearchFilter
               sx={{
                 position: 'sticky',
                 top: 69,
@@ -159,6 +193,7 @@ const SearchPage = () => {
 
                 // border: '1px solid red',
               }}
+              classifications={classifications}
             />
           </Box>
           <Box
@@ -180,10 +215,11 @@ const SearchPage = () => {
             >
               {searchResultsLoading ? (
                 <CircularProgress />
-              ) : productsData?.products?.length < 1 ? (
+              ) : searchResults?.length < 1 ? (
                 <Alert severity="info" variant="outlined" color="primary">
                   <AlertTitle>No Products Found</AlertTitle>
-                  Oops, there are no search results for this page you can browse through our other products by going{' '}
+                  Oops, there are no search results for this page you can browse
+                  through our other products by going{' '}
                   <Typography
                     color="primary.main"
                     fontWeight="bold"
@@ -195,7 +231,7 @@ const SearchPage = () => {
                   </Typography>
                 </Alert>
               ) : (
-                productsData?.products?.map((item, index) => (
+                searchResults?.map((item, index) => (
                   <Grid item xs={''} key={index}>
                     <ProductCard
                       alt={item?.image.alt}
@@ -212,16 +248,21 @@ const SearchPage = () => {
             </Grid>
             <Pagination
               sx={{ marginTop: 5 }}
-              count={Math.ceil(productsData?.productsCount / 1)}
+              count={
+                searchResultsCount >= 3 ? Math.ceil(searchResultsCount / 3) : 1
+              }
               color="primary"
+              defaultPage={pageNumber}
               variant="outlined"
               shape="rounded"
               onChange={(e, value) => {
-                router.push(
-                  `/search/${productName}?category=${categoryName}&page=${value}`
-                )
+                // setLoading(true)
+                router.push({
+                  pathname: router.pathname,
+                  query: { ...queryParameters, page: value },
+                })
               }}
-            />
+            />{' '}
           </Box>
         </Box>
       </Container>
@@ -229,21 +270,3 @@ const SearchPage = () => {
   )
 }
 export default SearchPage
-
-// export async function getServerSideProps(context) {
-//   const { category } = context.params
-//   const pageNumber = Number(context.query?.page || 1)
-//   const lastId = context?.query?.lastId || ''
-
-//   try {
-//     const productsCount = await getProductsForCategoryCount(category)
-//     const categoryName = await getCategoryName(category)
-//     const products = await getProductsForCategory(category, pageNumber, 2)
-//     return {
-//       props: { products, productsCount, categoryName: categoryName.name },
-//     }
-//   } catch (error) {
-//     console.error(error)
-//     return { props: { products: [], productsCount: 0 } }
-//   }
-// }
