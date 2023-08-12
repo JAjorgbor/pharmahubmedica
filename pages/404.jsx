@@ -40,13 +40,13 @@ const Error404Page = () => {
                   Home Page
                 </Button>
               </Link>
-              <Link href="/products">
+              <Link href="/collections">
                 <Button
                   variant="outlined"
                   color="primary"
                   sx={{ borderRadius: '0' }}
                 >
-                  Products
+                  Collections
                 </Button>
               </Link>
             </Stack>

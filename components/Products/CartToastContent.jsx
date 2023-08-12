@@ -9,6 +9,9 @@ import {
   Typography,
 } from '@mui/material'
 import Image from 'next/image'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import CustomImage from '../CustomImage'
 
 const CartToastContent = ({ imageSrc, productName }) => {
   return (
@@ -26,7 +29,7 @@ const CartToastContent = ({ imageSrc, productName }) => {
                 // marginRight: -2,
               }}
             >
-              <Image src={imageSrc} alt={productName} fill />
+              <CustomImage asset={imageSrc} alt={productName} fill />
             </Avatar>
           }
           title={productName}
@@ -45,8 +48,22 @@ const CartToastContent = ({ imageSrc, productName }) => {
           }}
         />
         <CardActions>
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            sx={{ fontSize: 10 }}
+            endIcon={<ShoppingCartOutlinedIcon />}
+          >
             View Cart
+          </Button>
+          <Button
+            size="small"
+            color="success"
+            variant="contained"
+            sx={{ fontSize: 10 }}
+            endIcon={<WhatsAppIcon />}
+          >
+            Buy On Whatsapp
           </Button>
         </CardActions>
       </Card>

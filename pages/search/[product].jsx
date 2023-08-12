@@ -121,7 +121,7 @@ const SearchPage = () => {
       </Drawer>
       <Container>
         {/* Breadcrumbs */}
-        <BreadCrumbs links={[{ title: 'search', path: '#' }]} />
+        <BreadCrumbs links={[{ title: 'search', path: '#' }, {title:`Search results for "${productName}"`, path:`/search/${productName}`}]} />
         <Toolbar
           sx={{
             width: '100%',
@@ -190,8 +190,6 @@ const SearchPage = () => {
                 position: 'sticky',
                 top: 69,
                 minHeight: 300,
-
-                // border: '1px solid red',
               }}
               classifications={classifications}
             />
@@ -214,7 +212,9 @@ const SearchPage = () => {
               sx={{ width: '100%' }}
             >
               {searchResultsLoading ? (
-                <CircularProgress />
+                <Box py={15}>
+                  <CircularProgress />
+                </Box>
               ) : searchResults?.length < 1 ? (
                 <Alert severity="info" variant="outlined" color="primary">
                   <AlertTitle>No Products Found</AlertTitle>

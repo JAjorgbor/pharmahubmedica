@@ -80,7 +80,7 @@ export const getProductsForCategory = (
     } ${
       price ? `&& ${price}` : ''
     }] | order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {
-      _id, name, price, image, category->{name}      
+      _id, name, price, image, category->{name,slug}, slug      
       }
   `,
     {
@@ -131,16 +131,43 @@ export const getProductsForCategoryCount = (
 // Get newly stocked products
 export const getNewlyStockedProducts = () => {
   return client.fetch(
-    `*[_type == "product" && status] | order(_createdAt desc) [0..9] {name, price, image, category->{name}, subcategories }
+    `*[_type == "product" && status] | order(_createdAt desc) [0..9] {name, price, image, category->{name, slug}, slug }
   `
   )
 }
 
 // Get product details
 export const getProductDetails = (productSlug) => {
-  return client.fetch(`*[_type=="product" && slug.current == $productSlug]`, {
-    productSlug,
-  })
+  return client.fetch(
+    `*[_type=="product" && slug.current == $productSlug][0]{
+      _id,
+      category->{name, slug}, 
+      name,
+      description,
+      slug,
+      image,
+      price,
+      'subcategories':subcategories[]->name
+    }`,
+    {
+      productSlug,
+    }
+  )
+}
+// Get Similar products for a specific product
+export const getSimilarProducts = (
+  categoryName,
+  subcategories,
+  mainProductId
+) => {
+  return client.fetch(
+    groq`*[_type=="product" && category->name == $categoryName && _id != $mainProductId && count((subcategories[]->name)[@ in $subcategories]) > 0 ][0...9]{_id, name, price, image, category->{name, slug}, slug }`,
+    {
+      categoryName,
+      subcategories,
+      mainProductId,
+    }
+  )
 }
 
 // Search Products

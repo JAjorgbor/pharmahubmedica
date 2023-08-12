@@ -18,7 +18,6 @@ import useTruncateText from '@/hooks/useTruncateWords'
 import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomImage from '@/components/CustomImage'
 
-
 const CustomCard = styled(Card)(({ theme }) => ({
   color: theme.palette.complementary.dark,
   zIndex: '10',
@@ -63,12 +62,13 @@ const ProductCard = ({
   imageSrc,
   title,
   categoryName,
+  categorySlug,
+  slug,
   price,
   starCount,
   otherStyles,
   ...props
 }) => {
-
   return (
     <>
       <CustomCard
@@ -86,7 +86,7 @@ const ProductCard = ({
           }}
           title={alt}
         >
-          <Link href="/products/product">
+          <Link href={`/collections/${categorySlug?.current}/${slug?.current}`}>
             <CustomImage
               alt={alt}
               asset={imageSrc}
@@ -175,11 +175,11 @@ const ProductCard = ({
             sx={{
               fontSize: 11,
               textTransform: 'uppercase',
-              marginLeft:'0 !important'
+              marginLeft: '0 !important',
             }}
           >
             <Link
-              href="/products/product"
+              href={`/collections/${categorySlug?.current}/${slug?.current}`}
               style={{ color: 'inherit', textDecoration: 'none' }}
             >
               View Details

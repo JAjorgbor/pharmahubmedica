@@ -87,7 +87,10 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
         <BreadCrumbs
           links={[
             { title: 'collections', path: '/collections' },
-            { title: categoryName ?? categorySlug, path: '#' },
+            {
+              title: categoryName ?? categorySlug,
+              path: `/collections/${categorySlug}`,
+            },
           ]}
         />
         <Toolbar
@@ -183,7 +186,9 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
               sx={{ width: '100%' }}
             >
               {loading ? (
-                <CircularProgress />
+                <Box py={15}>
+                  <CircularProgress />
+                </Box>
               ) : products?.length < 1 ? (
                 <Alert severity="info" variant="outlined" color="primary">
                   <AlertTitle>No Products Available</AlertTitle>
@@ -207,6 +212,8 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
                       price={item.price}
                       imageSrc={item.image}
                       categoryName={item.category.name}
+                      categorySlug={item.category.slug}
+                      slug={item.slug}
                       title={item.name}
                       starCount={index}
                       otherStyles={{ width: { xs: 165, sm: 200, md: 280 } }}
@@ -225,7 +232,7 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
               onChange={(e, value) => {
                 setLoading(true)
                 router.push({
-                  pathname: router.pathname,
+                  pathname: `/collections/${categorySlug}`,
                   query: { ...queryParameters, page: value },
                 })
               }}

@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
@@ -33,6 +34,18 @@ const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
     <>
       <Paper {...props}>
         <Box p={1} border={'1px solid lightgray'}>
+        <Typography
+            component="h3"
+            fontSize={15}
+            fontWeight={'bold'}
+            textAlign="center"
+            color="primary"
+            marginBottom={1}
+          >
+            <Button color="primary" endIcon={<FilterAltOutlinedIcon />}>
+              Filters
+            </Button>
+          </Typography>
     {(priceRange || subcategoryList.length > 0) && (
       <>
           <Button

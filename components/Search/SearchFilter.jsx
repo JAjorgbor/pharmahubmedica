@@ -22,7 +22,7 @@ import { useState } from 'react'
 
 const SearchFilter = ({ setSpinner = () => {}, classifications, ...props }) => {
   const router = useRouter()
-  const { category, ...queryParameters } = router.query
+  const { product, ...queryParameters } = router.query
   const { pathname } = router
   const { asPath } = router
   const productName = router.query?.product
@@ -39,11 +39,13 @@ const SearchFilter = ({ setSpinner = () => {}, classifications, ...props }) => {
             fontSize={15}
             fontWeight={'bold'}
             textAlign="center"
-            color='primary'
+            color="primary"
+            marginBottom={1}
           >
-            FILTER <FilterAltOutlinedIcon />
+            <Button color="primary" endIcon={<FilterAltOutlinedIcon />}>
+              Filters
+            </Button>
           </Typography>
-          <Divider sx={{marginBottom:1}} />
           {(priceRange || subClassificationsList.length > 0) && (
             <>
               <Button
@@ -53,9 +55,11 @@ const SearchFilter = ({ setSpinner = () => {}, classifications, ...props }) => {
                 color="primary"
                 sx={{ marginBottom: 1 }}
                 onClick={() => {
-                  setSpinner()
+                  // setSpinner()
+                  console.log(productName)
+
                   router.replace({
-                    pathname: router.pathname,
+                    pathname: `/search/${productName}`,
                     query: {
                       ...queryParameters,
                       priceRange: priceRange,
@@ -121,6 +125,7 @@ const SearchFilter = ({ setSpinner = () => {}, classifications, ...props }) => {
                 onChange={(e) => {
                   setPriceRange(e.target.value)
                 }}
+                defaultValue={queryParameters?.priceRange || ''}
               >
                 <FormControlLabel
                   value="price < 1000"
@@ -166,7 +171,6 @@ const SearchFilter = ({ setSpinner = () => {}, classifications, ...props }) => {
           <AccordionDetails>
             <FormControl>
               <FormGroup
-                defaultValue="cough and cold"
                 name="radio-buttons-group"
                 onChange={(e) => {
                   setSubClassificationsList((prevState) => {

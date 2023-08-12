@@ -51,7 +51,7 @@ const product = {
       title: 'Slug',
       type: 'slug',
       description:
-        'A unique name that can be used for the URL of this product, note that there should be no spaces between the words i.e:"slug-of-category" and not:"slug of category"',
+        'A unique name that can be used for the URL of this product, note that there should be no spaces between the words i.e:"slug-of-product" and not:"slug of product"',
       validation: (Rule) => Rule.required(),
       options: {
         source: 'name',
