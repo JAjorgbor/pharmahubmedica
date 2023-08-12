@@ -89,8 +89,11 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
               >
                 {product.name}
               </Typography>
-              <Stack direction="row" spacing={1} sx={{ marginBlock: 1 }}>
-                {product.subcategories.map((item, index) => (
+              <Stack
+                direction="row"
+                sx={{ marginBlock: 1, flexWrap: 'wrap', gap:1 }}
+              >
+                {product?.subcategories?.map((item, index) => (
                   <Link
                     href={{
                       pathname: `/collections/${product.category.slug.current}`,
@@ -188,7 +191,7 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                 {' '}
                 <PortableText value={product?.description} />
               </TabPanel>
-              <TabPanel value="Reviews" sx={{}}>
+              <TabPanel value="Reviews" sx={{ paddingInline: 0 }}>
                 <Stack gap={3}>
                   <Stack
                     sx={{
@@ -196,6 +199,7 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                       height: { md: 400 },
                     }}
                     direction={{ md: 'row' }}
+                    spacing={1}
                   >
                     {/* Review Section */}
                     <Box
@@ -220,7 +224,11 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                                   </Avatar>
                                 }
                                 action={
-                                  <Tooltip title='Reply Review' arrow placement='top' >
+                                  <Tooltip
+                                    title="Reply Review"
+                                    arrow
+                                    placement="top"
+                                  >
                                     <IconButton aria-label="settings">
                                       <ReplyIcon />
                                     </IconButton>
@@ -355,7 +363,11 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                                   </Avatar>
                                 }
                                 action={
-                                  <Tooltip title='Reply Review' arrow placement='top' >
+                                  <Tooltip
+                                    title="Reply Review"
+                                    arrow
+                                    placement="top"
+                                  >
                                     <IconButton aria-label="settings">
                                       <ReplyIcon />
                                     </IconButton>
@@ -575,20 +587,19 @@ export default ProductDetailsPage
 
 export async function getServerSideProps(context) {
   const productSlug = context.query.product
-  try {
-    const product = await getProductDetails(productSlug)
-    // console.log(product.category.name,
-    //   product.subcategories)
-    const similarProducts = await getSimilarProducts(
-      product.category.name,
-      product.subcategories,
-      product._id
-    )
-    console.log('similarProducts', similarProducts)
-    return {
-      props: { product, similarProducts },
-    }
-  } catch (error) {
-    console.error(error)
+  const product = await getProductDetails(productSlug)
+  // console.log(product.category.name,
+  //   product.subcategories)
+  if (!product) {
+    return { notFound: true }
+  }
+  const similarProducts = await getSimilarProducts(
+    product.category.name,
+    product.subcategories,
+    product._id
+  )
+  console.log('similarProducts', similarProducts)
+  return {
+    props: { product, similarProducts },
   }
 }
