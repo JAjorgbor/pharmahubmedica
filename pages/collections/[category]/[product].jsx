@@ -18,13 +18,14 @@ import {
   Chip,
   Collapse,
   CardActions,
+  Tooltip,
 } from '@mui/material'
 import { TabPanel, TabContext, TabList } from '@mui/lab'
 import EastOutlinedIcon from '@mui/icons-material/EastOutlined'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
+import ReplyIcon from '@mui/icons-material/Reply'
 import { useState, useEffect } from 'react'
-import drugImage from '@/public/drug-image.jpg'
 import BreadCrumbs from '@/components/BreadCrumbs'
 import Image from 'next/image'
 import Meta from '@/components/Meta'
@@ -218,11 +219,13 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                                     R
                                   </Avatar>
                                 }
-                                // action={
-                                //   <IconButton aria-label="settings">
-                                //     <MoreVertIcon />
-                                //   </IconButton>
-                                // }
+                                action={
+                                  <Tooltip title='Reply Review' arrow placement='top' >
+                                    <IconButton aria-label="settings">
+                                      <ReplyIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                }
                                 title="Shrimp and Chorizo Paella"
                                 subheader={
                                   <>
@@ -286,11 +289,6 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                                           R
                                         </Avatar>
                                       }
-                                      // action={
-                                      //   <IconButton aria-label="settings">
-                                      //     <MoreVertIcon />
-                                      //   </IconButton>
-                                      // }
                                       title="Shrimp and Chorizo Paella"
                                       subheader={'September 14, 2016'}
                                     />
@@ -324,11 +322,6 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                                           R
                                         </Avatar>
                                       }
-                                      // action={
-                                      //   <IconButton aria-label="settings">
-                                      //     <MoreVertIcon />
-                                      //   </IconButton>
-                                      // }
                                       title="Shrimp and Chorizo Paella"
                                       subheader={'September 14, 2016'}
                                     />
@@ -361,11 +354,13 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                                     R
                                   </Avatar>
                                 }
-                                // action={
-                                //   <IconButton aria-label="settings">
-                                //     <MoreVertIcon />
-                                //   </IconButton>
-                                // }
+                                action={
+                                  <Tooltip title='Reply Review' arrow placement='top' >
+                                    <IconButton aria-label="settings">
+                                      <ReplyIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                }
                                 title="Shrimp and Chorizo Paella"
                                 subheader={
                                   <>
