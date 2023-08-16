@@ -36,18 +36,34 @@ import { toast } from 'react-toastify'
 import CartToastContent from '@/components/Products/CartToastContent'
 import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomCounter from '@/components/Products/CustomCounter'
-import { getProductDetails, getSimilarProducts } from '@/utils/requests'
+import {
+  getProductDetails,
+  getProductReviews,
+  getSimilarProducts,
+} from '@/utils/requests'
 import CustomImage from '@/components/CustomImage'
 import { PortableText } from '@portabletext/react'
 import { useRouter } from 'next/router'
+import { getSession } from 'next-auth/react'
+import ReviewSection from '@/components/ProductDetails/ReviewSection'
+import useSWR from 'swr'
 
-const ProductDetailsPage = ({ product, similarProducts }) => {
+const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const [count, setCount] = useState(1)
-  const [openCollapse, setOpenCollapse] = useState(false)
   const [tabValue, setTabValue] = useState('description')
+  const clientSideReviewsDataFetcher = async () => {
+    const { reviews } = await getProductReviews(product._id)
+    return reviews
+  }
+  const { data: clientSideReviews } = useSWR(
+    `api/${product._id}/reviews`,
+    clientSideReviewsDataFetcher
+  )
+  const displayedReviews = (serverSideRendered, clientSideRendered) => {
+    return clientSideRendered ?? serverSideRendered
+  }
   const router = useRouter()
   const categorySlug = router.query.category
-
   return (
     <>
       <Meta titlePrefix={product.name} />
@@ -91,7 +107,7 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
               </Typography>
               <Stack
                 direction="row"
-                sx={{ marginBlock: 1, flexWrap: 'wrap', gap:1 }}
+                sx={{ marginBlock: 1, flexWrap: 'wrap', gap: 1 }}
               >
                 {product?.subcategories?.map((item, index) => (
                   <Link
@@ -178,7 +194,7 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                     value="description"
                   />
                   <Tab
-                    label="Reviews (0)"
+                    label={`Reviews (${displayedReviews(reviews, clientSideReviews)?.length??0})`}
                     sx={{ fontWeight: 'bold' }}
                     value="Reviews"
                   />
@@ -192,333 +208,9 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
                 <PortableText value={product?.description} />
               </TabPanel>
               <TabPanel value="Reviews" sx={{ paddingInline: 0 }}>
-                <Stack gap={3}>
-                  <Stack
-                    sx={{
-                      border: '1px solid #f0f0f0',
-                      height: { md: 400 },
-                    }}
-                    direction={{ md: 'row' }}
-                    spacing={1}
-                  >
-                    {/* Review Section */}
-                    <Box
-                      sx={{
-                        overflowY: 'auto',
-                        height: { xs: 400 },
-                        flexGrow: 1,
-                      }}
-                    >
-                      <Box>
-                        <List>
-                          <ListItem>
-                            <Card>
-                              <CardHeader
-                                sx={{ paddingBottom: 1 }}
-                                avatar={
-                                  <Avatar
-                                    sx={{ bgcolor: 'red' }}
-                                    aria-label="recipe"
-                                  >
-                                    R
-                                  </Avatar>
-                                }
-                                action={
-                                  <Tooltip
-                                    title="Reply Review"
-                                    arrow
-                                    placement="top"
-                                  >
-                                    <IconButton aria-label="settings">
-                                      <ReplyIcon />
-                                    </IconButton>
-                                  </Tooltip>
-                                }
-                                title="Shrimp and Chorizo Paella"
-                                subheader={
-                                  <>
-                                    September 14, 2016
-                                    <br />
-                                    <Rating value={3} size="small" readOnly />
-                                  </>
-                                }
-                              />
-                              <CardContent sx={{ paddingTop: 1 }}>
-                                <Typography
-                                  variant={'body2'}
-                                  color="text.secondary"
-                                >
-                                  This impressive paella is a perfect party dish
-                                  and a fun meal to cook together with your
-                                  guests. Add 1 cup of frozen peas along with
-                                  the mussels, if you like.
-                                </Typography>
-                              </CardContent>
-                              <CardActions sx={{ justifyContent: 'end' }}>
-                                <Button
-                                  size="small"
-                                  onClick={() => setOpenCollapse(!openCollapse)}
-                                >
-                                  {!openCollapse ? 'View' : 'Hide'} Replies
-                                </Button>
-                              </CardActions>
-                            </Card>
-                          </ListItem>
-                          <Collapse
-                            in={openCollapse}
-                            timeout="auto"
-                            unmountOnExit
-                          >
-                            <Stack direction="row">
-                              <Divider
-                                orientation="vertical"
-                                variant="inset"
-                                flexItem
-                                sx={{ marginLeft: 5 }}
-                              />
-                              <List
-                                component="div"
-                                disablePadding
-                                // sx={{ marginLeft: 2 }}
-                              >
-                                <ListItem>
-                                  <Card
-                                    sx={{
-                                      backgroundColor: 'complementary.light',
-                                    }}
-                                  >
-                                    <CardHeader
-                                      sx={{ paddingBottom: 1 }}
-                                      avatar={
-                                        <Avatar
-                                          sx={{ bgcolor: 'red' }}
-                                          aria-label="recipe"
-                                        >
-                                          R
-                                        </Avatar>
-                                      }
-                                      title="Shrimp and Chorizo Paella"
-                                      subheader={'September 14, 2016'}
-                                    />
-                                    <CardContent sx={{ paddingTop: 1 }}>
-                                      <Typography
-                                        variant={'body2'}
-                                        color="text.secondary"
-                                      >
-                                        This impressive paella is a perfect
-                                        party dish and a fun meal to cook
-                                        together with your guests. Add 1 cup of
-                                        frozen peas along with the mussels, if
-                                        you like.
-                                      </Typography>
-                                    </CardContent>
-                                  </Card>
-                                </ListItem>
-                                <ListItem>
-                                  <Card
-                                    sx={{
-                                      backgroundColor: 'complementary.light',
-                                    }}
-                                  >
-                                    <CardHeader
-                                      sx={{ paddingBottom: 1 }}
-                                      avatar={
-                                        <Avatar
-                                          sx={{ bgcolor: 'red' }}
-                                          aria-label="recipe"
-                                        >
-                                          R
-                                        </Avatar>
-                                      }
-                                      title="Shrimp and Chorizo Paella"
-                                      subheader={'September 14, 2016'}
-                                    />
-                                    <CardContent sx={{ paddingTop: 1 }}>
-                                      <Typography
-                                        variant={'body2'}
-                                        color="text.secondary"
-                                      >
-                                        This impressive paella is a perfect
-                                        party dish and a fun meal to cook
-                                        together with your guests. Add 1 cup of
-                                        frozen peas along with the mussels, if
-                                        you like.
-                                      </Typography>
-                                    </CardContent>
-                                  </Card>
-                                </ListItem>
-                              </List>
-                            </Stack>
-                          </Collapse>
-                          <ListItem>
-                            <Card>
-                              <CardHeader
-                                sx={{ paddingBottom: 1 }}
-                                avatar={
-                                  <Avatar
-                                    sx={{ bgcolor: 'red' }}
-                                    aria-label="recipe"
-                                  >
-                                    R
-                                  </Avatar>
-                                }
-                                action={
-                                  <Tooltip
-                                    title="Reply Review"
-                                    arrow
-                                    placement="top"
-                                  >
-                                    <IconButton aria-label="settings">
-                                      <ReplyIcon />
-                                    </IconButton>
-                                  </Tooltip>
-                                }
-                                title="Shrimp and Chorizo Paella"
-                                subheader={
-                                  <>
-                                    September 14, 2016
-                                    <br />
-                                    <Rating value={3} size="small" readOnly />
-                                  </>
-                                }
-                              />
-                              <CardContent sx={{ paddingTop: 1 }}>
-                                <Typography
-                                  variant={'body2'}
-                                  color="text.secondary"
-                                >
-                                  This impressive paella is a perfect party dish
-                                  and a fun meal to cook together with your
-                                  guests. Add 1 cup of frozen peas along with
-                                  the mussels, if you like.
-                                </Typography>
-                              </CardContent>
-                            </Card>
-                          </ListItem>
-                        </List>
-                      </Box>
-                    </Box>
-                    {/* End of review section */}
-                    {/* Review Summary */}
-                    <Box
-                      sx={{
-                        width: { xs: '100%', md: 300 },
-                        height: { xs: 340, md: '100%' },
-                        backgroundColor: 'complementary.light',
-                        // padding: 3,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Box sx={{ width: '100%', paddingInline: 2 }}>
-                        <Typography fontSize={25} fontWeight={'bold'}>
-                          Ratings
-                        </Typography>
-                        <List sx={{ padding: 0 }}>
-                          <ListItem
-                            sx={{
-                              justifyContent: 'space-between',
-                              paddingInline: 0,
-                            }}
-                          >
-                            <Rating value={5} readOnly />
-                            <Typography variant="caption">
-                              70 reviews
-                            </Typography>
-                          </ListItem>
-                          <ListItem
-                            sx={{
-                              justifyContent: 'space-between',
-                              paddingInline: 0,
-                            }}
-                          >
-                            <Rating value={4} readOnly />
-                            <Typography variant="caption">
-                              60 reviews
-                            </Typography>
-                          </ListItem>
-                          <ListItem
-                            sx={{
-                              justifyContent: 'space-between',
-                              paddingInline: 0,
-                            }}
-                          >
-                            <Rating value={3} readOnly />
-                            <Typography variant="caption">
-                              50 reviews
-                            </Typography>
-                          </ListItem>
-                          <ListItem
-                            sx={{
-                              justifyContent: 'space-between',
-                              paddingInline: 0,
-                            }}
-                          >
-                            <Rating value={2} readOnly />
-                            <Typography variant="caption">
-                              40 reviews
-                            </Typography>
-                          </ListItem>
-                          <ListItem
-                            sx={{
-                              justifyContent: 'space-between',
-                              paddingInline: 0,
-                            }}
-                          >
-                            <Rating value={1} readOnly />
-                            <Typography variant="caption">
-                              30 reviews
-                            </Typography>
-                          </ListItem>
-                          <ListItem
-                            sx={{
-                              justifyContent: 'space-between',
-                              paddingInline: 0,
-                              borderTop: '1px solid lightgray',
-                            }}
-                          >
-                            <Typography variant="body1" fontWeight={'bold'}>
-                              Total:
-                            </Typography>
-                            <Typography variant="body2">20 </Typography>
-                          </ListItem>
-                        </List>
-                      </Box>
-                    </Box>
-                    {/* End of Review Summary */}
-                  </Stack>
-                  <Box>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        // justifyContent: 'end',
-                        alignItems: 'center',
-                        gap: 2,
-                        // textAlign: 'end',
-                      }}
-                    >
-                      <Typography
-                        variant="h4"
-                        fontSize={{ xs: 20, md: 25 }}
-                        color="primary.main"
-                        fontWeight={'bold'}
-                        gutterBottom
-                      >
-                        Leave A Review
-                      </Typography>
-                      <Rating name="simple-controlled" />
-                    </Box>
-                    <TextField
-                      label="Comment"
-                      required
-                      multiline
-                      rows={4}
-                      fullWidth
-                      sx={{ marginTop: 1 }}
-                    />
-                  </Box>
-                </Stack>
+                {/* Review Section */}
+                <ReviewSection product={product} reviews={displayedReviews(reviews, clientSideReviews)} />
+                {/* End of review section */}
               </TabPanel>
             </TabContext>
           </Box>
@@ -586,20 +278,20 @@ const ProductDetailsPage = ({ product, similarProducts }) => {
 export default ProductDetailsPage
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context)
   const productSlug = context.query.product
   const product = await getProductDetails(productSlug)
-  // console.log(product.category.name,
-  //   product.subcategories)
+
   if (!product) {
     return { notFound: true }
   }
+  const {reviews} = await getProductReviews(product._id)
   const similarProducts = await getSimilarProducts(
     product.category.name,
     product.subcategories,
     product._id
   )
-  console.log('similarProducts', similarProducts)
   return {
-    props: { product, similarProducts },
+    props: { product, similarProducts, session, reviews },
   }
 }

@@ -14,6 +14,10 @@ const product = {
       name: 'categoryGroup',
       title: 'Category Info',
     },
+    {
+      name: 'reviewGroup',
+      title: 'Reviews',
+    },
   ],
   fields: [
     {
@@ -82,7 +86,6 @@ const product = {
           'exif', // Default: not included
           'location', // Default: not included
         ],
-          
       },
     },
     {
@@ -128,42 +131,14 @@ const product = {
         },
       ],
     },
-    // {
-    //   name: 'tags',
-    //   title: 'Tags',
-    //   group: 'categoryGroup',
-    //   type: 'array',
-    //   of: [
-    //     {
-    //       type: 'reference',
-    //       to: [
-    //         {
-    //           type: 'productTag',
-    //           weak: true,
-    //           options: {
-    //             filter: async ({ document }) => {
-    //               if (!document?.category) {
-    //                 return
-    //               }
-    //               const category = await client.fetch(
-    //                 `*[_type=="category" && _id == $categoryId][0]`,
-    //                 {
-    //                   categoryId: document.category._ref,
-    //                 }
-    //               )
-    //               return {
-    //                 filter: '_id in $tagIds',
-    //                 params: {
-    //                   tagIds: category.productTags?.map((tag) => tag._ref),
-    //                 },
-    //               }
-    //             },
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
+    {
+      name: 'reviews',
+      type: 'array',
+      title: 'Reviews',
+      group: 'reviewGroup',
+      readOnly: true,
+      of: [{ type: 'reference', to: [{ type: 'review' }] }],
+    },
   ],
 }
 

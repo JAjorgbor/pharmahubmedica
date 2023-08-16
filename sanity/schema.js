@@ -7,6 +7,7 @@ import faq from './schemas/faq'
 import contact from './schemas/contact'
 import about from './schemas/about'
 import productTag from './schemas/productTag'
+import review from './schemas/review'
 
 export const schema = {
   types: [
@@ -18,6 +19,7 @@ export const schema = {
     about,
     contact,
     faq,
+    review,
     blockContent,
   ],
 }

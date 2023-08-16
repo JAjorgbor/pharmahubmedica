@@ -233,3 +233,49 @@ export const searchProductsCount = (productName, classificationName) => {
     }
   )
 }
+
+// Create product review
+export const createProductReview = (reviewData, productId) => {
+  return client.create({ _type: 'review', ...reviewData }).then(
+    (response) =>
+      client
+        .patch(productId) // Document ID to patch
+        .setIfMissing({ reviews: [] }) // Ensure that the `reviews` array exists
+        .insert('after', 'reviews[-1]', [
+          {
+            _type: 'reference',
+            _ref: response._id,
+            _key: response._id
+          },
+        ]) // Add the new review to the end of the array
+        .commit() // Perform the patch and return a promise
+  )
+}
+// Get product reviews
+export const getProductReviews = (productId) => {
+  return client.fetch(
+    groq`*[_type=='product' && _id==$productId][0]{
+   'reviews':reviews[]->{
+      user,
+      _id,
+      comment,
+      replies,
+      _createdAt,
+      _updatedAt,
+      stars
+    }
+  }`,
+    {
+      productId,
+    }
+  )
+}
+
+// Reply Product review
+export const replyProductReview = (replyData,reviewId)=>{
+  return client
+  .patch(reviewId)
+  .setIfMissing({ replies: [] })
+  .insert('after', 'replies[-1]', [replyData])
+  .commit()
+}

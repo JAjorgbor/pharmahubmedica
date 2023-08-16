@@ -8,6 +8,8 @@ import {
   Container,
   Divider,
   IconButton,
+  Menu,
+  MenuItem,
   Slide,
   Stack,
   Toolbar,
@@ -21,7 +23,7 @@ import { useTheme } from '@emotion/react'
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
@@ -32,6 +34,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import SearchBar from './Search/SearchBar'
 import CustomTooltip from './TooltipMenu'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -262,6 +265,16 @@ function TopNavContent({
   searchValue,
   setSearchValue,
 }) {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const { data: session, status } = useSession()
+  // console.log(session)
+  // const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
   return (
     <>
       <Toolbar>
@@ -371,9 +384,36 @@ function TopNavContent({
               </Card>
             </Grid>
             <Grid>
-              <IconButton>
-                <PersonOutlineOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+              <IconButton onClick={handleClick}>
+                {status=='authenticated' ? (
+                  <img
+                    src={session?.user?.image}
+                    style={{
+                      height: '40px',
+                      width: '40px',
+                      borderRadius: '100%',
+                    }}
+                    alt="profile photo"
+                  />
+                ) : (
+                  <PersonOutlineOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                )}
               </IconButton>
+              <Menu
+                id="profile-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                // MenuListProps={{
+                //   'aria-labelledby': 'basic-button',
+                // }}
+              >
+                {status=='authenticated' ? (
+                  <MenuItem onClick={() => signOut()}>Sign Out</MenuItem>
+                ) : (
+                  <MenuItem onClick={() => signIn()}>Sign In</MenuItem>
+                )}
+              </Menu>
             </Grid>
             <Grid>
               <IconButton
