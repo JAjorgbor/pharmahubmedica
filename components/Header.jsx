@@ -389,8 +389,8 @@ function TopNavContent({
                   <img
                     src={session?.user?.image}
                     style={{
-                      height: '40px',
-                      width: '40px',
+                      height: '35px',
+                      width: '35px',
                       borderRadius: '100%',
                     }}
                     alt="profile photo"

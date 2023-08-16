@@ -94,6 +94,7 @@ const ReviewSection = ({ product, reviews }) => {
             sx={{
               overflowY: 'auto',
               maxHeight: { xs: 450 },
+              order:{xs:2,md:1},
               flexGrow: 1,
             }}
           >
@@ -124,6 +125,7 @@ const ReviewSection = ({ product, reviews }) => {
             sx={{
               width: { xs: '100%', md: 300 },
               height: { xs: 340, md: 400 },
+              order:{xs:1,md:2},
               backgroundColor: 'complementary.light',
               // padding: 3,
               display: 'flex',
