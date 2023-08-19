@@ -239,7 +239,6 @@ const SearchPage = () => {
                       imageSrc={item.image}
                       categoryName={item.category.name}
                       title={item.name}
-                      starCount={index}
                       otherStyles={{ width: { xs: 165, sm: 200, md: 280 } }}
                     />
                   </Grid>

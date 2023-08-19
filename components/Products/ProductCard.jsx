@@ -17,6 +17,8 @@ import CartToastContent from './CartToastContent'
 import useTruncateText from '@/hooks/useTruncateWords'
 import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomImage from '@/components/CustomImage'
+import BuyOnWhatsappButton from '../BuyOnWhatsappButton'
+import useGetReviewStarCount from '@/hooks/useGetReviewStarCount'
 
 const CustomCard = styled(Card)(({ theme }) => ({
   color: theme.palette.complementary.dark,
@@ -63,12 +65,13 @@ const ProductCard = ({
   title,
   categoryName,
   categorySlug,
+  reviews,
   slug,
   price,
-  starCount,
   otherStyles,
   ...props
 }) => {
+  const starsCount = useGetReviewStarCount()
   return (
     <>
       <CustomCard
@@ -120,7 +123,7 @@ const ProductCard = ({
           </Typography>
           <Box sx={{ textAlign: 'center', margin: 'auto' }}>
             <Rating
-              value={starCount}
+              value={starsCount(reviews)}
               readOnly
               size="small"
               //   sx={{ textAlign: 'center', margin: 'auto' }}
@@ -152,7 +155,7 @@ const ProductCard = ({
             color="primary"
             endIcon={<ShoppingBagOutlinedIcon fontSize="small" />}
             sx={{
-              fontSize: 11,
+              fontSize: 9,
               textTransform: 'uppercase',
             }}
             onClick={() => {
@@ -167,24 +170,13 @@ const ProductCard = ({
           >
             Add To Cart
           </Button>
-          <Button
+          <BuyOnWhatsappButton
             size="small"
-            variant="outlined"
-            color="primary"
-            endIcon={<AssignmentOutlinedIcon fontSize="small" />}
             sx={{
-              fontSize: 11,
+              fontSize: 9,
               textTransform: 'uppercase',
-              marginLeft: '0 !important',
             }}
-          >
-            <Link
-              href={`/collections/${categorySlug?.current}/${slug?.current}`}
-              style={{ color: 'inherit', textDecoration: 'none' }}
-            >
-              View Details
-            </Link>
-          </Button>
+          />
         </CardActions>
       </CustomCard>
     </>

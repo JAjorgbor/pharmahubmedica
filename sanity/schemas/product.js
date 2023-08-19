@@ -136,8 +136,16 @@ const product = {
       type: 'array',
       title: 'Reviews',
       group: 'reviewGroup',
-      readOnly: true,
-      of: [{ type: 'reference', to: [{ type: 'review' }] }],
+      // readOnly: true,
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'review' }],
+          options: {
+            weak: true,
+          },
+        },
+      ],
     },
   ],
 }

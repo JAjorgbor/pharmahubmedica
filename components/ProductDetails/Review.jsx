@@ -1,6 +1,8 @@
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ReplyIcon from '@mui/icons-material/Reply'
 import {
   Avatar,
+  Box,
   Button,
   Card,
   CardActions,
@@ -16,14 +18,19 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
 import moment from 'moment'
+import { useState } from 'react'
 
-const Review = ({ data, setReviewrsName, setReviewId }) => {
+const Review = ({ data, setReviewrsName, reviewId, setReviewId }) => {
   const [openCollapse, setOpenCollapse] = useState(false)
+  const filteredReplies = data?.replies?.filter((reply) => !reply.hideReply)
   return (
     <ListItem sx={{ display: 'block' }}>
-      <Card>
+      <Card
+        sx={{
+          border: reviewId === data?._id ? '1px solid blue' : 'none',
+        }}
+      >
         <CardHeader
           sx={{ paddingBottom: 1 }}
           avatar={
@@ -59,7 +66,11 @@ const Review = ({ data, setReviewrsName, setReviewId }) => {
         {data?.replies && (
           <CardActions sx={{ justifyContent: 'end' }}>
             <Button size="small" onClick={() => setOpenCollapse(!openCollapse)}>
-              {!openCollapse ? 'View' : 'Hide'} Replies
+              {!openCollapse
+                ? `View ${
+                    data?.replies.length > 1 ? data?.replies.length : ''
+                  } ${data?.replies.length > 1 ? 'Replies' : 'Reply'}`
+                : `Hide ${data?.replies.length > 1 ? 'Replies' : 'Reply'}`}
             </Button>
           </CardActions>
         )}
@@ -76,31 +87,51 @@ const Review = ({ data, setReviewrsName, setReviewId }) => {
             <List
               component="div"
               disablePadding
-              sx={{width:'100%', flexGrow:1}}            >
-              {data.replies.map((reply, index) => (
+              sx={{ width: '100%', flexGrow: 1 }}
+            >
+              {filteredReplies.map((reply, index) => (
                 <ListItem key={index}>
                   <Card
                     sx={{
                       backgroundColor: 'complementary.light',
-                      width:'100%'
+                      width: '100%',
                     }}
                   >
                     <CardHeader
                       sx={{ paddingBottom: 1 }}
                       avatar={
                         <Avatar
-                          src={reply.user.profilePhoto}
+                          src={'/favicon.svg'}
                           aria-label="profile-image"
                         />
                       }
-                      title={reply.user.userName}
+                      title={
+                        <>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              gap: 0.5,
+                              alignItems: 'center',
+                            }}
+                          >
+                            Pharmahubmedica{' '}
+                            <CheckCircleIcon
+                              sx={{
+                                color: 'primary.main',
+                                margin: 0,
+                                fontSize: 15,
+                              }}
+                            />
+                          </Box>
+                        </>
+                      }
                       subheader={moment(reply?._createdAt).format(
                         'MMMM D, YYYY'
                       )}
                     />
                     <CardContent sx={{ paddingTop: 1 }}>
                       <Typography variant={'body2'} color="text.secondary">
-                        {reply.comment}
+                        {reply?.comment}
                       </Typography>
                     </CardContent>
                   </Card>

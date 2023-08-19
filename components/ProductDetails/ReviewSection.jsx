@@ -1,7 +1,4 @@
-import {
-  createProductReview,
-  replyProductReview
-} from '@/utils/requests'
+import { createProductReview, replyProductReview } from '@/utils/requests'
 import { LoadingButton } from '@mui/lab'
 import {
   Alert,
@@ -16,8 +13,9 @@ import {
   Typography,
 } from '@mui/material'
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { mutate } from 'swr'
 import Review from './Review'
@@ -26,10 +24,11 @@ const ReviewSection = ({ product, reviews }) => {
   const { data: session } = useSession()
   const [reviewrsName, setReviewrsName] = useState('')
   const [reviewId, setReviewId] = useState('')
-  
+  const router = useRouter()
   const {
     register,
     watch,
+    setFocus,
     reset,
     control,
     handleSubmit,
@@ -37,12 +36,25 @@ const ReviewSection = ({ product, reviews }) => {
   } = useForm({
     defaultValues: { stars: 1 },
   })
-  //   useEffect(() => {
-  //     const subscribe = watch((value) => {
-  //       console.log(value)
-  //     })
-  //     return () => subscribe.unsubscribe()
-  //   }, [])
+  useEffect(() => {
+    const resetReviewer = () => {
+      setReviewrsName('')
+      setReviewId('')
+    }
+    router.events.on('routeChangeStart', resetReviewer)
+
+    return () => {
+      router.events.off('routeChangeStart', resetReviewer)
+    }
+  }, [])
+  useEffect(() => {
+    if (reviewrsName) {
+      setFocus('comment')
+    }
+  }, [reviewrsName])
+  const FilteredReviews = reviews?.filter(
+    (review) => review.hideReview !== true
+  )
   const submitHandler = async (data) => {
     try {
       const { name, email, image } = session.user
@@ -61,13 +73,13 @@ const ReviewSection = ({ product, reviews }) => {
       } else {
         const replyData = {
           _type: 'reply',
-          key: Date.now(),
+          _key: Date.now(),
           comment: data.comment,
-          user: {
-            userName: name,
-            email,
-            profilePhoto: image,
-          },
+          // user: {
+          //   userName: name,
+          //   email,
+          //   profilePhoto: image,
+          // },
         }
         const res = await replyProductReview(replyData, reviewId)
         console.log(res)
@@ -78,6 +90,9 @@ const ReviewSection = ({ product, reviews }) => {
     } catch (error) {
       console.error(error)
     }
+  }
+  const renderReviewCount = (starCount) => {
+    return reviews?.filter((review) => review.stars == starCount)?.length ?? 0
   }
   return (
     <>
@@ -94,23 +109,23 @@ const ReviewSection = ({ product, reviews }) => {
             sx={{
               overflowY: 'auto',
               maxHeight: { xs: 450 },
-              order:{xs:2,md:1},
+              order: { xs: 2, md: 1 },
               flexGrow: 1,
             }}
           >
             <Box>
-              {reviews ? (
+              {FilteredReviews ? (
                 <List>
-                  {reviews
-                    .reverse()
-                    .map((review, index) => (
-                      <Review
-                        data={review}
-                        setReviewrsName={setReviewrsName}
-                        setReviewId={setReviewId}
-                        key={index}
-                      />
-                    ))}
+                  {FilteredReviews.reverse().map((review, index) => (
+                    <Review
+                      data={review}
+                      setReviewrsName={setReviewrsName}
+                      reviewrsName={reviewrsName}
+                      setReviewId={setReviewId}
+                      reviewId={reviewId}
+                      key={index}
+                    />
+                  ))}
                 </List>
               ) : (
                 <Alert severity="info" variant="outlined" color="primary">
@@ -125,7 +140,7 @@ const ReviewSection = ({ product, reviews }) => {
             sx={{
               width: { xs: '100%', md: 300 },
               height: { xs: 340, md: 400 },
-              order:{xs:1,md:2},
+              order: { xs: 1, md: 2 },
               backgroundColor: 'complementary.light',
               // padding: 3,
               display: 'flex',
@@ -146,7 +161,11 @@ const ReviewSection = ({ product, reviews }) => {
                   }}
                 >
                   <Rating value={5} readOnly />
-                  <Typography variant="caption">70 reviews</Typography>
+                  <Typography variant="caption">
+                    {`${renderReviewCount(5)} ${
+                      renderReviewCount(5) == 1 ? 'review' : 'reviews'
+                    }`}
+                  </Typography>
                 </ListItem>
                 <ListItem
                   sx={{
@@ -156,7 +175,11 @@ const ReviewSection = ({ product, reviews }) => {
                   }}
                 >
                   <Rating value={4} readOnly />
-                  <Typography variant="caption">60 reviews</Typography>
+                  <Typography variant="caption">
+                    {`${renderReviewCount(4)} ${
+                      renderReviewCount(4) == 1 ? 'review' : 'reviews'
+                    }`}
+                  </Typography>
                 </ListItem>
                 <ListItem
                   sx={{
@@ -166,7 +189,11 @@ const ReviewSection = ({ product, reviews }) => {
                   }}
                 >
                   <Rating value={3} readOnly />
-                  <Typography variant="caption">50 reviews</Typography>
+                  <Typography variant="caption">
+                    {`${renderReviewCount(3)} ${
+                      renderReviewCount(3) == 1 ? 'review' : 'reviews'
+                    }`}
+                  </Typography>
                 </ListItem>
                 <ListItem
                   sx={{
@@ -176,7 +203,11 @@ const ReviewSection = ({ product, reviews }) => {
                   }}
                 >
                   <Rating value={2} readOnly />
-                  <Typography variant="caption">40 reviews</Typography>
+                  <Typography variant="caption">
+                    {`${renderReviewCount(3)} ${
+                      renderReviewCount(3) == 1 ? 'review' : 'reviews'
+                    }`}
+                  </Typography>
                 </ListItem>
                 <ListItem
                   sx={{
@@ -186,7 +217,11 @@ const ReviewSection = ({ product, reviews }) => {
                   }}
                 >
                   <Rating value={1} readOnly />
-                  <Typography variant="caption">30 reviews</Typography>
+                  <Typography variant="caption">
+                    {`${renderReviewCount(1)} ${
+                      renderReviewCount(1) == 1 ? 'review' : 'reviews'
+                    }`}
+                  </Typography>
                 </ListItem>
                 <ListItem
                   sx={{
@@ -198,7 +233,19 @@ const ReviewSection = ({ product, reviews }) => {
                   <Typography variant="body1" fontWeight={'bold'}>
                     Total:
                   </Typography>
-                  <Typography variant="body2">20 </Typography>
+                  <Typography variant="caption">
+                    {[
+                      renderReviewCount(5),
+                      renderReviewCount(4),
+                      renderReviewCount(3),
+                      renderReviewCount(2),
+                      renderReviewCount(1),
+                    ].reduce(
+                      (accumulator, currentValue) => accumulator + currentValue,
+                      0
+                    )}{' '}
+                    reviews{' '}
+                  </Typography>
                 </ListItem>
               </List>
             </Box>
@@ -221,7 +268,7 @@ const ReviewSection = ({ product, reviews }) => {
               fontWeight={'bold'}
               gutterBottom
             >
-              Leave A {reviewrsName?'Reply':'Review'}
+              Leave A {reviewrsName ? 'Reply' : 'Review'}
             </Typography>
             {/* hide ratings when replying */}
             {!reviewrsName && (

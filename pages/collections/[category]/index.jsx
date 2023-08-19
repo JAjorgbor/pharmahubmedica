@@ -58,6 +58,22 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
   // useEffect(() => {
   //   console.log('productsError', productsError)
   // }, [productsError])
+  // useEffect(() => {
+  //   const handleRouteChangeStart = () => {
+  //     setLoading(true)
+  //   }
+  //   const handleRouteChangeComplete = () => {
+  //     setLoading(false)
+  //   }
+
+  //   router.events.on('routeChangeStart', handleRouteChangeStart)
+
+  //   return () => {
+  //     router.events.off('routeChangeStart', handleRouteChangeStart)
+  //     router.events.off('routeChangeComplete', handleRouteChangeComplete)
+  //   }
+  // }, [])
+
   return (
     <>
       <Meta titlePrefix={'Products'} />
@@ -215,7 +231,7 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
                       categorySlug={item.category.slug}
                       slug={item.slug}
                       title={item.name}
-                      starCount={index}
+                      reviews={item.reviews}
                       otherStyles={{ width: { xs: 165, sm: 200, md: 280 } }}
                     />
                   </Grid>
@@ -230,6 +246,7 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
               variant="outlined"
               shape="rounded"
               onChange={(e, value) => {
+                if (value == pageNumber) return
                 setLoading(true)
                 router.push({
                   pathname: `/collections/${categorySlug}`,

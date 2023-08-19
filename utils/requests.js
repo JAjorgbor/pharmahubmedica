@@ -80,7 +80,11 @@ export const getProductsForCategory = (
     } ${
       price ? `&& ${price}` : ''
     }] | order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {
-      _id, name, price, image, category->{name,slug}, slug      
+      _id, name, price, image, category->{name,slug}, slug, 
+      'reviews':reviews[]->{
+        _id,
+        stars
+      }      
       }
   `,
     {
@@ -131,7 +135,13 @@ export const getProductsForCategoryCount = (
 // Get newly stocked products
 export const getNewlyStockedProducts = () => {
   return client.fetch(
-    `*[_type == "product" && status] | order(_createdAt desc) [0..9] {name, price, image, category->{name, slug}, slug }
+    `*[_type == "product" && status] | order(_createdAt desc) [0..9] {
+      _id, name, price, image, category->{name,slug}, slug, 
+      'reviews':reviews[]->{
+        _id,
+        stars
+      }      
+      }
   `
   )
 }
@@ -161,7 +171,13 @@ export const getSimilarProducts = (
   mainProductId
 ) => {
   return client.fetch(
-    groq`*[_type=="product" && category->name == $categoryName && _id != $mainProductId && count((subcategories[]->name)[@ in $subcategories]) > 0 ][0...9]{_id, name, price, image, category->{name, slug}, slug }`,
+    groq`*[_type=="product" && category->name == $categoryName && _id != $mainProductId && count((subcategories[]->name)[@ in $subcategories]) > 0 ][0...9]{
+      _id, name, price, image, category->{name,slug}, slug, 
+      'reviews':reviews[]->{
+        _id,
+        stars
+      }      
+      }`,
     {
       categoryName,
       subcategories,
@@ -245,7 +261,7 @@ export const createProductReview = (reviewData, productId) => {
           {
             _type: 'reference',
             _ref: response._id,
-            _key: response._id
+            _key: response._id,
           },
         ]) // Add the new review to the end of the array
         .commit() // Perform the patch and return a promise
@@ -272,10 +288,10 @@ export const getProductReviews = (productId) => {
 }
 
 // Reply Product review
-export const replyProductReview = (replyData,reviewId)=>{
+export const replyProductReview = (replyData, reviewId) => {
   return client
-  .patch(reviewId)
-  .setIfMissing({ replies: [] })
-  .insert('after', 'replies[-1]', [replyData])
-  .commit()
+    .patch(reviewId)
+    .setIfMissing({ replies: [] })
+    .insert('after', 'replies[-1]', [replyData])
+    .commit()
 }

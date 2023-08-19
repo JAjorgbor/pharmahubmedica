@@ -23,7 +23,6 @@ import {
 import { TabPanel, TabContext, TabList } from '@mui/lab'
 import EastOutlinedIcon from '@mui/icons-material/EastOutlined'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
-import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import ReplyIcon from '@mui/icons-material/Reply'
 import { useState, useEffect } from 'react'
 import BreadCrumbs from '@/components/BreadCrumbs'
@@ -47,6 +46,8 @@ import { useRouter } from 'next/router'
 import { getSession } from 'next-auth/react'
 import ReviewSection from '@/components/ProductDetails/ReviewSection'
 import useSWR from 'swr'
+import BuyOnWhatsappButton from '@/components/BuyOnWhatsappButton'
+import useGetReviewStarCount from '@/hooks/useGetReviewStarCount'
 
 const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const [count, setCount] = useState(1)
@@ -64,6 +65,8 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   }
   const router = useRouter()
   const categorySlug = router.query.category
+  const starsCount = useGetReviewStarCount()
+
   return (
     <>
       <Meta titlePrefix={product.name} />
@@ -130,13 +133,13 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                 ))}
               </Stack>
               <Rating
-                value={3}
+                value={starsCount(displayedReviews(reviews, clientSideReviews))}
                 readOnly
                 size="small"
                 //   sx={{ textAlign: 'center', margin: 'auto' }}
               />{' '}
               <Typography variant="caption" component="sup" fontSize={11}>
-                (26)
+                ({displayedReviews(reviews, clientSideReviews)?.length ?? 0})
               </Typography>
               <Typography color="primary.main" variant="h5" fontWeight={'bold'}>
                 {useFormatAmount(product.price)}
@@ -149,7 +152,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                   color="primary"
                   endIcon={<ShoppingBagOutlinedIcon />}
                   sx={{
-                    fontSize: 13,
+                    fontSize: 8,
                     textTransform: 'uppercase',
                   }}
                   onClick={() => {
@@ -169,14 +172,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                 </Button>
               </Stack>
               <Divider sx={{ marginBlock: '1rem' }} />
-              <Button
-                size="large"
-                endIcon={<WhatsAppIcon />}
-                color="success"
-                variant="contained"
-              >
-                Buy On Whatsapp
-              </Button>
+              <BuyOnWhatsappButton size="large" />
             </Box>
           </Stack>
           <Box mt={15}>
@@ -194,7 +190,9 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                     value="description"
                   />
                   <Tab
-                    label={`Reviews (${displayedReviews(reviews, clientSideReviews)?.length??0})`}
+                    label={`Reviews (${
+                      displayedReviews(reviews, clientSideReviews)?.length ?? 0
+                    })`}
                     sx={{ fontWeight: 'bold' }}
                     value="Reviews"
                   />
@@ -209,7 +207,10 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
               </TabPanel>
               <TabPanel value="Reviews" sx={{ paddingInline: 0 }}>
                 {/* Review Section */}
-                <ReviewSection product={product} reviews={displayedReviews(reviews, clientSideReviews)} />
+                <ReviewSection
+                  product={product}
+                  reviews={displayedReviews(reviews, clientSideReviews)}
+                />
                 {/* End of review section */}
               </TabPanel>
             </TabContext>
@@ -259,6 +260,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                       imageSrc={item.image}
                       categoryName={item.category.name}
                       categorySlug={item.category.slug}
+                      reviews={item.reviews}
                       slug={item.slug}
                       title={item.name}
                       starCount={index}
@@ -285,7 +287,7 @@ export async function getServerSideProps(context) {
   if (!product) {
     return { notFound: true }
   }
-  const {reviews} = await getProductReviews(product._id)
+  const { reviews } = await getProductReviews(product._id)
   const similarProducts = await getSimilarProducts(
     product.category.name,
     product.subcategories,

@@ -9,7 +9,7 @@ import {
   getFaqs,
   getHeroInfo,
   getNewlyStockedProducts,
-  getTopCategories
+  getTopCategories,
 } from '@/utils/requests'
 import EastOutlinedIcon from '@mui/icons-material/EastOutlined'
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
@@ -22,7 +22,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -75,20 +75,22 @@ const HomePage = ({
               {heroInfo?.description}
             </Typography>
             <Grid container mt={4} gap={3} columns={2}>
-              <Link href='/collections'>
-              <Button
-                variant="contained"
-                color={'primary'}
-                endIcon={<FormatListBulletedOutlinedIcon />}
-                sx={{ borderRadius: '0' }}
-              >
-                View Collections
-              </Button>
-                </Link>
+              <Link href="/collections">
+                <Button
+                  variant="contained"
+                  color={'primary'}
+                  endIcon={<FormatListBulletedOutlinedIcon />}
+                  sx={{ borderRadius: '0' }}
+                >
+                  View Collections
+                </Button>
+              </Link>
               <Button
                 variant="outlined"
                 color={'primary'}
                 endIcon={<LocalPhoneIcon />}
+                target='_blank'
+                href={`https://wa.me/${'07011835704'}?text=what's up danger.`}
                 sx={{ borderRadius: '0' }}
                 onClick={() => {
                   toast("what's up danger")
@@ -150,13 +152,13 @@ const HomePage = ({
             </Typography>
             <HorizontalScrollSection>
               {featuredCategories?.map((category, index) => (
-                 <CategoryCard
-                 alt={category?.image.alt}
-                 imageSrc={urlForImage(category.image).url()}
-                 slug={category?.slug}
-                 title={category?.name}
-                 sx={{ marginInline: 1, width: 270 }}
-               />
+                <CategoryCard
+                  alt={category?.image.alt}
+                  imageSrc={urlForImage(category.image).url()}
+                  slug={category?.slug}
+                  title={category?.name}
+                  sx={{ marginInline: 1, width: 270 }}
+                />
               ))}
             </HorizontalScrollSection>
           </Box>
@@ -189,6 +191,7 @@ const HomePage = ({
                       alt={item?.image.alt}
                       price={item.price}
                       imageSrc={item.image}
+                      reviews={item.reviews}
                       categoryName={item.category.name}
                       categorySlug={item.category.slug}
                       slug={item.slug}
