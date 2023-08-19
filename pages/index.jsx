@@ -92,11 +92,8 @@ const HomePage = ({
                 target='_blank'
                 href={`https://wa.me/${'07011835704'}?text=what's up danger.`}
                 sx={{ borderRadius: '0' }}
-                onClick={() => {
-                  toast("what's up danger")
-                }}
               >
-                Speak To A Pharmarcist
+                Speak To A Pharmacist
               </Button>
             </Grid>
           </Grid>
