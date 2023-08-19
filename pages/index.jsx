@@ -90,7 +90,7 @@ const HomePage = ({
                 color={'primary'}
                 endIcon={<LocalPhoneIcon />}
                 target='_blank'
-                href={`https://wa.me/${'07011835704'}?text=what's up danger.`}
+                href={`https://wa.me/${'08084465610'}?text=what's up danger.`}
                 sx={{ borderRadius: '0' }}
               >
                 Speak To A Pharmacist
