@@ -6,7 +6,6 @@ import '@/styles/globals.css'
 import Layout from '@/components/Layout'
 import { createTheme } from '@mui/material'
 import { ThemeProvider } from '@emotion/react'
-import { ToastContainer } from 'react-toastify'
 import { SessionProvider } from "next-auth/react"
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -34,7 +33,6 @@ export default function App({ Component, pageProps, session }) {
   if (Component.dontShowLayout) {
     return (
       <>
-        <ToastContainer />
         <ThemeProvider theme={customTheme}>
           <Component {...pageProps} />
         </ThemeProvider>
@@ -45,7 +43,6 @@ export default function App({ Component, pageProps, session }) {
     <>
       <SessionProvider session={session}>
         <ThemeProvider theme={customTheme}>
-          <ToastContainer />
           <Layout>
             <Component {...pageProps} />
           </Layout>

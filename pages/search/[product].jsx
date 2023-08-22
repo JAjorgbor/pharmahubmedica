@@ -234,10 +234,14 @@ const SearchPage = () => {
                 searchResults?.map((item, index) => (
                   <Grid item xs={''} key={index}>
                     <ProductCard
+                      product={item}
                       alt={item?.image.alt}
                       price={item.price}
                       imageSrc={item.image}
+                      reviews={item.reviews}
                       categoryName={item.category.name}
+                      categorySlug={item.category.slug}
+                      slug={item.slug}
                       title={item.name}
                       otherStyles={{ width: { xs: 165, sm: 200, md: 280 } }}
                     />

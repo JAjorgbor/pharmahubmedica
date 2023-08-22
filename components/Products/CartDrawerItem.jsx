@@ -9,16 +9,26 @@ import {
   Typography,
   IconButton,
 } from '@mui/material'
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import Image from 'next/image'
 import useFormatAmount from '@/hooks/useFormatAmount'
+import CustomImage from '../CustomImage'
+import { useContext } from 'react'
+import { CartContext } from '../Layout'
 
-const CartDrawerItem = ({ imageSrc, productName }) => {
+const CartDrawerItem = ({ product }) => {
+  const { item, count } = product
+  const { cart, dispatch } = useContext(CartContext)
+
+
   return (
-    <Card elevation={0} sx={{ width:'100%'}}>
+    <Card elevation={0} sx={{ width: '100%' }}>
       <CardHeader
         action={
-          <IconButton aria-label="remove item from cart">
+          <IconButton
+            aria-label="remove item from cart"
+            onClick={() => dispatch({ type: 'REMOVE_ITEM',payload: item })}
+          >
             <DeleteOutlineOutlinedIcon />
           </IconButton>
         }
@@ -33,11 +43,11 @@ const CartDrawerItem = ({ imageSrc, productName }) => {
               // marginRight: -2,
             }}
           >
-            <Image src={imageSrc} alt={productName} fill />
+            <CustomImage asset={item.image} alt={item.image.alt} fill />
           </Avatar>
         }
-        title={productName}
-        subheader={`2 x ${useFormatAmount(500)}`}
+        title={item.name}
+        subheader={`${count} x ${useFormatAmount(item.price)}`}
         titleTypographyProps={{
           color: 'primary.main',
           textTransform: 'uppercase',

@@ -1,19 +1,24 @@
+import CloseIcon from '@mui/icons-material/Close'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import {
+  Button,
+  Divider,
   Drawer,
   IconButton,
   List,
-  Toolbar,
-  Typography,
   ListItem,
-  Divider,
-  Button,
+  Toolbar,
+  Typography
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
 import CartDrawerItem from './CartDrawerItem'
-import drugImage from '@/public/drug-image.jpg'
-import { Fragment } from 'react'
+
+import Link from 'next/link'
+import { Fragment, useContext } from 'react'
+import BuyOnWhatsappButton from '../BuyOnWhatsappButton'
+import { CartContext } from '../Layout'
 
 const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
+  const { cart, dispatch } = useContext(CartContext)
   return (
     <>
       <Drawer
@@ -47,31 +52,44 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
           Shopping Cart
         </Typography>
         <List>
-          <ListItem>
-            <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
-          </ListItem>
-          <Divider />
-
-          <ListItem>
-            <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
-          </ListItem>
-          <Divider />
-
-          <ListItem>
-            <CartDrawerItem imageSrc={drugImage} productName={'Product'} />
-          </ListItem>
-          <Divider />
-
-          <ListItem>
-            <Button variant="outlined" fullWidth >
-              View Cart
-            </Button>
-          </ListItem>
-          <ListItem sx={{ paddingBlock: 0 }}>
-            <Button variant="contained" color="success" fullWidth>
-              Buy on WhatsApp
-            </Button>
-          </ListItem>
+          {cart.length ? (
+            <>
+              {cart?.map((item, index) => (
+                <Fragment key={index}>
+                  <ListItem>
+                    <CartDrawerItem product={item} />
+                  </ListItem>
+                  <Divider />
+                </Fragment>
+              ))}
+              <ListItem>
+                <Link href="/cart" style={{width:'100%',}}>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    endIcon={
+                      <ShoppingCartOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                    }
+                  >
+                    View Cart
+                  </Button>
+                </Link>
+              </ListItem>
+              <ListItem sx={{ paddingBlock: 0 }}>
+                <BuyOnWhatsappButton fullWidth/>
+              </ListItem>
+            </>
+          ) : (
+            <Typography
+              color="complimentary.light"
+              my={5}
+              textAlign="center"
+              fontSize={18}
+              sx={{ opacity: 0.5, fontStyle: 'italic' }}
+            >
+              Cart is empty...
+            </Typography>
+          )}
         </List>
       </Drawer>
     </>

@@ -13,12 +13,15 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
+import { useContext } from 'react'
 import CartToastContent from './CartToastContent'
 import useTruncateText from '@/hooks/useTruncateWords'
 import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomImage from '@/components/CustomImage'
 import BuyOnWhatsappButton from '../BuyOnWhatsappButton'
 import useGetReviewStarCount from '@/hooks/useGetReviewStarCount'
+import useManageCart from '@/hooks/useManageCart'
+import { CartContext } from '../Layout'
 
 const CustomCard = styled(Card)(({ theme }) => ({
   color: theme.palette.complementary.dark,
@@ -60,6 +63,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
 }))
 
 const ProductCard = ({
+  product,
   alt,
   imageSrc,
   title,
@@ -72,6 +76,7 @@ const ProductCard = ({
   ...props
 }) => {
   const starsCount = useGetReviewStarCount()
+  const {cart, dispatch} = useContext(CartContext)
   return (
     <>
       <CustomCard
@@ -159,8 +164,9 @@ const ProductCard = ({
               textTransform: 'uppercase',
             }}
             onClick={() => {
+              dispatch({ type: 'ADD_ITEM', payload: product })
               toast(
-                <CartToastContent imageSrc={imageSrc} productName={title} />,
+                <CartToastContent product={product} />,
                 {
                   hideProgressBar: true,
                   autoClose: 3000,

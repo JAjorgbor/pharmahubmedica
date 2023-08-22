@@ -3,25 +3,30 @@ import Header from './Header'
 import Sidebar from './Sidebar'
 import Footer from './Footer'
 import { useState, useEffect, createContext } from 'react'
-import useUpdateCart from '@/hooks/useUpdateCart'
+import useManageCart from '@/hooks/useManageCart'
 import BackToTopButton from './BackToTopButton'
 import ContactSpeedDial from './ContactSpeedDial'
 import CartDrawer from './Products/CartDrawer'
+import { ToastContainer } from 'react-toastify'
 
 const sidebarWidth = 240
-const CartContext = createContext()
+export const CartContext = createContext()
 
 const Layout = ({ children }) => {
   const [openSidebar, setOpenSidebar] = useState(false)
   const [openCartDrawer, setOpenCartDrawer] = useState(false) //
   // cart logic hook
-  const [cartValue, dispatch] = useUpdateCart()
+  const [cart, dispatch] = useManageCart()
   return (
     <>
       <CssBaseline />
-      <CartContext.Provider value={{ cartValue, dispatch }}>
-        <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} setOpenCartDrawer={setOpenCartDrawer}/>
-
+      <CartContext.Provider value={{ cart, dispatch }}>
+        <Header
+          openSidebar={openSidebar}
+          setOpenSidebar={setOpenSidebar}
+          setOpenCartDrawer={setOpenCartDrawer}
+        />
+        <ToastContainer />
         <Sidebar
           sidebarWidth={sidebarWidth}
           openSidebar={openSidebar}
@@ -46,5 +51,3 @@ const Layout = ({ children }) => {
   )
 }
 export default Layout
-
-export { CartContext }

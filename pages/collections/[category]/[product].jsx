@@ -1,53 +1,41 @@
-import {
-  Box,
-  Container,
-  Stack,
-  Typography,
-  Button,
-  Rating,
-  Divider,
-  TextField,
-  Tab,
-  List,
-  ListItem,
-  Card,
-  CardHeader,
-  Avatar,
-  IconButton,
-  CardContent,
-  Chip,
-  Collapse,
-  CardActions,
-  Tooltip,
-} from '@mui/material'
-import { TabPanel, TabContext, TabList } from '@mui/lab'
-import EastOutlinedIcon from '@mui/icons-material/EastOutlined'
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
-import ReplyIcon from '@mui/icons-material/Reply'
-import { useState, useEffect } from 'react'
 import BreadCrumbs from '@/components/BreadCrumbs'
-import Image from 'next/image'
-import Meta from '@/components/Meta'
+import BuyOnWhatsappButton from '@/components/BuyOnWhatsappButton'
+import CustomImage from '@/components/CustomImage'
 import HorizontalScrollSection from '@/components/HomePage/HorizontalScrollSection'
-import ProductCard from '@/components/Products/ProductCard'
-import Link from 'next/link'
-import { toast } from 'react-toastify'
+import { CartContext } from '@/components/Layout'
+import Meta from '@/components/Meta'
+import ReviewSection from '@/components/ProductDetails/ReviewSection'
 import CartToastContent from '@/components/Products/CartToastContent'
-import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomCounter from '@/components/Products/CustomCounter'
+import ProductCard from '@/components/Products/ProductCard'
+import useFormatAmount from '@/hooks/useFormatAmount'
+import useGetReviewStarCount from '@/hooks/useGetReviewStarCount'
 import {
   getProductDetails,
   getProductReviews,
   getSimilarProducts,
 } from '@/utils/requests'
-import CustomImage from '@/components/CustomImage'
+import EastOutlinedIcon from '@mui/icons-material/EastOutlined'
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  Divider,
+  Rating,
+  Stack,
+  Tab,
+  Typography,
+} from '@mui/material'
 import { PortableText } from '@portabletext/react'
-import { useRouter } from 'next/router'
 import { getSession } from 'next-auth/react'
-import ReviewSection from '@/components/ProductDetails/ReviewSection'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useContext, useState } from 'react'
+import { toast } from 'react-toastify'
 import useSWR from 'swr'
-import BuyOnWhatsappButton from '@/components/BuyOnWhatsappButton'
-import useGetReviewStarCount from '@/hooks/useGetReviewStarCount'
 
 const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const [count, setCount] = useState(1)
@@ -66,6 +54,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const router = useRouter()
   const categorySlug = router.query.category
   const starsCount = useGetReviewStarCount()
+  const { cart, dispatch } = useContext(CartContext)
 
   return (
     <>
@@ -139,7 +128,13 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                 //   sx={{ textAlign: 'center', margin: 'auto' }}
               />{' '}
               <Typography variant="caption" component="sup" fontSize={11}>
-                ({displayedReviews(reviews, clientSideReviews)?.length ?? 0})
+                ({displayedReviews(reviews, clientSideReviews)?.length ?? 0}{' '}
+                {` ${
+                  displayedReviews(reviews, clientSideReviews)?.length == 1
+                    ? 'review'
+                    : 'reviews'
+                }`}
+                )
               </Typography>
               <Typography color="primary.main" variant="h5" fontWeight={'bold'}>
                 {useFormatAmount(product.price)}
@@ -152,20 +147,15 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                   color="primary"
                   endIcon={<ShoppingBagOutlinedIcon />}
                   sx={{
-                    fontSize: 8,
+                    fontSize: 15,
                     textTransform: 'uppercase',
                   }}
                   onClick={() => {
-                    toast(
-                      <CartToastContent
-                        imageSrc={product.image}
-                        productName={product.name}
-                      />,
-                      {
-                        hideProgressBar: true,
-                        autoClose: 3000,
-                      }
-                    )
+                    dispatch({ type: 'ADD_ITEM', payload: product, count })
+                    toast(<CartToastContent product={product} />, {
+                      hideProgressBar: true,
+                      autoClose: 3000,
+                    })
                   }}
                 >
                   Add To Cart

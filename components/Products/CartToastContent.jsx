@@ -13,8 +13,11 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import CustomImage from '../CustomImage'
+import { CartContext } from '../Layout'
+import { useContext } from 'react'
 
-const CartToastContent = ({ imageSrc, productName }) => {
+const CartToastContent = ({ product }) => {
+  const { cart, dispatch } = useContext(CartContext)
   return (
     <>
       {/* <Card elevation={0}>
@@ -70,13 +73,23 @@ const CartToastContent = ({ imageSrc, productName }) => {
       <Card sx={{ display: 'flex', width: '100%' }} elevation={0}>
         <CardMedia sx={{ width: 80, position: 'relative' }}>
           <Link href="/products/product">
-            <CustomImage asset={imageSrc} alt={productName} fill style={{objectFit:'cover'}}/>
+            <CustomImage
+              asset={product.image}
+              alt={product.image.alt}
+              fill
+              style={{ objectFit: 'cover' }}
+            />
           </Link>
         </CardMedia>
         <Box flexGrow={1}>
           <CardHeader
-            title={productName}
-            subheader="Added To Cart"
+            title={product.name}
+            subheader={
+              cart.find(({ item }) => item._id == product._id).count > 1 ||
+              !cart.find(({ item }) => item._id == product._id)
+                ? 'Item quantity updated'
+                : 'Added To Cart'
+            }
             titleTypographyProps={{
               textTransform: 'uppercase',
               fontSize: 12,
@@ -93,6 +106,7 @@ const CartToastContent = ({ imageSrc, productName }) => {
           />
           <CardContent sx={{ paddingBlock: 1 }}></CardContent>
           <CardActions>
+            <Link href = '/cart'>
             <Button
               size="small"
               variant="contained"
@@ -101,6 +115,7 @@ const CartToastContent = ({ imageSrc, productName }) => {
             >
               View Cart
             </Button>
+            </Link>
             <Button
               size="small"
               color="success"

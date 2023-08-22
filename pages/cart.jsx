@@ -28,16 +28,24 @@ import {
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomCounter from '@/components/Products/CustomCounter'
-import { useState } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useTheme } from '@mui/material/styles'
 import Link from 'next/link'
+import { CartContext } from '@/components/Layout'
+import CustomImage from '@/components/CustomImage'
 
 const Cart = () => {
   const theme = useTheme()
   const matchMediaQuery = useMediaQuery(theme.breakpoints.up('md'), {
     noSsr: true,
   })
-
+  const { cart, dispatch } = useContext(CartContext)
+  const totalPrice = cart.reduce(
+    (previousValue, currentValue) =>
+      previousValue+
+      currentValue.count * currentValue.item.price,
+    0
+  )
   return (
     <>
       <Meta titlePrefix={'Cart'} />
@@ -94,14 +102,16 @@ const Cart = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <CartItemForLargeScreens />
+                    {cart.map((item, index) => (
+                      <CartItemForLargeScreens key={index} product={item} />
+                    ))}
                   </TableBody>
                 </Table>
               ) : (
                 <List>
-                  <CartItemForSmallScreens />
-                  <CartItemForSmallScreens />
-                  <CartItemForSmallScreens />
+                  {cart.map((item, index) => (
+                    <CartItemForSmallScreens key={index} product={item} />
+                  ))}
                 </List>
               )}
             </Box>
@@ -118,7 +128,7 @@ const Cart = () => {
                     >
                       <Typography fontWeight={'bold'}>Total</Typography>
                       <Typography fontSize={20} fontWeight="bold">
-                        {useFormatAmount(20000)}
+                        {useFormatAmount(totalPrice)}
                       </Typography>
                     </ListItem>
                     <Divider />
@@ -144,8 +154,13 @@ const Cart = () => {
 }
 export default Cart
 
-function CartItemForLargeScreens() {
-  const [count, setCount] = useState(1)
+function CartItemForLargeScreens({ product }) {
+  const { cart, dispatch } = useContext(CartContext)
+  const { item, count: itemCount } = product
+  const [count, setCount] = useState(itemCount || 1)
+  useEffect(() => {
+    dispatch({ type: 'SET_ITEM_COUNT', payload: item, count })
+  }, [count])
   return (
     <>
       <TableRow>
@@ -154,32 +169,33 @@ function CartItemForLargeScreens() {
           width={350}
         >
           <Stack direction="row" alignItems="center" width={'100%'}>
-            <Image
-              src={drugImage}
+            <CustomImage
+              asset={item.image}
+              alt={item.image.alt}
               width={100}
               height={80}
               style={{ objectFit: 'contain' }}
             />
             <Link href="/product" style={{ textDecoration: 'none' }}>
-              <Typography color="primary.main">
-                TYLENOL Cold & Flu Severe Caplets
-              </Typography>
+              <Typography color="primary.main">{item.name}</Typography>
             </Link>
           </Stack>
         </TableCell>
         <TableCell>
-          <Typography fontSize={18}>{useFormatAmount(1900)}</Typography>
+          <Typography fontSize={18}>{useFormatAmount(item.price)}</Typography>
         </TableCell>
         <TableCell>
           <CustomCounter count={count} setCount={setCount} />
         </TableCell>
         <TableCell>
           <Typography fontWeight={'bold'} fontSize={18}>
-            {useFormatAmount(1900)}
+            {useFormatAmount(itemCount * item.price)}
           </Typography>
         </TableCell>
         <TableCell>
-          <IconButton>
+          <IconButton
+            onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item })}
+          >
             <DeleteOutlineOutlinedIcon />
           </IconButton>
         </TableCell>
@@ -188,17 +204,22 @@ function CartItemForLargeScreens() {
   )
 }
 
-function CartItemForSmallScreens() {
-  const [count, setCount] = useState(1)
+function CartItemForSmallScreens({ product }) {
+  const { cart, dispatch } = useContext(CartContext)
+  const { item, count: itemCount } = product
+  const [count, setCount] = useState(itemCount || 1)
+  useEffect(() => {
+    dispatch({ type: 'SET_ITEM_COUNT', payload: item, count })
+  }, [count])
   return (
     <>
       <ListItem>
         <Card sx={{ display: 'flex', height: 200, width: '100%' }}>
           <CardMedia sx={{ width: { xs: 150, sm: 200 }, position: 'relative' }}>
             <Link href="/products/product">
-              <Image
-                alt={'alt'}
-                src={drugImage}
+              <CustomImage
+                alt={item.image.alt}
+                asset={item.image}
                 style={{ objectFit: 'contain' }}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -208,11 +229,16 @@ function CartItemForSmallScreens() {
           <Box flexGrow={1}>
             <CardHeader
               action={
-                <IconButton aria-label="settings">
+                <IconButton
+                  aria-label="settings"
+                  onClick={() =>
+                    dispatch({ type: 'REMOVE_ITEM', payload: item })
+                  }
+                >
                   <DeleteOutlineOutlinedIcon />
                 </IconButton>
               }
-              title="TYLENOL Cold & Flu Severe Caplets"
+              title={item.name}
               titleTypographyProps={{
                 fontSize: 15,
                 fontWeight: 'bold',
@@ -233,7 +259,7 @@ function CartItemForSmallScreens() {
                 Subtotal:
               </Typography>
               <Typography display={'inline'} fontWeight="bold">
-                {useFormatAmount(1900 * count)}
+                {useFormatAmount(1900 * itemCount)}
               </Typography>
             </CardContent>
             <CardActions sx={{ paddingLeft: 2 }}>

@@ -185,6 +185,7 @@ const HomePage = ({
                   <Grid item xs={''}>
                     <ProductCard
                       key={index}
+                      product={item}
                       alt={item?.image.alt}
                       price={item.price}
                       imageSrc={item.image}
@@ -193,7 +194,6 @@ const HomePage = ({
                       categorySlug={item.category.slug}
                       slug={item.slug}
                       title={item.name}
-                      starCount={index}
                       otherStyles={{ width: 300, marginInline: 1 }}
                     />
                   </Grid>
