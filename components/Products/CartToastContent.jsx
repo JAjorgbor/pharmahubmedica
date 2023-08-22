@@ -105,13 +105,13 @@ const CartToastContent = ({ product }) => {
             sx={{ paddingBlock: 1 }}
           />
           <CardContent sx={{ paddingBlock: 1 }}></CardContent>
-          <CardActions>
-            <Link href = '/cart'>
+          <CardActions sx={{ gap:1, flexDirection:'column'}}>
+            <Link href = '/cart' style={{display:'block', width:'100%'}}>
             <Button
               size="small"
               variant="contained"
-              sx={{ fontSize: 8 }}
-              // endIcon={<ShoppingCartOutlinedIcon />}
+              sx={{width:{xs:'100%'}, fontSize: {xs:10} }}
+              endIcon={<ShoppingCartOutlinedIcon />}
             >
               View Cart
             </Button>
@@ -120,8 +120,8 @@ const CartToastContent = ({ product }) => {
               size="small"
               color="success"
               variant="contained"
-              sx={{ fontSize: 8 }}
-              // endIcon={<WhatsAppIcon />}
+              sx={{width:{xs:'100%'}, fontSize: {xs:10} }}
+              endIcon={<WhatsAppIcon />}
             >
               Buy On Whatsapp
             </Button>

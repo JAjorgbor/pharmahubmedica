@@ -24,6 +24,9 @@ import {
   CardHeader,
   CardActions,
   Button,
+  Stepper,
+  Step,
+  StepLabel,
 } from '@mui/material'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import useFormatAmount from '@/hooks/useFormatAmount'
@@ -42,8 +45,7 @@ const Cart = () => {
   const { cart, dispatch } = useContext(CartContext)
   const totalPrice = cart.reduce(
     (previousValue, currentValue) =>
-      previousValue+
-      currentValue.count * currentValue.item.price,
+      previousValue + currentValue.count * currentValue.item.price,
     0
   )
   return (
@@ -51,6 +53,16 @@ const Cart = () => {
       <Meta titlePrefix={'Cart'} />
       <Box my={5}>
         <Container>
+          <Box sx={{ width: '100%', marginBottom: 5 }}>
+            <Stepper activeStep={1} alternativeLabel>
+              <Step>
+                <StepLabel>Cart</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Order On Whatsapp</StepLabel>
+              </Step>
+            </Stepper>
+          </Box>
           <Stack direction={{ md: 'row' }} gap={3}>
             <Box sx={{ flexGrow: 1 }}>
               {matchMediaQuery ? (
@@ -68,7 +80,7 @@ const Cart = () => {
                           Product
                         </Typography>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         <Typography
                           variant="h6"
                           fontSize={16}
@@ -78,7 +90,7 @@ const Cart = () => {
                           Unit Price
                         </Typography>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         <Typography
                           variant="h6"
                           fontSize={16}
@@ -141,7 +153,7 @@ const Cart = () => {
                     color="success"
                     endIcon={<WhatsAppIcon />}
                   >
-                    Buy On Whatsapp
+                    Order On Whatsapp
                   </Button>
                 </CardActions>
               </Card>
@@ -168,7 +180,7 @@ function CartItemForLargeScreens({ product }) {
           // bgcolor={'primary.light'}
           width={350}
         >
-          <Stack direction="row" alignItems="center" width={'100%'}>
+          <Stack direction="row" alignItems="center" width={'100%'} gap={2}>
             <CustomImage
               asset={item.image}
               alt={item.image.alt}
@@ -176,7 +188,10 @@ function CartItemForLargeScreens({ product }) {
               height={80}
               style={{ objectFit: 'contain' }}
             />
-            <Link href="/product" style={{ textDecoration: 'none' }}>
+            <Link
+              href={`/collections/${item.category.slug.current}/${item.slug.current}`}
+              style={{ textDecoration: 'none' }}
+            >
               <Typography color="primary.main">{item.name}</Typography>
             </Link>
           </Stack>
@@ -216,7 +231,9 @@ function CartItemForSmallScreens({ product }) {
       <ListItem>
         <Card sx={{ display: 'flex', height: 200, width: '100%' }}>
           <CardMedia sx={{ width: { xs: 150, sm: 200 }, position: 'relative' }}>
-            <Link href="/products/product">
+            <Link
+              href={`/collections/${item.category.slug.current}/${item.slug.current}`}
+            >
               <CustomImage
                 alt={item.image.alt}
                 asset={item.image}
