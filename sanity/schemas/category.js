@@ -19,7 +19,7 @@ const category = {
       title: 'Status',
       type: 'boolean',
       description:
-        'Is this category active if set to false it will not be displayed on the website',
+        'If this is set to false it will not be displayed on the website',
       initialValue: true,
     },
     {

@@ -15,11 +15,11 @@ import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomImage from '../CustomImage'
 import { useContext } from 'react'
 import { CartContext } from '../Layout'
+import Link from 'next/link'
 
 const CartDrawerItem = ({ product }) => {
   const { item, count } = product
   const { cart, dispatch } = useContext(CartContext)
-
 
   return (
     <Card elevation={0} sx={{ width: '100%' }}>
@@ -27,7 +27,7 @@ const CartDrawerItem = ({ product }) => {
         action={
           <IconButton
             aria-label="remove item from cart"
-            onClick={() => dispatch({ type: 'REMOVE_ITEM',payload: item })}
+            onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item })}
           >
             <DeleteOutlineOutlinedIcon />
           </IconButton>
@@ -43,7 +43,11 @@ const CartDrawerItem = ({ product }) => {
               // marginRight: -2,
             }}
           >
-            <CustomImage asset={item.image} alt={item.image.alt} fill />
+            <Link
+              href={`/collections/${item.category.slug.current}/${item.slug.current}`}
+            >
+              <CustomImage asset={item.image} alt={item.image.alt} fill />
+            </Link>
           </Avatar>
         }
         title={item.name}

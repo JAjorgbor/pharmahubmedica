@@ -3,9 +3,12 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import ChatIcon from '@mui/icons-material/Chat'
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import { useState } from 'react'
+import Link from 'next/link'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
 
 const ContactSpeedDial = () => {
   const [openSpeedDial, setOpenSpeedDial] = useState(false)
+  const { contactInfo } = useGetContactInfo()
   return (
     <>
       <SpeedDial
@@ -24,10 +27,30 @@ const ContactSpeedDial = () => {
       >
         <SpeedDialAction
           //   sx={{height:50}}
-          icon={<WhatsAppIcon />}
+
+          icon={
+            <Link
+              target="_blank"
+              href={`https://wa.me/${contactInfo?.phoneNumber}?text:'Hello I would like to seek for your consultancy'`}
+              style={{ color: 'inherit' }}
+            >
+              <WhatsAppIcon />
+            </Link>
+          }
           tooltipTitle={'Chat with us on Whatsapp'}
         />
-        <SpeedDialAction icon={<LocalPhoneIcon />} tooltipTitle={'Call us'} />
+        <SpeedDialAction
+          icon={
+            <Link
+              target="_blank"
+              href={`tel:${contactInfo?.phoneNumber}`}
+              style={{ color: 'inherit' }}
+            >
+              <LocalPhoneIcon />
+            </Link>
+          }
+          tooltipTitle={'Call us'}
+        />
       </SpeedDial>
     </>
   )

@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import {
   Button,
   Divider,
@@ -8,13 +9,12 @@ import {
   List,
   ListItem,
   Toolbar,
-  Typography
+  Typography,
 } from '@mui/material'
 import CartDrawerItem from './CartDrawerItem'
 
 import Link from 'next/link'
 import { Fragment, useContext } from 'react'
-import BuyOnWhatsappButton from '../BuyOnWhatsappButton'
 import { CartContext } from '../Layout'
 
 const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
@@ -63,7 +63,7 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
                 </Fragment>
               ))}
               <ListItem>
-                <Link href="/cart" style={{width:'100%',}}>
+                <Link href="/cart" style={{ width: '100%' }}>
                   <Button
                     variant="outlined"
                     fullWidth
@@ -76,7 +76,14 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
                 </Link>
               </ListItem>
               <ListItem sx={{ paddingBlock: 0 }}>
-                <BuyOnWhatsappButton fullWidth/>
+                <Button
+                  endIcon={<WhatsAppIcon />}
+                  color="success"
+                  variant="contained"
+                  fullWidth
+                >
+                  Order On Whatsapp
+                </Button>
               </ListItem>
             </>
           ) : (

@@ -36,6 +36,7 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
+import { urlForImage } from '@/sanity/lib/image'
 
 const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const [count, setCount] = useState(1)
@@ -55,10 +56,14 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const categorySlug = router.query.category
   const starsCount = useGetReviewStarCount()
   const { cart, dispatch } = useContext(CartContext)
+  console.log(urlForImage(product.image).url())
 
   return (
     <>
-      <Meta titlePrefix={product.name} />
+      <Meta
+        titlePrefix={product.name}
+        ogImage={urlForImage(product.image).url()}
+      />
       <Container>
         {/* Breadcrumbs */}
         <BreadCrumbs

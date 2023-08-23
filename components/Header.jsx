@@ -387,7 +387,7 @@ function TopNavContent({
                     fontWeight: 'bold',
                   }}
                   subheaderTypographyProps={{
-                    fontSize: '1.4rem',
+                    fontSize: '1.1rem',
                     fontWeight: '600',
                     sx: {
                       color: 'primary.main',
