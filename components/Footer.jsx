@@ -9,18 +9,15 @@ import {
   styled,
 } from '@mui/material'
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
+import InstagramIcon from '@mui/icons-material/Instagram';
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import logo from '@/public/logo.svg'
 import Image from 'next/image'
 import Link from 'next/link'
+import useGetFeaturedCategories from '@/hooks/useGetFeaturedCategories'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
 
 const Footer = () => {
-  const popularCategoriesLinks=[
-    {text:'Sexual health',path:'/categories'},
-    {text:'His health',path:'/categories'},
-    {text:'Her health',path:'/categories'},
-    {text:'Multivitamins and supplements',path:'/categories'},
-  ]
   const FooterNavLink=styled(Link)(({theme})=>({
     color:'inherit',
     textDecoration:'none',
@@ -28,6 +25,8 @@ const Footer = () => {
       color:theme.palette.primary.light
     }
   }))
+  const {featuredCategories} = useGetFeaturedCategories()
+  const {contactInfo} = useGetContactInfo()
   return (
     <>
       <Box
@@ -75,7 +74,7 @@ const Footer = () => {
                 textTransform={'uppercase'}
                 gutterBottom
                 >
-                Plot C281, Ushafa New Layout, Ushafa Bwari Abuja
+                {contactInfo?.address}
               </Typography>
               <Typography
                 variant="h5"
@@ -90,7 +89,7 @@ const Footer = () => {
                 textTransform={'uppercase'}
                 gutterBottom
                 >
-                <FooterNavLink href="tel:2340001122">+2340001122</FooterNavLink>
+                <FooterNavLink target='_blank' href={`tel:${contactInfo?.phoneNumber}`}>{contactInfo?.phoneNumber}</FooterNavLink>
               </Typography>
               <Typography
                 variant="h5"
@@ -102,19 +101,16 @@ const Footer = () => {
                   
               </Typography>
               <Typography variant="caption" gutterBottom>
-                <FooterNavLink href="mailto:pharmahubmedica@gmail.com">
-                  pharmahubmedica@gmail.com{' '}
+                <FooterNavLink target='_blank' href={`mailto:${contactInfo?.email}`}>
+                {contactInfo?.email}{' '}
                 </FooterNavLink>
               </Typography>
               <Stack direction={'row'} mt={2}>
-                <FooterNavLink href={'#'}>
+                <FooterNavLink target='_blank' href={contactInfo?.facebookAccount??''}>
                   <FacebookOutlinedIcon sx={{ fontSize: '2rem' }} />
                 </FooterNavLink>
-                <FooterNavLink href={'#'}>
-                  <FacebookOutlinedIcon sx={{ fontSize: '2rem' }} />
-                </FooterNavLink>
-                <FooterNavLink href={'#'}>
-                  <FacebookOutlinedIcon sx={{ fontSize: '2rem' }} />
+                <FooterNavLink target='_blank' href={contactInfo?.instagramAccount??''}>
+                  <InstagramIcon sx={{ fontSize: '2rem' }} />
                 </FooterNavLink>
               </Stack>
             </Grid>
@@ -160,14 +156,14 @@ const Footer = () => {
               >
                 Featured Categories
               </Typography>
-              {popularCategoriesLinks.map((link, index) => (
+              {featuredCategories?.map((item, index) => (
                 <Typography
                   variant="caption"
                   textTransform={'uppercase'}
                   component={'p'}
                   key={index}
                 >
-                  <FooterNavLink href={link.path}>{link.text}</FooterNavLink>
+                  <FooterNavLink href={`/collections/${item.slug.current}`}>{item.name}</FooterNavLink>
                 </Typography>
               ))}
             </Grid>

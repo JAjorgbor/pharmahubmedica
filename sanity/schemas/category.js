@@ -12,8 +12,7 @@ const category = {
     {
       name: 'description',
       title: 'Description',
-      type: 'array',
-      of: [{ type: 'block' }],
+      type: 'string',
     },
     {
       name: 'status',

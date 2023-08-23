@@ -76,7 +76,7 @@ const ProductCard = ({
   ...props
 }) => {
   const starsCount = useGetReviewStarCount()
-  const {cart, dispatch} = useContext(CartContext)
+  const { cart, dispatch } = useContext(CartContext)
   return (
     <>
       <CustomCard
@@ -165,13 +165,10 @@ const ProductCard = ({
             }}
             onClick={() => {
               dispatch({ type: 'ADD_ITEM', payload: product })
-              toast(
-                <CartToastContent product={product} />,
-                {
-                  hideProgressBar: true,
-                  autoClose: 3000,
-                }
-              )
+              toast(<CartToastContent product={product} />, {
+                hideProgressBar: true,
+                autoClose: 3000,
+              })
             }}
           >
             Add To Cart
@@ -182,6 +179,7 @@ const ProductCard = ({
               fontSize: 9,
               textTransform: 'uppercase',
             }}
+            product={product}
           />
         </CardActions>
       </CustomCard>

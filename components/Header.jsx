@@ -35,6 +35,7 @@ import { useEffect, useState } from 'react'
 import SearchBar from './Search/SearchBar'
 import CustomTooltip from './TooltipMenu'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -267,14 +268,13 @@ function TopNavContent({
 }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const { data: session, status } = useSession()
-  // console.log(session)
-  // const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const { contactInfo } = useGetContactInfo()
   return (
     <>
       <Toolbar>
@@ -367,7 +367,20 @@ function TopNavContent({
                     </Avatar>
                   }
                   title="Give Us A Call"
-                  subheader="+2340001122"
+                  subheader={
+                    <Link
+                      href={`tel:${contactInfo?.phoneNumber}`}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        fontWeight: 'inherit',
+                        fontFamily: 'inherit',
+                        fontSize: 'inherit',
+                      }}
+                    >
+                      {contactInfo?.phoneNumber}
+                    </Link>
+                  }
                   titleTypographyProps={{
                     textTransform: 'uppercase',
                     fontSize: '0.7rem',
@@ -385,7 +398,7 @@ function TopNavContent({
             </Grid>
             <Grid>
               <IconButton onClick={handleClick}>
-                {status=='authenticated' ? (
+                {status == 'authenticated' ? (
                   <img
                     src={session?.user?.image}
                     style={{
@@ -408,7 +421,7 @@ function TopNavContent({
                 //   'aria-labelledby': 'basic-button',
                 // }}
               >
-                {status=='authenticated' ? (
+                {status == 'authenticated' ? (
                   <MenuItem onClick={() => signOut()}>Sign Out</MenuItem>
                 ) : (
                   <MenuItem onClick={() => signIn()}>Sign In</MenuItem>

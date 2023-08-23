@@ -10,7 +10,10 @@ export const getFaqs = () => {
 export const getAbout = () => {
   return client.fetch(`*[_type=="about"][0]{content}`)
 }
-
+// Get contact info
+export const getContact = ()=>{
+  return client.fetch (`*[_type=="contact"][0]{email, phoneNumber, facebookAccount, instagramAccount,address}`)
+}
 // Get home page hero info
 export const getHeroInfo = () => {
   return client.fetch(
@@ -224,7 +227,13 @@ export const searchProducts = (
         : ''
     }${
       price ? `&& ${price}` : ''
-    }]| order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {name, price, image, category->{name} }`,
+    }]| order(_id) [(($pageNumber - 1) * $itemsPerPage)...($pageNumber * $itemsPerPage)] {
+      _id, name, price, image, category->{name,slug}, slug, 
+      'reviews':reviews[]->{
+        _id,
+        stars
+      }      
+      }`,
     {
       productName,
       classificationName,

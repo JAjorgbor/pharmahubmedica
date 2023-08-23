@@ -96,7 +96,7 @@ const SearchPage = () => {
   )
 
   useEffect(() => {
-    // console.log('searchResultsError', searchResultsError)
+    console.error('searchResultsError', searchResultsError)
   }, [searchResultsError])
   return (
     <>
@@ -104,7 +104,7 @@ const SearchPage = () => {
       <Drawer
         open={openFilterDrawer}
         onClose={() => setOpenFilterDrawer(false)}
-        sx={{ display: { md: 'none' } }}
+        sx={{ display: { lg: 'none' } }}
         PaperProps={{
           sx: { width: 250 },
         }}
@@ -121,11 +121,19 @@ const SearchPage = () => {
       </Drawer>
       <Container>
         {/* Breadcrumbs */}
-        <BreadCrumbs links={[{ title: 'search', path: '#' }, {title:`Search results for "${productName}"`, path:`/search/${productName}`}]} />
+        <BreadCrumbs
+          links={[
+            { title: 'search', path: '#' },
+            {
+              title: `Search results for "${productName}"`,
+              path: `/search/${productName}`,
+            },
+          ]}
+        />
         <Toolbar
           sx={{
             width: '100%',
-            display: { md: 'none' },
+            display: { lg: 'none' },
             visibility: trigger ? 'hidden' : 'visible',
             backgroundColor: 'complementary.light',
           }}
@@ -248,24 +256,28 @@ const SearchPage = () => {
                   </Grid>
                 ))
               )}
-            </Grid>
-            <Pagination
-              sx={{ marginTop: 5 }}
-              count={
-                searchResultsCount >= 3 ? Math.ceil(searchResultsCount / 3) : 1
-              }
-              color="primary"
-              defaultPage={pageNumber}
-              variant="outlined"
-              shape="rounded"
-              onChange={(e, value) => {
-                // setLoading(true)
-                router.push({
-                  pathname: router.pathname,
-                  query: { ...queryParameters, page: value },
-                })
-              }}
-            />{' '}
+            </Grid> 
+            {Math.ceil(searchResultsCount / 3) > 1 && (
+              <Pagination
+                sx={{ marginTop: 5 }}
+                count={
+                  searchResultsCount >= 3
+                    ? Math.ceil(searchResultsCount / 3)
+                    : 1
+                }
+                color="primary"
+                defaultPage={pageNumber}
+                variant="outlined"
+                shape="rounded"
+                onChange={(e, value) => {
+                  // setLoading(true)
+                  router.push({
+                    pathname: router.pathname,
+                    query: { ...queryParameters, page: value },
+                  })
+                }}
+              />
+            )}
           </Box>
         </Box>
       </Container>

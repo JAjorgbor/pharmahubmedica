@@ -17,24 +17,37 @@ import Meta from '@/components/Meta'
 import FAQSection from '@/components/FAQSection'
 import { useContext } from 'react'
 import { CartContext } from '@/components/Layout'
+import { getContact, getFaqs } from '@/utils/requests'
+import { useForm } from 'react-hook-form'
+import useSWR from 'swr'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
 
-const Contact = () => {
+const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
   const { cartValue, dispatch } = useContext(CartContext)
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    dispatch('SHOW')
-
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm()
+  const submitMessage = (data) => {
+    console.log(data)
   }
-  
+  const { data: clientFaqs } = useSWR('api/faqs', async () => {
+    const faqs = await getFaqs()
+    return faqs
+  })
+  const { contactInfo: clientContactInfo } = useGetContactInfo()
+  const handleDefaultValue = (serverValue, clientValue) => {
+    return clientValue ?? serverValue
+  }
+  const faqs = handleDefaultValue(serverFaqs, clientFaqs)
+  const contactInfo = handleDefaultValue(serverContactInfo, clientContactInfo)
   return (
     <>
       <Meta titlePrefix="Contact" />
       <Container>
-        <BreadCrumbs
-          links={[
-            { title: 'Contact Us', path: '/contact' },
-          ]}
-        />
+        <BreadCrumbs links={[{ title: 'Contact Us', path: '/contact' }]} />
         <Box my={5}>
           <Typography
             varaint="h1"
@@ -89,7 +102,7 @@ const Contact = () => {
                 color="complementary.main"
                 fontSize={14}
               >
-                PLOT C281, USHAFA NEW LAYOUT, USHAFA BWARI ABUJA
+                {contactInfo.address}{' '}
               </Typography>
             </Paper>
             <Paper
@@ -131,7 +144,7 @@ const Contact = () => {
                 color="complementary.main"
                 fontSize={14}
               >
-                +2340001122
+                {contactInfo.phoneNumber}
               </Typography>
             </Paper>
             <Paper
@@ -173,14 +186,16 @@ const Contact = () => {
                 color="complementary.main"
                 fontSize={14}
               >
-                pharmahubmedica@gmail.com
+                {contactInfo.email}
               </Typography>
             </Paper>{' '}
           </Stack>
           <Divider sx={{ marginBlockStart: 5, marginBlockEnd: 10 }} />
           <Stack direction={{ md: 'row' }} gap={3}>
             <Box
-              component={'section'}
+              component="form"
+              onSubmit={handleSubmit(submitMessage)}
+              noValidate
               mb={{ xs: 4, md: 0 }}
               sx={{ width: '100%' }}
             >
@@ -193,33 +208,52 @@ const Contact = () => {
               >
                 Send Us A Message
               </Typography>
-              <Stack
-                spacing={2}
-                component="form"
-                // onSubmit={handleSubmit}
-              >
-                <TextField label=" Name" required fullWidth />
-                <TextField type="email" label=" E-mail" required fullWidth />
+              <Stack spacing={2}>
+                <TextField
+                  label=" Name"
+                  {...register('name', { required: 'Please enter your name.' })}
+                  error={errors.name?.message}
+                  helperText={errors.name?.message}
+                  fullWidth
+                />
+                <TextField
+                  type="email"
+                  label=" Email Address"
+                  {...register('email', {
+                    required: 'Please enter your email address',
+                    pattern: {
+                      value:
+                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/,
+                      message: 'Please enter a valid email address',
+                    },
+                  })}
+                  error={errors.email?.message}
+                  helperText={errors.email?.message}
+                  fullWidth
+                />
                 <TextField
                   label=" Message"
-                  required
+                  {...register('message', {
+                    required: 'Please enter a message.',
+                  })}
+                  error={errors.message?.message}
+                  helperText={errors.message?.message}
                   multiline
                   rows={4}
                   fullWidth
                 />
               </Stack>
               <Button
-                // type="submit"
-                onClick={handleSubmit}
+                type="submit"
                 variant="contained"
                 size="large"
                 sx={{ marginTop: 2, paddingInline: 5 }}
               >
-                Send A Message
+                Send Message
               </Button>
             </Box>
 
-            <Box component="section" id="faqs">
+            <Box component="section" id="faqs" sx={{ width: { md: '100%' } }}>
               <Typography
                 variant="h3"
                 fontSize={24}
@@ -229,7 +263,7 @@ const Contact = () => {
               >
                 Frequently Asked Questions{' '}
               </Typography>
-              <FAQSection />
+              <FAQSection faqs={faqs} />
             </Box>
           </Stack>
         </Box>
@@ -237,4 +271,11 @@ const Contact = () => {
     </>
   )
 }
-export default Contact
+export default ContactPage
+
+export async function getStaticProps() {
+  const contactInfo = await getContact()
+  const faqs = await getFaqs()
+
+  return { props: { contactInfo, faqs }, revalidate: 30 }
+}

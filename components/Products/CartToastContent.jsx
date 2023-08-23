@@ -20,56 +20,6 @@ const CartToastContent = ({ product }) => {
   const { cart, dispatch } = useContext(CartContext)
   return (
     <>
-      {/* <Card elevation={0}>
-        <CardHeader
-          avatar={
-            <Avatar
-              sx={{
-                height: 50,
-                width: 50,
-                borderRadius: 0,
-                // backgroundColor: '',
-                // marginRight: -2,
-              }}
-            >
-              <CustomImage asset={imageSrc} alt={productName} fill />
-            </Avatar>
-          }
-          title={productName}
-          subheader="Added To Cart"
-          titleTypographyProps={{
-            textTransform: 'uppercase',
-            fontSize: 12,
-            fontWeight: 'bold',
-          }}
-          subheaderTypographyProps={{
-            fontSize: 10,
-            fontWeight: '600',
-            sx: {
-              color: 'primary.main',
-            },
-          }}
-        />
-        <CardActions>
-          <Button
-            size="small"
-            variant="contained"
-            sx={{ fontSize: 10 }}
-            endIcon={<ShoppingCartOutlinedIcon />}
-          >
-            View Cart
-          </Button>
-          <Button
-            size="small"
-            color="success"
-            variant="contained"
-            sx={{ fontSize: 10 }}
-            endIcon={<WhatsAppIcon />}
-          >
-            Buy On Whatsapp
-          </Button>
-        </CardActions>
-      </Card> */}
       <Card sx={{ display: 'flex', width: '100%' }} elevation={0}>
         <CardMedia sx={{ width: 80, position: 'relative' }}>
           <Link href="/products/product">
@@ -77,7 +27,7 @@ const CartToastContent = ({ product }) => {
               asset={product.image}
               alt={product.image.alt}
               fill
-              style={{ objectFit: 'cover' }}
+              style={{ objectFit: 'contain' }}
             />
           </Link>
         </CardMedia>
@@ -105,23 +55,27 @@ const CartToastContent = ({ product }) => {
             sx={{ paddingBlock: 1 }}
           />
           <CardContent sx={{ paddingBlock: 1 }}></CardContent>
-          <CardActions sx={{ gap:1, flexDirection:'column'}}>
-            <Link href = '/cart' style={{display:'block', width:'100%'}}>
-            <Button
-              size="small"
-              variant="contained"
-              sx={{width:{xs:'100%'}, fontSize: {xs:10} }}
-              endIcon={<ShoppingCartOutlinedIcon />}
-            >
-              View Cart
-            </Button>
+          <CardActions sx={{ gap: 1, flexDirection: { sm: 'column' } }}>
+            <Link href="/cart" style={{ display: 'block', width: '100%' }}>
+              <Button
+                size="small"
+                variant="contained"
+                sx={{ width: { xs: '100%' }, fontSize: { xs: 9 } }}
+                // endIcon={
+                //   <ShoppingCartOutlinedIcon
+                //     sx={{ fontSize: { xs: 5.5, sm: 10 } }}
+                //   />
+                // }
+              >
+                View Cart
+              </Button>
             </Link>
             <Button
               size="small"
               color="success"
               variant="contained"
-              sx={{width:{xs:'100%'}, fontSize: {xs:10} }}
-              endIcon={<WhatsAppIcon />}
+              sx={{ width: { xs: '100%' }, fontSize: { xs: 9 } }}
+              // endIcon={<WhatsAppIcon sx={{fontSize:{xs:7.5,sm:10}}}/>}
             >
               Buy On Whatsapp
             </Button>

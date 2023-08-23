@@ -5,7 +5,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-const FAQSection = ({ faqsList }) => {
+const FAQSection = ({ faqs }) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -13,8 +13,8 @@ const FAQSection = ({ faqsList }) => {
   }
   return (
     <>
-      {faqsList &&
-        faqsList.map((faq,index) => {
+      {faqs &&
+        faqs.map((faq,index) => {
           return (
             <Accordion
               expanded={expanded === `panel${index}`}

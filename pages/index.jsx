@@ -6,6 +6,7 @@ import CategoryCard from '@/components/Products/CategoryCard'
 import ProductCard from '@/components/Products/ProductCard'
 import { urlForImage } from '@/sanity/lib/image'
 import {
+  getContact,
   getFaqs,
   getHeroInfo,
   getNewlyStockedProducts,
@@ -24,18 +25,57 @@ import {
 } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import Link from 'next/link'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
 import { useEffect } from 'react'
+import useSWR, { SWRConfig } from 'swr'
 import { toast } from 'react-toastify'
 
 const HomePage = ({
-  heroInfo,
-  faqs,
-  featuredCategories,
-  newlyStockedProducts,
+  heroInfo: serverHeroInfo,
+  featuredCategories: serverFeaturedCategories,
+  newlyStockedProducts: serverNewlyStockedProducts,
+  contactInfo: serverContactInfo,
+  faqs: serverFaqs,
+  // fallback,
 }) => {
-  useEffect(() => {
-    console.log(featuredCategories)
-  }, [featuredCategories])
+  const { data: clientHeroInfo } = useSWR('api/heroInfo', async () => {
+    const heroInfo = await getHeroInfo()
+    return heroInfo
+  })
+  const { data: clientFaqs } = useSWR('api/faqs', async () => {
+    const faqs = await getFaqs()
+    return faqs
+  })
+
+  const { data: clientFeaturedCategories } = useSWR(
+    'api/featuredCategories',
+    async () => {
+      const featuredCategories = await getTopCategories()
+      return featuredCategories
+    }
+  )
+  const { data: clientNewlyStockedProducts } = useSWR(
+    'api/newlyStockedProducts',
+    async () => {
+      const newlyStockedProducts = await getNewlyStockedProducts()
+      return newlyStockedProducts
+    }
+  )
+  const { contactInfo: clientContactInfo } = useGetContactInfo()
+  const handleDefaultValue = (serverValue, clientValue) => {
+    return clientValue ? clientValue : serverValue
+  }
+  const contactInfo = handleDefaultValue(serverContactInfo, clientContactInfo)
+  const heroInfo = handleDefaultValue(serverHeroInfo, clientHeroInfo)
+  const featuredCategories = handleDefaultValue(
+    serverFeaturedCategories,
+    clientFeaturedCategories
+  )
+  const newlyStockedProducts = handleDefaultValue(
+    serverNewlyStockedProducts,
+    clientNewlyStockedProducts
+  )
+  const faqs = handleDefaultValue(serverFaqs, clientFaqs)
   return (
     <>
       <Meta titlePrefix={'Home'} />
@@ -89,8 +129,8 @@ const HomePage = ({
                 variant="outlined"
                 color={'primary'}
                 endIcon={<LocalPhoneIcon />}
-                target='_blank'
-                href={`https://wa.me/${'+2348084465610'}?text=what's up danger.`}
+                target="_blank"
+                href={`tel:${contactInfo?.phoneNumber}`}
                 sx={{ borderRadius: '0' }}
               >
                 Speak To A Pharmacist
@@ -208,7 +248,7 @@ const HomePage = ({
           <Typography variant="h4" mb={4} fontWeight={'bold'}>
             Frequently Asked Questions
           </Typography>
-          <FAQSection faqsList={faqs} />
+          <FAQSection faqs={faqs} />
         </Container>
       </Box>
     </>
@@ -220,10 +260,17 @@ export async function getStaticProps() {
   try {
     const heroInfo = await getHeroInfo()
     const faqs = await getFaqs()
+    const contactInfo = await getContact()
     const featuredCategories = await getTopCategories()
     const newlyStockedProducts = await getNewlyStockedProducts()
     return {
-      props: { heroInfo, faqs, featuredCategories, newlyStockedProducts },
+      props: {
+        heroInfo,
+        featuredCategories,
+        newlyStockedProducts,
+        contactInfo,
+        faqs,
+      },
       revalidate: 30,
     }
   } catch (error) {

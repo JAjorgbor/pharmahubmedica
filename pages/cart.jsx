@@ -53,16 +53,7 @@ const Cart = () => {
       <Meta titlePrefix={'Cart'} />
       <Box my={5}>
         <Container>
-          <Box sx={{ width: '100%', marginBottom: 5 }}>
-            <Stepper activeStep={1} alternativeLabel>
-              <Step>
-                <StepLabel>Cart</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Order On Whatsapp</StepLabel>
-              </Step>
-            </Stepper>
-          </Box>
+          <Typography variant={'h1'} fontSize={25} fontWeight='bold' textAlign='center' mb={5} color='primary.main'>Shopping Cart</Typography>
           <Stack direction={{ md: 'row' }} gap={3}>
             <Box sx={{ flexGrow: 1 }}>
               {matchMediaQuery ? (
@@ -257,7 +248,7 @@ function CartItemForSmallScreens({ product }) {
               }
               title={item.name}
               titleTypographyProps={{
-                fontSize: 15,
+                fontSize: 20,
                 fontWeight: 'bold',
                 color: 'primary.main',
               }}
@@ -269,14 +260,14 @@ function CartItemForSmallScreens({ product }) {
                 Unit Price:{' '}
               </Typography>
               <Typography display={'inline'} fontWeight="bold">
-                {useFormatAmount(1900)}
+                {useFormatAmount(item.price)}
               </Typography>
               <br />
               <Typography fontSize={15} display={'inline'}>
                 Subtotal:
               </Typography>
               <Typography display={'inline'} fontWeight="bold">
-                {useFormatAmount(1900 * itemCount)}
+                {useFormatAmount(item.price * itemCount)}
               </Typography>
             </CardContent>
             <CardActions sx={{ paddingLeft: 2 }}>

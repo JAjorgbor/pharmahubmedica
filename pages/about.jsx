@@ -8,8 +8,17 @@ import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import { getAbout } from '@/utils/requests'
+import useSWR from 'swr'
 
-const About = ({ about }) => {
+const About = ({ about: serverAbout }) => {
+  const { data: clientAbout } = useSWR('api/about', async () => {
+    const about = await getAbout()
+    return about
+  })
+  const handleDefaultValue = (serverValue, clientValue) => {
+    return clientValue ?? serverValue
+  }
+  const about = handleDefaultValue(serverAbout, clientAbout)
   return (
     <>
       <Meta titlePrefix={'About'} />
@@ -27,11 +36,7 @@ const About = ({ about }) => {
           </Container>
         </Box>
         <Container>
-          <BreadCrumbs
-            links={[
-              { title: 'About Us', path: '#' },
-            ]}
-          />
+          <BreadCrumbs links={[{ title: 'About Us', path: '#' }]} />
           <Typography
             textAlign={'center'}
             variant="h3"
@@ -165,17 +170,12 @@ const About = ({ about }) => {
 export default About
 
 export async function getStaticProps() {
-  try {
-    const res = await getAbout()
+  const about = await getAbout()
 
-    return {
-      props: {
-        about: res,
-      },
-      revalidate:30
-    }
-  } catch (error) {
-    console.log(error)
-    return { props: { about: {} } }
+  return {
+    props: {
+      about: about,
+    },
+    revalidate: 30,
   }
 }

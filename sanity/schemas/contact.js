@@ -9,6 +9,11 @@ export default {
             type: 'string',
         },
         {
+            name: 'address',
+            title: 'Address',
+            type: 'string',
+        },
+        {
             name: 'phoneNumber',
             title: 'Phone Number',
             type: 'string',

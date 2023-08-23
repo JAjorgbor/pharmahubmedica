@@ -80,7 +80,7 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
       <Drawer
         open={openFilterDrawer}
         onClose={() => setOpenFilterDrawer(false)}
-        sx={{ display: { md: 'none' } }}
+        sx={{ display: { lg: 'none' } }}
         PaperProps={{
           sx: { width: 250 },
         }}
@@ -112,7 +112,7 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
         <Toolbar
           sx={{
             width: '100%',
-            display: { md: 'none' },
+            display: { lg: 'none' },
             visibility: trigger ? 'hidden' : 'visible',
             backgroundColor: 'complementary.light',
           }}
@@ -234,28 +234,31 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
                       slug={item.slug}
                       title={item.name}
                       starCount={index}
-                      otherStyles={{ width: { xs: 165, sm: 200, md: 280 } }}
+                      otherStyles={{ width: { xs: 165, sm:200, md: 280 } }}
                     />
                   </Grid>
                 ))
               )}
             </Grid>
-            <Pagination
-              sx={{ marginTop: 5 }}
-              count={Math.ceil(productsCount / 3)}
-              color="primary"
-              defaultPage={pageNumber}
-              variant="outlined"
-              shape="rounded"
-              onChange={(e, value) => {
-                if (value == pageNumber) return
-                setLoading(true)
-                router.push({
-                  pathname: `/collections/${categorySlug}`,
-                  query: { ...queryParameters, page: value },
-                })
-              }}
-            />
+
+            {Math.ceil(productsCount / 3) > 1 && (
+              <Pagination
+                sx={{ marginTop: 5 }}
+                count={Math.ceil(productsCount / 3)}
+                color="primary"
+                defaultPage={pageNumber}
+                variant="outlined"
+                shape="rounded"
+                onChange={(e, value) => {
+                  if (value == pageNumber) return
+                  setLoading(true)
+                  router.push({
+                    pathname: `/collections/${categorySlug}`,
+                    query: { ...queryParameters, page: value },
+                  })
+                }}
+              />
+            )}
           </Box>
         </Box>
       </Container>
