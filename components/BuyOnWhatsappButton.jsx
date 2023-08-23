@@ -13,9 +13,9 @@ const BuyOnWhatsappButton = ({ endIconProps, product, quantity, ...props }) => {
           contactInfo?.phoneNumber
         }?text=${`I would like to place an order for ${
           product?.name
-        }: {url:${`https://pharmahubmedica.ng/collections/${product?.category.slug.current}/${product?.slug.current}`},quantity:${
+        }: [url:${`https://pharmahubmedica.ng/collections/${product?.category.slug.current}/${product?.slug.current}`}\n,quantity:${
           quantity ?? 1
-        }`}`}
+        }]`}`}
         // style={{ width: '100%' }}
       >
         <Button
