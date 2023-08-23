@@ -28,7 +28,13 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useSWR, { SWRConfig } from 'swr'
 
-const Products = ({ categoryName, subcategories, products, productsCount }) => {
+const Products = ({
+  categoryName,
+  subcategories,
+  products,
+  productsCount,
+  description,
+}) => {
   const [openFilterDrawer, setOpenFilterDrawer] = useState(false)
   const [loading, setLoading] = useState(false)
   const trigger = useScrollTrigger({ threshold: 220, disableHysteresis: true })
@@ -76,7 +82,7 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
 
   return (
     <>
-      <Meta titlePrefix={'Products'} />
+      <Meta titlePrefix={'Products'} description={description} />
       <Drawer
         open={openFilterDrawer}
         onClose={() => setOpenFilterDrawer(false)}
@@ -234,7 +240,7 @@ const Products = ({ categoryName, subcategories, products, productsCount }) => {
                       slug={item.slug}
                       title={item.name}
                       starCount={index}
-                      otherStyles={{ width: { xs: 165, sm:200, md: 280 } }}
+                      otherStyles={{ width: { xs: 165, sm: 200, md: 280 } }}
                     />
                   </Grid>
                 ))
@@ -276,31 +282,27 @@ export async function getServerSideProps(context) {
   const pageNumber = Number(context.query?.page || 1)
   const priceRange = context?.query?.priceRange || ''
 
-  try {
-    const productsCount = await getProductsForCategoryCount(
-      category,
-      subcategoriesFilter,
-      priceRange
-    )
-    const categoryDetails = await getCategoryDetails(category)
-    const { name: categoryName, subcategories } = categoryDetails
-    const products = await getProductsForCategory(
-      category,
-      pageNumber,
-      subcategoriesFilter,
-      3,
-      priceRange
-    )
-    return {
-      props: {
-        products,
-        productsCount,
-        categoryName,
-        subcategories,
-      },
-    }
-  } catch (error) {
-    console.error(error)
-    return { props: { products: [], productsCount: 0 } }
+  const productsCount = await getProductsForCategoryCount(
+    category,
+    subcategoriesFilter,
+    priceRange
+  )
+  const categoryDetails = await getCategoryDetails(category)
+  const { name: categoryName, subcategories, description } = categoryDetails
+  const products = await getProductsForCategory(
+    category,
+    pageNumber,
+    subcategoriesFilter,
+    3,
+    priceRange
+  )
+  return {
+    props: {
+      products,
+      productsCount,
+      categoryName,
+      subcategories,
+      description,
+    },
   }
 }

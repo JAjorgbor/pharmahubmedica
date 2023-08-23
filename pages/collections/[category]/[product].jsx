@@ -63,6 +63,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
       <Meta
         titlePrefix={product.name}
         ogImage={urlForImage(product.image).url()}
+        description={product.metaDescription}
       />
       <Container>
         {/* Breadcrumbs */}

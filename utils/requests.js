@@ -28,7 +28,7 @@ export const getCategories = () => {
 // Get category details
 export const getCategoryDetails = (categorySlug) => {
   return client.fetch(
-    `*[_type=="category"&& status && slug.current == 'first-category'][0]{name, subcategories[]->{name, slug}}`,
+    `*[_type=="category"&& status && slug.current == 'first-category'][0]{name, subcategories[]->{name, slug}, description}`,
     { categorySlug }
   )
 }
@@ -157,6 +157,7 @@ export const getProductDetails = (productSlug) => {
       category->{name, slug}, 
       name,
       description,
+      metaDescription,
       slug,
       image,
       price,

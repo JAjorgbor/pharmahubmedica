@@ -35,6 +35,14 @@ const product = {
       group: 'productGroup',
     },
     {
+      name: 'metaDescription',
+      type: 'string',
+      title: 'Meta Description',
+      group: 'productGroup',
+      description: 'The description that would be used for Search Engine Optimization.',
+      validation: (Rule) => Rule.required(),
+    },
+    {
       name: 'price',
       title: 'Price',
       type: 'number',
