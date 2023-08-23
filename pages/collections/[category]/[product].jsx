@@ -41,6 +41,7 @@ import { urlForImage } from '@/sanity/lib/image'
 const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const [count, setCount] = useState(1)
   const [tabValue, setTabValue] = useState('description')
+
   const clientSideReviewsDataFetcher = async () => {
     const { reviews } = await getProductReviews(product._id)
     return reviews
@@ -56,7 +57,6 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const categorySlug = router.query.category
   const starsCount = useGetReviewStarCount()
   const { cart, dispatch } = useContext(CartContext)
-  console.log(urlForImage(product.image).url())
 
   return (
     <>
@@ -206,6 +206,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                 <ReviewSection
                   product={product}
                   reviews={displayedReviews(reviews, clientSideReviews)}
+                  session={session}
                 />
                 {/* End of review section */}
               </TabPanel>

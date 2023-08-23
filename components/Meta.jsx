@@ -33,7 +33,7 @@ export default function Meta({
       />
       <meta property="og:description" content={description} />
       {/* Credit */}
-      <meta name="sitecredit" content="Joshua Ajorgbor" />
+      <meta name="sitecredit" content="Developed by Joshua Ajorgbor" />
     </Head>
   )
 }

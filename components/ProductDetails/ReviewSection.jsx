@@ -19,11 +19,13 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { mutate } from 'swr'
 import Review from './Review'
+import SignInWarning from '../Modals/SignInWarning'
 
-const ReviewSection = ({ product, reviews }) => {
-  const { data: session } = useSession()
+const ReviewSection = ({ product, reviews, session }) => {
   const [reviewrsName, setReviewrsName] = useState('')
   const [reviewId, setReviewId] = useState('')
+  const [openModal, setOpenModal] = useState(false)
+
   const router = useRouter()
   const {
     register,
@@ -36,6 +38,7 @@ const ReviewSection = ({ product, reviews }) => {
   } = useForm({
     defaultValues: { stars: 1 },
   })
+  console.log(session)
   useEffect(() => {
     const resetReviewer = () => {
       setReviewrsName('')
@@ -56,6 +59,10 @@ const ReviewSection = ({ product, reviews }) => {
     (review) => review.hideReview !== true
   )
   const submitHandler = async (data) => {
+    if (!session?.user) {
+      setOpenModal(true)
+      return
+    }
     try {
       const { name, email, image } = session.user
       if (!reviewrsName) {
@@ -326,6 +333,7 @@ const ReviewSection = ({ product, reviews }) => {
         </Box>
         {/* End Review Form */}
       </Stack>
+      <SignInWarning open={openModal} handleClose={() => setOpenModal(false)} />
     </>
   )
 }

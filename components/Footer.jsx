@@ -59,7 +59,7 @@ const Footer = () => {
                 gutterBottom
                 fontWeight={'bold'}
               >
-                Contact Info
+                Quick Links
               </Typography>
               <Typography
                 variant="h5"
@@ -94,7 +94,8 @@ const Footer = () => {
               <Typography
                 variant="h5"
                 fontSize={14}
-                fontWeight={'bold'}
+                fontWeight=
+                {'bold'}
                 textTransform={'uppercase'}
                 >
                 Email:
@@ -129,7 +130,7 @@ const Footer = () => {
                 component="p"
                 textTransform={'uppercase'}
               >
-                <FooterNavLink href={'/contact#faqs'}>faq questions</FooterNavLink>
+                <FooterNavLink href={'/contact#faqs'}>Frequently Asked Questions</FooterNavLink>
               </Typography>
               <Typography
                 variant="caption"
