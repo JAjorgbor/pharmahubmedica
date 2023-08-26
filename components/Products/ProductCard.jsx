@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { toast } from 'react-toastify'
 import { useContext } from 'react'
 import CartToastContent from './CartToastContent'
-import useTruncateText from '@/hooks/useTruncateWords'
+import useTruncate from '@/hooks/useTruncate'
 import useFormatAmount from '@/hooks/useFormatAmount'
 import CustomImage from '@/components/CustomImage'
 import BuyOnWhatsappButton from '../BuyOnWhatsappButton'
@@ -124,7 +124,7 @@ const ProductCard = ({
             fontSize={17}
             gutterBottom
           >
-            {useTruncateText(title, 30)}
+            {useTruncate(title, 30)}
           </Typography>
           <Box sx={{ textAlign: 'center', margin: 'auto' }}>
             <Rating

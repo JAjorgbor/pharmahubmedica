@@ -2,6 +2,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import {
+  Box,
   Button,
   Divider,
   Drawer,
@@ -14,11 +15,22 @@ import {
 import CartDrawerItem from './CartDrawerItem'
 
 import Link from 'next/link'
-import { Fragment, useContext } from 'react'
+import { useEffect, Fragment, useContext } from 'react'
 import { CartContext } from '../Layout'
+import { useRouter } from 'next/router'
 
 const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
   const { cart, dispatch } = useContext(CartContext)
+  const router = useRouter()
+  useEffect(() => {
+    const handleRouteChangeComplete = () => {
+      setOpenCartDrawer(false)
+    }
+    router.events.on('routeChangeComplete', handleRouteChangeComplete)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChangeComplete)
+    }
+  }, [router])
   return (
     <>
       <Drawer
@@ -49,7 +61,7 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
           textAlign="center"
           //   sx={{width:'100%'}}
         >
-          Shopping Cart
+          Cart Summary
         </Typography>
         <List>
           {cart.length ? (
@@ -87,15 +99,30 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
               </ListItem>
             </>
           ) : (
-            <Typography
-              color="complimentary.light"
-              my={5}
-              textAlign="center"
-              fontSize={18}
-              sx={{ opacity: 0.5, fontStyle: 'italic' }}
-            >
-              Cart is empty...
-            </Typography>
+            <>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography
+                  color="complimentary.light"
+                  my={5}
+                  textAlign="center"
+                  fontSize={18}
+                  sx={{ opacity: 0.5, fontStyle: 'italic' }}
+                >
+                  Cart is empty...
+                </Typography>
+                <Link href="/cart" style={{ width: '100%' }}>
+                  <Button
+                    variant="outlined"
+                    sx={{ width: '90%' }}
+                    endIcon={
+                      <ShoppingCartOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                    }
+                  >
+                    View Cart
+                  </Button>
+                </Link>
+              </Box>
+            </>
           )}
         </List>
       </Drawer>

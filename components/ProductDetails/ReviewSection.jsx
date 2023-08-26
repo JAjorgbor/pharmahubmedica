@@ -19,12 +19,12 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { mutate } from 'swr'
 import Review from './Review'
-import SignInWarning from '../Modals/SignInWarning'
+import SignInWarning from '../Dialogs/SignInWarning'
 
 const ReviewSection = ({ product, reviews, session }) => {
   const [reviewrsName, setReviewrsName] = useState('')
   const [reviewId, setReviewId] = useState('')
-  const [openModal, setOpenModal] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
 
   const router = useRouter()
   const {
@@ -60,7 +60,7 @@ const ReviewSection = ({ product, reviews, session }) => {
   )
   const submitHandler = async (data) => {
     if (!session?.user) {
-      setOpenModal(true)
+      setOpenDialog(true)
       return
     }
     try {
@@ -333,7 +333,7 @@ const ReviewSection = ({ product, reviews, session }) => {
         </Box>
         {/* End Review Form */}
       </Stack>
-      <SignInWarning open={openModal} handleClose={() => setOpenModal(false)} />
+      <SignInWarning open={openDialog} handleClose={() => setOpenDialog(false)} />
     </>
   )
 }

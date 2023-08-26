@@ -1,6 +1,6 @@
 import Meta from '@/components/Meta'
-import drugImage from '@/public/drug-image.jpg'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined'
 import Image from 'next/image'
 import {
   Box,
@@ -36,6 +36,8 @@ import { useTheme } from '@mui/material/styles'
 import Link from 'next/link'
 import { CartContext } from '@/components/Layout'
 import CustomImage from '@/components/CustomImage'
+import useTruncate from '@/hooks/useTruncate'
+import RemoveFromCartWarning from '@/components/Dialogs/RemoveFromCartWarning'
 
 const Cart = () => {
   const theme = useTheme()
@@ -43,6 +45,10 @@ const Cart = () => {
     noSsr: true,
   })
   const { cart, dispatch } = useContext(CartContext)
+  const noOfItems = cart.reduce(
+    (previousValue, currentValue) => previousValue + currentValue.count,
+    0
+  )
   const totalPrice = cart.reduce(
     (previousValue, currentValue) =>
       previousValue + currentValue.count * currentValue.item.price,
@@ -53,7 +59,16 @@ const Cart = () => {
       <Meta titlePrefix={'Cart'} />
       <Box my={5}>
         <Container>
-          <Typography variant={'h1'} fontSize={25} fontWeight='bold' textAlign='center' mb={5} color='primary.main'>Shopping Cart</Typography>
+          <Typography
+            variant={'h1'}
+            fontSize={25}
+            fontWeight="bold"
+            textAlign="center"
+            mb={5}
+            color="primary.main"
+          >
+            Shopping Cart
+          </Typography>
           <Stack direction={{ md: 'row' }} gap={3}>
             <Box sx={{ flexGrow: 1 }}>
               {matchMediaQuery ? (
@@ -117,6 +132,12 @@ const Cart = () => {
                   ))}
                 </List>
               )}
+              {!cart?.length && (
+                <Box sx={{ display: 'grid', placeItems: 'center', minHeight:200 }}>
+                  <Image src ='/inbox.svg' width={200} height={200} style={{opacity:0.5}}/>
+                  
+                </Box>
+              )}
             </Box>
             <Box sx={{ width: { md: 300 } }}>
               <Card>
@@ -129,7 +150,18 @@ const Cart = () => {
                     <ListItem
                       sx={{ display: 'flex', justifyContent: 'space-between' }}
                     >
-                      <Typography fontWeight={'bold'}>Total</Typography>
+                      <Typography fontWeight={'bold'}>
+                        Number of items
+                      </Typography>
+                      <Typography fontSize={20} fontWeight="bold">
+                        {noOfItems}
+                      </Typography>
+                    </ListItem>
+                    <Divider />
+                    <ListItem
+                      sx={{ display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography fontWeight={'bold'}>Total Amount</Typography>
                       <Typography fontSize={20} fontWeight="bold">
                         {useFormatAmount(totalPrice)}
                       </Typography>
@@ -160,6 +192,7 @@ export default Cart
 function CartItemForLargeScreens({ product }) {
   const { cart, dispatch } = useContext(CartContext)
   const { item, count: itemCount } = product
+  const [openDialog, setOpenDialog] = useState(false)
   const [count, setCount] = useState(itemCount || 1)
   useEffect(() => {
     dispatch({ type: 'SET_ITEM_COUNT', payload: item, count })
@@ -172,18 +205,27 @@ function CartItemForLargeScreens({ product }) {
           width={350}
         >
           <Stack direction="row" alignItems="center" width={'100%'} gap={2}>
-            <CustomImage
-              asset={item.image}
-              alt={item.image.alt}
-              width={100}
-              height={80}
-              style={{ objectFit: 'contain' }}
-            />
+            <Link
+              href={`/collections/${item.category.slug.current}/${item.slug.current}`}
+            >
+              <CustomImage
+                asset={item.image}
+                alt={item.image.alt}
+                width={100}
+                height={80}
+                style={{ objectFit: 'contain' }}
+              />
+            </Link>
             <Link
               href={`/collections/${item.category.slug.current}/${item.slug.current}`}
               style={{ textDecoration: 'none' }}
             >
-              <Typography color="primary.main">{item.name}</Typography>
+              <Typography
+                color="primary.main"
+                sx={{ maxWidth: { sm: 100, lg: 300 }, wordWrap: 'break-word' }}
+              >
+                {useTruncate(item.name, 40)}
+              </Typography>
             </Link>
           </Stack>
         </TableCell>
@@ -199,13 +241,16 @@ function CartItemForLargeScreens({ product }) {
           </Typography>
         </TableCell>
         <TableCell>
-          <IconButton
-            onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: item })}
-          >
+          <IconButton onClick={() => setOpenDialog(true)}>
             <DeleteOutlineOutlinedIcon />
           </IconButton>
         </TableCell>
       </TableRow>
+      <RemoveFromCartWarning
+        item={item}
+        open={openDialog}
+        handleClose={() => setOpenDialog(false)}
+      />
     </>
   )
 }
@@ -213,6 +258,7 @@ function CartItemForLargeScreens({ product }) {
 function CartItemForSmallScreens({ product }) {
   const { cart, dispatch } = useContext(CartContext)
   const { item, count: itemCount } = product
+  const [openDialog, setOpenDialog] = useState(false)
   const [count, setCount] = useState(itemCount || 1)
   useEffect(() => {
     dispatch({ type: 'SET_ITEM_COUNT', payload: item, count })
@@ -239,16 +285,29 @@ function CartItemForSmallScreens({ product }) {
               action={
                 <IconButton
                   aria-label="settings"
-                  onClick={() =>
-                    dispatch({ type: 'REMOVE_ITEM', payload: item })
-                  }
+                  onClick={() => setOpenDialog(true)}
                 >
                   <DeleteOutlineOutlinedIcon />
                 </IconButton>
               }
-              title={item.name}
+              title={
+                <Link
+                  href={`/collections/${item.category.slug.current}/${item.slug.current}`}
+                  style={{ all: 'inherit', cursor: 'pointer' }}
+                >
+                  <Typography
+                    sx={{
+                      all: 'inherit',
+                      maxWidth: { xs: 200, sm: 300 },
+                      wordWrap: 'break-word',
+                    }}
+                  >
+                    {useTruncate(item.name, 30)}
+                  </Typography>
+                </Link>
+              }
               titleTypographyProps={{
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: 'bold',
                 color: 'primary.main',
               }}
@@ -276,6 +335,11 @@ function CartItemForSmallScreens({ product }) {
           </Box>
         </Card>
       </ListItem>
+      <RemoveFromCartWarning
+        item={item}
+        open={openDialog}
+        handleClose={() => setOpenDialog(false)}
+      />
     </>
   )
 }

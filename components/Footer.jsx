@@ -171,7 +171,7 @@ const Footer = () => {
           </Grid>
           <Divider sx={{ marginBlock: 5 }} />
           <Typography fontSize={12} textAlign={'center'}>
-            &copy; Pharmahubmedica. {new Date().getFullYear()}. All Rights
+            &copy; {new Date().getFullYear()} Pharmahubmedica. All Rights
             Reserved
           </Typography>
         </Container>
