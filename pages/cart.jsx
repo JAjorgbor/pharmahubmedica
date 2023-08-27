@@ -38,6 +38,9 @@ import { CartContext } from '@/components/Layout'
 import CustomImage from '@/components/CustomImage'
 import useTruncate from '@/hooks/useTruncate'
 import RemoveFromCartWarning from '@/components/Dialogs/RemoveFromCartWarning'
+import { Alert, AlertTitle } from '@mui/lab'
+import useGetCartOrder from '@/hooks/useGetCartOrder'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
 
 const Cart = () => {
   const theme = useTheme()
@@ -54,6 +57,9 @@ const Cart = () => {
       previousValue + currentValue.count * currentValue.item.price,
     0
   )
+  const checkoutString = useGetCartOrder()
+  const { contactInfo } = useGetContactInfo()
+
   return (
     <>
       <Meta titlePrefix={'Cart'} />
@@ -133,9 +139,36 @@ const Cart = () => {
                 </List>
               )}
               {!cart?.length && (
-                <Box sx={{ display: 'grid', placeItems: 'center', minHeight:200 }}>
-                  <Image src ='/inbox.svg' width={200} height={200} style={{opacity:0.5}}/>
-                  
+                <Box
+                  sx={{ display: 'grid', placeItems: 'center', minHeight: 200 }}
+                >
+                  <Image
+                    src="/empty-cart-illustration.svg"
+                    width={200}
+                    height={200}
+                  />
+                  <Typography
+                    sx={{
+                      color: 'primary.main',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Your cart is empty
+                  </Typography>
+                  <Stack direction="row" gap={2} marginTop={2}>
+                    <Link href={'/collections'}>
+                      <Button variant="contained" size="small">
+                        Browse Collections
+                      </Button>
+                    </Link>
+                    <Link href={'/'}>
+                      <Button variant="outlined" size="small">
+                        Go To Home Page
+                      </Button>
+                    </Link>
+                  </Stack>
                 </Box>
               )}
             </Box>
@@ -148,7 +181,10 @@ const Cart = () => {
                 <CardContent sx={{ paddingBlock: 1 }}>
                   <List>
                     <ListItem
-                      sx={{ display: 'flex', justifyContent: 'space-between' }}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
                     >
                       <Typography fontWeight={'bold'}>
                         Number of items
@@ -159,7 +195,10 @@ const Cart = () => {
                     </ListItem>
                     <Divider />
                     <ListItem
-                      sx={{ display: 'flex', justifyContent: 'space-between' }}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
                     >
                       <Typography fontWeight={'bold'}>Total Amount</Typography>
                       <Typography fontSize={20} fontWeight="bold">
@@ -170,14 +209,24 @@ const Cart = () => {
                   </List>
                 </CardContent>
                 <CardActions>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="success"
-                    endIcon={<WhatsAppIcon />}
+                  <Link
+                    target={cart?.length?"_blank":"_self"}
+                    href={
+                      cart?.length
+                        ? `https://wa.me/${contactInfo?.phoneNumber}?text=${checkoutString}`
+                        : '#'
+                    }
+                    style={{ width:'100%'}}
                   >
-                    Order On Whatsapp
-                  </Button>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="success"
+                      endIcon={<WhatsAppIcon />}
+                    >
+                      Order On Whatsapp
+                    </Button>
+                  </Link>
                 </CardActions>
               </Card>
             </Box>

@@ -18,6 +18,8 @@ import Link from 'next/link'
 import { useEffect, Fragment, useContext } from 'react'
 import { CartContext } from '../Layout'
 import { useRouter } from 'next/router'
+import useGetCartOrder from '@/hooks/useGetCartOrder'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
 
 const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
   const { cart, dispatch } = useContext(CartContext)
@@ -31,6 +33,9 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete)
     }
   }, [router])
+  const checkoutString = useGetCartOrder()
+  const { contactInfo } = useGetContactInfo()
+
   return (
     <>
       <Drawer
@@ -88,14 +93,24 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
                 </Link>
               </ListItem>
               <ListItem sx={{ paddingBlock: 0 }}>
-                <Button
-                  endIcon={<WhatsAppIcon />}
-                  color="success"
-                  variant="contained"
-                  fullWidth
+                <Link
+                  target={cart?.length ? '_blank' : '_self'}
+                  href={
+                    cart?.length
+                      ? `https://wa.me/${contactInfo?.phoneNumber}?text=${checkoutString}`
+                      : '#'
+                  }
+                  style={{ width: '100%' }}
                 >
-                  Order On Whatsapp
-                </Button>
+                  <Button
+                    endIcon={<WhatsAppIcon />}
+                    color="success"
+                    variant="contained"
+                    fullWidth
+                  >
+                    Order On Whatsapp
+                  </Button>
+                </Link>
               </ListItem>
             </>
           ) : (
