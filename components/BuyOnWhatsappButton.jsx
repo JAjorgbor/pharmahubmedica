@@ -18,7 +18,7 @@ const BuyOnWhatsappButton = ({ endIconProps, product, ...props }) => {
         target="_blank"
         href={`https://wa.me/${
           contactInfo?.phoneNumber
-        }?text=${`I would like to place an order for:%0A%0A *${
+        }?text=${`I would like to place an order for  *${
           item.name
         }*(quantity: ${
           count ?? 1

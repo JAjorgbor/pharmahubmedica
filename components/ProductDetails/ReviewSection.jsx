@@ -38,7 +38,6 @@ const ReviewSection = ({ product, reviews, session }) => {
   } = useForm({
     defaultValues: { stars: 1 },
   })
-  console.log(session)
   useEffect(() => {
     const resetReviewer = () => {
       setReviewrsName('')

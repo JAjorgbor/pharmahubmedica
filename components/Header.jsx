@@ -36,6 +36,7 @@ import SearchBar from './Search/SearchBar'
 import CustomTooltip from './TooltipMenu'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import useGetContactInfo from '@/hooks/useGetContactInfo'
+import { ClickAwayListener } from '@mui/material'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -77,7 +78,7 @@ export default function Header({
     threshold: 200, // Pixels scrolled before trigger is activated
     disableHysteresis: true, // Disable the "hysteresis" effect
   })
-  const [showSearchBar, setshowSearchBar] = useState(false)
+  const [showSearchBar, setShowSearchBar] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
@@ -102,7 +103,7 @@ export default function Header({
             setOpenSidebar={setOpenSidebar}
             setOpenCartDrawer={setOpenCartDrawer}
             showSearchBar={showSearchBar}
-            setshowSearchBar={setshowSearchBar}
+            setShowSearchBar={setShowSearchBar}
             searchValue={searchValue}
             setSearchValue={setSearchValue}
           />
@@ -119,28 +120,29 @@ export default function Header({
               setOpenSidebar={setOpenSidebar}
               setOpenCartDrawer={setOpenCartDrawer}
               showSearchBar={showSearchBar}
-              setshowSearchBar={setshowSearchBar}
+              setShowSearchBar={setShowSearchBar}
               searchValue={searchValue}
               setSearchValue={setSearchValue}
             />
           </AppBar>
         </Slide>
-        {/* <Grow
-            in={showSearchBar}> */}
-        <SearchBar
-          styles={{
-            width: { xs: '90%', sm: '450px' },
-            position: 'fixed',
-            top: '8rem',
-            zIndex: 999,
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            display: showSearchBar && isSmallScreen ? 'flex' : 'none' || 'flex',
-          }}
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
-        />
-        {/* </Grow> */}
+        <ClickAwayListener onClickAway={()=>{console.log('clicked away')
+        setShowSearchBar(false)}}>
+          <SearchBar
+            styles={{
+              width: { xs: '90%', sm: '450px' },
+              position: 'fixed',
+              top: '8rem',
+              zIndex: 999,
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              display:
+                showSearchBar && isSmallScreen ? 'flex' : 'none' || 'flex',
+            }}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+          />
+        </ClickAwayListener>
         {/* End Top Nav*/}
         {/* Start Bottom Nav*/}
 
@@ -262,7 +264,7 @@ function TopNavContent({
   setOpenSidebar,
   setOpenCartDrawer,
   showSearchBar,
-  setshowSearchBar,
+  setShowSearchBar,
   searchValue,
   setSearchValue,
 }) {
@@ -275,6 +277,14 @@ function TopNavContent({
     setAnchorEl(null)
   }
   const { contactInfo } = useGetContactInfo()
+  const router = useRouter()
+  useEffect(() => {
+    const handleRouteComplete = () => setShowSearchBar(false)
+    router.events.on('routeChangeComplete', handleRouteComplete)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteComplete)
+    }
+  }, [router])
   return (
     <>
       <Toolbar>
@@ -342,7 +352,7 @@ function TopNavContent({
                 size="large"
                 aria-label="Search Products"
                 //   color="inherit"
-                onClick={() => setshowSearchBar(!showSearchBar)}
+                onClick={() => setShowSearchBar(!showSearchBar)}
                 sx={{ display: { md: 'none' } }}
               >
                 <SearchIcon fontSize="medium" />
