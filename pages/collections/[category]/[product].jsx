@@ -257,7 +257,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                       alt={item?.image.alt}
                       price={item.price}
                       imageSrc={item.image}
-                      product={product}
+                      product={item}
                       categoryName={item.category.name}
                       categorySlug={item.category.slug}
                       reviews={item.reviews}

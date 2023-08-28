@@ -8,6 +8,6 @@ ${cart.map(
   ({ item, count }, index) =>
     `${index + 1}) *${
       item.name
-    }*(quantity:${count}, url:${`https://pharmahubmedica.ng/collections/${item?.category.slug.current}/${item?.slug.current}`}%20)%0A%0A`
+    }*(quantity:${count}, url:${`https://pharmahubmedica.ng/collections/${item?.category.slug.current}/${item?.slug.current}`}%20)%0A%0A` 
 )}`
 }
