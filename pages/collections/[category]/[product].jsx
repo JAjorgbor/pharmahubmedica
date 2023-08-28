@@ -37,6 +37,7 @@ import { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 import { urlForImage } from '@/sanity/lib/image'
+import successToast from '@/library/successToast'
 
 const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const [count, setCount] = useState(1)
@@ -168,6 +169,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                 </Button>
               </Stack>
               <Divider sx={{ marginBlock: '1rem' }} />
+              {/* <Button onClick={()=>successToast("What's up danger")}>click me</Button> */}
               <BuyOnWhatsappButton size="large" />
             </Box>
           </Stack>

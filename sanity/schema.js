@@ -1,13 +1,12 @@
+import about from './schemas/about'
 import blockContent from './schemas/blockContent'
 import category from './schemas/category'
-import homepage from './schemas/homepage'
-import subcategory from './schemas/subcategory'
-import product from './schemas/product'
-import faq from './schemas/faq'
 import contact from './schemas/contact'
-import about from './schemas/about'
-import productTag from './schemas/productTag'
+import faq from './schemas/faq'
+import homepage from './schemas/homepage'
+import product from './schemas/product'
 import review from './schemas/review'
+import subcategory from './schemas/subcategory'
 
 export const schema = {
   types: [
@@ -15,7 +14,6 @@ export const schema = {
     category,
     product,
     subcategory,
-    productTag,
     about,
     contact,
     faq,

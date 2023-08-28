@@ -1,3 +1,4 @@
+import successToast from '@/library/successToast'
 import { createProductReview, replyProductReview } from '@/utils/requests'
 import { LoadingButton } from '@mui/lab'
 import {
@@ -12,14 +13,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useSession } from 'next-auth/react'
-import { useState, useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { mutate } from 'swr'
-import Review from './Review'
 import SignInWarning from '../Dialogs/SignInWarning'
+import Review from './Review'
 
 const ReviewSection = ({ product, reviews, session }) => {
   const [reviewrsName, setReviewrsName] = useState('')
@@ -75,8 +75,7 @@ const ReviewSection = ({ product, reviews, session }) => {
           },
         }
         const res = await createProductReview(reviewData, product._id)
-        console.log(res)
-        toast.success('Review created successfully!!')
+        successToast('Review created successfully!!')
       } else {
         const replyData = {
           _type: 'reply',
@@ -90,7 +89,7 @@ const ReviewSection = ({ product, reviews, session }) => {
         }
         const res = await replyProductReview(replyData, reviewId)
         console.log(res)
-        toast.success('Your reply was sent successfully!!')
+        successToast('Your reply was sent successfully!!')
       }
       mutate(`api/${product._id}/reviews`)
       reset()

@@ -53,6 +53,9 @@ dependencies:
   next-sanity:
     specifier: '4'
     version: 4.3.3(@sanity/icons@2.4.1)(@sanity/types@3.13.0)(@sanity/ui@1.7.0)(@types/styled-components@5.1.26)(next@13.4.4)(react@18.2.0)(sanity@3.13.0)(styled-components@5.3.11)
+  nprogress:
+    specifier: ^0.2.0
+    version: 0.2.0
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -4958,6 +4961,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       path-key: 3.1.1
+    dev: false
+
+  /nprogress@0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
     dev: false
 
   /nwsapi@2.2.5:

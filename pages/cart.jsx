@@ -1,46 +1,40 @@
+import CustomImage from '@/components/CustomImage'
+import RemoveFromCartWarning from '@/components/Dialogs/RemoveFromCartWarning'
+import { CartContext } from '@/components/Layout'
 import Meta from '@/components/Meta'
+import CustomCounter from '@/components/Products/CustomCounter'
+import useFormatAmount from '@/hooks/useFormatAmount'
+import useGetCartOrder from '@/hooks/useGetCartOrder'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
+import useTruncate from '@/hooks/useTruncate'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined'
-import Image from 'next/image'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import {
   Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
   Container,
   Divider,
+  IconButton,
   List,
   ListItem,
   Stack,
-  Typography,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  IconButton,
-  useMediaQuery,
-  Card,
-  CardMedia,
-  CardContent,
-  CardHeader,
-  CardActions,
-  Button,
-  Stepper,
-  Step,
-  StepLabel,
+  Typography,
+  useMediaQuery
 } from '@mui/material'
-import WhatsAppIcon from '@mui/icons-material/WhatsApp'
-import useFormatAmount from '@/hooks/useFormatAmount'
-import CustomCounter from '@/components/Products/CustomCounter'
-import { useState, useEffect, useContext } from 'react'
 import { useTheme } from '@mui/material/styles'
+import Image from 'next/image'
 import Link from 'next/link'
-import { CartContext } from '@/components/Layout'
-import CustomImage from '@/components/CustomImage'
-import useTruncate from '@/hooks/useTruncate'
-import RemoveFromCartWarning from '@/components/Dialogs/RemoveFromCartWarning'
-import { Alert, AlertTitle } from '@mui/lab'
-import useGetCartOrder from '@/hooks/useGetCartOrder'
-import useGetContactInfo from '@/hooks/useGetContactInfo'
+import { useContext, useEffect, useState } from 'react'
 
 const Cart = () => {
   const theme = useTheme()
