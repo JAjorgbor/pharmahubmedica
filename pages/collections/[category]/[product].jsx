@@ -170,7 +170,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
               </Stack>
               <Divider sx={{ marginBlock: '1rem' }} />
               {/* <Button onClick={()=>successToast("What's up danger")}>click me</Button> */}
-              <BuyOnWhatsappButton size="large" />
+              <BuyOnWhatsappButton size="large" product={product} />
             </Box>
           </Stack>
           <Box mt={15}>

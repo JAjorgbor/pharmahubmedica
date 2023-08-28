@@ -6,8 +6,8 @@ export default function () {
   return `I would like to place an order for the following items:%0A%0A
 ${cart.map(
   ({ item, count }, index) =>
-    `${index + 1}) ${
+    `${index + 1}) *${
       item.name
-    }(quantity:${count}, url:${`https://pharmahubmedica.ng/collections/${item?.category.slug.current}/${item?.slug.current}`}%20)%0A%0A`
+    }*(quantity:${count}, url:${`https://pharmahubmedica.ng/collections/${item?.category.slug.current}/${item?.slug.current}`}%20)%0A%0A`
 )}`
 }
