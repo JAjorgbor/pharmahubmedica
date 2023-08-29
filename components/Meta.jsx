@@ -42,5 +42,5 @@ Meta.defaultProps = {
   titleSuffix: 'Pharmahubmedica',
   description:
     'Pharmahubmedica: Your trusted pharmacy partner offering high-quality medicines, personalized consultations, and affordable healthcare solutions. Experience exceptional care for your health needs.',
-  ogImage: 'https://pharmahubmedica.ng/logo.png',
+  ogImage: 'https://pharmahubmedica.ng/jpg-logo.jpg',
 }
