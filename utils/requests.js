@@ -11,8 +11,10 @@ export const getAbout = () => {
   return client.fetch(`*[_type=="about"][0]{content}`)
 }
 // Get contact info
-export const getContact = ()=>{
-  return client.fetch (`*[_type=="contact"][0]{email, phoneNumber, facebookAccount, instagramAccount,address}`)
+export const getContact = () => {
+  return client.fetch(
+    `*[_type=="contact"][0]{email, phoneNumber, facebookAccount, instagramAccount,address}`
+  )
 }
 // Get home page hero info
 export const getHeroInfo = () => {
@@ -28,7 +30,7 @@ export const getCategories = () => {
 // Get category details
 export const getCategoryDetails = (categorySlug) => {
   return client.fetch(
-    `*[_type=="category"&& status && slug.current == 'first-category'][0]{name, subcategories[]->{name, slug}, description}`,
+    `*[_type=="category"&& status && slug.current == 'first-category'][0]{name, subcategories[]->{name, slug}, description, image}`,
     { categorySlug }
   )
 }

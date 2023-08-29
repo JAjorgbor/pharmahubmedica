@@ -2,6 +2,7 @@ import BreadCrumbs from '@/components/BreadCrumbs'
 import Meta from '@/components/Meta'
 import Filter from '@/components/Products/Filter'
 import ProductCard from '@/components/Products/ProductCard'
+import { urlForImage } from '@/sanity/lib/image'
 import {
   getCategoryDetails,
   getProductsForCategory,
@@ -30,6 +31,7 @@ import useSWR, { SWRConfig } from 'swr'
 
 const Products = ({
   categoryName,
+  categoryImage,
   subcategories,
   products,
   productsCount,
@@ -48,41 +50,10 @@ const Products = ({
     setLoading(false)
     setOpenFilterDrawer(false)
   }, [asPath])
-  // useEffect(() => {
-  //   setLastProduct(products[products.length - 1])
-  // }, [products]);
-  // const productsFetcher = async () => {
-  //   const products = getProductsForCategory(categorySlug, pageNumber, 3)
-  //   return products
-  // }
-
-  // const {
-  //   data: products,
-  //   isLoading: productsLoading,
-  //   error: productsError,
-  // } = useSWR(`api/collections/${categorySlug}?page=${pageNumber}`, productsFetcher)
-  // useEffect(() => {
-  //   console.log('productsError', productsError)
-  // }, [productsError])
-  // useEffect(() => {
-  //   const handleRouteChangeStart = () => {
-  //     setLoading(true)
-  //   }
-  //   const handleRouteChangeComplete = () => {
-  //     setLoading(false)
-  //   }
-
-  //   router.events.on('routeChangeStart', handleRouteChangeStart)
-
-  //   return () => {
-  //     router.events.off('routeChangeStart', handleRouteChangeStart)
-  //     router.events.off('routeChangeComplete', handleRouteChangeComplete)
-  //   }
-  // }, [])
 
   return (
     <>
-      <Meta titlePrefix={'Products'} description={description} />
+      <Meta titlePrefix={'Products'} description={description} ogImage={urlForImage(categoryImage).url()} />
       <Drawer
         open={openFilterDrawer}
         onClose={() => setOpenFilterDrawer(false)}
@@ -288,7 +259,7 @@ export async function getServerSideProps(context) {
     priceRange
   )
   const categoryDetails = await getCategoryDetails(category)
-  const { name: categoryName, subcategories, description } = categoryDetails
+  const { name: categoryName, subcategories, description, image:categoryImage } = categoryDetails
   const products = await getProductsForCategory(
     category,
     pageNumber,
