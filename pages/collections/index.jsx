@@ -23,21 +23,23 @@ import CategoryCard from '@/components/Products/CategoryCard'
 import { getCategories } from '@/utils/requests'
 import { urlForImage } from '@/sanity/lib/image'
 import { useEffect } from 'react'
+import useSWR from 'swr'
 
-const Collections = ({ categories }) => {
-  useEffect(() => {
-    console.log(categories)
-  }, [categories])
+const Collections = ({ serverCategories }) => {
+  const categoriesFetcher = async () => {
+    const data = await getCategories()
+    return data
+  }
+  const { data: clientCategories } = useSWR('api/categories', categoriesFetcher)
+  const setDefaultValue = (clientValue, serverValue) =>
+    clientValue ?? serverValue
+
   return (
     <>
       <Meta titlePrefix={'Collections'} />
       <Container>
         {/* Breadcrumbs */}
-        <BreadCrumbs
-          links={[
-            { title: 'All Collections', path: '#' },
-          ]}
-        />
+        <BreadCrumbs links={[{ title: 'All Collections', path: '#' }]} />
         <Box
           sx={{
             display: 'flex',
@@ -48,27 +50,29 @@ const Collections = ({ categories }) => {
           py={8}
         >
           <Grid container gap={{ xs: 1, sm: 2 }} justifyContent={'center'}>
-            {categories.map((category, index) => (
-              <Grid
-                item
-                xs={''}
-                sm={5}
-                md={4}
-                lg={3}
-                sx={{ justifySelf: 'center' }}
-                key={index}
-              >
-                <CategoryCard
-                  alt={category?.image.alt}
-                  imageSrc={urlForImage(category.image).url()}
-                  slug={category?.slug}
-                  title={category?.name}
-                  sx={{
-                    width: { xs: 300, sm: 'auto' },
-                  }}
-                />{' '}
-              </Grid>
-            ))}
+            {setDefaultValue(clientCategories,serverCategories).map(
+              (category, index) => (
+                <Grid
+                  item
+                  xs={''}
+                  sm={5}
+                  md={4}
+                  lg={3}
+                  sx={{ justifySelf: 'center' }}
+                  key={index}
+                >
+                  <CategoryCard
+                    alt={category?.image.alt}
+                    imageSrc={urlForImage(category.image).url()}
+                    slug={category?.slug}
+                    title={category?.name}
+                    sx={{
+                      width: { xs: 300, sm: 'auto' },
+                    }}
+                  />{' '}
+                </Grid>
+              )
+            )}
           </Grid>
           {/* <Pagination
             count={5}
@@ -88,7 +92,7 @@ export async function getStaticProps() {
     const categories = await getCategories()
     return {
       props: {
-        categories,
+        serverCategories: categories,
       },
       revalidate: 30,
     }

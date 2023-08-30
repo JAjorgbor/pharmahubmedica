@@ -6,7 +6,7 @@ export default function useGetCategoriesList() {
     const res = await getCategoriesList()
     return res
   }
-  const { data, error, isLoading } = useSWR(`/api/categories`, fetcher)
+  const { data, error, isLoading } = useSWR(`/api/categoriesList`, fetcher)
 
   return {
     categories: data,

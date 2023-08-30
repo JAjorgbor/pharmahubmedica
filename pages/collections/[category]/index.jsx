@@ -53,7 +53,11 @@ const Products = ({
 
   return (
     <>
-      <Meta titlePrefix={'Products'} description={description} ogImage={urlForImage(categoryImage).url()} />
+      <Meta
+        titlePrefix={'Products'}
+        description={description}
+        ogImage={categoryImage && urlForImage(categoryImage).url()}
+      />
       <Drawer
         open={openFilterDrawer}
         onClose={() => setOpenFilterDrawer(false)}
@@ -259,7 +263,15 @@ export async function getServerSideProps(context) {
     priceRange
   )
   const categoryDetails = await getCategoryDetails(category)
-  const { name: categoryName, subcategories, description, image:categoryImage } = categoryDetails
+  if (categoryDetails == null) {
+    return { notFound: true }
+  }
+  const {
+    name: categoryName,
+    subcategories,
+    description,
+    image: categoryImage,
+  } = categoryDetails
   const products = await getProductsForCategory(
     category,
     pageNumber,
@@ -274,6 +286,7 @@ export async function getServerSideProps(context) {
       categoryName,
       subcategories,
       description,
+      categoryImage,
     },
   }
 }
