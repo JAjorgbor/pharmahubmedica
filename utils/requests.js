@@ -30,7 +30,7 @@ export const getCategories = () => {
 // Get category details
 export const getCategoryDetails = (categorySlug) => {
   return client.fetch(
-    `*[_type=="category"&& status && slug.current == 'first-category'][0]{name, subcategories[]->{name, slug}, description, image}`,
+    `*[_type=="category"&& status && slug.current == $categorySlug][0]{name, subcategories[]->{name, slug}, description, image}`,
     { categorySlug }
   )
 }

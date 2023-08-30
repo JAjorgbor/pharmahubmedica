@@ -263,9 +263,9 @@ export async function getServerSideProps(context) {
     priceRange
   )
   const categoryDetails = await getCategoryDetails(category)
-  //if (! categoryDetails) {
-   // return { notFound: true }
-  //}
+  if (! categoryDetails) {
+   return { notFound: true }
+  }
   const {
     name: categoryName,
     subcategories,
