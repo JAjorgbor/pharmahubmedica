@@ -1,6 +1,7 @@
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Button,
   Card,
@@ -31,12 +32,13 @@ import { styled } from '@mui/material/styles'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import SearchBar from './Search/SearchBar'
 import CustomTooltip from './TooltipMenu'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import useGetContactInfo from '@/hooks/useGetContactInfo'
 import { ClickAwayListener } from '@mui/material'
+import { CartContext } from './Layout'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -126,8 +128,12 @@ export default function Header({
             />
           </AppBar>
         </Slide>
-        <ClickAwayListener onClickAway={()=>{console.log('clicked away')
-        setShowSearchBar(false)}}>
+        <ClickAwayListener
+          onClickAway={() => {
+            console.log('clicked away')
+            setShowSearchBar(false)
+          }}
+        >
           <SearchBar
             styles={{
               width: { xs: '90%', sm: '450px' },
@@ -270,6 +276,7 @@ function TopNavContent({
 }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const { data: session, status } = useSession()
+  const { cart } = useContext(CartContext)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
@@ -343,7 +350,7 @@ function TopNavContent({
               <SearchBar
                 styles={{
                   display: { xs: 'none', md: 'flex' },
-                  width: '100%',
+                  width:  '100%' ,
                 }}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
@@ -444,7 +451,9 @@ function TopNavContent({
                   setOpenCartDrawer(true)
                 }}
               >
-                <ShoppingCartOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                <Badge color="secondary" badgeContent={cart?.length ?? 0}>
+                  <ShoppingCartOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                </Badge>
               </IconButton>
             </Grid>
           </Grid>
