@@ -317,7 +317,7 @@ const ReviewSection = ({ product, reviews, session }) => {
                         }}
                       />
                       <Typography variant="caption" color="error">
-                        {starError && 'invalid star count'}
+                        {starError && 'Please leave a rating.'}
                       </Typography>
                     </Stack>
                   </>
