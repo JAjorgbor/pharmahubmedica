@@ -195,6 +195,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
             <Box
               component="form"
               onSubmit={handleSubmit(submitMessage)}
+              // action=''
               noValidate
               mb={{ xs: 4, md: 0 }}
               sx={{ width: '100%' }}
@@ -209,13 +210,26 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                 Send Us A Message
               </Typography>
               <Stack spacing={2}>
-                <TextField
-                  label=" Name"
-                  {...register('name', { required: 'Please enter your name.' })}
-                  error={errors.name?.message}
-                  helperText={errors.name?.message}
-                  fullWidth
-                />
+                <Stack direction="row" spacing={2}>
+                  <TextField
+                    label=" First Name"
+                    {...register('firstName', {
+                      required: 'Please enter your first name.',
+                    })}
+                    error={errors.firstName?.message}
+                    helperText={errors.firstName?.message}
+                    fullWidth
+                    />
+                  <TextField
+                    label=" Last Name"
+                    {...register('lastName', {
+                      required: 'Please enter your lastName.',
+                    })}
+                    error={errors.lastName?.message}
+                    helperText={errors.lastName?.message}
+                    fullWidth
+                  />
+                </Stack>
                 <TextField
                   type="email"
                   label=" Email Address"

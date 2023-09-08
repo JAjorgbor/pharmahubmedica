@@ -25,19 +25,34 @@ const ReviewSection = ({ product, reviews, session }) => {
   const [reviewrsName, setReviewrsName] = useState('')
   const [reviewId, setReviewId] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
+  const [starError, setStarError] = useState(false)
 
   const router = useRouter()
   const {
     register,
     watch,
+    trigger,
     setFocus,
     reset,
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: { stars: 1 },
+    defaultValues: { stars: 0 },
   })
+
+  const starsCount = watch('stars')
+  useEffect(() => {
+    // clear review form on route change
+    const handleRouteComplete = () => {
+      reset()
+    }
+    router.events.on('routeChangeComplete', handleRouteComplete)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteComplete)
+    }
+  }, [])
+
   useEffect(() => {
     const resetReviewer = () => {
       setReviewrsName('')
@@ -58,12 +73,18 @@ const ReviewSection = ({ product, reviews, session }) => {
     (review) => review.hideReview !== true
   )
   const submitHandler = async (data) => {
+    if (Number(data.stars) == 0) {
+      setStarError(true)
+      return
+    }
+    setStarError(false)
     if (!session?.user) {
       setOpenDialog(true)
       return
     }
     try {
       const { name, email, image } = session.user
+
       if (!reviewrsName) {
         const reviewData = {
           ...data,
@@ -209,8 +230,8 @@ const ReviewSection = ({ product, reviews, session }) => {
                 >
                   <Rating value={2} readOnly />
                   <Typography variant="caption">
-                    {`${renderReviewCount(3)} ${
-                      renderReviewCount(3) == 1 ? 'review' : 'reviews'
+                    {`${renderReviewCount(2)} ${
+                      renderReviewCount(2) == 1 ? 'review' : 'reviews'
                     }`}
                   </Typography>
                 </ListItem>
@@ -281,16 +302,25 @@ const ReviewSection = ({ product, reviews, session }) => {
                 name="stars"
                 control={control}
                 render={({ field }) => (
-                  <Rating
-                    value={field.value}
-                    onChange={(event, newValue) => {
-                      if (newValue === null || newValue === 0) {
-                        field.onChange(1)
-                      } else {
-                        field.onChange(newValue)
-                      }
-                    }}
-                  />
+                  <>
+                    <Stack sx={{textAlign:'center'}}>
+                      <Rating
+                        value={Number(field.value)}
+                        onChange={(e) => {
+                          if (Number(e.target.value) == 0) {
+                            console.log('errors')
+                            setStarError(true)
+                          } else {
+                            setStarError(false)
+                          }
+                          field.onChange(Number(e.target.value))
+                        }}
+                      />
+                      <Typography variant="caption" color="error">
+                        {starError && 'invalid star count'}
+                      </Typography>
+                    </Stack>
+                  </>
                 )}
               />
             )}
@@ -308,6 +338,14 @@ const ReviewSection = ({ product, reviews, session }) => {
           />
           <LoadingButton
             variant="contained"
+            // manualling triggering rating count validation because react-hook-form for some reason isn't able to do the automatic validation rule for the rating field
+            onClick={() => {
+              if (Number(starsCount) == 0) {
+                setStarError(true)
+              } else {
+                setStarError(false)
+              }
+            }}
             loading={isSubmitting}
             size="large"
             type="submit"
@@ -331,7 +369,10 @@ const ReviewSection = ({ product, reviews, session }) => {
         </Box>
         {/* End Review Form */}
       </Stack>
-      <SignInWarning open={openDialog} handleClose={() => setOpenDialog(false)} />
+      <SignInWarning
+        open={openDialog}
+        handleClose={() => setOpenDialog(false)}
+      />
     </>
   )
 }
