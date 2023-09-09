@@ -7,6 +7,7 @@ import homepage from './schemas/homepage'
 import product from './schemas/product'
 import review from './schemas/review'
 import subcategory from './schemas/subcategory'
+import team from './schemas/team'
 
 export const schema = {
   types: [
@@ -17,6 +18,7 @@ export const schema = {
     about,
     contact,
     faq,
+    team,
     review,
     blockContent,
   ],

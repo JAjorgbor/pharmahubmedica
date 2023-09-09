@@ -150,6 +150,7 @@ const ReviewSection = ({ product, reviews, session }) => {
                       setReviewId={setReviewId}
                       reviewId={reviewId}
                       key={index}
+                      session={session}
                     />
                   ))}
                 </List>

@@ -16,6 +16,12 @@ export const getContact = () => {
     `*[_type=="contact"][0]{email, phoneNumber, facebookAccount, instagramAccount,address}`
   )
 }
+// Get team emails 
+export const getTeamEmails = () => {
+  return client.fetch(
+    `*[_type=="team"][0]{emails}`
+  )
+}
 // Get home page hero info
 export const getHeroInfo = () => {
   return client.fetch(

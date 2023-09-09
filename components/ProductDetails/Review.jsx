@@ -1,3 +1,4 @@
+import useGetTeamEmails from '@/hooks/useGetTeamEmails'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ReplyIcon from '@mui/icons-material/Reply'
 import {
@@ -21,9 +22,11 @@ import {
 import moment from 'moment'
 import { useState } from 'react'
 
-const Review = ({ data, setReviewrsName, reviewId, setReviewId }) => {
+const Review = ({ data, setReviewrsName, reviewId, setReviewId, session }) => {
   const [openCollapse, setOpenCollapse] = useState(false)
   const filteredReplies = data?.replies?.filter((reply) => !reply.hideReply)
+  const { teamEmails } = useGetTeamEmails()
+
   return (
     <ListItem sx={{ display: 'block' }}>
       <Card
@@ -37,17 +40,19 @@ const Review = ({ data, setReviewrsName, reviewId, setReviewId }) => {
             <Avatar src={data?.user?.profilePhoto} aria-label="profile photo" />
           }
           action={
-            <Tooltip title="Reply Review" arrow placement="top">
-              <IconButton
-                aria-label="settings"
-                onClick={() => {
-                  setReviewrsName(data?.user?.userName)
-                  setReviewId(data._id)
-                }}
-              >
-                <ReplyIcon />
-              </IconButton>
-            </Tooltip>
+            teamEmails?.includes(session?.user?.email) && (
+              <Tooltip title="Reply Review" arrow placement="top">
+                <IconButton
+                  aria-label="settings"
+                  onClick={() => {
+                    setReviewrsName(data?.user?.userName)
+                    setReviewId(data._id)
+                  }}
+                >
+                  <ReplyIcon />
+                </IconButton>
+              </Tooltip>
+            )
           }
           title={data?.user?.userName}
           subheader={
