@@ -46,6 +46,7 @@ const ReviewSection = ({ product, reviews, session }) => {
     // clear review form on route change
     const handleRouteComplete = () => {
       reset()
+      setStarError(false)
     }
     router.events.on('routeChangeComplete', handleRouteComplete)
     return () => {
@@ -279,96 +280,103 @@ const ReviewSection = ({ product, reviews, session }) => {
           </Box>
           {/* End of Review Summary */}
         </Stack>
-        {/* Start Review Form */}
-        <Box component="form" noValidate onSubmit={handleSubmit(submitHandler)}>
+        <Box>
+          {/* Start Review Form */}
           <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-            }}
+            component="form"
+            sx={{ maxWidth: 900, margin:'auto' }}
+            noValidate
+            onSubmit={handleSubmit(submitHandler)}
           >
-            <Typography
-              variant="h4"
-              fontSize={{ xs: 20, md: 25 }}
-              color="primary.main"
-              fontWeight={'bold'}
-              gutterBottom
-            >
-              Leave A {reviewrsName ? 'Reply' : 'Review'}
-            </Typography>
-            {/* hide ratings when replying */}
-            {!reviewrsName && (
-              <Controller
-                name="stars"
-                control={control}
-                render={({ field }) => (
-                  <>
-                    <Stack sx={{textAlign:'center'}}>
-                      <Rating
-                        value={Number(field.value)}
-                        onChange={(e) => {
-                          if (Number(e.target.value) == 0) {
-                            console.log('errors')
-                            setStarError(true)
-                          } else {
-                            setStarError(false)
-                          }
-                          field.onChange(Number(e.target.value))
-                        }}
-                      />
-                      <Typography variant="caption" color="error">
-                        {starError && 'Please leave a rating.'}
-                      </Typography>
-                    </Stack>
-                  </>
-                )}
-              />
-            )}
-          </Box>
-          <TextField
-            label={reviewrsName ? `Reply to ${reviewrsName}` : 'Comment'}
-            required
-            {...register('comment', { required: 'Please enter a comment' })}
-            error={!!errors.comment?.message}
-            helperText={errors.comment?.message}
-            multiline
-            rows={4}
-            fullWidth
-            sx={{ marginBlock: 2 }}
-          />
-          <LoadingButton
-            variant="contained"
-            // manualling triggering rating count validation because react-hook-form for some reason isn't able to do the automatic validation rule for the rating field
-            onClick={() => {
-              if (Number(starsCount) == 0) {
-                setStarError(true)
-              } else {
-                setStarError(false)
-              }
-            }}
-            loading={isSubmitting}
-            size="large"
-            type="submit"
-            sx={{ marginRight: 2 }}
-          >
-            Submit
-          </LoadingButton>
-          {reviewrsName && (
-            <Button
-              variant="contained"
-              size="large"
-              color="error"
-              onClick={() => {
-                setReviewrsName('')
-                setReviewId('')
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
               }}
             >
-              Cancel
-            </Button>
-          )}
+              <Typography
+                variant="h4"
+                fontSize={{ xs: 20, md: 25 }}
+                color="primary.main"
+                fontWeight={'bold'}
+                gutterBottom
+              >
+                Leave A {reviewrsName ? 'Reply' : 'Review'}
+              </Typography>
+              {/* hide ratings when replying */}
+              {!reviewrsName && (
+                <Controller
+                  name="stars"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <Stack sx={{ textAlign: 'center' }}>
+                        <Rating
+                          value={Number(field.value)}
+                          onChange={(e) => {
+                            if (Number(e.target.value) == 0) {
+                              console.log('errors')
+                              setStarError(true)
+                            } else {
+                              setStarError(false)
+                            }
+                            field.onChange(Number(e.target.value))
+                          }}
+                        />
+                        <Typography variant="caption" color="error">
+                          {starError && 'Please leave a rating.'}
+                        </Typography>
+                      </Stack>
+                    </>
+                  )}
+                />
+              )}
+            </Box>
+            <TextField
+              label={reviewrsName ? `Reply to ${reviewrsName}` : 'Comment'}
+              required
+              {...register('comment', { required: 'Please enter a comment' })}
+              error={!!errors.comment?.message}
+              helperText={errors.comment?.message}
+              multiline
+              rows={4}
+              fullWidth
+              sx={{ marginBlock: 2 }}
+            />
+            <LoadingButton
+              variant="contained"
+              // manualling triggering rating count validation because react-hook-form for some reason isn't able to do the automatic validation rule for the rating field
+              onClick={() => {
+                if (Number(starsCount) == 0) {
+                  setStarError(true)
+                } else {
+                  setStarError(false)
+                }
+              }}
+              loading={isSubmitting}
+              size="large"
+              type="submit"
+              sx={{ marginRight: 2 }}
+            >
+              Submit
+            </LoadingButton>
+            {reviewrsName && (
+              <Button
+                variant="contained"
+                size="large"
+                color="error"
+                onClick={() => {
+                  setReviewrsName('')
+                  setReviewId('')
+                }}
+              >
+                Cancel
+              </Button>
+            )}
+          </Box>
+          {/* End Review Form */}
         </Box>
-        {/* End Review Form */}
       </Stack>
       <SignInWarning
         open={openDialog}

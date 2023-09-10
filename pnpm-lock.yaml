@@ -38,6 +38,9 @@ dependencies:
   '@sanity/react-hooks':
     specifier: ^2.36.1
     version: 2.36.1(@sanity/base@2.36.2)(react@18.2.0)
+  '@sanity/structure':
+    specifier: ^2.36.2
+    version: 2.36.2(react@18.2.0)
   '@sanity/vision':
     specifier: '3'
     version: 3.13.0(@babel/runtime@7.22.3)(@codemirror/lint@6.3.0)(@codemirror/state@6.2.1)(@codemirror/theme-one-dark@6.1.2)(@lezer/common@1.0.3)(codemirror@6.0.1)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)(styled-components@5.3.11)

@@ -5,6 +5,8 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
 import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined'
 import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined'
+import heroImage from 'public/about-page-hero-background.jpg'
+import secondaryBackground from 'public/about-page-secondary-background.jpg'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import { getAbout } from '@/utils/requests'
@@ -23,9 +25,18 @@ const About = ({ about: serverAbout }) => {
     <>
       <Meta titlePrefix={'About'} />
       <Box mb={10}>
-        <Box py={8} bgcolor={'complementary.light'} component="section">
+        <Box
+          py={8}
+          bgcolor={'complementary.light'}
+          component="section"
+          sx={{
+            backgroundImage: `url(${heroImage.src})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
           <Container>
-            <Typography fontWeight={'bold'} fontSize={20} mb={4}>
+            <Typography fontWeight={'bold'} fontSize={25} mb={4} color='white'>
               About Us
             </Typography>
             <Link href="/contact" styles={{ color: 'auto' }}>
@@ -51,9 +62,18 @@ const About = ({ about: serverAbout }) => {
             {about?.content && <PortableText value={about?.content} />}
           </Box>
         </Container>
-        <Box py={8} bgcolor={'complementary.light'} component="section">
+        <Box
+          py={8}
+          bgcolor={'complementary.light'}
+          component="section"
+          sx={{
+            backgroundImage: `url(${secondaryBackground.src})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
           <Container>
-            <Typography fontWeight={'bold'} fontSize={20} mb={4}>
+            <Typography fontWeight={'bold'} fontSize={25} mb={4} color='white'>
               Our Values
             </Typography>
             <Stack direction={{ md: 'row' }} gap={3}>

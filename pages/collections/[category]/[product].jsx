@@ -71,6 +71,10 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
         <BreadCrumbs
           links={[
             {
+              title: 'Collections',
+              path: `/collections`,
+            },
+            {
               title: product.category.name,
               path: `/collections/${product.category.slug.current}`,
             },

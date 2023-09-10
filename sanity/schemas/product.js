@@ -100,6 +100,7 @@ const product = {
       name: 'category',
       title: 'Category',
       type: 'reference',
+      validation: (Rule) => Rule.required(),
       to: { type: 'category' },
       group: 'categoryGroup',
     },
@@ -107,6 +108,7 @@ const product = {
       name: 'subcategories',
       title: 'Subcategories',
       group: 'categoryGroup',
+      validation: (Rule) => Rule.required(),
       type: 'array',
       of: [
         {
