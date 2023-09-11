@@ -19,7 +19,7 @@ import {
   useScrollTrigger,
 } from '@mui/material'
 import useGetCategoriesList from '@/hooks/useGetCategoriesList'
-import logo from '@/public/logo.svg'
+import logo from '@/public/png-transparent-logo.png'
 import { useTheme } from '@emotion/react'
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -318,16 +318,12 @@ function TopNavContent({
                   minWidth: '100px',
                   height: '80px',
                   display: 'none',
-                  '@media(min-width:300px)': { display: 'block' },
+                  '@media(min-width:300px)': { display: 'grid' },
+                  placeItems:'center'
                 }}
               >
                 <Link href={'/'}>
-                  <Image
-                    src={logo}
-                    fill
-                    alt="logo"
-                    // sizes="(max-width: 768px) 100vw, 50vw"
-                  />
+                  <Image src={logo} alt="Logo" width={130} height={50} />
                 </Link>
               </Box>
             </Grid>
