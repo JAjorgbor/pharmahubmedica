@@ -26,8 +26,10 @@ import {
   Divider,
   Rating,
   Stack,
+  IconButton,
   Tab,
   Typography,
+  Tooltip,
 } from '@mui/material'
 import { PortableText } from '@portabletext/react'
 import { getSession } from 'next-auth/react'
@@ -38,11 +40,13 @@ import { toast } from 'react-toastify'
 import useSWR from 'swr'
 import { urlForImage } from '@/sanity/lib/image'
 import successToast from '@/library/successToast'
+import ShareIcon from '@mui/icons-material/Share'
+import ShareModal from '@/components/Modals/ShareModal'
 
 const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
   const [count, setCount] = useState(1)
   const [tabValue, setTabValue] = useState('description')
-
+  const [openShareModal, setOpenShareModal] = useState(false)
   const clientSideReviewsDataFetcher = async () => {
     const { reviews } = await getProductReviews(product._id)
     return reviews
@@ -146,6 +150,16 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                     : 'reviews'
                 }`}
                 )
+                <Tooltip title="Share Product">
+                  <IconButton onClick={() => setOpenShareModal(true)}>
+                    <ShareIcon
+                      sx={{
+                        fontSize: 18,
+                        '&:hover': { color: 'primary.main' },
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
               </Typography>
               <Typography color="primary.main" variant="h5" fontWeight={'bold'}>
                 {useFormatAmount(product.price)}
@@ -278,6 +292,10 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
           )}
         </Box>
       </Container>
+      <ShareModal
+        open={openShareModal}
+        handleClose={() => setOpenShareModal(false)}
+      />
     </>
   )
 }

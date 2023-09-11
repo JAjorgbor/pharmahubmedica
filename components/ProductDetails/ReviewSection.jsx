@@ -74,7 +74,7 @@ const ReviewSection = ({ product, reviews, session }) => {
     (review) => review.hideReview !== true
   )
   const submitHandler = async (data) => {
-    if (Number(data.stars) == 0) {
+    if (Number(data.stars) == 0 && !reviewrsName) {
       setStarError(true)
       return
     }
@@ -346,9 +346,9 @@ const ReviewSection = ({ product, reviews, session }) => {
             />
             <LoadingButton
               variant="contained"
-              // manualling triggering rating count validation because react-hook-form for some reason isn't able to do the automatic validation rule for the rating field
+              // manualy triggering rating count validation because react-hook-form for some reason isn't able to do the automatic validation rule for the rating field
               onClick={() => {
-                if (Number(starsCount) == 0) {
+                if (Number(starsCount) == 0 && !reviewrsName) {
                   setStarError(true)
                 } else {
                   setStarError(false)

@@ -13,7 +13,7 @@ export const getAbout = () => {
 // Get contact info
 export const getContact = () => {
   return client.fetch(
-    `*[_type=="contact"][0]{email, phoneNumber, facebookAccount, instagramAccount,address}`
+    `*[_type=="contact"][0]{email, callNumber, whatsappNumber, facebookAccount, instagramAccount,address}`
   )
 }
 // Get team emails 

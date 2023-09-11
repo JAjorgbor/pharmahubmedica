@@ -102,7 +102,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                 color="complementary.main"
                 fontSize={14}
               >
-                {contactInfo.address}{' '}
+                {contactInfo?.address}{' '}
               </Typography>
             </Paper>
             <Paper
@@ -144,7 +144,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                 color="complementary.main"
                 fontSize={14}
               >
-                {contactInfo.phoneNumber}
+                {contactInfo?.callNumber}
               </Typography>
             </Paper>
             <Paper
@@ -186,7 +186,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                 color="complementary.main"
                 fontSize={14}
               >
-                {contactInfo.email}
+                {contactInfo?.email}
               </Typography>
             </Paper>{' '}
           </Stack>

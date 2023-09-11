@@ -97,7 +97,7 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
                   target={cart?.length ? '_blank' : '_self'}
                   href={
                     cart?.length
-                      ? `https://wa.me/${contactInfo?.phoneNumber}?text=${checkoutString}`
+                      ? `https://wa.me/${contactInfo?.whatsappNumber}?text=${checkoutString}`
                       : '#'
                   }
                   style={{ width: '100%' }}

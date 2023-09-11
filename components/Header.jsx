@@ -128,12 +128,6 @@ export default function Header({
             />
           </AppBar>
         </Slide>
-        <ClickAwayListener
-          onClickAway={() => {
-            console.log('clicked away')
-            setShowSearchBar(false)
-          }}
-        >
           <SearchBar
             styles={{
               width: { xs: '90%', sm: '450px' },
@@ -148,7 +142,6 @@ export default function Header({
             searchValue={searchValue}
             setSearchValue={setSearchValue}
           />
-        </ClickAwayListener>
         {/* End Top Nav*/}
         {/* Start Bottom Nav*/}
 
@@ -386,7 +379,7 @@ function TopNavContent({
                   title="Give Us A Call"
                   subheader={
                     <Link
-                      href={`tel:${contactInfo?.phoneNumber}`}
+                      href={`tel:${contactInfo?.callNumber}`}
                       style={{
                         textDecoration: 'none',
                         color: 'inherit',
@@ -395,7 +388,7 @@ function TopNavContent({
                         fontSize: 'inherit',
                       }}
                     >
-                      {contactInfo?.phoneNumber}
+                      {contactInfo?.callNumber}
                     </Link>
                   }
                   titleTypographyProps={{

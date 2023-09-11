@@ -130,7 +130,7 @@ const HomePage = ({
                 color={'primary'}
                 endIcon={<LocalPhoneIcon />}
                 target="_blank"
-                href={`tel:${contactInfo?.phoneNumber}`}
+                href={`tel:${contactInfo?.callNumber}`}
                 sx={{ borderRadius: '0' }}
               >
                 Speak To A Pharmacist

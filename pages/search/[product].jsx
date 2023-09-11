@@ -68,7 +68,7 @@ const SearchPage = () => {
       subClassificationsFilter,
       pageNumber,
       priceRange,
-      2
+      20
     )
     return products
   }

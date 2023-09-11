@@ -89,7 +89,7 @@ const Footer = () => {
                 textTransform={'uppercase'}
                 gutterBottom
                 >
-                <FooterNavLink target='_blank' href={`tel:${contactInfo?.phoneNumber}`}>{contactInfo?.phoneNumber}</FooterNavLink>
+                <FooterNavLink target='_blank' href={`tel:${contactInfo?.phoneNumber}`}>{contactInfo?.callNumber}</FooterNavLink>
               </Typography>
               <Typography
                 variant="h5"
