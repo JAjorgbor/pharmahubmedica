@@ -3,13 +3,19 @@ import { ShareSocial } from 'react-share-social'
 import ModalWrapper from './ModalWrapper'
 import { useRouter } from 'next/router'
 import { Box, IconButton, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
 
 const ShareModal = ({ open, handleClose }) => {
   const router = useRouter()
+  const [url, setUrl] = useState('')
+  useEffect(() => {
+    setUrl(`${window?.location?.origin}${router.asPath}`)
+  }, [])
+
   return (
     <ModalWrapper open={open} handleClose={handleClose}>
       <ShareSocial
-        url={`${window?.location?.origin}${router.asPath}`}
+        url={`${url}`}
         title={
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography
@@ -19,11 +25,11 @@ const ShareModal = ({ open, handleClose }) => {
               Share Product
             </Typography>
             <IconButton onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
+                <CloseIcon />
+              </IconButton>
           </Box>
         }
-        socialTypes={['facebook', 'whatsapp', 'x', 'linkedin']}
+        socialTypes={['facebook', 'whatsapp', 'twitter', 'linkedin']}
         style={{
           root: {
             borderRadius: 3,
