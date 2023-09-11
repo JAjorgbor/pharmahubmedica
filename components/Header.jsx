@@ -1,34 +1,44 @@
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Button,
   Card,
-  CardActionArea,
   CardHeader,
   Container,
+  Divider,
   IconButton,
-  ListItem,
+  Menu,
+  MenuItem,
   Slide,
   Stack,
   Toolbar,
   Typography,
+  useMediaQuery,
   useScrollTrigger,
 } from '@mui/material'
-// Icons
-import MenuIcon from '@mui/icons-material/Menu'
-import PersonIcon from '@mui/icons-material/Person'
-import SearchIcon from '@mui/icons-material/Search'
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
-import { styled } from '@mui/material/styles'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import Image from 'next/image'
+import useGetCategoriesList from '@/hooks/useGetCategoriesList'
 import logo from '@/public/logo.svg'
 import { useTheme } from '@emotion/react'
-import { useEffect } from 'react'
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
+import MenuIcon from '@mui/icons-material/Menu'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import SearchIcon from '@mui/icons-material/Search'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
+import { styled } from '@mui/material/styles'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useContext, useState } from 'react'
+import SearchBar from './Search/SearchBar'
+import CustomTooltip from './TooltipMenu'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
+import { ClickAwayListener } from '@mui/material'
+import { CartContext } from './Layout'
 
 const NavLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -60,12 +70,21 @@ const SearchField = styled('input')(({ theme }) => ({
   border: 'none',
 }))
 
-export default function Header({ openSidebar, setOpenSidebar }) {
+export default function Header({
+  openSidebar,
+  setOpenSidebar,
+  setOpenCartDrawer,
+}) {
   // const theme = useTheme()
   const trigger = useScrollTrigger({
     threshold: 200, // Pixels scrolled before trigger is activated
     disableHysteresis: true, // Disable the "hysteresis" effect
   })
+  const [showSearchBar, setShowSearchBar] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+
   return (
     <>
       <Box component="header" id="header">
@@ -84,6 +103,11 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           <TopNavContent
             openSidebar={openSidebar}
             setOpenSidebar={setOpenSidebar}
+            setOpenCartDrawer={setOpenCartDrawer}
+            showSearchBar={showSearchBar}
+            setShowSearchBar={setShowSearchBar}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
           />
         </AppBar>
 
@@ -96,9 +120,27 @@ export default function Header({ openSidebar, setOpenSidebar }) {
             <TopNavContent
               openSidebar={openSidebar}
               setOpenSidebar={setOpenSidebar}
+              setOpenCartDrawer={setOpenCartDrawer}
+              showSearchBar={showSearchBar}
+              setShowSearchBar={setShowSearchBar}
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
             />
           </AppBar>
         </Slide>
+        <SearchBar
+          styles={{
+            width: { xs: '90%', sm: '450px' },
+            position: 'fixed',
+            top: '8rem',
+            zIndex: 999,
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            display: showSearchBar && isSmallScreen ? 'flex' : 'none' || 'flex',
+          }}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
         {/* End Top Nav*/}
         {/* Start Bottom Nav*/}
 
@@ -106,7 +148,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           elevation={0}
           position="static"
           sx={{
-            backgroundColor: 'complementary.light',
+            backgroundColor: 'white',
 
             visibility: trigger && 'hidden',
             display: { xs: 'none', md: 'block' },
@@ -118,7 +160,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           <AppBar
             elevation={1}
             sx={{
-              backgroundColor: 'complementary.light',
+              backgroundColor: 'white',
               display: { xs: 'none', md: 'block' },
             }}
           >
@@ -126,6 +168,7 @@ export default function Header({ openSidebar, setOpenSidebar }) {
           </AppBar>
           {/* End Bottom Nav*/}
         </Slide>
+        <Divider />
       </Box>
     </>
   )
@@ -133,11 +176,17 @@ export default function Header({ openSidebar, setOpenSidebar }) {
 
 function BottomNavContent() {
   const router = useRouter()
+  const { categories, isError } = useGetCategoriesList()
+  useEffect(() => {
+    // console.log(categories)
+    if (isError) {
+      console.error(isError)
+    }
+  }, [categories, isError])
   const { pathname } = router
   const links = [
     { path: '/', text: 'home' },
-    { path: '/categories', text: 'categories' },
-    { path: '/products', text: 'products' },
+    { path: '/collections', text: 'collections' },
     { path: '/about', text: 'about us' },
     { path: '/contact', text: 'contact us' },
     { path: '/cart', text: 'cart' },
@@ -148,35 +197,98 @@ function BottomNavContent() {
         <Toolbar disableGutters sx={{}}>
           <Stack spacing={3} direction="row">
             {/* navlinks */}
-            {links.map((item, index) => (
-              <NavLink
-                href={item.path}
-                className={pathname === item.path && 'active'}
-                key={index}
-              >
-                <Typography
-                  variant="subtitle1"
-                  component={'span'}
-                  sx={{
-                    fontSize: '0.9rem',
-                    textTransform: 'uppercase',
-                    fontWeight: '600',
-                  }}
-                >
-                  {item.text}
-                </Typography>
-              </NavLink>
-            ))}
+            {links.map((item, index) => {
+              return (
+                <>
+                  {item.text == 'collections' ? (
+                    <CustomTooltip collections={categories}>
+                      <NavLink
+                        href={item.path}
+                        className={pathname === item.path && 'active'}
+                        key={index}
+                      >
+                        <Button
+                          sx={{ padding: 0 }}
+                          size="small"
+                          endIcon={<KeyboardArrowDownIcon />}
+                          disableElevation
+                          disableFocusRipple
+                          disableRipple
+                        >
+                          <Typography
+                            variant="subtitle1"
+                            component={'span'}
+                            sx={{
+                              fontSize: '0.9rem',
+                              textTransform: 'uppercase',
+                              fontWeight: '600',
+                            }}
+                          >
+                            {item.text}
+                          </Typography>
+                        </Button>
+                      </NavLink>
+                    </CustomTooltip>
+                  ) : (
+                    <NavLink
+                      href={item.path}
+                      className={pathname === item.path && 'active'}
+                      key={index}
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        component={'span'}
+                        sx={{
+                          fontSize: '0.9rem',
+                          textTransform: 'uppercase',
+                          fontWeight: '600',
+                        }}
+                      >
+                        {item.text}
+                      </Typography>
+                    </NavLink>
+                  )}
+                </>
+              )
+            })}
           </Stack>
         </Toolbar>
       </Container>
     </>
   )
 }
-function TopNavContent({ openSidebar, setOpenSidebar }) {
+function TopNavContent({
+  openSidebar,
+  setOpenSidebar,
+  setOpenCartDrawer,
+  showSearchBar,
+  setShowSearchBar,
+  searchValue,
+  setSearchValue,
+}) {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const { data: session, status } = useSession()
+  const { cart } = useContext(CartContext)
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+  const { contactInfo } = useGetContactInfo()
+  const router = useRouter()
+  useEffect(() => {
+    const handleRouteComplete = () => setShowSearchBar(false)
+    router.events.on('routeChangeComplete', handleRouteComplete)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteComplete)
+    }
+  }, [router])
   return (
     <>
       <Toolbar>
+        {/* search bar for mobile view that is triggered on search icon button click */}
+
         <Container>
           <Grid
             container
@@ -227,18 +339,22 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
                 alignItems: 'center',
               }}
             >
-              <SearchField
-                sx={{
-                  display: { xs: 'none', md: 'inline' },
+              <SearchBar
+                styles={{
+                  display: { xs: 'none', md: 'flex' },
+                  width: '100%',
                 }}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
               />
               <IconButton
                 size="large"
                 aria-label="Search Products"
                 //   color="inherit"
+                onClick={() => setShowSearchBar(!showSearchBar)}
                 sx={{ display: { md: 'none' } }}
               >
-                <SearchIcon fontSize='medium' />
+                <SearchIcon fontSize="medium" />
               </IconButton>
             </Grid>
             <Grid md={''}>
@@ -259,15 +375,28 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
                       />
                     </Avatar>
                   }
-                  title="Call Us Now"
-                  subheader="+2340001122"
+                  title="Give Us A Call"
+                  subheader={
+                    <Link
+                      href={`tel:${contactInfo?.callNumber}`}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        fontWeight: 'inherit',
+                        fontFamily: 'inherit',
+                        fontSize: 'inherit',
+                      }}
+                    >
+                      {contactInfo?.callNumber}
+                    </Link>
+                  }
                   titleTypographyProps={{
                     textTransform: 'uppercase',
                     fontSize: '0.7rem',
                     fontWeight: 'bold',
                   }}
                   subheaderTypographyProps={{
-                    fontSize: '1.4rem',
+                    fontSize: '1.1rem',
                     fontWeight: '600',
                     sx: {
                       color: 'primary.main',
@@ -277,18 +406,53 @@ function TopNavContent({ openSidebar, setOpenSidebar }) {
               </Card>
             </Grid>
             <Grid>
-              <IconButton>
-                <PersonIcon sx={{ fontSize: '1.5rem' }} />
+              <IconButton onClick={handleClick}>
+                {status == 'authenticated' ? (
+                  <>
+                    <Avatar src={session?.user?.image} alt="profile photo" />
+                    {/* <img
+                      src={session?.user?.image}
+                      style={{
+                        height: '35px',
+                        width: '35px',
+                        borderRadius: '100%',
+                      }}
+                      alt="profile photo"
+                    /> */}
+                  </>
+                ) : (
+                  <PersonOutlineOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                )}
               </IconButton>
+              <Menu
+                id="profile-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                // MenuListProps={{
+                //   'aria-labelledby': 'basic-button',
+                // }}
+              >
+                {status == 'authenticated' ? (
+                  <MenuItem onClick={() => signOut()}>Sign Out</MenuItem>
+                ) : (
+                  <MenuItem onClick={() => signIn()}>Sign In</MenuItem>
+                )}
+              </Menu>
             </Grid>
             <Grid>
-              <IconButton>
-                <ShoppingCartIcon
-                  sx={{ fontSize: '1.8rem', fontSize: '1.5rem' }}
-                />
+              <IconButton
+                onClick={() => {
+                  setOpenCartDrawer(true)
+                }}
+              >
+                <Badge color="secondary" badgeContent={cart?.length ?? 0}>
+                  <ShoppingCartOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                </Badge>
               </IconButton>
             </Grid>
           </Grid>
+          <Divider sx={{ display: { xs: 'none', md: 'block' } }} />
         </Container>
       </Toolbar>
     </>

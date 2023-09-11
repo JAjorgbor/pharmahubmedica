@@ -10,6 +10,7 @@ import {
   styled,
 } from '@mui/material'
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
+import Link from 'next/link'
 import Image from 'next/image'
 
 const CustomCard = styled(Card)(({ theme }) => ({
@@ -52,11 +53,11 @@ const CustomCard = styled(Card)(({ theme }) => ({
   },
 }))
 
-const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
+const CategoryCard = ({ alt, imageSrc, title, slug, ...props }) => {
   return (
     <>
       <CustomCard
-        sx={{ maxWidth: 260, borderRadius: '0' }}
+        sx={{ maxWidth: 260, borderRadius: '0', position: 'relative' }}
         px={3}
         elevation={0}
         {...props}
@@ -67,22 +68,36 @@ const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
             //  width: 200,
             margin: '2px',
             position: 'relative',
+            transition: '1.5s ease-in-out',
+            '&:hover': {
+              transform:'scale(1.2)',
+            }
           }}
           title={alt}
         >
+          <Link href={`collections/${slug?.current}/`}>
           <Image
             alt={title}
             src={imageSrc}
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'cover', }}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+            />
+            </Link>
         </CardMedia>
-        <CardContent>
+        <CardContent
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            backgroundImage: 'linear-gradient( transparent , rgba(0,0,0,0.8) 90%)',
+            color: 'white',
+          }}
+        >
           <Typography
             variant="h5"
             textTransform="capitalize"
-            textAlign="center"
+            // textAlign="center"
             fontWeight={'bold'}
             fontSize={20}
             gutterBottom
@@ -90,7 +105,7 @@ const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
             {title}
           </Typography>
         </CardContent>
-        <CardActions sx={{ justifyContent: 'center', paddingBottom: 3 }}>
+        {/* <CardActions sx={{ justifyContent: 'center', paddingBottom: 3 }}>
           <Button
             size="small"
             variant="contained"
@@ -107,7 +122,7 @@ const CategoryCard = ({ alt, imageSrc, title, ...props }) => {
             View Products
             
           </Button>
-        </CardActions>
+        </CardActions> */}
       </CustomCard>
     </>
   )

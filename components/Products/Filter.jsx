@@ -4,9 +4,11 @@ import {
   AccordionSummary,
   Box,
   Button,
+  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
+  FormGroup,
   FormLabel,
   Paper,
   Radio,
@@ -14,15 +16,86 @@ import {
   Typography,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 
-const Filter = ({ ...props }) => {
+const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
+  const router = useRouter()
+  const { category, ...queryParameters } = router.query
+  const { pathname } = router
+  const { asPath } = router
+  const categorySlug = router.query?.category
+  const [priceRange, setPriceRange] = useState(queryParameters.priceRange ?? '')
+  const [subcategoryList, setSubcategoryList] = useState(
+    queryParameters.subcategories ?? []
+  )
   return (
     <>
       <Paper {...props}>
-        <Box p={2} border={'1px solid lightgray'}>
-          <Button textTransform="uppercase" variant="contained" color="primary">
-            Reset All Filters
+        <Box p={1} border={'1px solid lightgray'}>
+        <Typography
+            component="h3"
+            fontSize={15}
+            fontWeight={'bold'}
+            textAlign="center"
+            color="primary"
+            marginBottom={1}
+          >
+            <Button color="primary" endIcon={<FilterAltOutlinedIcon />}>
+              Filters
+            </Button>
+          </Typography>
+    {(priceRange || subcategoryList.length > 0) && (
+      <>
+          <Button
+            textTransform="uppercase"
+            variant="contained"
+            size="small"
+            color="primary"
+            sx={{ marginBottom: 1 }}
+            onClick={() => {
+              setSpinner()
+              router.replace({
+                pathname: `/collections/${category}`,
+                query: {
+                  ...queryParameters,
+                  priceRange: priceRange,
+                  subcategories: subcategoryList,
+                },
+              })
+            }}
+          >
+            Set Filters
           </Button>
+            <Button
+              textTransform="uppercase"
+              variant="outlined"
+              size="small"
+              color="primary"
+              onClick={() => {
+                if (
+                  !queryParameters?.priceRange &&
+                  !queryParameters?.subcategories
+                ) {
+                  setPriceRange('')
+                  setSubcategoryList([])
+                  return
+                }
+                setSpinner()
+                router.replace({
+                  pathname: `/collections/${categorySlug}`,
+                  query: {
+                    page: queryParameters.page,
+                  },
+                })
+                setPriceRange('')
+                setSubcategoryList([])
+              }}
+            >
+              Reset All Filters
+            </Button></>
+          )}
         </Box>
         <Accordion elevation={0} sx={{ color: 'complementary.dark' }}>
           <AccordionSummary
@@ -43,20 +116,25 @@ const Filter = ({ ...props }) => {
           </AccordionSummary>
           <AccordionDetails>
             <FormControl>
-              <RadioGroup defaultValue="above 5000" name="radio-buttons-group">
+              <RadioGroup
+                name="radio-buttons-group"
+                onChange={(e) => {
+                  setPriceRange(e.target.value)
+                }}
+              >
                 <FormControlLabel
-                  value="under 1000"
-                  control={<Radio />}
-                  label="Under 1000"
+                  value="price < 1000"
+                  control={<Radio checked={priceRange == 'price < 1000'} />}
+                  label="Below 1000"
                 />
                 <FormControlLabel
-                  value="1000 - 4000"
-                  control={<Radio />}
-                  label="1000 - 4000"
+                  value="1000 - 5000"
+                  control={<Radio checked={priceRange == '1000 - 5000'} />}
+                  label="1000 - 5000"
                 />
                 <FormControlLabel
-                  value="above 5000"
-                  control={<Radio />}
+                  value="price > 5000"
+                  control={<Radio checked={priceRange == 'price > 5000'} />}
                   label="Above 5000"
                 />
               </RadioGroup>
@@ -80,31 +158,42 @@ const Filter = ({ ...props }) => {
                 fontWeight: 'bold',
               }}
             >
-              Category
+              Subcategories
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <FormControl>
-              <RadioGroup
+              <FormGroup
                 defaultValue="cough and cold"
                 name="radio-buttons-group"
+                onChange={(e) => {
+                  setSubcategoryList((prevState) => {
+                    const array = [...prevState]
+                    if (!e.target.checked) {
+                      array.splice(
+                        prevState.indexOf(e.target.value),
+                        prevState.indexOf(e.target.value) + 1
+                      )
+                    } else {
+                      array.push(e.target.value)
+                    }
+                    return array
+                  })
+                }}
               >
-                <FormControlLabel
-                  value="cough and cold"
-                  control={<Radio />}
-                  label="cough and cold"
-                />
-                <FormControlLabel
-                  value="pain killers"
-                  control={<Radio />}
-                  label="Pain Killers"
-                />
-                <FormControlLabel
-                  value="sexual health"
-                  control={<Radio />}
-                  label="Sexual Health"
-                />
-              </RadioGroup>
+                {subcategories?.map((subcategory, index) => (
+                  <FormControlLabel
+                    value={subcategory?.name}
+                    control={
+                      <Checkbox
+                        checked={subcategoryList.includes(subcategory?.name)}
+                      />
+                    }
+                    label={subcategory?.name}
+                    key={index}
+                  />
+                ))}
+              </FormGroup>
             </FormControl>
           </AccordionDetails>
         </Accordion>

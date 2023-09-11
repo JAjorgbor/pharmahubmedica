@@ -9,10 +9,10 @@ const BackToTopButton = () => {
   return (
     <>
       <Slide in={trigger}>
-        <Fab
+        <Fab 
           aria-label="scroll back to top"
           //   size={{ xs: 'small', md: 'medium', lg: 'large' }}
-          size="small"
+          size={"medium"}
           color="primary"
           sx={{ position: 'fixed', bottom: 0, right: 16, borderRadius: 10 }}
           onClick={() => {

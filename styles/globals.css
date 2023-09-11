@@ -17,3 +17,12 @@ body{
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+/* Nprogress styles */
+#nprogress .bar {
+  background: #031D91;
+ }
+/* react toastify custom styles */
+.Toastify__progress-bar--success {
+  background: #031D91 !important; /* Change the background color */
+  /* Add other styles as needed */
+}

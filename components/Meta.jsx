@@ -19,21 +19,21 @@ export default function Meta({
       />
       <meta name="theme-color" content="#1a20f6" />
       {/* Favicon & Icons */}
-      <link
-        href='/logo.svg'
-        type="image/png"
-        rel="shortcut icon"
-      />
+      <link href="/logo.svg" type="image/png" rel="shortcut icon" />
+      {/* Twitter Card Data */}
+      <meta name="twitter:title" content={`${titlePrefix} — ${titleSuffix}`} />
+      <meta name="twitter:site" content="@pharmahubmedica" />
+      <meta name="twitter:card" content="Pharmahubmedica" />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:creator" content="@pharmahubmedica" />
+      <meta name="twitter:image" content={ogImage} />
       {/* Open Graph data */}
       <meta property="og:title" content={`${titlePrefix} — ${titleSuffix}`} />
       <meta property="og:url" content="#" />
-      <meta
-        property="og:image"
-        content={ogImage}
-      />
+      <meta property="og:image" content={ogImage} />
       <meta property="og:description" content={description} />
       {/* Credit */}
-      <meta name="sitecredit" content="Joshua Ajorgbor" />
+      <meta name="sitecredit" content="Developed by Joshua Ajorgbor" />
     </Head>
   )
 }
@@ -42,5 +42,5 @@ Meta.defaultProps = {
   titleSuffix: 'Pharmahubmedica',
   description:
     'Pharmahubmedica: Your trusted pharmacy partner offering high-quality medicines, personalized consultations, and affordable healthcare solutions. Experience exceptional care for your health needs.',
-    ogImage:'/logo.svg'
+  ogImage: 'https://pharmahubmedica.ng/jpg-logo.jpg',
 }

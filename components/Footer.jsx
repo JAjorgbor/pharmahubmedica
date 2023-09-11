@@ -9,18 +9,15 @@ import {
   styled,
 } from '@mui/material'
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
+import InstagramIcon from '@mui/icons-material/Instagram';
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import logo from '@/public/logo.svg'
 import Image from 'next/image'
 import Link from 'next/link'
+import useGetFeaturedCategories from '@/hooks/useGetFeaturedCategories'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
 
 const Footer = () => {
-  const popularCategoriesLinks=[
-    {text:'Sexual health',path:'/categories'},
-    {text:'His health',path:'/categories'},
-    {text:'Her health',path:'/categories'},
-    {text:'Multivitamins and supplements',path:'/categories'},
-  ]
   const FooterNavLink=styled(Link)(({theme})=>({
     color:'inherit',
     textDecoration:'none',
@@ -28,6 +25,8 @@ const Footer = () => {
       color:theme.palette.primary.light
     }
   }))
+  const {featuredCategories} = useGetFeaturedCategories()
+  const {contactInfo} = useGetContactInfo()
   return (
     <>
       <Box
@@ -60,7 +59,7 @@ const Footer = () => {
                 gutterBottom
                 fontWeight={'bold'}
               >
-                Contact Info
+                Quick Links
               </Typography>
               <Typography
                 variant="h5"
@@ -74,8 +73,8 @@ const Footer = () => {
                 variant="caption"
                 textTransform={'uppercase'}
                 gutterBottom
-              >
-                Plot C281, Ushafa New Layout, Ushafa Bwari Abuja
+                >
+                {contactInfo?.address}
               </Typography>
               <Typography
                 variant="h5"
@@ -89,31 +88,30 @@ const Footer = () => {
                 variant="caption"
                 textTransform={'uppercase'}
                 gutterBottom
-              >
-                <FooterNavLink href="tel:2340001122">+2340001122</FooterNavLink>
+                >
+                <FooterNavLink target='_blank' href={`tel:${contactInfo?.phoneNumber}`}>{contactInfo?.callNumber}</FooterNavLink>
               </Typography>
               <Typography
                 variant="h5"
                 fontSize={14}
-                fontWeight={'bold'}
+                fontWeight=
+                {'bold'}
                 textTransform={'uppercase'}
-              >
+                >
                 Email:
+                  
               </Typography>
-              <Typography variant="caption">
-                <FooterNavLink href="mailto:pharmahubmedica@gmail.com">
-                  pharmahubmedica@gmail.com{' '}
+              <Typography variant="caption" gutterBottom>
+                <FooterNavLink target='_blank' href={`mailto:${contactInfo?.email}`}>
+                {contactInfo?.email}{' '}
                 </FooterNavLink>
               </Typography>
               <Stack direction={'row'} mt={2}>
-                <FooterNavLink href={'#'}>
+                <FooterNavLink target='_blank' href={contactInfo?.facebookAccount??''}>
                   <FacebookOutlinedIcon sx={{ fontSize: '2rem' }} />
                 </FooterNavLink>
-                <FooterNavLink href={'#'}>
-                  <FacebookOutlinedIcon sx={{ fontSize: '2rem' }} />
-                </FooterNavLink>
-                <FooterNavLink href={'#'}>
-                  <FacebookOutlinedIcon sx={{ fontSize: '2rem' }} />
+                <FooterNavLink target='_blank' href={contactInfo?.instagramAccount??''}>
+                  <InstagramIcon sx={{ fontSize: '2rem' }} />
                 </FooterNavLink>
               </Stack>
             </Grid>
@@ -132,7 +130,7 @@ const Footer = () => {
                 component="p"
                 textTransform={'uppercase'}
               >
-                <FooterNavLink href={'/contact#faqs'}>Help & faq questions</FooterNavLink>
+                <FooterNavLink href={'/contact#faqs'}>Frequently Asked Questions</FooterNavLink>
               </Typography>
               <Typography
                 variant="caption"
@@ -157,23 +155,23 @@ const Footer = () => {
                 fontWeight={'bold'}
                 gutterBottom
               >
-                Popular Categories
+                Featured Categories
               </Typography>
-              {popularCategoriesLinks.map((link, index) => (
+              {featuredCategories?.map((item, index) => (
                 <Typography
                   variant="caption"
                   textTransform={'uppercase'}
                   component={'p'}
                   key={index}
                 >
-                  <FooterNavLink href={link.path}>{link.text}</FooterNavLink>
+                  <FooterNavLink href={`/collections/${item.slug.current}`}>{item.name}</FooterNavLink>
                 </Typography>
               ))}
             </Grid>
           </Grid>
           <Divider sx={{ marginBlock: 5 }} />
           <Typography fontSize={12} textAlign={'center'}>
-            &copy; Pharmahubmedica. {new Date().getFullYear()}. All Rights
+            &copy; {new Date().getFullYear()} Pharmahubmedica. All Rights
             Reserved
           </Typography>
         </Container>

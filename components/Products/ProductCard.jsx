@@ -11,10 +11,17 @@ import {
 } from '@mui/material'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
-import Image from 'next/image'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
+import { useContext } from 'react'
 import CartToastContent from './CartToastContent'
+import useTruncate from '@/hooks/useTruncate'
+import useFormatAmount from '@/hooks/useFormatAmount'
+import CustomImage from '@/components/CustomImage'
+import BuyOnWhatsappButton from '../BuyOnWhatsappButton'
+import useGetReviewStarCount from '@/hooks/useGetReviewStarCount'
+import useManageCart from '@/hooks/useManageCart'
+import { CartContext } from '../Layout'
 
 const CustomCard = styled(Card)(({ theme }) => ({
   color: theme.palette.complementary.dark,
@@ -56,27 +63,20 @@ const CustomCard = styled(Card)(({ theme }) => ({
 }))
 
 const ProductCard = ({
+  product,
   alt,
   imageSrc,
   title,
   categoryName,
+  categorySlug,
+  reviews,
+  slug,
   price,
-  starCount,
   otherStyles,
   ...props
 }) => {
-  const formatAmount = (amount) => {
-    const result = new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN',
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    }).format(amount)
-    return result
-  }
-  const truncateText = (text) => {
-    return text.slice(0, 35) + '...'
-  }
+  const starsCount = useGetReviewStarCount()
+  const { cart, dispatch } = useContext(CartContext)
   return (
     <>
       <CustomCard
@@ -94,10 +94,10 @@ const ProductCard = ({
           }}
           title={alt}
         >
-          <Link href="/products/product">
-            <Image
+          <Link href={`/collections/${categorySlug?.current}/${slug?.current}`}>
+            <CustomImage
               alt={alt}
-              src={imageSrc}
+              asset={imageSrc}
               style={{ objectFit: 'contain' }}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -121,14 +121,14 @@ const ProductCard = ({
             textTransform="capitalize"
             textAlign="center"
             fontWeight={'bold'}
-            fontSize={20}
+            fontSize={17}
             gutterBottom
           >
-            {truncateText(title)}
+            {useTruncate(title, 30)}
           </Typography>
           <Box sx={{ textAlign: 'center', margin: 'auto' }}>
             <Rating
-              value={starCount}
+              value={starsCount(reviews)}
               readOnly
               size="small"
               //   sx={{ textAlign: 'center', margin: 'auto' }}
@@ -141,7 +141,7 @@ const ProductCard = ({
             color={'primary.main'}
           >
             {' '}
-            {formatAmount(price)}
+            {useFormatAmount(price)}
           </Typography>
         </CardContent>
         <CardActions
@@ -160,39 +160,27 @@ const ProductCard = ({
             color="primary"
             endIcon={<ShoppingBagOutlinedIcon fontSize="small" />}
             sx={{
-              fontSize: 11,
+              fontSize: 9,
               textTransform: 'uppercase',
             }}
             onClick={() => {
-              toast(
-                <CartToastContent imageSrc={imageSrc} productName={title} />,
-                {
-                  hideProgressBar: true,
-                  autoClose: 3000,
-                }
-              )
+              dispatch({ type: 'ADD_ITEM', payload: product })
+              toast(<CartToastContent product={product} />, {
+                hideProgressBar: true,
+                autoClose: 3000,
+              })
             }}
           >
             Add To Cart
           </Button>
-          <Button
+          <BuyOnWhatsappButton
             size="small"
-            variant="outlined"
-            color="primary"
-            endIcon={<AssignmentOutlinedIcon fontSize="small" />}
-            component="Link"
             sx={{
-              fontSize: 11,
+              fontSize: 9,
               textTransform: 'uppercase',
             }}
-          >
-            <Link
-              href="/products/product"
-              style={{ color: 'inherit', textDecoration: 'none' }}
-            >
-              View Details
-            </Link>
-          </Button>
+            product={product}
+          />
         </CardActions>
       </CustomCard>
     </>
