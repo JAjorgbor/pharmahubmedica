@@ -40,7 +40,14 @@ const About = ({ about: serverAbout }) => {
           }}
         >
           <Container>
-            <Typography fontWeight={'bold'} fontSize={25} mb={4} color="white">
+            <Typography
+              fontWeight={'bold'}
+              fontSize={25}
+              mb={4}
+              color={
+                about?.secondBackgroundImage ? 'white' : 'complimentary.main'
+              }
+            >
               About Us
             </Typography>
             <Link href="/contact" styles={{ color: 'auto' }}>
@@ -73,14 +80,21 @@ const About = ({ about: serverAbout }) => {
           sx={{
             backgroundImage: `url(${
               about?.firstBackgroundImage &&
-              urlForImage(about.secondBackgroundImage).url()
+              urlForImage(about?.secondBackgroundImage).url()
             })`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
           }}
         >
           <Container>
-            <Typography fontWeight={'bold'} fontSize={25} mb={4} color="white">
+            <Typography
+              fontWeight={'bold'}
+              fontSize={25}
+              mb={4}
+              color={
+                about?.secondBackgroundImage ? 'white' : 'complimentary.main'
+              }
+            >
               Our Values
             </Typography>
             <Stack direction={{ md: 'row' }} gap={3}>
