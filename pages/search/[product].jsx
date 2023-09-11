@@ -68,7 +68,7 @@ const SearchPage = () => {
       subClassificationsFilter,
       pageNumber,
       priceRange,
-      20
+      process.env.NEXT_PUBLIC_ITEMS_PER_PAGE_COUNT
     )
     return products
   }

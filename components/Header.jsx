@@ -128,20 +128,19 @@ export default function Header({
             />
           </AppBar>
         </Slide>
-          <SearchBar
-            styles={{
-              width: { xs: '90%', sm: '450px' },
-              position: 'fixed',
-              top: '8rem',
-              zIndex: 999,
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              display:
-                showSearchBar && isSmallScreen ? 'flex' : 'none' || 'flex',
-            }}
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-          />
+        <SearchBar
+          styles={{
+            width: { xs: '90%', sm: '450px' },
+            position: 'fixed',
+            top: '8rem',
+            zIndex: 999,
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            display: showSearchBar && isSmallScreen ? 'flex' : 'none' || 'flex',
+          }}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
         {/* End Top Nav*/}
         {/* Start Bottom Nav*/}
 
@@ -343,7 +342,7 @@ function TopNavContent({
               <SearchBar
                 styles={{
                   display: { xs: 'none', md: 'flex' },
-                  width:  '100%' ,
+                  width: '100%',
                 }}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
@@ -409,15 +408,18 @@ function TopNavContent({
             <Grid>
               <IconButton onClick={handleClick}>
                 {status == 'authenticated' ? (
-                  <img
-                    src={session?.user?.image}
-                    style={{
-                      height: '35px',
-                      width: '35px',
-                      borderRadius: '100%',
-                    }}
-                    alt="profile photo"
-                  />
+                  <>
+                    <Avatar src={session?.user?.image} alt="profile photo" />
+                    {/* <img
+                      src={session?.user?.image}
+                      style={{
+                        height: '35px',
+                        width: '35px',
+                        borderRadius: '100%',
+                      }}
+                      alt="profile photo"
+                    /> */}
+                  </>
                 ) : (
                   <PersonOutlineOutlinedIcon sx={{ fontSize: '1.8rem' }} />
                 )}

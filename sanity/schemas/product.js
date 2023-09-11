@@ -58,6 +58,16 @@ const product = {
       group: 'productGroup',
     },
     {
+      name: 'isNewlyStocked',
+      title: 'Is a newly stocked product',
+      type: 'boolean',
+      description:
+        'This field determines if this product is showed on the homepage as a newly stocked product.',
+      initialValue: false,
+      group: 'productGroup',
+    },
+
+    {
       name: 'slug',
       group: 'productGroup',
       title: 'Slug',

@@ -8,7 +8,7 @@ export const getFaqs = () => {
 
 // Get About Info
 export const getAbout = () => {
-  return client.fetch(`*[_type=="about"][0]{content}`)
+  return client.fetch(`*[_type=="about"][0]{firstBackgroundImage,content,secondBackgroundImage}`)
 }
 // Get contact info
 export const getContact = () => {
@@ -101,7 +101,7 @@ export const getProductsForCategory = (
     {
       categorySlug,
       pageNumber,
-      itemsPerPage,
+      itemsPerPage:Number(itemsPerPage),
       subcategories,
       priceRange: price,
     }
@@ -146,7 +146,7 @@ export const getProductsForCategoryCount = (
 // Get newly stocked products
 export const getNewlyStockedProducts = () => {
   return client.fetch(
-    `*[_type == "product" && status] | order(_createdAt desc) [0..9] {
+    `*[_type == "product" && status && isNewlyStocked]  {
       _id, name, price, image, category->{name,slug}, slug, 
       'reviews':reviews[]->{
         _id,
@@ -249,7 +249,7 @@ export const searchProducts = (
       subClassifications,
       pageNumber,
       priceRange: price,
-      itemsPerPage,
+      itemsPerPage:Number(itemsPerPage),
     }
   )
 }

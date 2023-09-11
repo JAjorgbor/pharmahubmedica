@@ -178,7 +178,7 @@ const Products = ({
             <Grid
               container
               columnGap={1}
-              rowGap={3}
+              rowGap={5}
               justifyContent={'center'}
               sx={{ width: '100%' }}
             >
@@ -222,10 +222,14 @@ const Products = ({
               )}
             </Grid>
 
-            {Math.ceil(productsCount / 3) > 1 && (
+            {Math.ceil(
+              productsCount / process.env.NEXT_PUBLIC_ITEMS_PER_PAGE_COUNT
+            ) > 1 && (
               <Pagination
                 sx={{ marginTop: 5 }}
-                count={Math.ceil(productsCount / 3)}
+                count={Math.ceil(
+                  productsCount / process.env.NEXT_PUBLIC_ITEMS_PER_PAGE_COUNT
+                )}
                 color="primary"
                 defaultPage={pageNumber}
                 variant="outlined"
@@ -263,8 +267,8 @@ export async function getServerSideProps(context) {
     priceRange
   )
   const categoryDetails = await getCategoryDetails(category)
-  if (! categoryDetails) {
-   return { notFound: true }
+  if (!categoryDetails) {
+    return { notFound: true }
   }
   const {
     name: categoryName,
@@ -276,7 +280,7 @@ export async function getServerSideProps(context) {
     category,
     pageNumber,
     subcategoriesFilter,
-    3,
+    process.env.NEXT_PUBLIC_ITEMS_PER_PAGE_COUNT,
     priceRange
   )
   return {

@@ -165,7 +165,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
                 {useFormatAmount(product.price)}
               </Typography>
               <Divider sx={{ marginBlock: '1rem' }} />
-              <Stack direction="row" spacing={3}>
+              <Stack direction="row" gap={3} flexWrap='wrap'>
                 <CustomCounter count={count} setCount={setCount} />
                 <Button
                   variant="contained"
@@ -191,7 +191,7 @@ const ProductDetailsPage = ({ product, similarProducts, session, reviews }) => {
               <BuyOnWhatsappButton size="large" product={product} />
             </Box>
           </Stack>
-          <Box mt={15}>
+          <Box mt={{xs:10,md:5}}>
             <TabContext value={tabValue}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList

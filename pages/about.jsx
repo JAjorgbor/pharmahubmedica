@@ -11,6 +11,7 @@ import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import { getAbout } from '@/utils/requests'
 import useSWR from 'swr'
+import { urlForImage } from '@/sanity/lib/image'
 
 const About = ({ about: serverAbout }) => {
   const { data: clientAbout } = useSWR('api/about', async () => {
@@ -30,13 +31,16 @@ const About = ({ about: serverAbout }) => {
           bgcolor={'complementary.light'}
           component="section"
           sx={{
-            backgroundImage: `url(${heroImage.src})`,
+            backgroundImage: `url(${
+              about?.firstBackgroundImage &&
+              urlForImage(about.firstBackgroundImage).url()
+            })`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
           }}
         >
           <Container>
-            <Typography fontWeight={'bold'} fontSize={25} mb={4} color='white'>
+            <Typography fontWeight={'bold'} fontSize={25} mb={4} color="white">
               About Us
             </Typography>
             <Link href="/contact" styles={{ color: 'auto' }}>
@@ -67,13 +71,16 @@ const About = ({ about: serverAbout }) => {
           bgcolor={'complementary.light'}
           component="section"
           sx={{
-            backgroundImage: `url(${secondaryBackground.src})`,
+            backgroundImage: `url(${
+              about?.firstBackgroundImage &&
+              urlForImage(about.secondBackgroundImage).url()
+            })`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
           }}
         >
           <Container>
-            <Typography fontWeight={'bold'} fontSize={25} mb={4} color='white'>
+            <Typography fontWeight={'bold'} fontSize={25} mb={4} color="white">
               Our Values
             </Typography>
             <Stack direction={{ md: 'row' }} gap={3}>

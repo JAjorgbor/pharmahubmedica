@@ -5,7 +5,7 @@ const style = {
   top: '45%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width:{sx:'80vw',sm:400},
+  width:{sx:'80%'},
   bgcolor: 'background.paper',
   boxShadow: 24,
 }
