@@ -1,6 +1,6 @@
 export default {
   name: 'team',
-  title: 'Team',
+  title: 'Team Emails',
   type: 'document',
   fields: [
     {
