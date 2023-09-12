@@ -11,7 +11,7 @@ import {
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
-import logo from '@/public/logo.svg'
+import logo from '@/public/png-transparent-logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import useGetFeaturedCategories from '@/hooks/useGetFeaturedCategories'
@@ -48,7 +48,7 @@ const Footer = () => {
           >
             <Grid alignSelf={'center'} xs={12} sm={'auto'} textAlign={{xs:'center',sm:'start'}} >
               <FooterNavLink href="/">
-                <Image src={logo}  alt='Logo' sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
+                <Image src={logo}  alt='Logo' width={200} height={80}/>
               </FooterNavLink>
             </Grid>
             <Grid>

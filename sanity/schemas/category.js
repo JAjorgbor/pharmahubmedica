@@ -68,6 +68,7 @@ const category = {
     {
       name: 'subcategories',
       title: 'Subcategories',
+      validation: (Rule) => Rule.required(),
       type: 'array',
       description:
         'This is a list of subcategoires that belong to this category.',

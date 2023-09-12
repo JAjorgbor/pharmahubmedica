@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import logo from '@/public/logo.svg'
+import logo from '@/public/logo.png'
 
 export default function Meta({
   titlePrefix,
@@ -18,8 +18,6 @@ export default function Meta({
         content="width=device-width, initial-scale=1, maximum-scale=1.0"
       />
       <meta name="theme-color" content="#1a20f6" />
-      {/* Favicon & Icons */}
-      <link href="/logo.svg" type="image/png" rel="shortcut icon" />
       {/* Twitter Card Data */}
       <meta name="twitter:title" content={`${titlePrefix} — ${titleSuffix}`} />
       <meta name="twitter:site" content="@pharmahubmedica" />
