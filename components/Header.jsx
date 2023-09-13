@@ -27,7 +27,6 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
-import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import { styled } from '@mui/material/styles'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -64,7 +63,6 @@ const SearchField = styled('input')(({ theme }) => ({
   borderRadius: '20px',
   outline: 'none',
   width: '100%',
-  //   height: '1.1.5rem',
   padding: '0.5rem',
   paddingInline: '1rem',
   border: 'none',
@@ -178,7 +176,6 @@ function BottomNavContent() {
   const router = useRouter()
   const { categories, isError } = useGetCategoriesList()
   useEffect(() => {
-    // console.log(categories)
     if (isError) {
       console.error(isError)
     }
@@ -290,19 +287,19 @@ function TopNavContent({
         {/* search bar for mobile view that is triggered on search icon button click */}
 
         <Container>
-          <Grid
+          <Box
             container
-            spacing={{ md: 2 }}
             sx={{
-              justifyContent: { xs: '', md: 'space-between' },
+              justifyContent: { xs: 'space-between' },
+              display: 'flex',
               alignItems: 'center',
               width: '100%',
             }}
           >
-            <Grid
+            {/* Start menu button and logo */}
+            <Box
               container
-              direction="row"
-              sx={{ flexGrow: { xs: '1', md: '' }, alignItems: 'center' }}
+              sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}
             >
               <IconButton
                 sx={{ display: { md: 'none' } }}
@@ -319,42 +316,37 @@ function TopNavContent({
                   height: '80px',
                   display: 'none',
                   '@media(min-width:300px)': { display: 'grid' },
-                  placeItems:'center'
+                  placeItems: 'center',
                 }}
               >
                 <Link href={'/'}>
                   <Image src={logo} alt="Logo" width={130} height={50} />
                 </Link>
               </Box>
-            </Grid>
-            <Grid
+            </Box>
+            {/* End menu button and logo */}
+            {/* Start search bar and search Icon */}
+
+            <Box
               md={5}
               sx={{
-                display: 'flex',
-                justifyContent: { xs: 'end', md: 'center' },
+                flexGrow: { xs: '0.5', lg: '0.3' },
                 alignItems: 'center',
               }}
             >
               <SearchBar
                 styles={{
                   display: { xs: 'none', md: 'flex' },
-                  width: '100%',
+                  marginLeft: 'auto',
                 }}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
               />
-              <IconButton
-                size="large"
-                aria-label="Search Products"
-                //   color="inherit"
-                onClick={() => setShowSearchBar(!showSearchBar)}
-                sx={{ display: { md: 'none' } }}
-              >
-                <SearchIcon fontSize="medium" />
-              </IconButton>
-            </Grid>
-            <Grid md={''}>
-              <Card elevation={0} sx={{ display: { xs: 'none', md: 'flex' } }}>
+            </Box>
+            {/* Start call card, profile icon and cart icon */}
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: { md: 2 } }}>
+              <Card elevation={0} sx={{ display: { xs: 'none', sm: 'flex' } }}>
                 <CardHeader
                   avatar={
                     <Avatar
@@ -400,54 +392,55 @@ function TopNavContent({
                   }}
                 />
               </Card>
-            </Grid>
-            <Grid>
-              <IconButton onClick={handleClick}>
-                {status == 'authenticated' ? (
-                  <>
-                    <Avatar src={session?.user?.image} alt="profile photo" />
-                    {/* <img
-                      src={session?.user?.image}
-                      style={{
-                        height: '35px',
-                        width: '35px',
-                        borderRadius: '100%',
-                      }}
-                      alt="profile photo"
-                    /> */}
-                  </>
-                ) : (
-                  <PersonOutlineOutlinedIcon sx={{ fontSize: '1.8rem' }} />
-                )}
-              </IconButton>
-              <Menu
-                id="profile-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                // MenuListProps={{
-                //   'aria-labelledby': 'basic-button',
-                // }}
-              >
-                {status == 'authenticated' ? (
-                  <MenuItem onClick={() => signOut()}>Sign Out</MenuItem>
-                ) : (
-                  <MenuItem onClick={() => signIn()}>Sign In</MenuItem>
-                )}
-              </Menu>
-            </Grid>
-            <Grid>
               <IconButton
-                onClick={() => {
-                  setOpenCartDrawer(true)
-                }}
+                size="large"
+                aria-label="Search Products"
+                onClick={() => setShowSearchBar(!showSearchBar)}
+                sx={{ display: { md: 'none' } }}
               >
-                <Badge color="secondary" badgeContent={cart?.length ?? 0}>
-                  <ShoppingCartOutlinedIcon sx={{ fontSize: '1.8rem' }} />
-                </Badge>
+                <SearchIcon sx={{ fontSize: 25 }} />
               </IconButton>
-            </Grid>
-          </Grid>
+              <Box>
+                <IconButton onClick={handleClick}>
+                  {status == 'authenticated' ? (
+                    <>
+                      <Avatar
+                        src={session?.user?.image}
+                        alt="profile photo"
+                        sx={{ width: 36, height: 36 }}
+                      />
+                    </>
+                  ) : (
+                    <PersonOutlineOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                  )}
+                </IconButton>
+                <Menu
+                  id="profile-menu"
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  {status == 'authenticated' ? (
+                    <MenuItem onClick={() => signOut()}>Sign Out</MenuItem>
+                  ) : (
+                    <MenuItem onClick={() => signIn()}>Sign In</MenuItem>
+                  )}
+                </Menu>
+              </Box>
+              <Box>
+                <IconButton
+                  onClick={() => {
+                    setOpenCartDrawer(true)
+                  }}
+                >
+                  <Badge color="secondary" badgeContent={cart?.length ?? 0}>
+                    <ShoppingCartOutlinedIcon sx={{ fontSize: '1.8rem' }} />
+                  </Badge>
+                </IconButton>
+              </Box>
+            </Box>
+            {/* End call card, profile icon and cart icon */}
+          </Box>
           <Divider sx={{ display: { xs: 'none', md: 'block' } }} />
         </Container>
       </Toolbar>
