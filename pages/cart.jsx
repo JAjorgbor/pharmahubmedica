@@ -265,7 +265,7 @@ function CartItemForLargeScreens({ product }) {
             >
               <Typography
                 color="primary.main"
-                sx={{ maxWidth: { sm: 100, lg: 300 }, wordWrap: 'break-word' }}
+                sx={{ maxWidth: { sm: 100, lg: 300 }, wordWrap: 'break-word',  }}
               >
                 {useTruncate(item.name, 40)}
               </Typography>
@@ -350,8 +350,8 @@ function CartItemForSmallScreens({ product }) {
                 </Link>
               }
               titleTypographyProps={{
-                fontSize: 22,
-                fontWeight: 'bold',
+                fontSize: 18,
+                // fontWeight: 'bold',
                 color: 'primary.main',
               }}
               sx={{ paddingBlock: 1 }}

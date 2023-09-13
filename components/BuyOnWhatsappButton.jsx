@@ -1,11 +1,16 @@
 import useGetContactInfo from '@/hooks/useGetContactInfo'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import { Button } from '@mui/material'
-import { useContext } from 'react'
+import { useState, useEffect,useContext } from 'react'
 import { CartContext } from './Layout'
 import Link from 'next/link'
 
 const BuyOnWhatsappButton = ({ endIconProps, product, ...props }) => {
+  const [hostUrl, setHostUrl] = useState('')
+  useEffect(() => {
+    setHostUrl(window?.location?.origin)
+  }, [])
+  
   const { contactInfo } = useGetContactInfo()
   const { cart } = useContext(CartContext)
   const itemInCart = cart?.find(({ item }) => item?._id === product._id)
@@ -22,7 +27,7 @@ const BuyOnWhatsappButton = ({ endIconProps, product, ...props }) => {
           item.name
         }*(quantity: ${
           count ?? 1
-        }, url: ${`https://pharmahubmedica.ng/collections/${item?.category.slug.current}/${item?.slug.current}`}%20)`}`}
+        }, url: ${`${hostUrl}/${item?.category.slug.current}/${item?.slug.current}`}%20)`}`}
         // style={{ width: '100%' }}
       >
         <Button
