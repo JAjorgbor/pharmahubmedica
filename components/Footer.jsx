@@ -37,25 +37,32 @@ const Footer = () => {
         }}
       >
         <Container>
-          <Grid
+          <Stack
             container
-            justifyContent={'space-between'}
             alignItems={'start'}
-            columns={{ xs: 1, sm: 2, xl: 4 }}
-            spacing={3}
+            // columns={{ xs: 1, sm: 2, xl: 4 }}
+            gap={3}
+            sx={{
+              flexWrap: 'wrap',
+              flexDirection: {
+                xs: 'column',
+                justifyContent: 'space-between',
+                sm: 'row',
+              },
+            }}
             pt={5}
           >
-            <Grid
+            <Box
               alignSelf={'center'}
-              xs={12}
+              // xs={12}
               sm={'auto'}
               textAlign={{ xs: 'center', sm: 'start' }}
             >
               <FooterNavLink href="/">
                 <Image src={logo} alt="Logo" width={200} height={80} />
               </FooterNavLink>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography
                 variant="h6"
                 fontSize={16}
@@ -77,8 +84,8 @@ const Footer = () => {
                   </FooterNavLink>
                 </Typography>
               ))}
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography
                 variant="h6"
                 fontSize={16}
@@ -111,8 +118,8 @@ const Footer = () => {
               >
                 <FooterNavLink href={'#'}>Terms and conditions</FooterNavLink>
               </Typography>
-            </Grid>
-            <Grid>
+            </Box>
+            <Box>
               <Typography
                 variant="h6"
                 fontSize={16}
@@ -130,7 +137,7 @@ const Footer = () => {
               <Typography
                 variant="h6"
                 fontSize={16}
-                mt={2}
+                mt={1}
                 textTransform={'uppercase'}
                 fontWeight={'bold'}
                 gutterBottom
@@ -151,8 +158,8 @@ const Footer = () => {
                   <InstagramIcon sx={{ fontSize: '2rem' }} />
                 </FooterNavLink>
               </Stack>
-            </Grid>
-          </Grid>
+            </Box>
+          </Stack>
           <Divider sx={{ marginBlock: 5 }} />
           <Typography fontSize={12} textAlign={'center'}>
             &copy; {new Date().getFullYear()} Pharmahubmedica. All Rights
