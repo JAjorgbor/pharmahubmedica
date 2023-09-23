@@ -47,7 +47,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
       })
       console.log(res)
       successToast('Your Message has been sent successfully.')
-      // reset()
+      reset()
     } catch (error) {
       toast.error('Something went wrong. Please try again later.')
       console.error(error)
