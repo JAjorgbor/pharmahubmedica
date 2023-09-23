@@ -1,32 +1,31 @@
+import useGetContactInfo from '@/hooks/useGetContactInfo'
+import useGetFeaturedCategories from '@/hooks/useGetFeaturedCategories'
+import logo from '@/public/png-transparent-logo.png'
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
+import InstagramIcon from '@mui/icons-material/Instagram'
 import {
   Box,
+  Button,
   Container,
   Divider,
-  IconButton,
   Stack,
-  Toolbar,
   Typography,
   styled,
 } from '@mui/material'
-import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
-import InstagramIcon from '@mui/icons-material/Instagram';
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
-import logo from '@/public/png-transparent-logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
-import useGetFeaturedCategories from '@/hooks/useGetFeaturedCategories'
-import useGetContactInfo from '@/hooks/useGetContactInfo'
 
 const Footer = () => {
-  const FooterNavLink=styled(Link)(({theme})=>({
-    color:'inherit',
-    textDecoration:'none',
-    '&:hover':{
-      color:theme.palette.primary.light
-    }
+  const FooterNavLink = styled(Link)(({ theme }) => ({
+    color: 'inherit',
+    textDecoration: 'none',
+    '&:hover': {
+      color: theme.palette.primary.light,
+    },
   }))
-  const {featuredCategories} = useGetFeaturedCategories()
-  const {contactInfo} = useGetContactInfo()
+  const { featuredCategories } = useGetFeaturedCategories()
+  const { contactInfo } = useGetContactInfo()
   return (
     <>
       <Box
@@ -46,9 +45,14 @@ const Footer = () => {
             spacing={3}
             pt={5}
           >
-            <Grid alignSelf={'center'} xs={12} sm={'auto'} textAlign={{xs:'center',sm:'start'}} >
+            <Grid
+              alignSelf={'center'}
+              xs={12}
+              sm={'auto'}
+              textAlign={{ xs: 'center', sm: 'start' }}
+            >
               <FooterNavLink href="/">
-                <Image src={logo}  alt='Logo' width={200} height={80}/>
+                <Image src={logo} alt="Logo" width={200} height={80} />
               </FooterNavLink>
             </Grid>
             <Grid>
@@ -56,64 +60,23 @@ const Footer = () => {
                 variant="h6"
                 fontSize={16}
                 textTransform={'uppercase'}
-                gutterBottom
                 fontWeight={'bold'}
-              >
-                Quick Links
-              </Typography>
-              <Typography
-                variant="h5"
-                fontSize={14}
-                fontWeight={'bold'}
-                textTransform={'uppercase'}
-              >
-                Address:
-              </Typography>
-              <Typography
-                variant="caption"
-                textTransform={'uppercase'}
                 gutterBottom
-                >
-                {contactInfo?.address}
-              </Typography>
-              <Typography
-                variant="h5"
-                fontSize={14}
-                fontWeight={'bold'}
-                textTransform={'uppercase'}
               >
-                Phone:
+                Featured Categories
               </Typography>
-              <Typography
-                variant="caption"
-                textTransform={'uppercase'}
-                gutterBottom
+              {featuredCategories?.map((item, index) => (
+                <Typography
+                  variant="caption"
+                  textTransform={'uppercase'}
+                  component={'p'}
+                  key={index}
                 >
-                <FooterNavLink target='_blank' href={`tel:${contactInfo?.phoneNumber}`}>{contactInfo?.callNumber}</FooterNavLink>
-              </Typography>
-              <Typography
-                variant="h5"
-                fontSize={14}
-                fontWeight=
-                {'bold'}
-                textTransform={'uppercase'}
-                >
-                Email:
-                  
-              </Typography>
-              <Typography variant="caption" gutterBottom>
-                <FooterNavLink target='_blank' href={`mailto:${contactInfo?.email}`}>
-                {contactInfo?.email}{' '}
-                </FooterNavLink>
-              </Typography>
-              <Stack direction={'row'} mt={2}>
-                <FooterNavLink target='_blank' href={contactInfo?.facebookAccount??''}>
-                  <FacebookOutlinedIcon sx={{ fontSize: '2rem' }} />
-                </FooterNavLink>
-                <FooterNavLink target='_blank' href={contactInfo?.instagramAccount??''}>
-                  <InstagramIcon sx={{ fontSize: '2rem' }} />
-                </FooterNavLink>
-              </Stack>
+                  <FooterNavLink href={`/collections/${item.slug.current}`}>
+                    {item.name}
+                  </FooterNavLink>
+                </Typography>
+              ))}
             </Grid>
             <Grid>
               <Typography
@@ -123,14 +86,16 @@ const Footer = () => {
                 fontWeight={'bold'}
                 gutterBottom
               >
-                Support
+                Resources
               </Typography>
               <Typography
                 variant="caption"
                 component="p"
                 textTransform={'uppercase'}
               >
-                <FooterNavLink href={'/contact#faqs'}>Frequently Asked Questions</FooterNavLink>
+                <FooterNavLink href={'/contact#faqs'}>
+                  Frequently Asked Questions
+                </FooterNavLink>
               </Typography>
               <Typography
                 variant="caption"
@@ -155,18 +120,37 @@ const Footer = () => {
                 fontWeight={'bold'}
                 gutterBottom
               >
-                Featured Categories
+                Quick Support
               </Typography>
-              {featuredCategories?.map((item, index) => (
-                <Typography
-                  variant="caption"
-                  textTransform={'uppercase'}
-                  component={'p'}
-                  key={index}
+              <Link href="/contact">
+                <Button variant="outlined" color="primary">
+                  Contact Us
+                </Button>
+              </Link>
+              <Typography
+                variant="h6"
+                fontSize={16}
+                mt={2}
+                textTransform={'uppercase'}
+                fontWeight={'bold'}
+                gutterBottom
+              >
+                Social Media
+              </Typography>
+              <Stack direction={'row'}>
+                <FooterNavLink
+                  target="_blank"
+                  href={contactInfo?.facebookAccount ?? ''}
                 >
-                  <FooterNavLink href={`/collections/${item.slug.current}`}>{item.name}</FooterNavLink>
-                </Typography>
-              ))}
+                  <FacebookOutlinedIcon sx={{ fontSize: '2rem' }} />
+                </FooterNavLink>
+                <FooterNavLink
+                  target="_blank"
+                  href={contactInfo?.instagramAccount ?? ''}
+                >
+                  <InstagramIcon sx={{ fontSize: '2rem' }} />
+                </FooterNavLink>
+              </Stack>
             </Grid>
           </Grid>
           <Divider sx={{ marginBlock: 5 }} />

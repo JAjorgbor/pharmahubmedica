@@ -72,7 +72,7 @@ const SearchBar = ({ searchValue, setSearchValue, styles, ...props }) => {
             >
               <MenuItem value="all categories">All Categories</MenuItem>
               {categories?.map((category, index) => (
-                <MenuItem key={index} value={category?.name}>
+                <MenuItem key={index} value={category?.name} sx={{textTransform:'capitalize'}}>
                   {category?.name}
                 </MenuItem>
               ))}

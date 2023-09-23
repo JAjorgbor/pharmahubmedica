@@ -1,37 +1,57 @@
 import BreadCrumbs from '@/components/BreadCrumbs'
+import FAQSection from '@/components/FAQSection'
+import { CartContext } from '@/components/Layout'
+import Meta from '@/components/Meta'
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline'
+import useGetContactInfo from '@/hooks/useGetContactInfo'
+import successToast from '@/library/successToast'
+import { getContact, getFaqs } from '@/utils/requests'
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined'
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
-  Button,
   Container,
   Divider,
-  Grid,
   Paper,
   Stack,
   TextField,
   Typography,
 } from '@mui/material'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
-import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined'
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
-import Meta from '@/components/Meta'
-import FAQSection from '@/components/FAQSection'
+import Link from 'next/link'
 import { useContext } from 'react'
-import { CartContext } from '@/components/Layout'
-import { getContact, getFaqs } from '@/utils/requests'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import useSWR from 'swr'
-import useGetContactInfo from '@/hooks/useGetContactInfo'
 
 const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
   const { cartValue, dispatch } = useContext(CartContext)
   const {
     register,
-    formState: { errors },
+    formState: { isSubmitting, errors },
     handleSubmit,
     reset,
   } = useForm()
-  const submitMessage = (data) => {
-    console.log(data)
+  // submit contact form message
+  const submitMessage = async (data) => {
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      console.log(res)
+      successToast('Your Message has been sent successfully.')
+      // reset()
+    } catch (error) {
+      toast.error('Something went wrong. Please try again later.')
+      console.error(error)
+    }
   }
   const { data: clientFaqs } = useSWR('api/faqs', async () => {
     const faqs = await getFaqs()
@@ -144,7 +164,9 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                 color="complementary.main"
                 fontSize={14}
               >
-                {contactInfo?.callNumber}
+                <Link href={`tel:${contactInfo?.callNumber}`}>
+                  {contactInfo?.callNumber}
+                </Link>
               </Typography>
             </Paper>
             <Paper
@@ -186,11 +208,73 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                 color="complementary.main"
                 fontSize={14}
               >
-                {contactInfo?.email}
+                <Link href={`mailto:${contactInfo?.email}`}>
+                  {contactInfo?.email}
+                </Link>
+              </Typography>
+            </Paper>{' '}
+            <Paper
+              elevation={0}
+              sx={{
+                textAlign: 'center',
+                width: '100%',
+                padding: 3,
+                transition: (theme) =>
+                  theme.transitions.create(['box-shadow'], {
+                    duration: theme.transitions.duration.short,
+                  }),
+                '&:hover': {
+                  boxShadow: (theme) => theme.shadows[3],
+                  '& .cardIcon': {
+                    color: 'primary.main',
+                  },
+                },
+              }}
+            >
+              <PeopleOutlineIcon
+                className="cardIcon"
+                sx={{
+                  fontSize: 50,
+                }}
+              />
+              <Typography
+                variant={'h3'}
+                fontSize={22}
+                textTransform={'capitalize'}
+                fontWeight="bold"
+                color="complementary.dark"
+                gutterBottom
+              >
+                Social Media
+              </Typography>
+              <Typography
+                varaint="body2"
+                color="complementary.main"
+                fontSize={14}
+              >
+                <Stack sx={{alignItems:'center', gap:1}}>
+                  <Link
+                    target="_blank"
+                    style={{ display: 'flex', gap: 5 }}
+                    href={contactInfo?.facebookAccount ?? ''}
+                  >
+                    <FacebookOutlinedIcon />
+                    {contactInfo?.facebookAccount?.replace('https://', '')}
+                  </Link>
+                  <Link
+                    target="_blank"
+                    style={{ display: 'flex', gap: 5 }}
+                    href={contactInfo?.instagramAccount ?? ''}
+                  >
+                    <InstagramIcon />
+                    {contactInfo?.instagramAccount?.replace('https://', '')}
+                  </Link>
+                </Stack>
               </Typography>
             </Paper>{' '}
           </Stack>
-          <Divider sx={{ marginBlockStart: 5, marginBlockEnd: 10 }} />
+
+          <Divider sx={{ marginBlockStart: 3, marginBlockEnd: 10 }} />
           <Stack direction={{ md: 'row' }} gap={3}>
             <Box
               component="form"
@@ -219,7 +303,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                     error={errors.firstName?.message}
                     helperText={errors.firstName?.message}
                     fullWidth
-                    />
+                  />
                   <TextField
                     label=" Last Name"
                     {...register('lastName', {
@@ -257,14 +341,15 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                   fullWidth
                 />
               </Stack>
-              <Button
+              <LoadingButton
                 type="submit"
                 variant="contained"
+                loading={isSubmitting}
                 size="large"
                 sx={{ marginTop: 2, paddingInline: 5 }}
               >
                 Send Message
-              </Button>
+              </LoadingButton>
             </Box>
 
             <Box component="section" id="faqs" sx={{ width: { md: '100%' } }}>

@@ -26,6 +26,7 @@
     "next": "13.4.4",
     "next-auth": "^4.23.0",
     "next-sanity": "4",
+    "nodemailer": "^6.9.5",
     "nprogress": "^0.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
