@@ -1,3 +1,4 @@
+import styles from '@/styles/contact.module.css'
 import BreadCrumbs from '@/components/BreadCrumbs'
 import FAQSection from '@/components/FAQSection'
 import { CartContext } from '@/components/Layout'
@@ -66,7 +67,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
   return (
     <>
       <Meta titlePrefix="Contact" />
-      <Container>
+      <Container className={styles.contact}>
         <BreadCrumbs links={[{ title: 'Contact Us', path: '/contact' }]} />
         <Box my={5}>
           <Typography
