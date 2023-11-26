@@ -20,10 +20,10 @@ export default function Meta({
       <meta name="theme-color" content="#1a20f6" />
       {/* Twitter Card Data */}
       <meta name="twitter:title" content={`${titlePrefix} — ${titleSuffix}`} />
-      <meta name="twitter:site" content="@pharmahubmedica" />
-      <meta name="twitter:card" content="Pharmahubmedica" />
+      <meta name="twitter:site" content="@Pharmahubmedica" />
+      <meta name="twitter:card" content="PharmaHub Medica" />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:creator" content="@pharmahubmedica" />
+      <meta name="twitter:creator" content="@PharmaHub Medica" />
       <meta name="twitter:image" content={ogImage} />
       {/* Open Graph data */}
       <meta property="og:title" content={`${titlePrefix} — ${titleSuffix}`} />
@@ -37,8 +37,8 @@ export default function Meta({
 }
 Meta.defaultProps = {
   titlePrefix: 'Website',
-  titleSuffix: 'Pharmahubmedica',
+  titleSuffix: 'PharmaHub Medica',
   description:
     'PharmaHub Medica: Your trusted pharmacy partner offering high-quality medicines, personalized consultations, and affordable healthcare solutions. Experience exceptional care for your health needs.',
-  ogImage: 'https://pharmahubmedica.ng/logo.png',
+  ogImage: 'https://PharmaHub Medica.ng/logo.png',
 }

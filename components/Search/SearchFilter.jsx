@@ -56,7 +56,6 @@ const SearchFilter = ({ setSpinner = () => {}, classifications, ...props }) => {
                 sx={{ marginBottom: 1 }}
                 onClick={() => {
                   // setSpinner()
-                  console.log(productName)
 
                   router.replace({
                     pathname: `/search/${productName}`,

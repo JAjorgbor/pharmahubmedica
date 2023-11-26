@@ -20,7 +20,7 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
+const Filter = ({ setSpinner = () => {}, subcategories, ...props }) => {
   const router = useRouter()
   const { category, ...queryParameters } = router.query
   const { pathname } = router
@@ -34,7 +34,7 @@ const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
     <>
       <Paper {...props}>
         <Box p={1} border={'1px solid lightgray'}>
-        <Typography
+          <Typography
             component="h3"
             fontSize={15}
             fontWeight={'bold'}
@@ -46,55 +46,67 @@ const Filter = ({ setSpinner=()=>{}, subcategories, ...props }) => {
               Filters
             </Button>
           </Typography>
-    {(priceRange || subcategoryList.length > 0) && (
-      <>
-          <Button
-            textTransform="uppercase"
-            variant="contained"
-            size="small"
-            color="primary"
-            sx={{ marginBottom: 1 }}
-            onClick={() => {
-              setSpinner()
-              router.replace({
-                pathname: `/collections/${category}`,
-                query: {
-                  ...queryParameters,
-                  priceRange: priceRange,
-                  subcategories: subcategoryList,
-                },
-              })
-            }}
-          >
-            Set Filters
-          </Button>
-            <Button
-              textTransform="uppercase"
-              variant="outlined"
-              size="small"
-              color="primary"
-              onClick={() => {
-                if (
-                  !queryParameters?.priceRange &&
-                  !queryParameters?.subcategories
-                ) {
+          {(priceRange || subcategoryList.length > 0) && (
+            <>
+              <Button
+                textTransform="uppercase"
+                variant="contained"
+                size="small"
+                color="primary"
+                sx={{ marginBottom: 1 }}
+                onClick={() => {
+                  let {
+                    priceRange: queryPriceRange,
+                    subcategories: querySubcategories,
+                  } = router.query
+                  querySubcategories = querySubcategories ?? ''
+                  if (
+                    queryPriceRange == priceRange &&
+                    querySubcategories === subcategoryList.join()
+                  ) {
+                    return
+                  }
+                  setSpinner()
+                  router.replace({
+                    pathname: `/collections/${category}`,
+                    query: {
+                      ...queryParameters,
+                      priceRange: priceRange,
+                      subcategories: subcategoryList,
+                    },
+                  })
+                }}
+              >
+                Set Filters
+              </Button>
+              <Button
+                textTransform="uppercase"
+                variant="outlined"
+                size="small"
+                color="primary"
+                onClick={() => {
+                  if (
+                    !queryParameters?.priceRange &&
+                    !queryParameters?.subcategories
+                  ) {
+                    setPriceRange('')
+                    setSubcategoryList([])
+                    return
+                  }
+                  setSpinner()
+                  router.replace({
+                    pathname: `/collections/${categorySlug}`,
+                    query: {
+                      page: queryParameters.page,
+                    },
+                  })
                   setPriceRange('')
                   setSubcategoryList([])
-                  return
-                }
-                setSpinner()
-                router.replace({
-                  pathname: `/collections/${categorySlug}`,
-                  query: {
-                    page: queryParameters.page,
-                  },
-                })
-                setPriceRange('')
-                setSubcategoryList([])
-              }}
-            >
-              Reset All Filters
-            </Button></>
+                }}
+              >
+                Reset All Filters
+              </Button>
+            </>
           )}
         </Box>
         <Accordion elevation={0} sx={{ color: 'complementary.dark' }}>

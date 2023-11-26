@@ -100,7 +100,7 @@ const SearchPage = () => {
   }, [searchResultsError])
   return (
     <>
-      <Meta titlePrefix={'Products'} />
+      <Meta titlePrefix={`Search "${productName}"`} />
       <Drawer
         open={openFilterDrawer}
         onClose={() => setOpenFilterDrawer(false)}
@@ -256,7 +256,7 @@ const SearchPage = () => {
                   </Grid>
                 ))
               )}
-            </Grid> 
+            </Grid>
             {Math.ceil(searchResultsCount / 3) > 1 && (
               <Pagination
                 sx={{ marginTop: 5 }}

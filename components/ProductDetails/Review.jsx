@@ -119,7 +119,7 @@ const Review = ({ data, setReviewrsName, reviewId, setReviewId, session }) => {
                               alignItems: 'center',
                             }}
                           >
-                            Pharmahubmedica{' '}
+                            PharmaHub Medica{' '}
                             <CheckCircleIcon
                               sx={{
                                 color: 'primary.main',

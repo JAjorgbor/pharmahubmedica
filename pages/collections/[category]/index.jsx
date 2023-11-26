@@ -54,7 +54,7 @@ const Products = ({
   return (
     <>
       <Meta
-        titlePrefix={'Products'}
+        titlePrefix={category}
         description={description}
         ogImage={categoryImage && urlForImage(categoryImage).url()}
       />
@@ -71,8 +71,6 @@ const Products = ({
             position: 'sticky',
             top: 69,
             minHeight: 300,
-            // width:240
-            // border: '1px solid red',
           }}
           elevation={0}
           subcategories={subcategories}

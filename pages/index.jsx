@@ -105,11 +105,11 @@ const HomePage = ({
               fontSize={25}
             >
               {' '}
-              {/* Discover Exceptional Pharmacy Services at Pharmahubmedica{' '} */}
+              {/* Discover Exceptional Pharmacy Services at PharmaHub Medica{' '} */}
               {heroInfo?.subheading}
             </Typography>
             <Typography gutterBottom>
-              {/* At Pharmahubmedica, we are dedicated to delivering top-quality
+              {/* At PharmaHub Medica, we are dedicated to delivering top-quality
               medications and affordable products, ensuring your health and
               well-being are our top priorities. */}
               {heroInfo?.description}

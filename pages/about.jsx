@@ -127,7 +127,7 @@ const About = ({ about: serverAbout }) => {
                   color="complementary.main"
                   fontSize={14}
                 >
-                  Pharmahubmedica prioritizes convenience by offering easy
+                  PharmaHub Medica prioritizes convenience by offering easy
                   online ordering, home delivery options, and streamlined
                   in-store experiences.
                 </Typography>
@@ -161,7 +161,7 @@ const About = ({ about: serverAbout }) => {
                   color="complementary.main"
                   fontSize={14}
                 >
-                  At Pharmahubmedica, our customers are at the heart of
+                  At PharmaHub Medica, our customers are at the heart of
                   everything we do. We provide personalized care, attentive
                   service, and a supportive environment.
                 </Typography>
@@ -195,7 +195,7 @@ const About = ({ about: serverAbout }) => {
                   color="complementary.main"
                   fontSize={14}
                 >
-                  Pharmahubmedica operates with high ethical standards. We
+                  PharmaHub Medica operates with high ethical standards. We
                   adhere to legal and regulatory requirements, maintain
                   transparent pricing, and actively promote sustainable and
                   environmentally friendly practices.
