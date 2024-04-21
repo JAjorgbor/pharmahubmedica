@@ -204,14 +204,14 @@ const Cart = () => {
                   </List>
                 </CardContent>
                 <CardActions>
-                  {
+                  {cart?.length > 0 && (
                     <BuyOnWhatsappButton
                       orderFromCart
                       text="Order On Whatsapp"
                       fullWidth
                       checkoutString={checkoutString}
                     />
-                  }
+                  )}
                 </CardActions>
               </Card>
             </Box>
