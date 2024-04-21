@@ -31,7 +31,7 @@ const ContactSpeedDial = () => {
           icon={
             <Link
               target="_blank"
-              href={`https://wa.me/${contactInfo?.whatsappNumber}?text:'Hello I would like to seek for your consultancy'`}
+              href={`whatsapp://?phone=${contactInfo?.whatsappNumber}&text:'Hello I would like to seek for your consultancy'`}
               style={{ color: 'inherit' }}
             >
               <WhatsAppIcon />

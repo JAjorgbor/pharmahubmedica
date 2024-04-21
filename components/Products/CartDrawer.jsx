@@ -20,6 +20,7 @@ import { CartContext } from '../Layout'
 import { useRouter } from 'next/router'
 import useGetCartOrder from '@/hooks/useGetCartOrder'
 import useGetContactInfo from '@/hooks/useGetContactInfo'
+import BuyOnWhatsappButton from '../BuyOnWhatsappButton'
 
 const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
   const { cart, dispatch } = useContext(CartContext)
@@ -92,26 +93,16 @@ const CartDrawer = ({ openCartDrawer, setOpenCartDrawer }) => {
                   </Button>
                 </Link>
               </ListItem>
-              <ListItem sx={{ paddingBlock: 0 }}>
-                <Link
-                  target={cart?.length ? '_blank' : '_self'}
-                  href={
-                    cart?.length
-                      ? `https://wa.me/${contactInfo?.whatsappNumber}?text=${checkoutString}`
-                      : '#'
-                  }
-                  style={{ width: '100%' }}
-                >
-                  <Button
-                    endIcon={<WhatsAppIcon />}
-                    color="success"
-                    variant="contained"
+              {cart?.length > 0 && (
+                <ListItem sx={{ paddingBlock: 0 }}>
+                  <BuyOnWhatsappButton
+                    orderFromCart
+                    text="Order On Whatsapp"
                     fullWidth
-                  >
-                    Order On Whatsapp
-                  </Button>
-                </Link>
-              </ListItem>
+                    checkoutString={checkoutString}
+                  />
+                </ListItem>
+              )}
             </>
           ) : (
             <>

@@ -1,3 +1,4 @@
+import BuyOnWhatsappButton from '@/components/BuyOnWhatsappButton'
 import CustomImage from '@/components/CustomImage'
 import RemoveFromCartWarning from '@/components/Dialogs/RemoveFromCartWarning'
 import { CartContext } from '@/components/Layout'
@@ -29,7 +30,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import Image from 'next/image'
@@ -203,24 +204,14 @@ const Cart = () => {
                   </List>
                 </CardContent>
                 <CardActions>
-                  <Link
-                    target={cart?.length?"_blank":"_self"}
-                    href={
-                      cart?.length
-                        ? `https://wa.me/${contactInfo?.whatsappNumber}?text=${checkoutString}`
-                        : '#'
-                    }
-                    style={{ width:'100%'}}
-                  >
-                    <Button
+                  {
+                    <BuyOnWhatsappButton
+                      orderFromCart
+                      text="Order On Whatsapp"
                       fullWidth
-                      variant="contained"
-                      color="success"
-                      endIcon={<WhatsAppIcon />}
-                    >
-                      Order On Whatsapp
-                    </Button>
-                  </Link>
+                      checkoutString={checkoutString}
+                    />
+                  }
                 </CardActions>
               </Card>
             </Box>
@@ -265,7 +256,7 @@ function CartItemForLargeScreens({ product }) {
             >
               <Typography
                 color="primary.main"
-                sx={{ maxWidth: { sm: 100, lg: 300 }, wordWrap: 'break-word',  }}
+                sx={{ maxWidth: { sm: 100, lg: 300 }, wordWrap: 'break-word' }}
               >
                 {useTruncate(item.name, 40)}
               </Typography>
