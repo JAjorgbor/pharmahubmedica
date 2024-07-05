@@ -15,7 +15,7 @@ import { useRouter } from 'next/router'
 
 export default function App({ Component, pageProps, session }) {
   const router = useRouter()
-  NProgress.configure({showSpinner:false})
+  NProgress.configure({ showSpinner: false })
 
   useEffect(() => {
     router.events.on('routeChangeStart', () => NProgress.start())
@@ -53,13 +53,17 @@ export default function App({ Component, pageProps, session }) {
   }
   return (
     <>
-      <SessionProvider session={session}>
-        <ThemeProvider theme={customTheme}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
-      </SessionProvider>
+      {router.pathname == '/500' ? (
+        <Component {...pageProps} />
+      ) : (
+        <SessionProvider session={session}>
+          <ThemeProvider theme={customTheme}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </SessionProvider>
+      )}
     </>
   )
 }
