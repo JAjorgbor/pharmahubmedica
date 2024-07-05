@@ -53,17 +53,13 @@ export default function App({ Component, pageProps, session }) {
   }
   return (
     <>
-      {router.pathname == '/500' ? (
-        <Component {...pageProps} />
-      ) : (
-        <SessionProvider session={session}>
-          <ThemeProvider theme={customTheme}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
-        </SessionProvider>
-      )}
+      <SessionProvider session={session}>
+        <ThemeProvider theme={customTheme}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </SessionProvider>
     </>
   )
 }
