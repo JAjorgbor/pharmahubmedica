@@ -1,41 +1,36 @@
-import { useEffect, useState } from 'react'
+import BreadCrumbs from '@/components/BreadCrumbs'
+import Meta from '@/components/Meta'
 import ProductCard from '@/components/Products/ProductCard'
-import useSWR from 'swr'
+import SearchFilter from '@/components/Search/SearchFilter'
+import useGetCollections from '@/hooks/requests/useGetCollections'
+import useGetFilterProducts from '@/hooks/requests/useGetFilteredProducts'
+import useGetSubCollections from '@/hooks/requests/useGetSubCollections'
+import { searchProductsCount as searchResultsCount } from '@/utils/requests'
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
+import { Alert, AlertTitle } from '@mui/lab'
 import {
   Box,
   Button,
-  Drawer,
-  Container,
-  Grid,
-  Typography,
-  AppBar,
-  Toolbar,
-  useScrollTrigger,
-  Slide,
-  Pagination,
   CircularProgress,
+  Container,
+  Drawer,
+  Grid,
+  Pagination,
+  Slide,
+  Toolbar,
+  Typography,
+  useScrollTrigger,
 } from '@mui/material'
-import { Alert, AlertTitle } from '@mui/lab'
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined'
-import drugImage from '@/public/drug-image.jpg'
-import Meta from '@/components/Meta'
 import Link from 'next/link'
-import BreadCrumbs from '@/components/BreadCrumbs'
-import {
-  getCategoriesList,
-  getCategoryDetails,
-  getProductsForCategory,
-  getProductsForCategoryCount,
-  getSearchResultsCount,
-  getSubCategories,
-  searchProducts,
-  searchProductsCount as searchResultsCount,
-} from '@/utils/requests'
 import { useRouter } from 'next/router'
-import SearchFilter from '@/components/Search/SearchFilter'
+import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 const SearchPage = () => {
   const [openFilterDrawer, setOpenFilterDrawer] = useState(false)
+  const [classifications, setClassifications] = useState([])
+  const [searchResults, setSearchResults] = useState([])
+
   const trigger = useScrollTrigger({ threshold: 220, disableHysteresis: true })
   const router = useRouter()
   const { product: productName } = router?.query
@@ -43,44 +38,37 @@ const SearchPage = () => {
   const classificationName = router?.query?.classification || ''
   const priceRange = router?.query?.priceRange || ''
 
-  let subClassificationsFilter = router?.query?.subClassifications || []
-  subClassificationsFilter = Array.isArray(subClassificationsFilter)
-    ? subClassificationsFilter
-    : [subClassificationsFilter]
+  let subClassifications = router?.query?.subClassifications || []
+  subClassifications = Array.isArray(subClassifications)
+    ? subClassifications
+    : [subClassifications]
 
-  const classificationsListFetcher = async () => {
+  const { filteredProducts, filteredProductsLoading } = useGetFilterProducts(
+    productName,
+    classificationName,
+    subClassifications,
+    pageNumber,
+    priceRange,
+    process.env.NEXT_PUBLIC_ITEMS_PER_PAGE_COUNT
+  )
+
+  const { collections } = useGetCollections()
+  const { subCollections } = useGetSubCollections(classificationName)
+
+  useEffect(() => {
     if (classificationName == 'all categories') {
-      const categoryList = await getCategoriesList()
-      return categoryList
+      setClassifications(collections)
+    } else setClassifications(subCollections)
+  }, [subCollections, collections, classificationName])
+
+  useEffect(() => {
+    if (filteredProducts) {
+      const results = filteredProducts.filter((each) =>
+        each.name.toLowerCase().includes(productName.toLowerCase())
+      )
+      setSearchResults(results)
     }
-    const subcategories = await getSubCategories(classificationName)
-    return subcategories
-  }
-  const { data: classifications } = useSWR(
-    `api/classifications/${classificationName}`,
-    classificationsListFetcher
-  )
-
-  const searchResultsFetcher = async () => {
-    const products = await searchProducts(
-      productName,
-      classificationName,
-      subClassificationsFilter,
-      pageNumber,
-      priceRange,
-      process.env.NEXT_PUBLIC_ITEMS_PER_PAGE_COUNT
-    )
-    return products
-  }
-
-  const {
-    data: searchResults,
-    isLoading: searchResultsLoading,
-    error: searchResultsError,
-  } = useSWR(
-    `api/${productName}?classification=${classificationName}&&page=${pageNumber}&&subcategories=${subClassificationsFilter} && priceRange=${priceRange}`,
-    searchResultsFetcher
-  )
+  }, [filteredProducts])
 
   const searchResultsCountFetcher = async () => {
     const productsCount = await searchResultsCount(
@@ -95,9 +83,6 @@ const SearchPage = () => {
     searchResultsCountFetcher
   )
 
-  useEffect(() => {
-    console.error('searchResultsError', searchResultsError)
-  }, [searchResultsError])
   return (
     <>
       <Meta titlePrefix={`Search "${productName}"`} />
@@ -219,7 +204,7 @@ const SearchPage = () => {
               justifyContent={'center'}
               sx={{ width: '100%' }}
             >
-              {searchResultsLoading ? (
+              {filteredProductsLoading ? (
                 <Box py={15}>
                   <CircularProgress />
                 </Box>
