@@ -8,7 +8,9 @@ export const getFaqs = () => {
 
 // Get About Info
 export const getAbout = () => {
-  return client.fetch(`*[_type=="about"][0]{firstBackgroundImage,content,secondBackgroundImage}`)
+  return client.fetch(
+    `*[_type=="about"][0]{firstBackgroundImage,content,secondBackgroundImage}`
+  )
 }
 // Get contact info
 export const getContact = () => {
@@ -16,11 +18,9 @@ export const getContact = () => {
     `*[_type=="contact"][0]{email, callNumber, whatsappNumber, facebookAccount, instagramAccount,address}`
   )
 }
-// Get team emails 
+// Get team emails
 export const getTeamEmails = () => {
-  return client.fetch(
-    `*[_type=="team"][0]{emails}`
-  )
+  return client.fetch(`*[_type=="team"][0]{emails}`)
 }
 // Get home page hero info
 export const getHeroInfo = () => {
@@ -101,7 +101,7 @@ export const getProductsForCategory = (
     {
       categorySlug,
       pageNumber,
-      itemsPerPage:Number(itemsPerPage),
+      itemsPerPage: Number(itemsPerPage),
       subcategories,
       priceRange: price,
     }
@@ -198,9 +198,15 @@ export const getSimilarProducts = (
   )
 }
 
+// Get All Products
+export const getAllProducts = (priceRange) => {
+  return client.fetch(
+    groq`*[_type=='product' && status]{...,category->{name,slug,description,_id},subcategories[]->{_id, name,status,description}}`
+  )
+}
+// Search Product
 // Search Products
-export const searchProducts = (
-  productName,
+export const filterProducts = (
   classificationName,
   subClassifications,
   pageNumber,
@@ -223,7 +229,7 @@ export const searchProducts = (
       break
   }
   return client.fetch(
-    groq`*[_type=="product" && status && name match $productName ${
+    groq`*[_type=="product" && status  ${
       classificationName !== 'all categories'
         ? '&& category->name == $classificationName'
         : ''
@@ -244,15 +250,15 @@ export const searchProducts = (
       }      
       }`,
     {
-      productName,
       classificationName,
       subClassifications,
       pageNumber,
       priceRange: price,
-      itemsPerPage:Number(itemsPerPage),
+      itemsPerPage: Number(itemsPerPage),
     }
   )
 }
+
 // Search Products count
 export const searchProductsCount = (productName, classificationName) => {
   return client.fetch(
