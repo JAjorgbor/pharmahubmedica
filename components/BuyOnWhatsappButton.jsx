@@ -26,12 +26,18 @@ const BuyOnWhatsappButton = ({
   const item = itemInCart ? itemInCart.item : product
   const count = itemInCart?.count
 
-  const orderFromCartString = `whatsapp://send?phone=${contactInfo?.whatsappNumber}&text=${checkoutString}`
+  const orderFromCartString = `whatsapp://send?phone=${
+    contactInfo?.whatsappNumber
+  }&text=${encodeURIComponent(checkoutString)}`
   const singleOrderString = `whatsapp://send?phone=${
     contactInfo?.whatsappNumber
-  }&text=${`I would like to place an order for *${item?.name}*(quantity: ${
+  }&text=${encodeURIComponent(`I would like to place an order for *${
+    item?.name
+  }*(quantity: ${
     count ?? 1
-  }, url: ${`${hostUrl}/${item?.category.slug.current}/${item?.slug.current}`}%20)`}`
+  }, url: ${`${hostUrl}/${item?.category.slug.current}/${item?.slug.current}`}
+  
+  `)}`
   return (
     <>
       <Link
