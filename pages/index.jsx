@@ -130,10 +130,10 @@ const HomePage = ({
                 color={'primary'}
                 endIcon={<LocalPhoneIcon />}
                 target="_blank"
-                href={`tel:${contactInfo?.callNumber}`}
+                href={`whatsapp://?phone=${contactInfo?.whatsappNumber}&text:'Hello I would like to find (drug name)'`}
                 sx={{ borderRadius: '0' }}
               >
-                Speak To A Pharmacist
+                Search for a Drug
               </Button>
             </Grid>
           </Grid>
