@@ -150,7 +150,7 @@ const HomePage = ({
         </Stack>
       </Container>
 
-      <Box
+      {/*<Box
         component={'section'}
         my={10}
         py={10}
@@ -200,8 +200,9 @@ const HomePage = ({
             </HorizontalScrollSection>
           </Box>
         </Container>
-      </Box>
-      <Box
+      </Box>*/}
+
+      {/*<Box
         component={'section'}
         my={10}
         py={10}
@@ -242,7 +243,8 @@ const HomePage = ({
             </Container>
           </Box>
         </Container>
-      </Box>
+      </Box>*/}
+      {/*
       <Box component="section" mb={10}>
         <Container maxWidth="md">
           <Typography variant="h4" mb={4} fontWeight={'bold'}>
@@ -250,7 +252,7 @@ const HomePage = ({
           </Typography>
           <FAQSection faqs={faqs} />
         </Container>
-      </Box>
+      </Box>*/}
     </>
   )
 }

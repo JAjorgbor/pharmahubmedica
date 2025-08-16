@@ -327,7 +327,7 @@ function TopNavContent({
             {/* End menu button and logo */}
             {/* Start search bar and search Icon */}
 
-            <Box
+            {/* <Box
               md={5}
               sx={{
                 flexGrow: { xs: '0.5', lg: '0.3' },
@@ -342,7 +342,7 @@ function TopNavContent({
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
               />
-            </Box>
+            </Box> */}
             {/* Start call card, profile icon and cart icon */}
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: { md: 2 } }}>
@@ -392,14 +392,14 @@ function TopNavContent({
                   }}
                 />
               </Card>
-              <IconButton
+              {/* <IconButton
                 size="large"
                 aria-label="Search Products"
                 onClick={() => setShowSearchBar(!showSearchBar)}
                 sx={{ display: { md: 'none' } }}
               >
                 <SearchIcon sx={{ fontSize: 25 }} />
-              </IconButton>
+              </IconButton> */}
               <Box>
                 <IconButton onClick={handleClick}>
                   {status == 'authenticated' ? (
