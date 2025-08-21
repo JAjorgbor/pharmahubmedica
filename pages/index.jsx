@@ -1,4 +1,5 @@
 import CustomImage from '@/components/CustomImage'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import FAQSection from '@/components/FAQSection'
 import HorizontalScrollSection from '@/components/HomePage/HorizontalScrollSection'
 import Meta from '@/components/Meta'
@@ -128,12 +129,12 @@ const HomePage = ({
               <Button
                 variant="outlined"
                 color={'primary'}
-                endIcon={<LocalPhoneIcon />}
+                endIcon={<WhatsAppIcon />}
                 target="_blank"
                 href={`whatsapp://?phone=${contactInfo?.whatsappNumber}&text:'Hello I would like to find (drug name)'`}
                 sx={{ borderRadius: '0' }}
               >
-                Search for a Drug
+                Search With a Pharmacist
               </Button>
             </Grid>
           </Grid>
