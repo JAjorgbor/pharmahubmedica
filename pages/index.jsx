@@ -131,7 +131,7 @@ const HomePage = ({
                 color={'primary'}
                 endIcon={<WhatsAppIcon />}
                 target="_blank"
-                href={`whatsapp://send?phone=${contactInfo?.whatsappNumber}&text='Hello I would like to find (drug name)'`}
+                href={`whatsapp://send?phone=${contactInfo?.whatsappNumber}&text=Hello I would like to find (drug name)`}
                 sx={{ borderRadius: '0' }}
               >
                 Search With a Pharmacist
