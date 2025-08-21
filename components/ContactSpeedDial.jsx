@@ -1,6 +1,8 @@
 import { SpeedDial, SpeedDialAction, Tooltip } from '@mui/material'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import ChatIcon from '@mui/icons-material/Chat'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import FacebookIcon from '@mui/icons-material/Facebook'
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import { useState } from 'react'
 import Link from 'next/link'
@@ -31,8 +33,48 @@ const ContactSpeedDial = () => {
           icon={
             <Link
               target="_blank"
+              href={contactInfo?.facebookAccount ?? '#'}
+              style={{
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <FacebookIcon />
+            </Link>
+          }
+          tooltipTitle={'Connect with us on Facebook'}
+        />
+        <SpeedDialAction
+          //   sx={{height:50}}
+
+          icon={
+            <Link
+              target="_blank"
+              href={contactInfo?.InstagramAccount ?? '#'}
+              style={{
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <InstagramIcon />
+            </Link>
+          }
+          tooltipTitle={'Connect with us on Instagram'}
+        />
+        <SpeedDialAction
+          //   sx={{height:50}}
+
+          icon={
+            <Link
+              target="_blank"
               href={`whatsapp://?phone=${contactInfo?.whatsappNumber}&text:'Hello I would like to seek for your consultancy'`}
-              style={{ color: 'inherit' }}
+              style={{
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
               <WhatsAppIcon />
             </Link>
@@ -44,7 +86,11 @@ const ContactSpeedDial = () => {
             <Link
               target="_blank"
               href={`tel:${contactInfo?.callNumber}`}
-              style={{ color: 'inherit' }}
+              style={{
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
               <LocalPhoneIcon />
             </Link>

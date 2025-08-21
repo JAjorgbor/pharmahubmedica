@@ -202,7 +202,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                 color="complementary.dark"
                 gutterBottom
               >
-                E-mail Address
+                Email Address
               </Typography>
               <Typography
                 varaint="body2"
@@ -253,7 +253,7 @@ const ContactPage = ({ contactInfo: serverContactInfo, faqs: serverFaqs }) => {
                 color="complementary.main"
                 fontSize={14}
               >
-                <Stack sx={{alignItems:'center', gap:1}}>
+                <Stack sx={{ alignItems: 'center', gap: 1 }}>
                   <Link
                     target="_blank"
                     style={{ display: 'flex', gap: 5 }}

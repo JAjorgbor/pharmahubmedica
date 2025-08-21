@@ -62,7 +62,7 @@ const Footer = () => {
                 <Image src={logo} alt="Logo" width={200} height={80} />
               </FooterNavLink>
             </Box>
-            <Box>
+            {/* <Box>
               <Typography
                 variant="h6"
                 fontSize={16}
@@ -84,7 +84,7 @@ const Footer = () => {
                   </FooterNavLink>
                 </Typography>
               ))}
-            </Box>
+            </Box> */}
             <Box>
               <Typography
                 variant="h6"

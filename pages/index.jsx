@@ -1,4 +1,5 @@
 import CustomImage from '@/components/CustomImage'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import FAQSection from '@/components/FAQSection'
 import HorizontalScrollSection from '@/components/HomePage/HorizontalScrollSection'
 import Meta from '@/components/Meta'
@@ -128,12 +129,12 @@ const HomePage = ({
               <Button
                 variant="outlined"
                 color={'primary'}
-                endIcon={<LocalPhoneIcon />}
+                endIcon={<WhatsAppIcon />}
                 target="_blank"
-                href={`tel:${contactInfo?.callNumber}`}
+                href={`whatsapp://?phone=${contactInfo?.whatsappNumber}&text:'Hello I would like to find (drug name)'`}
                 sx={{ borderRadius: '0' }}
               >
-                Speak To A Pharmacist
+                Search With a Pharmacist
               </Button>
             </Grid>
           </Grid>
@@ -150,7 +151,7 @@ const HomePage = ({
         </Stack>
       </Container>
 
-      <Box
+      {/*<Box
         component={'section'}
         my={10}
         py={10}
@@ -200,8 +201,9 @@ const HomePage = ({
             </HorizontalScrollSection>
           </Box>
         </Container>
-      </Box>
-      <Box
+      </Box>*/}
+
+      {/*<Box
         component={'section'}
         my={10}
         py={10}
@@ -242,7 +244,8 @@ const HomePage = ({
             </Container>
           </Box>
         </Container>
-      </Box>
+      </Box>*/}
+      {/*
       <Box component="section" mb={10}>
         <Container maxWidth="md">
           <Typography variant="h4" mb={4} fontWeight={'bold'}>
@@ -250,7 +253,7 @@ const HomePage = ({
           </Typography>
           <FAQSection faqs={faqs} />
         </Container>
-      </Box>
+      </Box>*/}
     </>
   )
 }
