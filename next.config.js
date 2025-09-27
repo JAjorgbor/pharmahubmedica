@@ -1,21 +1,32 @@
+// @ts-check
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    async headers() {
-      return [
-        {
-          source: '/(.*)',
-          headers: [{ key: 'X-Robots-Tag', value: 'index, follow' }],
-        },
-      ]
-    },
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'cdn.sanity.io',
       },
+      {
+        protocol: 'https',
+        hostname: 'dummyimage.com',
+      },
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow',
+          },
+        ],
+      },
+    ]
   },
 }
 

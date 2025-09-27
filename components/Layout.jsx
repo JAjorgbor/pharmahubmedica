@@ -4,10 +4,10 @@ import { createContext, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import BackToTopButton from './BackToTopButton'
 import ContactSpeedDial from './ContactSpeedDial'
-import Footer from './Footer'
-import Header from './Header'
+import Footer from './scaffold/Footer'
+import Header from './scaffold/Header'
 import CartDrawer from './Products/CartDrawer'
-import Sidebar from './Sidebar'
+import Sidebar from './scaffold/Sidebar'
 
 const sidebarWidth = 240
 export const CartContext = createContext()
@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
     <>
       <CssBaseline />
       <CartContext.Provider value={{ cart, dispatch }}>
-        <Box >
+        <Box>
           <Header
             openSidebar={openSidebar}
             setOpenSidebar={setOpenSidebar}
