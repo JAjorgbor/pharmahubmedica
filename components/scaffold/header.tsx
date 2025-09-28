@@ -5,7 +5,6 @@ import Sidebar from '@/components/scaffold/sidebar'
 import {
   Badge,
   Button,
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -16,6 +15,7 @@ import Image from 'next/image'
 import { LuChevronDown, LuShoppingCart } from 'react-icons/lu'
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils/cn'
+import Link from 'next/link'
 
 const Header = () => {
   const { scrollY } = useScroll() // reactive MotionValue
@@ -62,9 +62,9 @@ const Header = () => {
             <Badge content={2} color="danger">
               <Link
                 href="/cart"
-                className="bg-white rounded-xl p-2 hover:text-primary shadow text-foreground-600"
+                className="bg-white rounded-xl p-1.5 hover:text-primary shadow text-foreground-600"
               >
-                <LuShoppingCart size={20} />
+                <LuShoppingCart size={18} />
               </Link>
             </Badge>
           </NavbarItem>
@@ -124,7 +124,7 @@ const Header = () => {
               <Link
                 aria-current="page"
                 href="/collections"
-                className="flex gap-1 items-center"
+                className="flex gap-1 items-center text-primary"
               >
                 Collections <LuChevronDown size={15} />
               </Link>
@@ -146,9 +146,9 @@ const Header = () => {
             <Badge content={2} color="danger">
               <Link
                 href="/cart"
-                className="bg-white rounded-xl p-2 hover:text-primary shadow text-foreground-600"
+                className="bg-white rounded-xl p-1.5 hover:text-primary shadow text-foreground-600"
               >
-                <LuShoppingCart size={20} />
+                <LuShoppingCart size={18} />
               </Link>
             </Badge>
           </NavbarItem>
