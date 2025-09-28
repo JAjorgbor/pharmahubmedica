@@ -1,5 +1,5 @@
 'use client'
-
+import { useScroll } from 'framer-motion'
 import PhoneNumberDisplay from '@/components/scaffold/phone-number-display'
 import Sidebar from '@/components/scaffold/sidebar'
 import {
@@ -13,28 +13,44 @@ import {
 } from '@heroui/react'
 import Image from 'next/image'
 import { LuChevronDown } from 'react-icons/lu'
+import { useEffect, useState } from 'react'
+import { cn } from '@/utils/cn'
 
 const Header = () => {
+  const { scrollY } = useScroll() // reactive MotionValue
+  const [scrollHeight, setScrollHeight] = useState(0)
+
+  useEffect(() => {
+    // subscribe to changes
+    return scrollY.on('change', (latest) => {
+      setScrollHeight(latest)
+    })
+  }, [scrollY])
   return (
     <>
       <div className="pt-3 md:hidden" />
       <Navbar
-        className="max-w-[95%] md:max-w-6xl md:static mx-auto rounded-xl top-3 border-b-gray-300 "
+        className={cn(
+          'max-w-[93%] md:static md:max-w-6xl mx-auto rounded-xl top-3 border-b-gray-300',
+          scrollHeight > 80 ? 'shadow' : ''
+        )}
         classNames={{ wrapper: 'max-w-full' }}
       >
-        {/* <div className="flex justify-between gap-4 border-b max-w-6xl mx-auto items-center px-5 py-3"> */}
+        {/* <div className="flex justify-between gap-4 border-b max-w-6xl px-5  mx-auto items-center px-5 py-3"> */}
         <NavbarContent className="flex gap-3 items-center">
           <NavbarItem>
             <Sidebar />
           </NavbarItem>
           <NavbarBrand>
-            <Image
-              src="/png-transparent-logo.png"
-              height={80}
-              width={200}
-              alt="logo"
-              className="w-40"
-            />
+            <Link href="/">
+              <Image
+                src="/png-transparent-logo.png"
+                height={80}
+                width={200}
+                alt="logo"
+                className="w-40"
+              />
+            </Link>
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="flex gap-4 items-center" justify="end">
@@ -59,13 +75,20 @@ const Header = () => {
         </NavbarContent>
         {/* </div> */}
       </Navbar>
+      <hr className="border-foreground-300 max-w-6xl px-5  mx-auto" />
       <Navbar
-        className="hidden md:block max-w-6xl mx-auto rounded-xl top-3"
-        classNames={{ wrapper: 'max-w-full' }}
+        className={cn(
+          'hidden md:block max-w-6xl mx-auto rounded-xl top-3',
+          scrollHeight > 100 ? 'shadow' : ''
+        )}
+        classNames={{
+          base: 'max-w-6xl px-5',
+          wrapper: 'max-w-full',
+        }}
       >
         <NavbarContent className="flex gap-4" justify="center">
           <NavbarItem>
-            <Link color="foreground" href="/home">
+            <Link color="foreground" href="/">
               Home
             </Link>
           </NavbarItem>
