@@ -31,7 +31,7 @@ import PhoneNumberInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
 import Flag from 'react-world-flags'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/utils/cn'
 
 // const westAfrica = [
 //   'BJ',
@@ -188,7 +188,7 @@ const InputField = <T extends FieldValues>({
   const [phoneCountrySearchValue, setPhoneCountrySearchValue] = useState('')
 
   const [selectedCountry, setSelectedCountry] = useState(
-    countries.find((each) => each.code == 'ng'),
+    countries.find((each) => each.code == 'ng')
   )
 
   const filteredCountries = useMemo(
@@ -196,9 +196,9 @@ const InputField = <T extends FieldValues>({
       countries.filter((country) =>
         country?.name
           ?.toLowerCase()
-          .includes(phoneCountrySearchValue.toLowerCase()),
+          .includes(phoneCountrySearchValue.toLowerCase())
       ),
-    [phoneCountrySearchValue],
+    [phoneCountrySearchValue]
   )
   const countryDropdownItems = useMemo(
     () =>
@@ -206,15 +206,15 @@ const InputField = <T extends FieldValues>({
         <DropdownItem
           key={country.code}
           startContent={
-            <Flag className='size-4' code={country.code.toUpperCase()} />
+            <Flag className="size-4" code={country.code.toUpperCase()} />
           }
-          className='capitalize'
+          className="capitalize"
         >
           {country.name}{' '}
-          <span className='text-foreground-500'>{country.dialCode}</span>
+          <span className="text-foreground-500">{country.dialCode}</span>
         </DropdownItem>
       )),
-    [filteredCountries],
+    [filteredCountries]
   )
 
   const { control: defaultControl } = useForm()
@@ -229,7 +229,7 @@ const InputField = <T extends FieldValues>({
     fieldState: controllerFieldState,
     formState: controllerFormState,
   } = useController(
-    controllerProps?.control ? controllerProps : defaultControllerProps,
+    controllerProps?.control ? controllerProps : defaultControllerProps
   )
 
   const formatToCurrency = (value: string) => {
@@ -269,7 +269,7 @@ const InputField = <T extends FieldValues>({
     controllerField?.value,
   ])
 
-  const baseClass = twMerge(className, classNames.input)
+  const baseClass = cn(className, classNames.input)
 
   useEffect(() => {
     if (options) {
@@ -291,7 +291,7 @@ const InputField = <T extends FieldValues>({
             variant={variant}
             color={color}
             disabled={disabled}
-            type='text'
+            type="text"
             ref={controllerField.ref}
             value={controllerField.value}
             defaultValue={
@@ -326,7 +326,7 @@ const InputField = <T extends FieldValues>({
             variant={variant}
             color={color}
             disabled={disabled}
-            type='date'
+            type="date"
             isInvalid={!!controllerFieldState.error?.message}
             className={`${baseClass} `}
             ref={controllerField.ref}
@@ -344,13 +344,13 @@ const InputField = <T extends FieldValues>({
         )
       case 'search':
         return (
-          <div className='flex items-center gap-2 w-full'>
+          <div className="flex items-center gap-2 w-full">
             <Input
               classNames={{ inputWrapper: `${baseClass} ` }}
               radius={radius}
               variant={variant}
               color={color}
-              type='search'
+              type="search"
               className={`${baseClass}`}
               placeholder={placeholder}
               isInvalid={!!controllerFieldState.error?.message}
@@ -368,8 +368,8 @@ const InputField = <T extends FieldValues>({
               disabled={disabled}
             />
             <button
-              type='button'
-              className='p-2 rounded-md bg-blue-100 hover:bg-blue-200 text-primary'
+              type="button"
+              className="p-2 rounded-md bg-blue-100 hover:bg-blue-200 text-primary"
             >
               <FiSearch size={18} />
             </button>
@@ -382,7 +382,7 @@ const InputField = <T extends FieldValues>({
             radius={radius}
             variant={variant}
             color={color}
-            type='email'
+            type="email"
             className={`${baseClass} `}
             maxLength={maxLength}
             isInvalid={!!controllerFieldState.error?.message}
@@ -438,7 +438,7 @@ const InputField = <T extends FieldValues>({
             radius={radius}
             variant={variant}
             color={color}
-            size='lg'
+            size="lg"
             ref={controllerField.ref}
             value={controllerField.value}
             isInvalid={!!controllerFieldState.error?.message}
@@ -472,7 +472,7 @@ const InputField = <T extends FieldValues>({
             endContent={
               allowShowPassword && (
                 <button
-                  type='button'
+                  type="button"
                   aria-label={showPassword ? 'Hide Password' : 'Show Password'}
                   onClick={() => setShowPassword(!showPassword)}
                 >
@@ -544,7 +544,7 @@ const InputField = <T extends FieldValues>({
             variant={variant}
             color={color}
             listboxProps={{ color: 'secondary', variant: 'flat' }}
-            defaultSelectedKey={defaultValue }
+            defaultSelectedKey={defaultValue}
             isInvalid={!!controllerFieldState.error?.message}
             selectedKey={value as string}
             onSelectionChange={(value: any) => {
@@ -585,11 +585,11 @@ const InputField = <T extends FieldValues>({
         return (
           <Checkbox
             defaultSelected={defaultChecked}
-            className='p-0 ml-0'
+            className="p-0 ml-0"
             disabled={disabled}
             isInvalid={!!controllerFieldState.error?.message}
-            color='secondary'
-            size='sm'
+            color="secondary"
+            size="sm"
             radius={'none'}
             isSelected={!!controllerField.value}
             onValueChange={controllerField.onChange}
@@ -604,7 +604,7 @@ const InputField = <T extends FieldValues>({
             startContent={
               showSwitchIcon &&
               ((
-                <HiCheck color='white' size={switchSize == 'sm' ? 10 : 12} />
+                <HiCheck color="white" size={switchSize == 'sm' ? 10 : 12} />
               ) as any)
             }
             endContent={
@@ -612,9 +612,9 @@ const InputField = <T extends FieldValues>({
               ((<HiX size={switchSize == 'sm' ? 10 : 12} />) as any)
             }
             size={switchSize}
-            color='secondary'
+            color="secondary"
             defaultSelected={defaultChecked}
-            className='p-0'
+            className="p-0"
             classNames={{
               wrapper: `${
                 switchSize == 'sm' ? 'w-9 h-[1.2rem]' : ''
@@ -634,10 +634,10 @@ const InputField = <T extends FieldValues>({
         return (
           <input
             disabled={disabled}
-            type='radio'
-            name='inventory'
-            id='out-stock'
-            className='w-4 h-4 accent-black'
+            type="radio"
+            name="inventory"
+            id="out-stock"
+            className="w-4 h-4 accent-black"
             defaultChecked={defaultChecked}
             value={controllerField.value}
             onChange={controllerField.onChange}
@@ -651,7 +651,7 @@ const InputField = <T extends FieldValues>({
             variant={variant}
             color={color}
             disabled={disabled}
-            type='number'
+            type="number"
             min={min}
             max={max}
             className={`${baseClass}`}
@@ -678,13 +678,13 @@ const InputField = <T extends FieldValues>({
         )
       case 'phoneNumber':
         return (
-          <div className='relative w-full'>
+          <div className="relative w-full">
             <PhoneNumberInput
               disabled={disabled}
               country={selectedCountry?.code as string}
-              containerClass='!my-0'
+              containerClass="!my-0"
               disableDropdown
-              buttonClass='!bg-white !border-none !border-none !rounded-l-lg !m-[1px] !hidden'
+              buttonClass="!bg-white !border-none !border-none !rounded-l-lg !m-[1px] !hidden"
               regions={['america', 'europe', 'asia', 'oceania', 'africa']}
               enableSearch={true}
               disableSearchIcon={true}
@@ -694,7 +694,7 @@ const InputField = <T extends FieldValues>({
               }}
               countryCodeEditable={false}
               onChange={(
-                phoneValue: string,
+                phoneValue: string
                 // countryData: any,
                 // event: React.ChangeEvent<HTMLInputElement>,
               ) => {
@@ -709,15 +709,15 @@ const InputField = <T extends FieldValues>({
               value={controllerField.value}
               placeholder={placeholder}
             />
-            <div className='absolute top-0 left-0 h-full  rounded-l-lg w-10 py-1.5'>
+            <div className="absolute top-0 left-0 h-full  rounded-l-lg w-10 py-1.5">
               <Dropdown>
                 <DropdownTrigger>
                   <button
-                    type='button'
-                    className='w-full h-full flex items-center justify-center gap-1 px-1  border-r'
+                    type="button"
+                    className="w-full h-full flex items-center justify-center gap-1 px-1  border-r"
                   >
                     <Flag
-                      className='size-4'
+                      className="size-4"
                       code={selectedCountry?.code.toUpperCase()}
                       fallback={
                         <span>{selectedCountry?.code.toUpperCase()}</span>
@@ -727,20 +727,20 @@ const InputField = <T extends FieldValues>({
                   </button>
                 </DropdownTrigger>
                 <DropdownMenu
-                  aria-label='Countries'
-                  className='max-h-56 overflow-y-auto'
+                  aria-label="Countries"
+                  className="max-h-56 overflow-y-auto"
                   selectedKeys={new Set([String(selectedCountry?.code)])}
                   onAction={(key) => {
                     const country = countries.find(
-                      (country) => country.code === key,
+                      (country) => country.code === key
                     )
                     setSelectedCountry(country!)
                   }}
                   topContent={
                     <input
-                      type='search'
-                      placeholder='Search country...'
-                      className='p-1 border  rounded-lg !border-gray-300 ring-0 w-full'
+                      type="search"
+                      placeholder="Search country..."
+                      className="p-1 border  rounded-lg !border-gray-300 ring-0 w-full"
                       value={phoneCountrySearchValue}
                       onChange={(e) =>
                         setPhoneCountrySearchValue(e.target.value)
@@ -763,7 +763,7 @@ const InputField = <T extends FieldValues>({
             isInvalid={!!controllerFieldState.error?.message}
             color={color}
             disabled={disabled}
-            type='tel'
+            type="tel"
             min={min}
             className={`${baseClass}`}
             placeholder={placeholder}
@@ -858,7 +858,7 @@ const InputField = <T extends FieldValues>({
   return (
     <div className={`space-y-1  ${className} `}>
       <label
-        className={twMerge(
+        className={cn(
           'relative text-sm font-medium text-nevada font-oxygen',
           type === 'radio' ||
             type === 'checkbox' ||
@@ -868,7 +868,7 @@ const InputField = <T extends FieldValues>({
             ? 'flex items-center gap-1 space-y-0'
             : 'space-y-1',
           classNames.base,
-          disabled && 'cursor-not-allowed',
+          disabled && 'cursor-not-allowed'
         )}
       >
         {type == 'radio' ||
@@ -876,52 +876,51 @@ const InputField = <T extends FieldValues>({
         type == 'switch' ||
         renderLabelRight
           ? label && (
-              <p className={twMerge(`order-2`, classNames.label)}>
-                {label} {isRequired && <span className='text-red-700'>*</span>}
+              <p className={cn(`order-2`, classNames.label)}>
+                {label} {isRequired && <span className="text-red-700">*</span>}
               </p>
             )
           : renderLabelLeft
-            ? label && (
-                <p
-                  className={twMerge(
-                    `order-1 font-bold text-primary`,
-                    classNames.label,
+          ? label && (
+              <p
+                className={cn(
+                  `order-1 text-primary-600 font-light`,
+                  classNames.label
+                )}
+              >
+                {label} {isRequired && <span className="text-red-700">*</span>}
+              </p>
+            )
+          : label && (
+              <p>
+                <span
+                  className={cn(
+                    `font-bold text-primary-600 font-light`,
+                    classNames.label
                   )}
                 >
-                  {label}{' '}
-                  {isRequired && <span className='text-red-700'>*</span>}
-                </p>
-              )
-            : label && (
-                <p>
-                  <span
-                    className={twMerge(
-                      `font-bold text-primary`,
-                      classNames.label,
-                    )}
-                  >
-                    {label}
-                  </span>
-                  {isRequired && <span className='text-red-700'>*</span>}
-                </p>
-              )}
+                  {label}
+                </span>
+                {isRequired && <span className="text-red-700">*</span>}
+              </p>
+            )}
         <div className={`relative ${type !== 'passCode' ? 'flex' : ''}`}>
           {startContent && (
-            <div className='bg-white grid place-items-center px-2.5 rounded-l-lg border border-r-0 text-nevada'>
+            <div className="bg-white grid place-items-center px-2.5 rounded-l-lg border border-r-0 text-nevada">
               {startContent}
             </div>
           )}
           {renderInput()}
           {endContent && type != 'password' && (
-            <div className='absolute right-0 flex gap-2 h-full items-center'>
-              <Divider className='h-4' orientation='vertical' />
+            <div className="absolute right-0 flex gap-2 h-full items-center">
+              <Divider className="h-4" orientation="vertical" />
               {endContent}
             </div>
           )}
         </div>
       </label>
       {controllerFieldState.error?.message || errorMessage ? (
-        <p className='pl-1 text-sm text-danger'>
+        <p className="pl-1 text-sm text-danger">
           {controllerFieldState.error?.message || errorMessage}
         </p>
       ) : null}

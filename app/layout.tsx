@@ -4,6 +4,14 @@ import logo from '@/public/logo.png'
 import Providers from '@/app/providers'
 import Header from '@/components/scaffold/header'
 import Footer from '@/components/scaffold/footer'
+import { Lato } from 'next/font/google'
+
+const lato = Lato({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-lato',
+})
 
 export const metadata: Metadata = {
   title: {
@@ -55,7 +63,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className={lato.className}>
         <Providers>
           <Header />
           <main>{children}</main>

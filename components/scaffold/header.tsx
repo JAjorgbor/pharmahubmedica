@@ -3,6 +3,7 @@ import { useScroll } from 'framer-motion'
 import PhoneNumberDisplay from '@/components/scaffold/phone-number-display'
 import Sidebar from '@/components/scaffold/sidebar'
 import {
+  Badge,
   Button,
   Link,
   Navbar,
@@ -12,7 +13,7 @@ import {
   Tooltip,
 } from '@heroui/react'
 import Image from 'next/image'
-import { LuChevronDown } from 'react-icons/lu'
+import { LuChevronDown, LuShoppingCart } from 'react-icons/lu'
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils/cn'
 
@@ -32,7 +33,7 @@ const Header = () => {
       <Navbar
         className={cn(
           'max-w-[93%] md:static md:max-w-6xl mx-auto rounded-xl top-3 border-b-gray-300',
-          scrollHeight > 80 ? 'shadow' : ''
+          scrollHeight > 80 ? 'shadow-lg' : ''
         )}
         classNames={{ wrapper: 'max-w-full' }}
       >
@@ -57,6 +58,16 @@ const Header = () => {
           <NavbarItem>
             <PhoneNumberDisplay className="hidden md:flex" />
           </NavbarItem>
+          <NavbarItem className="md:hidden">
+            <Badge content={2} color="danger">
+              <Link
+                href="/cart"
+                className="bg-white rounded-xl p-2 hover:text-primary shadow text-foreground-600"
+              >
+                <LuShoppingCart size={20} />
+              </Link>
+            </Badge>
+          </NavbarItem>
           <NavbarItem>
             <div className="flex gap-2">
               <Button
@@ -79,7 +90,7 @@ const Header = () => {
       <Navbar
         className={cn(
           'hidden md:block max-w-6xl mx-auto rounded-xl top-3',
-          scrollHeight > 100 ? 'shadow' : ''
+          scrollHeight > 100 ? 'shadow-lg' : ''
         )}
         classNames={{
           base: 'max-w-6xl px-5',
@@ -128,6 +139,18 @@ const Header = () => {
             <Link color="foreground" href="/contact">
               Contact Us
             </Link>
+          </NavbarItem>
+        </NavbarContent>
+        <NavbarContent justify="end">
+          <NavbarItem>
+            <Badge content={2} color="danger">
+              <Link
+                href="/cart"
+                className="bg-white rounded-xl p-2 hover:text-primary shadow text-foreground-600"
+              >
+                <LuShoppingCart size={20} />
+              </Link>
+            </Badge>
           </NavbarItem>
         </NavbarContent>
       </Navbar>
