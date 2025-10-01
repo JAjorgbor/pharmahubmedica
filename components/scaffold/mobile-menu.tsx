@@ -7,10 +7,16 @@ import { LuMenu, LuX } from 'react-icons/lu'
 import { Drawer } from 'vaul'
 import PhoneNumberDisplay from '@/components/scaffold/phone-number-display'
 import Image from 'next/image'
+import useMediaQuery from '@/hooks/useMediaQuery'
 
-export default function Sidebar() {
+export default function MobileMenu() {
+  const isMobile = useMediaQuery('md')
+  const [isOpen, setIsOpen] = React.useState(true)
+  React.useEffect(() => {
+    if (!isMobile && isOpen) setIsOpen(false)
+  }, [isMobile, isOpen])
   return (
-    <Drawer.Root direction="left">
+    <Drawer.Root direction="bottom" open={isOpen} onOpenChange={setIsOpen}>
       {/* Trigger Button */}
       <Drawer.Trigger asChild>
         <button className="p-1 md:hidden rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer">
@@ -23,9 +29,9 @@ export default function Sidebar() {
         <Drawer.Overlay className="fixed inset-0 bg-primary/40 z-40" />
 
         {/* Sidebar Panel */}
-        <Drawer.Content className="fixed left-0 top-0 bottom-0 z-50 w-64 bg-white shadow-xl flex flex-col">
+        <Drawer.Content className="fixed left-0 top-1/3 bottom-0 z-50 w-full rounded-t-xl bg-white shadow-xl flex flex-col">
           <Drawer.Title className="hidden">Sidebar</Drawer.Title>
-          <div className="p-2 h-full">
+          <div className="p-4 ">
             <div className="flex justify-between items-center rounded-xl bg-primary/10 p-2">
               <Image
                 src="/png-transparent-logo.png"
@@ -47,41 +53,12 @@ export default function Sidebar() {
               >
                 Home
               </Link>
-
-              <Accordion className="px-0">
-                <AccordionItem
-                  classNames={{
-                    trigger:
-                      'p-0 group rounded-md p-2 hover:bg-gray-100 hover:text-primary',
-                    indicator: 'cursor-pointer',
-                  }}
-                  title={
-                    <Link
-                      href="#"
-                      className="group-hover:text-primary flex justify-between text-sm"
-                    >
-                      Collections{' '}
-                      <span className="text-foreground-300 font-light text-lg">
-                        |
-                      </span>
-                    </Link>
-                  }
-                >
-                  <div className="flex flex-col ml-7 pl-2 border-l border-l-foreground-200 gap-2">
-                    {Array(10)
-                      .fill(null)
-                      .map((_, index) => (
-                        <Link
-                          href="#"
-                          key={index}
-                          className="p-1.5 text-foreground-500 text-sm hover:bg-foreground-100 hover:text-primary transition-colors rounded-lg w-full"
-                        >
-                          Link {index}
-                        </Link>
-                      ))}
-                  </div>
-                </AccordionItem>
-              </Accordion>
+              <Link
+                href="#"
+                className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
+              >
+                Collections{' '}
+              </Link>
               <Link
                 href="#"
                 className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
@@ -95,9 +72,6 @@ export default function Sidebar() {
                 Contact Us
               </Link>
             </nav>
-          </div>
-          <div className="p-4 mt-auto">
-            <PhoneNumberDisplay />
           </div>
         </Drawer.Content>
       </Drawer.Portal>

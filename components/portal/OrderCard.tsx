@@ -49,7 +49,7 @@ const OrderCard = ({ order }) => {
               </p>
             )}
           </div>
-          <Chip color={getStatusColor(order.status)}>
+          <Chip color={getStatusColor(order.status)} size="sm" variant="flat">
             <div className="flex items-center space-x-1">
               {getStatusIcon(order.status)}
               <span className="capitalize">{order.status}</span>
@@ -66,7 +66,7 @@ const OrderCard = ({ order }) => {
               />
               <div className="flex-1">
                 <p className="font-bold">{item.productName}</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground-500">
                   Quantity: {item.quantity} × ${item.price.toFixed(2)}
                 </p>
               </div>
@@ -81,7 +81,7 @@ const OrderCard = ({ order }) => {
             </p>
           </div>
         )}
-        <div className="flex items-center justify-between pt-4 border-t">
+        <div className="flex items-center justify-between pt-4 border-t border-t-foreground-200">
           <div className="text-lg font-bold">
             Total: ${order.totalAmount.toFixed(2)}
           </div>

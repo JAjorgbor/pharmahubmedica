@@ -1,7 +1,7 @@
 'use client'
 import { useScroll } from 'framer-motion'
 import PhoneNumberDisplay from '@/components/scaffold/phone-number-display'
-import Sidebar from '@/components/scaffold/sidebar'
+import MobileMenu from '@/components/scaffold/mobile-menu'
 import {
   Badge,
   Button,
@@ -40,7 +40,7 @@ const Header = () => {
         {/* <div className="flex justify-between gap-4 border-b max-w-6xl px-5  mx-auto items-center px-5 py-3"> */}
         <NavbarContent className="flex gap-3 items-center">
           <NavbarItem>
-            <Sidebar />
+            <MobileMenu />
           </NavbarItem>
           <NavbarBrand>
             <Link href="/">

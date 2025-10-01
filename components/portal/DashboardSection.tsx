@@ -1,6 +1,14 @@
 'use client'
 
-import { Button, Card, CardBody, CardHeader, Chip } from '@heroui/react'
+import { currencyFormatter } from '@/utils/currencyFormatter'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
+} from '@heroui/react'
 import Link from 'next/link'
 import { FaShoppingBag, FaWhatsapp } from 'react-icons/fa'
 import {
@@ -119,7 +127,7 @@ const DashboardSection = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-[#031D91]">
             Welcome back, Jane Doe!
@@ -129,9 +137,9 @@ const DashboardSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card>
-            <CardBody className="px-6 py-10">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6">
+          <Card className="p-5">
+            <CardBody>
               <div className="flex items-center space-x-2">
                 <LuShoppingBag className="h-8 w-8 text-[#031D91]" />
                 <div>
@@ -144,8 +152,8 @@ const DashboardSection = () => {
             </CardBody>
           </Card>
 
-          <Card>
-            <CardBody className="px-6 py-10">
+          <Card className="p-5">
+            <CardBody>
               <div className="flex items-center space-x-2">
                 <LuClock className="h-8 w-8 text-yellow-600" />
                 <div>
@@ -158,8 +166,8 @@ const DashboardSection = () => {
             </CardBody>
           </Card>
 
-          <Card>
-            <CardBody className="px-6 py-10">
+          <Card className="p-5">
+            <CardBody>
               <div className="flex items-center space-x-2">
                 <LuCircleCheckBig className="h-8 w-8 text-green-600" />
                 <div>
@@ -172,22 +180,24 @@ const DashboardSection = () => {
             </CardBody>
           </Card>
 
-          <Card>
-            <CardBody className="px-6 py-10">
+          <Card className="p-5">
+            <CardBody>
               <div className="flex items-center space-x-2">
                 <LuPackage className="h-8 w-8 text-[#031D91]" />
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">
                     Total Spent
                   </p>
-                  <p className="text-2xl font-bold">$45,000.00</p>
+                  <p className="text-2xl font-bold">
+                    {currencyFormatter(20000)}
+                  </p>
                 </div>
               </div>
             </CardBody>
           </Card>
         </div>
 
-        <Card className="p-6">
+        <Card className="md:p-5">
           <CardHeader className="flex flex-row items-center justify-between">
             <h2 className="text-lg font-semibold">Recent Orders</h2>
             <Link href="/portal/orders">
@@ -200,48 +210,58 @@ const DashboardSection = () => {
             {recentOrders.length > 0 ? (
               <div className="space-y-4">
                 {recentOrders.map((order) => (
-                  <div
+                  <Card
                     key={order.id}
-                    className="flex items-center justify-between p-4 border border-[#e4d7d7] rounded-lg"
+                    shadow="none"
+                    className="border border-foreground-200"
                   >
-                    <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0">
-                        <img
-                          src={
-                            order.items[0]?.productImage || '/placeholder.svg'
-                          }
-                          alt={order.items[0]?.productName}
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                      </div>
-                      <div>
-                        <p className="font-medium">{order.id}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {order.items.length} item
-                          {order.items.length > 1 ? 's' : ''}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {new Date(order.orderDate).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right space-y-2">
-                      <p className="font-medium">
-                        ${order.totalAmount.toFixed(2)}
-                      </p>
-                      <Chip color={getStatusColor(order.status)}>
-                        <div className="flex items-center space-x-1">
-                          {getStatusIcon(order.status)}
-                          <span className="capitalize">{order.status}</span>
+                    <CardBody>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-shrink-0">
+                            <img
+                              src={
+                                order.items[0]?.productImage ||
+                                '/placeholder.svg'
+                              }
+                              alt={order.items[0]?.productName}
+                              className="w-12 h-12 rounded-lg object-cover"
+                            />
+                          </div>
+                          <div>
+                            <p className="font-medium">{order.id}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {order.items.length} item
+                              {order.items.length > 1 ? 's' : ''}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {new Date(order.orderDate).toLocaleDateString()}
+                            </p>
+                          </div>
                         </div>
-                      </Chip>
-                    </div>
-                  </div>
+                        <div className="text-right space-y-2">
+                          <p className="font-medium">
+                            ${order.totalAmount.toFixed(2)}
+                          </p>
+                          <Chip
+                            color={getStatusColor(order.status)}
+                            size="sm"
+                            variant="flat"
+                            startContent={getStatusIcon(order.status)}
+                            className="capitalize"
+                          >
+                            {order.status}
+                          </Chip>
+                        </div>
+                      </div>
+                    </CardBody>
+                  </Card>
                 ))}
               </div>
             ) : (
               <div className="text-center py-8">
-                <FaShoppingBag className="mx-auto h-12 w-12 text-muted-foreground" />
+                <FaShoppingBag className="mx-auto text-muted-foreground" />{' '}
+                size={40}
                 <p className="mt-2 text-muted-foreground">No orders yet</p>
                 <Link href="/collections">
                   <Button className="mt-4 bg-[#031D91] hover:bg-blue-800">
@@ -254,47 +274,65 @@ const DashboardSection = () => {
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardBody className="p-6 text-center">
-              <LuShoppingBag className="mx-auto h-12 w-12 text-primary mb-4" />
+          <Card className="md:p-3">
+            <CardHeader>
+              <LuShoppingBag className="mx-auto text-primary" size={40} />
+            </CardHeader>
+            <CardBody className="text-center">
               <h3 className="font-semibold mb-2">Browse Products</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Explore our wide range of medicines and health products
               </p>
-              <Link href="/collections">
-                <Button className="w-full bg-[#031D91] hover:bg-blue-800 text-white">
-                  Shop Now
-                </Button>
-              </Link>
             </CardBody>
+            <CardFooter>
+              <Button
+                as={Link}
+                className="w-full bg-[#031D91] hover:bg-blue-800 text-white"
+                href="/collections"
+              >
+                Shop Now
+              </Button>
+            </CardFooter>
           </Card>
 
-          <Card>
-            <CardBody className="p-6 text-center">
-              <FaWhatsapp className="mx-auto h-12 w-12 text-primary mb-4" />
+          <Card className="md:p-3">
+            <CardHeader>
+              <FaWhatsapp className="mx-auto text-primary" size={40} />
+            </CardHeader>
+            <CardBody className="text-center">
               <h3 className="font-semibold mb-2">WhatsApp Orders</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Place orders directly through WhatsApp for quick service
               </p>
+            </CardBody>
+            <CardFooter>
               <Button variant="ghost" className="border w-full shadow-xs">
                 Contact Us
               </Button>
-            </CardBody>
+            </CardFooter>
           </Card>
 
-          <Card>
-            <CardBody className="p-6 text-center">
-              <LuEye className="mx-auto h-12 w-12 text-primary mb-4" />
+          <Card className="md:p-3">
+            <CardHeader>
+              <LuEye className="mx-auto text-primary" size={40} />
+            </CardHeader>
+            <CardBody className="text-center">
               <h3 className="font-semibold mb-2">Order History</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 View and track all your previous orders and purchases
               </p>
-              <Link href="/user/orders">
-                <Button variant="ghost" className="border w-full shadow-xs">
-                  View Orders
-                </Button>
-              </Link>
             </CardBody>
+            <CardFooter>
+              <Button
+                variant="ghost"
+                as={Link}
+                href="/portal/orders"
+                className="border shadow-xs"
+                fullWidth
+              >
+                View Orders
+              </Button>
+            </CardFooter>
           </Card>
         </div>
       </div>

@@ -49,11 +49,11 @@ export default function AboutPage() {
           className="flex-1 w-full rounded-xl h-[400px] object-center object-cover"
         />
       </div>
-      <div className="max-w-6xl px-5 md:px-0  mx-auto space-y-4 text-center">
+      <div className="max-w-6xl px-5 md:px-0  mx-auto space-y-5 text-center">
         <h2 className="text-3xl font-bold text-primary">Our Values</h2>
         <p>The principles that guide everything we do at PharmaHub Medica.</p>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
-          <Card>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5">
+          <Card className="md:p-3">
             <CardBody>
               <div className="flex flex-col items-center gap-4">
                 <span className="bg-primary text-3xl text-white rounded-full inline-block p-4">
@@ -69,7 +69,7 @@ export default function AboutPage() {
               </div>
             </CardBody>
           </Card>
-          <Card>
+          <Card className="md:p-3">
             <CardBody>
               <div className="flex flex-col items-center gap-4">
                 <span className="bg-primary text-3xl text-white rounded-full inline-block p-4">
@@ -85,7 +85,7 @@ export default function AboutPage() {
               </div>
             </CardBody>
           </Card>
-          <Card>
+          <Card className="md:p-3">
             <CardBody>
               <div className="flex flex-col items-center gap-4">
                 <span className="bg-primary text-3xl text-white rounded-full inline-block p-4">
@@ -101,7 +101,7 @@ export default function AboutPage() {
               </div>
             </CardBody>
           </Card>
-          <Card>
+          <Card className="md:p-3">
             <CardBody>
               <div className="flex flex-col items-center gap-4">
                 <span className="bg-primary text-3xl text-white rounded-full inline-block p-4">

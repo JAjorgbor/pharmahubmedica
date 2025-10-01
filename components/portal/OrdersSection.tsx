@@ -240,7 +240,7 @@ const OrdersSection = () => {
           </CardBody>
         </Card>
 
-        <Tabs aria-label="Orders" defaultSelectedKey="all" variant="underlined">
+        <Tabs aria-label="Orders" defaultSelectedKey="all">
           {tabs.map((tab) => (
             <Tab key={tab.key} title={tab.label}>
               <div className="space-y-4 mt-4">

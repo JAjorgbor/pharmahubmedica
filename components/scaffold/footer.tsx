@@ -1,6 +1,7 @@
 'use client'
 import useGetContactInfo from '@/hooks/useGetContactInfo'
 import logo from '@/public/png-transparent-logo.png'
+import { Button } from '@heroui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LuFacebook, LuInstagram } from 'react-icons/lu'
@@ -59,11 +60,16 @@ const Footer = () => {
               <h6 className="text-sm font-bold uppercase mb-3">
                 Quick Support
               </h6>
-              <Link href="/contact">
-                <button className="px-2 py-1 border border-primary text-primary rounded-md hover:bg-primary hover:text-white transition">
-                  Contact Us
-                </button>
-              </Link>
+              <Button
+                href="/contact"
+                as={Link}
+                color="primary"
+                size="sm"
+                variant="ghost"
+                className="text-md"
+              >
+                Contact Us
+              </Button>
 
               <h6 className="text-sm font-bold uppercase mt-4 mb-3">
                 Social Media

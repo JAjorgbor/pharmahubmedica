@@ -16,7 +16,7 @@ export default function ContactPage() {
         </p>
       </div>
       <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-6xl px-5 md:px-0 mx-auto">
-        <Card>
+        <Card className="md:p-4">
           <CardHeader className="text-primary font-bold text-2xl">
             Send us a Message
           </CardHeader>
@@ -24,7 +24,7 @@ export default function ContactPage() {
             <ContactForm />
           </CardBody>
         </Card>
-        <Card>
+        <Card className="md:p-4">
           <CardHeader className="text-primary font-bold text-2xl">
             Get in Touch
           </CardHeader>
@@ -65,7 +65,7 @@ export default function ContactPage() {
             </div>
           </CardBody>
         </Card>
-        <Card>
+        <Card className="md:p-4">
           <CardHeader className="text-primary font-bold text-2xl">
             Quick Contact
           </CardHeader>
@@ -85,7 +85,7 @@ export default function ContactPage() {
             </div>
           </CardBody>
         </Card>
-        <Card>
+        <Card className="md:p-4">
           <CardHeader className="text-primary font-bold text-2xl">
             Our Services
           </CardHeader>
