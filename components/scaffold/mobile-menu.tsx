@@ -29,10 +29,10 @@ export default function MobileMenu() {
         <Drawer.Overlay className="fixed inset-0 bg-primary/40 z-40" />
 
         {/* Sidebar Panel */}
-        <Drawer.Content className="fixed left-0 top-1/3 bottom-0 z-50 w-full rounded-t-xl bg-white shadow-xl flex flex-col">
+        <Drawer.Content className="fixed left-0 top-[60%] bottom-0 z-50 w-full rounded-t-3xl bg-white shadow-xl flex flex-col">
           <Drawer.Title className="hidden">Sidebar</Drawer.Title>
           <div className="p-4 ">
-            <div className="flex justify-between items-center rounded-xl bg-primary/10 p-2">
+            <div className="flex justify-between items-center rounded-xl bg-foreground-100 p-2">
               <Image
                 src="/png-transparent-logo.png"
                 height={80}
@@ -46,7 +46,7 @@ export default function MobileMenu() {
                 </button>
               </Drawer.Trigger>
             </div>
-            <nav className="flex-1 py-4 space-y-2 divide-y divide-foreground-200 text-sm">
+            <nav className="flex-1 py-4 space-y-2 divide-y divide-foreground-200 text-sm ">
               <Link
                 href="#"
                 className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
@@ -72,6 +72,7 @@ export default function MobileMenu() {
                 Contact Us
               </Link>
             </nav>
+            <PhoneNumberDisplay />
           </div>
         </Drawer.Content>
       </Drawer.Portal>

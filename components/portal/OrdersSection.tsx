@@ -203,7 +203,7 @@ const OrdersSection = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-6xl mx-auto p-5 md:px-0 space-y-8">
         <div className="flex items-center space-x-4">
           <Link href="/portal/dashboard">
             <Button size="sm" variant="light">
