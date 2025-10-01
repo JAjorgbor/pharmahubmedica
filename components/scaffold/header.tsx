@@ -86,11 +86,11 @@ const Header = () => {
         </NavbarContent>
         {/* </div> */}
       </Navbar>
-      <hr className="border-foreground-300 max-w-6xl px-5  mx-auto" />
+      <hr className="border-foreground-300 max-w-6xl px-5 mx-auto" />
       <Navbar
         className={cn(
-          'hidden md:block max-w-6xl mx-auto rounded-xl top-3',
-          scrollHeight > 100 ? 'shadow-lg' : ''
+          'hidden md:block mx-auto rounded-xl top-3 transition-all duration-400 ease-in-out',
+          scrollHeight > 100 ? 'shadow-lg max-w-5xl' : 'max-w-6xl '
         )}
         classNames={{
           base: 'max-w-6xl px-5',
