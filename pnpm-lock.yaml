@@ -98,6 +98,9 @@ importers:
       react-phone-input-2:
         specifier: ^2.15.1
         version: 2.15.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      react-pro-sidebar:
+        specifier: ^1.1.0
+        version: 1.1.0(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-select:
         specifier: ^5.7.3
         version: 5.8.0(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -4798,6 +4801,12 @@ packages:
       '@popperjs/core': ^2.0.0
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
+
+  react-pro-sidebar@1.1.0:
+    resolution: {integrity: sha512-rdRJ4PeMsqWq9n69AmF6et6qCbhCF1KEBgjAH8vIiLxE1k5fMxtRYo0k4asxW8qpIH6sqahiMxrxVVoObv8orQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-props-stream@1.0.1:
     resolution: {integrity: sha512-lBMW9S7OvqE8sYruPTpG8Dv7WVwHiDt4hJmhixoRNlHBtVMnMvMJal/tsH8F/YKMsObvSkY3PCWCPRLqnEaOaw==}
@@ -11473,6 +11482,17 @@ snapshots:
       react-dom: 19.1.1(react@19.1.1)
       react-fast-compare: 3.2.2
       warning: 4.0.3
+
+  react-pro-sidebar@1.1.0(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      '@emotion/react': 11.11.1(@types/react@19.1.13)(react@19.1.1)
+      '@emotion/styled': 11.11.0(@emotion/react@11.11.1(@types/react@19.1.13)(react@19.1.1))(@types/react@19.1.13)(react@19.1.1)
+      '@popperjs/core': 2.11.8
+      classnames: 2.3.2
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+    transitivePeerDependencies:
+      - '@types/react'
 
   react-props-stream@1.0.1(react@19.1.1)(rxjs@6.6.7):
     dependencies:

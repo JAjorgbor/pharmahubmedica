@@ -106,7 +106,7 @@ const Review = ({ data, setReviewrsName, reviewId, setReviewId, session }) => {
                       sx={{ paddingBottom: 1 }}
                       avatar={
                         <Avatar
-                          src={'/logo mark.png'}
+                          src={'/logo-mark.png'}
                           aria-label="profile-image"
                         />
                       }
