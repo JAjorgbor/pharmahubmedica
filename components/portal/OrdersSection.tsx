@@ -1,10 +1,8 @@
 'use client'
 
-import { Button, Card, CardBody, Chip, Input, Tab, Tabs } from '@heroui/react'
-import Link from 'next/link'
+import { Card, CardBody, Chip, Input, Tab, Tabs } from '@heroui/react'
 import { useState } from 'react'
 import {
-  LuArrowLeft,
   LuCircleCheckBig,
   LuCircleX,
   LuClock,
@@ -205,12 +203,6 @@ const OrdersSection = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto p-5 md:px-0 space-y-8">
         <div className="flex items-center space-x-4">
-          <Link href="/portal/dashboard">
-            <Button size="sm" variant="light">
-              <LuArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
-            </Button>
-          </Link>
           <div>
             <h1 className="text-3xl font-bold text-[#031D91]">My Orders</h1>
             <p className="text-foreground-500">
@@ -243,7 +235,7 @@ const OrdersSection = () => {
         <Tabs aria-label="Orders" defaultSelectedKey="all">
           {tabs.map((tab) => (
             <Tab key={tab.key} title={tab.label}>
-              <div className="space-y-4 mt-4">
+              <div className="space-y-4">
                 {tab.orders.length > 0 ? (
                   tab.orders.map((order) => (
                     <OrderCard key={order.id} order={order} />
