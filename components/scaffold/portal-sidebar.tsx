@@ -6,6 +6,7 @@ import {
   LuChevronLeft,
   LuChevronRight,
   LuHandshake,
+  LuHouse,
   LuLayoutDashboard,
   LuLayoutList,
 } from 'react-icons/lu'
@@ -17,12 +18,20 @@ const PortalSidebar = () => {
   const [toggled, setToggled] = useState(true)
   return (
     <Sidebar
-      className="shadow"
+      className="relative"
       collapsed={collapsed}
       onBackdropClick={() => setToggled(false)}
       toggled={toggled}
+      rootStyles={{
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+        left: 0,
+        // boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        backgroundColor: 'white',
+      }}
     >
-      <Menu className="bg-white h-full">
+      <Menu className="bg-white h-[92%] ">
         <MenuItem
           icon={
             !collapsed ? (
@@ -81,6 +90,15 @@ const PortalSidebar = () => {
         >
           {' '}
           Referrals
+        </MenuItem>
+      </Menu>
+      <Menu className="border-t border-t-foreground-200 bg-white h-[8%]">
+        <MenuItem
+          icon={<LuHouse size={20} />}
+          className="text-foreground-500"
+          component={<Link href="/" />}
+        >
+          Back to Store
         </MenuItem>
       </Menu>
     </Sidebar>

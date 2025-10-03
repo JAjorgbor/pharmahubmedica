@@ -1,3 +1,4 @@
+import PortalHeader from '@/components/scaffold/portal-header'
 import PortalSidebar from '@/components/scaffold/portal-sidebar'
 import type { FC, ReactNode } from 'react'
 
@@ -8,9 +9,12 @@ interface PortallayoutProps {
 const Portallayout: FC<PortallayoutProps> = ({ children }) => {
   return (
     <>
-      <div className="flex">
+      <div className="flex gap-3 bg-gray-50">
         <PortalSidebar />
-        <div className="flex-grow">{children}</div>
+        <div className="flex-grow relative">
+          <PortalHeader />
+          {children}
+        </div>
       </div>
     </>
   )

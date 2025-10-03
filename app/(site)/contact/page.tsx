@@ -15,7 +15,7 @@ export default function ContactPage() {
           healthcare needs.
         </p>
       </div>
-      <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-6xl px-5 md:px-0 mx-auto">
+      <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-7xl px-5  mx-auto">
         <Card className="md:p-4">
           <CardHeader className="text-primary font-bold text-2xl">
             Send us a Message

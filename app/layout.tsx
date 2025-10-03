@@ -1,9 +1,8 @@
-import type { Metadata } from 'next'
-import '@/styles/globals.css'
-import logo from '@/public/logo.png'
 import Providers from '@/app/providers'
-import Header from '@/components/scaffold/header'
 import Footer from '@/components/scaffold/footer'
+import logo from '@/public/logo.png'
+import '@/styles/globals.css'
+import type { Metadata } from 'next'
 import { Lato } from 'next/font/google'
 
 const lato = Lato({
@@ -65,8 +64,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={lato.className}>
         <Providers>
-          <Header />
-          <main>{children}</main>
+          {children}
           <Footer />
         </Providers>
       </body>

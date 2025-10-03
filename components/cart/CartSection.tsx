@@ -6,7 +6,7 @@ import { LuMinus, LuPlus, LuTrash2 } from 'react-icons/lu'
 
 const CartSection = () => {
   return (
-    <div className="max-w-6xl mx-auto p-5 md:px-0">
+    <div className="max-w-7xl mx-auto p-5 ">
       <div className="grid md:grid-cols-3 gap-6 items-baseline">
         <div className="md:col-span-2 space-y-6">
           <div className="flex justify-between w-full">

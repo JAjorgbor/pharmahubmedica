@@ -15,7 +15,7 @@ export default function AboutPage() {
           care and expertise you deserve.
         </p>
       </div>
-      <div className="flex max-w-6xl px-5 md:px-0  mx-auto gap-4 flex-col md:flex-row">
+      <div className="flex max-w-7xl px-5   mx-auto gap-4 flex-col md:flex-row">
         <div className="flex-1 space-y-4">
           <h2 className="font-bold text-primary text-3xl">Our Story</h2>
           <div className="space-y-2">
@@ -49,7 +49,7 @@ export default function AboutPage() {
           className="flex-1 w-full rounded-xl h-[400px] object-center object-cover"
         />
       </div>
-      <div className="max-w-6xl px-5 md:px-0  mx-auto space-y-5 text-center">
+      <div className="max-w-7xl px-5   mx-auto space-y-5 text-center">
         <h2 className="text-3xl font-bold text-primary">Our Values</h2>
         <p>The principles that guide everything we do at PharmaHub Medica.</p>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5">
@@ -120,7 +120,7 @@ export default function AboutPage() {
         </div>
       </div>
       <div className="px-5">
-        <div className="max-w-6xl py-10 mb-10 text-center mx-auto bg-primary-gradient rounded-xl">
+        <div className="max-w-7xl py-10 mb-10 text-center mx-auto bg-primary-gradient rounded-xl">
           <div className=" text-white space-y-4 max-w-2xl mx-auto px-5">
             <h2 className="text-3xl font-bold">Our Mission</h2>
             <p>

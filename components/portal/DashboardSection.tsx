@@ -127,7 +127,7 @@ const DashboardSection = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto p-5 md:px-0 space-y-8">
+      <div className="max-w-7xl mx-auto p-5  space-y-8">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-[#031D91]">
             Welcome back, Jane Doe!
@@ -137,7 +137,7 @@ const DashboardSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
           <Card className="p-5">
             <CardBody>
               <div className="flex items-center space-x-2">
@@ -278,13 +278,13 @@ const DashboardSection = () => {
             <CardHeader>
               <LuShoppingBag className="mx-auto text-primary" size={40} />
             </CardHeader>
-            <CardBody className="text-center">
+            <CardBody className="text-center py-2">
               <h3 className="font-semibold mb-2">Browse Products</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Explore our wide range of medicines and health products
               </p>
             </CardBody>
-            <CardFooter>
+            <CardFooter className="py-2">
               <Button
                 as={Link}
                 className="w-full bg-[#031D91] hover:bg-blue-800 text-white"
@@ -305,7 +305,7 @@ const DashboardSection = () => {
                 Place orders directly through WhatsApp for quick service
               </p>
             </CardBody>
-            <CardFooter>
+            <CardFooter className="py-2">
               <Button variant="ghost" className="border w-full shadow-xs">
                 Contact Us
               </Button>
@@ -322,7 +322,7 @@ const DashboardSection = () => {
                 View and track all your previous orders and purchases
               </p>
             </CardBody>
-            <CardFooter>
+            <CardFooter className="py-2">
               <Button
                 variant="ghost"
                 as={Link}

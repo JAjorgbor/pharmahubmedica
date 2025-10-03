@@ -8,7 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   LuCircleCheckBig,
   LuCircleX,
@@ -128,78 +128,89 @@ const ReferralsSection = () => {
     },
   ]
 
-  const columns = [
-    {
-      accessorKey: 'referee',
-      header: 'Referee',
-      cell: ({ row }) => (
-        <div>
-          <p className="font-medium">{row.original.referee}</p>
-          <p className="text-sm text-foreground-500">{row.original.email}</p>
-          {row.original.phoneNo && (
-            <p className="text-sm text-foreground-500">
-              {row.original.phoneNo}
-            </p>
-          )}
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      cell: ({ row }) => (
-        <Chip
-          color={getStatusColor(row.original.status)}
-          startContent={getStatusIcon(row.original.status)}
-          size="sm"
-          variant="flat"
-        >
-          <span className="capitalize">{row.original.status}</span>
-        </Chip>
-      ),
-    },
-    {
-      accessorKey: 'createdOn',
-      header: 'Created On',
-      cell: ({ row }) => (
-        <div className="text-sm">
-          <p>{new Date(row.original.createdOn).toLocaleDateString()}</p>
-          {row.original.usedOn && (
-            <p className="text-foreground-500">
-              Used: {new Date(row.original.usedOn).toLocaleDateString()}
-            </p>
-          )}
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'commission',
-      header: 'Commission',
-      cell: ({ row }) =>
-        row.original.commission ? (
-          <div className="font-medium text-green-600">
-            {currencyFormatter(row.original.commission)}
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'referee',
+        header: 'Referee',
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium">{row.original.referee}</p>
+            <p className="text-sm text-foreground-500">{row.original.email}</p>
+            {row.original.phoneNo && (
+              <p className="text-sm text-foreground-500">
+                {row.original.phoneNo}
+              </p>
+            )}
           </div>
-        ) : (
-          <span className="text-foreground-500">-</span>
         ),
-    },
-    {
-      id: 'actions',
-      header: () => <div className="text-right">Actions</div>,
-      cell: ({ row }) => (
-        <div className="flex items-center justify-end space-x-2">
-          <Button variant="light" size="sm" href="#" target="_blank">
-            <LuEye className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
-  ]
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }) => (
+          <Chip
+            color={getStatusColor(row.original.status)}
+            startContent={getStatusIcon(row.original.status)}
+            size="sm"
+            variant="flat"
+          >
+            <span className="capitalize">{row.original.status}</span>
+          </Chip>
+        ),
+      },
+      {
+        accessorKey: 'createdOn',
+        header: 'Created On',
+        cell: ({ row }) => (
+          <div className="text-sm">
+            <p>{new Date(row.original.createdOn).toLocaleDateString()}</p>
+            {row.original.usedOn && (
+              <p className="text-foreground-500">
+                Used: {new Date(row.original.usedOn).toLocaleDateString()}
+              </p>
+            )}
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'commission',
+        header: 'Commission',
+        cell: ({ row }) =>
+          row.original.commission ? (
+            <div className="font-medium text-green-600">
+              {currencyFormatter(row.original.commission)}
+            </div>
+          ) : (
+            <span className="text-foreground-500">-</span>
+          ),
+      },
+      {
+        id: 'actions',
+        header: () => <div className="text-right">Actions</div>,
+        cell: ({ row }) => (
+          <div className="flex items-center justify-end space-x-2">
+            <Button variant="light" size="sm" href="#" target="_blank">
+              <LuEye className="h-4 w-4" />
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    []
+  )
+
+  const [tableData, setTableData] = useState(tabs[0].referrals)
+
+  const table = useReactTable({
+    data: tableData,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto p-5 md:px-0 space-y-8">
+      <div className="max-w-7xl mx-auto p-5  space-y-8">
         <div className="flex items-center justify-between space-x-4">
           <div>
             <h1 className="text-3xl font-bold text-[#031D91]">My Referrals</h1>
@@ -213,7 +224,7 @@ const ReferralsSection = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
           <Card className="p-5">
             <CardBody>
               <div className="flex items-center space-x-2">
@@ -282,13 +293,14 @@ const ReferralsSection = () => {
               </div>
             </div>
 
-            <Tabs aria-label="Referrals" defaultSelectedKey="all">
+            <Tabs
+              aria-label="Referrals"
+              defaultSelectedKey="all"
+              onSelectionChange={(value) =>
+                setTableData(tabs.find((each) => each.key == value).referrals)
+              }
+            >
               {tabs.map((tab) => {
-                const table = useReactTable({
-                  data: tab.referrals,
-                  columns,
-                  getCoreRowModel: getCoreRowModel(),
-                })
                 return (
                   <Tab key={tab.key} title={tab.label}>
                     <div className="space-y-4 mt-2">
