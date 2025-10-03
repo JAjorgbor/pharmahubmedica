@@ -32,12 +32,12 @@ const Header = () => {
       <div className="pt-3 md:hidden" />
       <Navbar
         className={cn(
-          'max-w-[93%] md:static md:max-w-6xl mx-auto rounded-xl top-3 border-b-gray-300',
+          'max-w-[93%] md:static md:max-w-7xl mx-auto rounded-xl top-3 border-b-gray-300',
           scrollHeight > 80 ? 'shadow-lg' : ''
         )}
-        classNames={{ wrapper: 'max-w-full' }}
+        classNames={{ wrapper: 'max-w-full px-0' }}
       >
-        {/* <div className="flex justify-between gap-4 border-b max-w-6xl px-5  mx-auto items-center px-5 py-3"> */}
+        {/* <div className="flex justify-between gap-4 border-b max-w-7xl px-5  mx-auto items-center px-5 py-3"> */}
         <NavbarContent className="flex gap-3 items-center">
           <NavbarItem>
             <MobileMenu />
@@ -86,15 +86,14 @@ const Header = () => {
         </NavbarContent>
         {/* </div> */}
       </Navbar>
-      <hr className="border-foreground-300 max-w-6xl px-5 mx-auto" />
+      <hr className="border-foreground-300 max-w-7xl px-5 mx-auto" />
       <Navbar
         className={cn(
-          'hidden md:block mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out',
-          scrollHeight > 100 ? 'shadow-lg max-w-5xl' : 'max-w-6xl '
+          'hidden md:block mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
+          scrollHeight > 100 ? 'shadow-lg max-w-5xl' : 'max-w-7xl '
         )}
         classNames={{
-          base: 'max-w-6xl px-5',
-          wrapper: 'max-w-full',
+          wrapper: 'max-w-full px-0',
         }}
       >
         <NavbarContent className="flex gap-4" justify="center">
