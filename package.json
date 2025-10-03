@@ -26,6 +26,7 @@
     "@sanity/structure": "^2.36.2",
     "@sanity/vision": "3",
     "@tailwindcss/postcss": "^4.1.13",
+    "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.16",
     "libphonenumber-js": "^1.12.23",

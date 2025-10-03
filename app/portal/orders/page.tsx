@@ -2,8 +2,6 @@ import OrdersSection from '@/components/portal/OrdersSection'
 
 export const metadata = { title: 'Dashboard' }
 
-const page = () => {
+export default function OrderPage() {
   return <OrdersSection />
 }
-
-export default page
