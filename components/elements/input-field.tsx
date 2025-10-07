@@ -906,7 +906,7 @@ const InputField = <T extends FieldValues>({
             )}
         <div className={`relative ${type !== 'passCode' ? 'flex' : ''}`}>
           {startContent && (
-            <div className="bg-white grid place-items-center px-2.5 rounded-l-lg border border-r-0 text-nevada">
+            <div className="bg-white grid place-items-center px-2.5 text-nevada">
               {startContent}
             </div>
           )}

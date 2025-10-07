@@ -1,6 +1,14 @@
 import { Button, Card, CardBody, Chip } from '@heroui/react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { FaWhatsapp } from 'react-icons/fa'
-import { LuCircleCheckBig, LuCircleX, LuClock, LuPackage } from 'react-icons/lu'
+import {
+  LuCircleCheckBig,
+  LuCircleX,
+  LuClock,
+  LuEye,
+  LuPackage,
+} from 'react-icons/lu'
 
 const getStatusIcon = (status: any) => {
   switch (status) {
@@ -59,7 +67,9 @@ const OrderCard = ({ order }) => {
         <div className="space-y-3 mb-4">
           {order.items.map((item, index) => (
             <div key={index} className="flex items-center space-x-3">
-              <img
+              <Image
+                width={48}
+                height={48}
                 src={item.productImage || '/placeholder.svg'}
                 alt={item.productName}
                 className="w-12 h-12 rounded-lg object-cover"
@@ -89,6 +99,15 @@ const OrderCard = ({ order }) => {
             <Button variant="ghost" size="sm">
               <FaWhatsapp className="mr-2 h-4 w-4 text-medium font-bold" />
               Contact Support
+            </Button>
+            <Button
+              as={Link}
+              href={`/portal/orders/${order.id}`}
+              variant="ghost"
+              size="sm"
+            >
+              <LuEye className="mr-2 h-4 w-4 text-medium font-bold" />
+              View Order
             </Button>
             {order.status === 'fulfilled' && (
               <Button
