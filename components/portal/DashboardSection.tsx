@@ -9,6 +9,7 @@ import {
   CardHeader,
   Chip,
 } from '@heroui/react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FaShoppingBag, FaWhatsapp } from 'react-icons/fa'
 import {
@@ -219,7 +220,9 @@ const DashboardSection = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                           <div className="flex-shrink-0">
-                            <img
+                            <Image
+                              width={48}
+                              height={48}
                               src={
                                 order.items[0]?.productImage ||
                                 '/placeholder.svg'

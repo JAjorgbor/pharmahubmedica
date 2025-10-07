@@ -210,7 +210,7 @@ const ReferralsSection = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-5  space-y-8">
+      <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="flex items-center justify-between space-x-4">
           <div>
             <h1 className="text-3xl font-bold text-[#031D91]">My Referrals</h1>
