@@ -12,6 +12,7 @@ import {
 } from 'react-icons/lu'
 import Link from 'next/link'
 import Image from 'next/image'
+import { theme } from '@/library/theme'
 
 const PortalSidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
@@ -27,11 +28,29 @@ const PortalSidebar = () => {
         position: 'sticky',
         top: 0,
         left: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
         // boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
         backgroundColor: 'white',
       }}
     >
-      <Menu className="bg-white h-[92%] ">
+      <Menu
+        className=""
+        menuItemStyles={{
+          root: {
+            paddingX: '5px',
+            backgroundColor: 'transparent',
+            ['&hover']: { backgroundColor: 'transparent' },
+          },
+
+          button: {
+            backgroundColor: 'transparent',
+            paddingX: '10px',
+            ['&hover']: { backgroundColor: 'transparent' },
+          },
+        }}
+      >
         <MenuItem
           icon={
             !collapsed ? (
@@ -66,6 +85,25 @@ const PortalSidebar = () => {
             User Portal
           </span>
         </MenuItem>
+      </Menu>
+      <Menu
+        className="bg-white flex-grow min-h-[82%]"
+        menuItemStyles={{
+          root: {
+            padding: '5px',
+          },
+          button: {
+            padding: '10px 5px',
+            height: '40px',
+            borderRadius: '10px',
+            transition: 'all 0.1s ease-in-out',
+            ['&:hover']: {
+              backgroundColor: theme.colors.primary,
+              color: 'white',
+            },
+          },
+        }}
+      >
         {/* <SubMenu label="Charts">
           <MenuItem> Pie charts </MenuItem>
           <MenuItem> Line charts </MenuItem>
@@ -92,7 +130,24 @@ const PortalSidebar = () => {
           Referrals
         </MenuItem>
       </Menu>
-      <Menu className="border-t border-t-foreground-200 bg-white h-[8%]">
+      <Menu
+        className="border-t border-t-foreground-200 bg-white"
+        menuItemStyles={{
+          root: {
+            padding: '5px',
+          },
+          button: {
+            padding: '10px 5px',
+            height: '40px',
+            borderRadius: '10px',
+            transition: 'all 0.1s ease-in-out',
+            ['&:hover']: {
+              backgroundColor: theme.colors.primary,
+              color: 'white',
+            },
+          },
+        }}
+      >
         <MenuItem
           icon={<LuHouse size={20} />}
           className="text-foreground-500"

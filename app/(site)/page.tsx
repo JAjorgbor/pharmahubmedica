@@ -21,15 +21,15 @@ export default function HomePage() {
               optio nam perferendis numquam rem ducimus enim dicta tenetur
               dolores expedita, sequi animi unde officiis!
             </p>
-            <div className="flex gap-4 flex-wrap">
+            <div className="flex gap-4 flex-wrap md:w-4/5">
               <Button
-                className="flex-1 bg-white text-primary"
+                className="bg-white text-primary flex-1"
                 endContent={<LuArrowRight size={18} />}
               >
                 Shop Now
               </Button>
               <Button
-                className="flex-1 border-white text-white"
+                className="border-white text-white flex-1"
                 variant="bordered"
                 endContent={<FaWhatsapp size={18} />}
               >

@@ -92,7 +92,9 @@ const PortalHeader = () => {
       <Navbar
         className={cn(
           'mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out',
-          scrollHeight > 100 ? 'shadow-lg max-w-5xl' : 'max-w-6xl '
+          scrollHeight > 100
+            ? 'max-w-5xl shadow-lg'
+            : 'max-w-[1220px] bg-white shadow'
         )}
         classNames={{ wrapper: 'max-w-full' }}
       >
