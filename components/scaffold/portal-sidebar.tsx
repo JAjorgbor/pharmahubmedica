@@ -1,5 +1,11 @@
 'use client'
-import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
+import {
+  Sidebar,
+  Menu,
+  MenuItem,
+  SubMenu,
+  sidebarClasses,
+} from 'react-pro-sidebar'
 
 import React, { ReactElement, ReactNode, useState } from 'react'
 import {
@@ -19,21 +25,22 @@ const PortalSidebar = () => {
   const [toggled, setToggled] = useState(true)
   return (
     <Sidebar
-      className="relative"
       collapsed={collapsed}
       onBackdropClick={() => setToggled(false)}
       toggled={toggled}
+      breakPoint="sm"
       rootStyles={{
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-        left: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        // boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        backgroundColor: 'white',
+        [`.${sidebarClasses.container}`]: {
+          display: 'flex',
+          position: 'sticky',
+          top: '0',
+          flexDirection: 'column',
+          height: '100vh', // force full height
+          overflow: 'hidden', // prevent scrollbars
+          background: 'white',
+        },
       }}
+      collapsedWidth="60px"
     >
       <Menu
         className=""
@@ -46,7 +53,7 @@ const PortalSidebar = () => {
 
           button: {
             backgroundColor: 'transparent',
-            paddingX: '10px',
+            padding: '10px 12px',
             ['&hover']: { backgroundColor: 'transparent' },
           },
         }}
@@ -59,7 +66,7 @@ const PortalSidebar = () => {
                 height={40}
                 width={40}
                 alt="logo"
-                className="w-8 rounded-lg"
+                className="w-8 rounded-lg ml-4"
               />
             ) : (
               <button
@@ -87,7 +94,7 @@ const PortalSidebar = () => {
         </MenuItem>
       </Menu>
       <Menu
-        className="bg-white flex-grow min-h-[82%]"
+        className="flex-1 overflow-y-auto"
         menuItemStyles={{
           root: {
             padding: '5px',
@@ -131,7 +138,7 @@ const PortalSidebar = () => {
         </MenuItem>
       </Menu>
       <Menu
-        className="border-t border-t-foreground-200 bg-white"
+        className="border-t border-t-foreground-200 mt-auto"
         menuItemStyles={{
           root: {
             padding: '5px',

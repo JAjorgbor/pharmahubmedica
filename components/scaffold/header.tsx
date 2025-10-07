@@ -35,7 +35,7 @@ const Header = () => {
           'max-w-[93%] md:static md:max-w-7xl mx-auto rounded-xl top-3 border-b-gray-300',
           scrollHeight > 80 ? 'shadow-lg' : ''
         )}
-        classNames={{ wrapper: 'max-w-full px-0' }}
+        classNames={{ wrapper: 'max-w-full md:px-0' }}
       >
         {/* <div className="flex justify-between gap-4 border-b max-w-7xl px-5  mx-auto items-center px-5 py-3"> */}
         <NavbarContent className="flex gap-3 items-center">

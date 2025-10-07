@@ -22,6 +22,7 @@ import {
   LuChevronDown,
   LuLayoutDashboard,
   LuLogOut,
+  LuMenu,
   LuSettings,
   LuShoppingCart,
 } from 'react-icons/lu'
@@ -38,7 +39,7 @@ export const UserPanel = () => {
         </DropdownTrigger>
         <DropdownMenu
           topContent={
-            <div className="space-y-1 py-2 bg-foreground-50 rounded-xl p-2">
+            <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2">
               Anastasia Oghenebrohien
               <p className="text-sm text-foreground-500">anastasia@email.com</p>
             </div>
@@ -48,8 +49,10 @@ export const UserPanel = () => {
             <DropdownItem
               key="name"
               startContent={<LuLayoutDashboard />}
-              variant="faded"
+              variant="flat"
               color="primary"
+              as={Link}
+              href="/portal/dashboard"
             >
               Dashboard
             </DropdownItem>
@@ -58,7 +61,7 @@ export const UserPanel = () => {
               href="/portal/settings"
               key="settings"
               startContent={<LuSettings />}
-              variant="faded"
+              variant="flat"
               color="primary"
             >
               Profile Settings
@@ -93,16 +96,19 @@ const PortalHeader = () => {
       <div className="pt-3" />
       <Navbar
         className={cn(
-          'mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out',
+          'max-w-[93%] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out',
           scrollHeight > 100
-            ? 'max-w-5xl shadow-lg'
-            : 'max-w-[1220px] bg-white shadow'
+            ? 'md:max-w-5xl shadow-lg'
+            : 'md:max-w-[1240px] bg-white shadow'
         )}
         classNames={{ wrapper: 'max-w-full' }}
       >
         {/* <div className="flex justify-between gap-4 border-b max-w-7xl px-5  mx-auto items-center px-5 py-3"> */}
         <NavbarContent className="flex gap-3 items-center">
-          <NavbarBrand>
+          <NavbarBrand className="flex gap-4 items-center">
+            <button className="p-1 md:hidden rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer">
+              <LuMenu size={20} />
+            </button>
             <h1 className="text-xl font-semibold text-primary">Dashboard</h1>
           </NavbarBrand>
         </NavbarContent>

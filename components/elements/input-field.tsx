@@ -1,5 +1,8 @@
 'use client'
-import { getCountries, getCountryCallingCode } from 'libphonenumber-js'
+import parsePhoneNumberFromString, {
+  getCountries,
+  getCountryCallingCode,
+} from 'libphonenumber-js'
 
 import {
   Autocomplete,
@@ -80,6 +83,7 @@ interface InputFieldPropsBase<T extends FieldValues> {
     | 'search'
     | 'postal-code'
   variant?: ComponentProps<typeof Input>['variant']
+  startContentPlacement?: 'inside' | 'outside'
   radius?: ComponentProps<typeof Input>['radius']
   color?: ComponentProps<typeof Input>['color']
   startContent?: ReactNode
@@ -160,6 +164,7 @@ const InputField = <T extends FieldValues>({
   variant = 'bordered',
   radius = 'md',
   color = 'secondary',
+  startContentPlacement = 'inside',
   onChange = () => null,
   switchSize = 'sm',
   showSwitchIcon = true,
@@ -186,6 +191,7 @@ const InputField = <T extends FieldValues>({
   const [amountValue, setAmountValue] = useState(value || '')
   const [disabledKeys, setDisabledKeys] = useState<string[]>()
   const [phoneCountrySearchValue, setPhoneCountrySearchValue] = useState('')
+  const [formattedPhonenumber, setFormattedPhonenumber] = useState('')
 
   const [selectedCountry, setSelectedCountry] = useState(
     countries.find((each) => each.code == 'ng')
@@ -200,6 +206,12 @@ const InputField = <T extends FieldValues>({
       ),
     [phoneCountrySearchValue]
   )
+
+  const strippedValue = (value: string) => {
+    const phoneNumber = parsePhoneNumberFromString(value, 'NG')
+    return phoneNumber?.isValid() ? phoneNumber.number : ''
+  }
+
   const countryDropdownItems = useMemo(
     () =>
       filteredCountries.map((country) => (
@@ -294,6 +306,7 @@ const InputField = <T extends FieldValues>({
             type="text"
             ref={controllerField.ref}
             value={controllerField.value}
+            startContent={startContent}
             defaultValue={
               controllerFormState?.defaultValues?.[
                 controllerProps?.name as string
@@ -327,6 +340,7 @@ const InputField = <T extends FieldValues>({
             color={color}
             disabled={disabled}
             type="date"
+            startContent={startContent}
             isInvalid={!!controllerFieldState.error?.message}
             className={`${baseClass} `}
             ref={controllerField.ref}
@@ -351,6 +365,7 @@ const InputField = <T extends FieldValues>({
               variant={variant}
               color={color}
               type="search"
+              startContent={startContent}
               className={`${baseClass}`}
               placeholder={placeholder}
               isInvalid={!!controllerFieldState.error?.message}
@@ -383,6 +398,7 @@ const InputField = <T extends FieldValues>({
             variant={variant}
             color={color}
             type="email"
+            startContent={startContent}
             className={`${baseClass} `}
             maxLength={maxLength}
             isInvalid={!!controllerFieldState.error?.message}
@@ -416,6 +432,7 @@ const InputField = <T extends FieldValues>({
             color={color}
             radius={radius}
             minRows={rows}
+            startContent={startContent}
             maxLength={maxLength}
             isInvalid={!!controllerFieldState.error?.message}
             ref={controllerField.ref}
@@ -463,6 +480,7 @@ const InputField = <T extends FieldValues>({
             variant={variant}
             color={color}
             disabled={disabled}
+            startContent={startContent}
             type={showPassword ? 'text' : 'password'}
             onKeyDown={(e) => {
               if (e.key === ' ') {
@@ -501,6 +519,7 @@ const InputField = <T extends FieldValues>({
             disabledKeys={disabledKeys}
             variant={variant}
             color={color}
+            startContent={startContent}
             listboxProps={{ color: 'secondary', variant: 'flat' }}
             isInvalid={!!controllerFieldState.error?.message}
             endContent={<>{endContent}</>}
@@ -544,6 +563,7 @@ const InputField = <T extends FieldValues>({
             variant={variant}
             color={color}
             listboxProps={{ color: 'secondary', variant: 'flat' }}
+            startContent={startContent}
             defaultSelectedKey={defaultValue}
             isInvalid={!!controllerFieldState.error?.message}
             selectedKey={value as string}
@@ -652,6 +672,7 @@ const InputField = <T extends FieldValues>({
             color={color}
             disabled={disabled}
             type="number"
+            startContent={startContent}
             min={min}
             max={max}
             className={`${baseClass}`}
@@ -678,81 +699,127 @@ const InputField = <T extends FieldValues>({
         )
       case 'phoneNumber':
         return (
-          <div className="relative w-full">
-            <PhoneNumberInput
+          // <div className="relative w-full">
+          //   <PhoneNumberInput
+          //     disabled={disabled}
+          //     country={selectedCountry?.code as string}
+          //     containerClass="!my-0"
+          //     disableDropdown
+          //     buttonClass="!bg-white !border-none !border-none !rounded-l-lg !m-[1px] !hidden"
+          //     regions={['america', 'europe', 'asia', 'oceania', 'africa']}
+          //     enableSearch={true}
+          //     disableSearchIcon={true}
+          //     inputProps={{
+          //       className: `relative w-full outline-none inline-flex tap-highlight-transparent flex-row items-center shadow-xs px-3 gap-3 border-medium border-default-200 hover:border-default-400 h-10 min-h-10 rounded-medium !duration-150 focus:border-secondary transition-colors motion-reduce:transition-none is-filled ${baseClass} pl-11`,
+          //       name: controllerProps?.name,
+          //     }}
+          //     countryCodeEditable={false}
+          //     onChange={(
+          //       phoneValue: string
+          //       // countryData: any,
+          //       // event: React.ChangeEvent<HTMLInputElement>,
+          //     ) => {
+          //       const normalizedValue = phoneValue.startsWith('+')
+          //         ? phoneValue
+          //         : `+${phoneValue}`
+          //       onChange(normalizedValue)
+          //       if (controllerField.onChange) {
+          //         controllerField.onChange(normalizedValue)
+          //       }
+          //     }}
+          //     value={controllerField.value}
+          //     placeholder={placeholder}
+          //   />
+          //   <div className="absolute top-0 left-0 h-full  rounded-l-lg w-10 py-1.5">
+          //     <Dropdown>
+          //       <DropdownTrigger>
+          //         <button
+          //           type="button"
+          //           className="w-full h-full flex items-center justify-center gap-1 px-1  border-r"
+          //         >
+          //           <Flag
+          //             className="size-4"
+          //             code={selectedCountry?.code.toUpperCase()}
+          //             fallback={
+          //               <span>{selectedCountry?.code.toUpperCase()}</span>
+          //             }
+          //           />
+          //           <PiCaretDown size={15} />
+          //         </button>
+          //       </DropdownTrigger>
+          //       <DropdownMenu
+          //         aria-label="Countries"
+          //         className="max-h-56 overflow-y-auto"
+          //         selectedKeys={new Set([String(selectedCountry?.code)])}
+          //         onAction={(key) => {
+          //           const country = countries.find(
+          //             (country) => country.code === key
+          //           )
+          //           setSelectedCountry(country!)
+          //         }}
+          //         topContent={
+          //           <input
+          //             type="search"
+          //             placeholder="Search country..."
+          //             className="p-1 border  rounded-lg !border-gray-300 ring-0 w-full"
+          //             value={phoneCountrySearchValue}
+          //             onChange={(e) =>
+          //               setPhoneCountrySearchValue(e.target.value)
+          //             }
+          //           />
+          //         }
+          //       >
+          //         {countryDropdownItems as any}
+          //       </DropdownMenu>
+          //     </Dropdown>
+          //   </div>
+          // </div>
+          <>
+            <Input
+              type="tel"
+              placeholder={placeholder}
+              maxLength={14} // matches (xxx) xxx-xxxx
+              classNames={{ inputWrapper: `${baseClass} ` }}
+              radius={radius}
+              variant={variant}
+              color={color}
               disabled={disabled}
-              country={selectedCountry?.code as string}
-              containerClass="!my-0"
-              disableDropdown
-              buttonClass="!bg-white !border-none !border-none !rounded-l-lg !m-[1px] !hidden"
-              regions={['america', 'europe', 'asia', 'oceania', 'africa']}
-              enableSearch={true}
-              disableSearchIcon={true}
-              inputProps={{
-                className: `relative w-full outline-none inline-flex tap-highlight-transparent flex-row items-center shadow-xs px-3 gap-3 border-medium border-default-200 hover:border-default-400 h-10 min-h-10 rounded-medium !duration-150 focus:border-secondary transition-colors motion-reduce:transition-none is-filled ${baseClass} pl-11`,
-                name: controllerProps?.name,
-              }}
-              countryCodeEditable={false}
-              onChange={(
-                phoneValue: string
-                // countryData: any,
-                // event: React.ChangeEvent<HTMLInputElement>,
-              ) => {
-                const normalizedValue = phoneValue.startsWith('+')
-                  ? phoneValue
-                  : `+${phoneValue}`
-                onChange(normalizedValue)
-                if (controllerField.onChange) {
-                  controllerField.onChange(normalizedValue)
+              startContent={startContent}
+              // value={controllerField.value}
+              value={formattedPhonenumber}
+              onValueChange={(value) => {
+                const newValue = value
+                const parsedValue = parseFloat(newValue)
+
+                // strip everything except digits and +
+                const cleaned = newValue.replace(/[^\d+]/g, '')
+
+                // Try parsing
+                const formatted = parsePhoneNumberFromString(cleaned, 'NG')
+                console.log(cleaned)
+                if (formatted) {
+                  if (controllerField.onChange) {
+                    console.log('parsed', formatted.formatNational())
+                    controllerField.onChange(cleaned)
+                    setFormattedPhonenumber(formatted.formatNational())
+
+                    if (onChange) onChange(cleaned)
+                  }
+                } else {
+                  setFormattedPhonenumber(cleaned)
                 }
               }}
-              value={controllerField.value}
-              placeholder={placeholder}
             />
-            <div className="absolute top-0 left-0 h-full  rounded-l-lg w-10 py-1.5">
-              <Dropdown>
-                <DropdownTrigger>
-                  <button
-                    type="button"
-                    className="w-full h-full flex items-center justify-center gap-1 px-1  border-r"
-                  >
-                    <Flag
-                      className="size-4"
-                      code={selectedCountry?.code.toUpperCase()}
-                      fallback={
-                        <span>{selectedCountry?.code.toUpperCase()}</span>
-                      }
-                    />
-                    <PiCaretDown size={15} />
-                  </button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  aria-label="Countries"
-                  className="max-h-56 overflow-y-auto"
-                  selectedKeys={new Set([String(selectedCountry?.code)])}
-                  onAction={(key) => {
-                    const country = countries.find(
-                      (country) => country.code === key
-                    )
-                    setSelectedCountry(country!)
-                  }}
-                  topContent={
-                    <input
-                      type="search"
-                      placeholder="Search country..."
-                      className="p-1 border  rounded-lg !border-gray-300 ring-0 w-full"
-                      value={phoneCountrySearchValue}
-                      onChange={(e) =>
-                        setPhoneCountrySearchValue(e.target.value)
-                      }
-                    />
-                  }
-                >
-                  {countryDropdownItems as any}
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          </div>
+
+            {/* <Input
+              type="number"
+              startContent={startContent}
+              min={min}
+              max={max}
+              className={`${baseClass}`}
+              placeholder={placeholder}
+            /> */}
+          </>
         )
       case 'amount':
         return (
@@ -905,7 +972,7 @@ const InputField = <T extends FieldValues>({
               </p>
             )}
         <div className={`relative ${type !== 'passCode' ? 'flex' : ''}`}>
-          {startContent && (
+          {startContent && startContentPlacement == 'outside' && (
             <div className="bg-white grid place-items-center px-2.5 text-nevada">
               {startContent}
             </div>
