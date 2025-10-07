@@ -54,6 +54,8 @@ export const UserPanel = () => {
               Dashboard
             </DropdownItem>
             <DropdownItem
+              as={Link}
+              href="/portal/settings"
               key="settings"
               startContent={<LuSettings />}
               variant="faded"
@@ -88,7 +90,7 @@ const PortalHeader = () => {
   }, [scrollY])
   return (
     <>
-      <div className="pt-3 " />
+      <div className="pt-3" />
       <Navbar
         className={cn(
           'mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out',

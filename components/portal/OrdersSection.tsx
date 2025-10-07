@@ -201,7 +201,7 @@ const OrdersSection = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-5  space-y-8">
+      <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="flex items-center space-x-4">
           <div>
             <h1 className="text-3xl font-bold text-[#031D91]">My Orders</h1>
@@ -232,7 +232,7 @@ const OrdersSection = () => {
           </CardBody>
         </Card>
 
-        <Tabs aria-label="Orders" defaultSelectedKey="all">
+        <Tabs aria-label="Orders" defaultSelectedKey="all" className="mb-2">
           {tabs.map((tab) => (
             <Tab key={tab.key} title={tab.label}>
               <div className="space-y-4">
