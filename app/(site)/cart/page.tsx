@@ -1,4 +1,4 @@
-import CartSection from '@/components/cart/CartSection'
+import CartSection from '@/components/(site)/cart/CartSection'
 
 export default function CartPage() {
   return (

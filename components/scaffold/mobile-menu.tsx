@@ -28,7 +28,7 @@ export default function MobileMenu() {
         <Drawer.Overlay className="fixed inset-0 bg-primary/40 z-40" />
 
         {/* Mobile Menu Panel */}
-        <Drawer.Content className="fixed left-0 top-[60%] bottom-0 z-50 w-full rounded-t-3xl bg-white shadow-xl flex flex-col">
+        <Drawer.Content className="fixed left-0 top-[50%] sm:top-[60%] bottom-0 z-50 w-full rounded-t-3xl bg-white shadow-xl flex flex-col">
           <Drawer.Title className="hidden">Mobile Menu</Drawer.Title>
           <div className="p-4 ">
             <div className="flex justify-between items-center rounded-2xl bg-foreground-100 p-2">
@@ -47,25 +47,25 @@ export default function MobileMenu() {
             </div>
             <nav className="flex-1 py-4 space-y-2 divide-y divide-foreground-200 text-sm ">
               <Link
-                href="#"
+                href="/"
                 className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
               >
                 Home
               </Link>
               <Link
-                href="#"
+                href="/collections"
                 className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
               >
                 Collections{' '}
               </Link>
               <Link
-                href="#"
+                href="/about"
                 className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
               >
                 About Us
               </Link>
               <Link
-                href="#"
+                href="contact"
                 className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
               >
                 Contact Us
