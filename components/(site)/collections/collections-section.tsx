@@ -8,7 +8,7 @@ const CollectionsSection = () => {
   return (
     <div className="max-w-7xl space-y-10 mx-auto p-5 min-h-screen">
       <div className="space-y-8">
-        <div className="flex justify-center sm:justify-between items-center flex-wrap gap-4">
+        <div className="flex justify-between items-center flex-wrap gap-4">
           <h2 className="text-2xl font-semibold text-primary">
             Shop by Category
           </h2>

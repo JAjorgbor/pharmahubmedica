@@ -1,6 +1,13 @@
 'use client'
-import { Card, CardBody, CardHeader, Image as HeroUiImage } from '@heroui/react'
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Image as HeroUiImage,
+} from '@heroui/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import type { FC } from 'react'
 
 interface CategoryCardProps {
@@ -9,20 +16,33 @@ interface CategoryCardProps {
 
 const CategoryCard: FC<CategoryCardProps> = ({ category }) => {
   return (
-    <Card className="p-0">
-      <CardHeader className="p-0">
+    <Card
+      className="p-0 group bg-background shadow-none hover:drop-shadow-xl transition-all transform hover:-translate-y-2"
+      as={Link}
+      href={'/collections/collection-name'}
+    >
+      <CardHeader className="p-0 relative">
         <HeroUiImage
           src={category?.coverImage}
           height={200}
           width={200}
           as={Image}
-          className="object-cover w-full"
+          alt={`${category?.name} image`}
+          className="object-cover w-full group-hover:scale-125"
           classNames={{ wrapper: 'min-w-full' }}
           isZoomed
         />
+        <Chip
+          size="sm"
+          variant="dot"
+          className="absolute top-3 right-3 z-20 bg-white text-primary"
+          color="primary"
+        >
+          10 Items
+        </Chip>
       </CardHeader>
       <CardBody>
-        <div className="py-2 px-3 space-y-2">
+        <div className="py-1 px-3 space-y-2">
           <h5 className="font-semibold text-lg text-primary">
             {category.name}
           </h5>

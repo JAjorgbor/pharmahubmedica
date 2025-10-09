@@ -4,7 +4,7 @@ export const metadata = { title: 'Collections' }
 
 export default function CollectionsPage() {
   return (
-    <>
+    <div className="py-10">
       <div className="mx-auto text-center max-w-xl space-y-5 mb-10">
         <h1 className="text-primary text-4xl font-bold">Our Collections</h1>
         <p className="text-foreground-500 text-lg">
@@ -13,6 +13,6 @@ export default function CollectionsPage() {
         </p>
       </div>
       <CollectionsSection />
-    </>
+    </div>
   )
 }
