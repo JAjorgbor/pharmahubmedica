@@ -144,7 +144,7 @@ const Filter: FC<FilterProps> = ({ isOpen, setIsOpen }) => {
       {content}
     </ModalWrapper>
   ) : (
-    <Card className="sticky top-22 w-[300px] hidden lg:block shadow-md">
+    <Card className="sticky top-22 w-[280px] hidden lg:block shadow-md">
       <CardHeader className=" font-semibold text-lg justify-between">
         <div className="flex gap-2 items-center text-primary">
           Filter <LuFilter size={15} />
