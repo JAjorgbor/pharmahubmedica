@@ -98,7 +98,7 @@ const PortalHeader = () => {
         className={cn(
           'max-w-[93%] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out',
           scrollHeight > 100
-            ? 'md:max-w-5xl shadow-lg'
+            ? 'md:max-w-4xl shadow-lg'
             : 'md:max-w-[1240px] bg-white shadow'
         )}
         classNames={{ wrapper: 'max-w-full' }}

@@ -97,7 +97,7 @@ const Header = () => {
       <Navbar
         className={cn(
           'hidden md:block mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
-          scrollHeight > 100 ? 'shadow-lg max-w-5xl' : 'max-w-7xl '
+          scrollHeight > 100 ? 'shadow-lg max-w-4xl' : 'max-w-7xl '
         )}
         classNames={{
           wrapper: 'max-w-full px-0',
