@@ -57,6 +57,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           color="primary"
           as={Link}
           href={'/collections/collection-name/product'}
+          size="sm"
         >
           View Details
         </Button>

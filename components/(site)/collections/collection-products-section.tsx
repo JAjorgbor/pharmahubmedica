@@ -119,7 +119,11 @@ const Filter: FC<FilterProps> = ({ isOpen, setIsOpen }) => {
       </div>
       <div className="space-y-2">
         <p>Subcategory</p>
-        <Select selectionMode="multiple" variant="bordered">
+        <Select
+          selectionMode="multiple"
+          variant="bordered"
+          placeholder="Select subcategories"
+        >
           {animals.map((animal) => (
             <SelectItem key={animal.key}>{animal.label}</SelectItem>
           ))}

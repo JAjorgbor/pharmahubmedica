@@ -17,7 +17,7 @@ interface CategoryCardProps {
 const CategoryCard: FC<CategoryCardProps> = ({ category }) => {
   return (
     <Card
-      className="p-0 group bg-background shadow-none hover:drop-shadow-xl transition-all transform hover:-translate-y-2"
+      className="p-0 group bg-background shadow-none border border-foreground-200 hover:drop-shadow-xl transition-all transform hover:-translate-y-2"
       as={Link}
       href={'/collections/collection-name'}
     >

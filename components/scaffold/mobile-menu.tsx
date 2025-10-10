@@ -4,6 +4,7 @@ import PhoneNumberDisplay from '@/components/scaffold/phone-number-display'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import * as React from 'react'
 import { LuMenu, LuX } from 'react-icons/lu'
 import { Drawer } from 'vaul'
@@ -11,9 +12,11 @@ import { Drawer } from 'vaul'
 export default function MobileMenu() {
   const isMobile = useMediaQuery('md')
   const [isOpen, setIsOpen] = React.useState(true)
+  const pathname = usePathname()
+
   React.useEffect(() => {
     if (!isMobile && isOpen) setIsOpen(false)
-  }, [isMobile, isOpen])
+  }, [isMobile, isOpen, pathname])
   return (
     <Drawer.Root direction="bottom" open={isOpen} onOpenChange={setIsOpen}>
       {/* Trigger Button */}
