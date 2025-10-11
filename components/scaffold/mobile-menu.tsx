@@ -15,10 +15,11 @@ export default function MobileMenu() {
   const pathname = usePathname()
 
   React.useEffect(() => {
-    if (!isMobile && isOpen) return setIsOpen(false)
+    if (!isMobile && isOpen) setIsOpen(false)
   }, [isMobile, isOpen, pathname])
+
   React.useEffect(() => {
-    return setIsOpen(false)
+    setIsOpen(false)
   }, [pathname])
   return (
     <Drawer.Root direction="bottom" open={isOpen} onOpenChange={setIsOpen}>

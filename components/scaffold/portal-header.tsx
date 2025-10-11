@@ -29,6 +29,8 @@ import {
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils/cn'
 import Link from 'next/link'
+import { useAppDispatch, useAppSelector } from '@/features/store'
+import { setOpenSidebar } from '@/features/sidebarSlice'
 
 export const UserPanel = () => {
   return (
@@ -85,6 +87,9 @@ const PortalHeader = () => {
   const { scrollY } = useScroll() // reactive MotionValue
   const [scrollHeight, setScrollHeight] = useState(0)
 
+  const dispatch = useAppDispatch()
+  const { openSidebar } = useAppSelector((state) => state.sidebar)
+
   useEffect(() => {
     // subscribe to changes
     return scrollY.on('change', (latest) => {
@@ -106,7 +111,10 @@ const PortalHeader = () => {
         {/* <div className="flex justify-between gap-4 border-b max-w-7xl px-5  mx-auto items-center px-5 py-3"> */}
         <NavbarContent className="flex gap-3 items-center">
           <NavbarBrand className="flex gap-4 items-center">
-            <button className="p-1 md:hidden rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer">
+            <button
+              className="p-1 md:hidden rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer"
+              onClick={() => dispatch(setOpenSidebar(true))}
+            >
               <LuMenu size={20} />
             </button>
             <h1 className="text-xl font-semibold text-primary">Dashboard</h1>
