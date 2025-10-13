@@ -211,21 +211,24 @@ const OrdersSection = () => {
           </div>
         </div>
 
-        <Card>
-          <CardBody className="px-0 py-10">
-            <div className="flex items-center space-x-4">
-              <div className="relative flex-1 max-w-sm">
+        <Card className="p-4 md:p-0 w-full">
+          <CardBody className="px-2 py-6 sm:py-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="relative flex-1 min-w-0 max-w-full">
                 <Input
                   placeholder="Search orders..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 md:pl-2 w-full"
                   startContent={
                     <LuSearch className="text-muted-foreground h-4 w-4" />
                   }
                 />
               </div>
-              <Chip color="danger" className="text-sm text-white rounded-md">
+              <Chip
+                color="danger"
+                className="text-sm text-white rounded-md self-end sm:self-center"
+              >
                 {filteredOrders.length} orders
               </Chip>
             </div>
@@ -237,9 +240,11 @@ const OrdersSection = () => {
             <Tab key={tab.key} title={tab.label}>
               <div className="space-y-4">
                 {tab.orders.length > 0 ? (
-                  tab.orders.map((order) => (
-                    <OrderCard key={order.id} order={order} />
-                  ))
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {tab.orders.map((order) => (
+                      <OrderCard key={order.id} order={order} />
+                    ))}
+                  </div>
                 ) : (
                   <Card>
                     <CardBody className="p-12 text-center">
