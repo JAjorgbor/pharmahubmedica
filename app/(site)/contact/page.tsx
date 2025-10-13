@@ -1,4 +1,4 @@
-import ContactForm from '@/components/contact/contact-form'
+import ContactForm from '@/components/(site)/contact/contact-form'
 import { Button, Card, CardBody, CardHeader } from '@heroui/react'
 import { FaWhatsapp } from 'react-icons/fa'
 import { LuMail, LuMapPin, LuPhone } from 'react-icons/lu'
@@ -90,7 +90,7 @@ export default function ContactPage() {
             Our Services
           </CardHeader>
           <CardBody>
-            <ul className="pl-3">
+            <ul className="pl-0">
               <li className="flex gap-2 items-center">
                 <span className="text-primary text-xl">●</span>
                 Prescription Medications

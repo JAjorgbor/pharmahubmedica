@@ -24,7 +24,8 @@ import z from 'zod'
 import InputField from '../elements/input-field'
 
 const profileSchema = z.object({
-  fullName: z.string({ error: 'Full name is required' }),
+  firstName: z.string({ error: 'First name is required' }),
+  lastName: z.string({ error: 'Last name is required' }),
   phoneNumber: z.string({ error: 'Phone number is required' }),
   email: z.email().nonempty({ error: 'Email address is required' }),
   address: z
@@ -78,14 +79,14 @@ const SettingsSection = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto p-5 space-y-8">
+      <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+          <h1 className="text-3xl font-bold text-primary">Settings</h1>
           <p className="text-gray-600">
             Manage your account settings and preferences
           </p>
         </div>
-        <div className="mx-auto space-y-8">
+        <div className="mx-auto space-y-8 max-w-4xl ">
           <Tabs
             aria-label="Settings"
             defaultSelectedKey="profile"
@@ -104,14 +105,29 @@ const SettingsSection = () => {
                   </div>
                 </CardHeader>
                 <CardBody className="space-y-4 px-6">
-                  <div className="space-y-2">
+                  <div className="flex gap-4 flex-col md:flex-row">
                     <InputField
-                      label="Full Name"
+                      label="First Name"
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder="Enter your first name"
+                      className="flex-1"
                       controllerProps={{
                         control: profileFormMethods.control,
-                        name: 'fullName',
+                        name: 'firstName',
+                      }}
+                      color="primary"
+                      startContent={
+                        <LuUser className="h-5 w-5 text-gray-400" />
+                      }
+                    />
+                    <InputField
+                      label="Last Name"
+                      type="text"
+                      placeholder="Enter your last name"
+                      className="flex-1"
+                      controllerProps={{
+                        control: profileFormMethods.control,
+                        name: 'lastName',
                       }}
                       color="primary"
                       startContent={
@@ -119,51 +135,41 @@ const SettingsSection = () => {
                       }
                     />
                   </div>
-                  <div className="space-y-2">
-                    <InputField
-                      label="Email Address"
-                      type="text"
-                      placeholder="Enter your email address"
-                      controllerProps={{
-                        control: profileFormMethods.control,
-                        name: 'email',
-                      }}
-                      color="primary"
-                      startContent={
-                        <LuMail className="h-5 w-5 text-gray-400" />
-                      }
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <InputField
-                      label="Phone Number"
-                      type="text"
-                      placeholder="Enter your phone number"
-                      controllerProps={{
-                        control: profileFormMethods.control,
-                        name: 'phoneNumber',
-                      }}
-                      color="primary"
-                      startContent={
-                        <LuPhone className="h-5 w-5 text-gray-400" />
-                      }
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <InputField
-                      label="Address"
-                      type="textarea"
-                      placeholder="Enter your address"
-                      controllerProps={{
-                        control: profileFormMethods.control,
-                        name: 'address',
-                      }}
-                      color="primary"
-                      startContent={
-                        <LuMapPin className="h-5 w-5 text-gray-400" />
-                      }
-                    />
-                  </div>
+                  <InputField
+                    label="Email Address"
+                    type="email"
+                    placeholder="Enter your email address"
+                    controllerProps={{
+                      control: profileFormMethods.control,
+                      name: 'email',
+                    }}
+                    color="primary"
+                    startContent={<LuMail className="h-5 w-5 text-gray-400" />}
+                  />
+                  <InputField
+                    label="Phone Number"
+                    type="phoneNumber"
+                    placeholder="Enter your phone number"
+                    controllerProps={{
+                      control: profileFormMethods.control,
+                      name: 'phoneNumber',
+                    }}
+                    color="primary"
+                    startContent={<LuPhone className="h-5 w-5 text-gray-400" />}
+                  />
+                  <InputField
+                    label="Address"
+                    type="textarea"
+                    placeholder="Enter your address"
+                    controllerProps={{
+                      control: profileFormMethods.control,
+                      name: 'address',
+                    }}
+                    color="primary"
+                    startContent={
+                      <LuMapPin className="h-5 w-5 text-gray-400" />
+                    }
+                  />
                 </CardBody>
                 <CardFooter className="px-6 pb-6">
                   <Button onClick={handleProfileSave} size="md" color="primary">
@@ -174,156 +180,156 @@ const SettingsSection = () => {
             </Tab>
 
             {isDoctor && (
-              <Tab key="professional" title="Professional">
-                <Card>
-                  <CardHeader className="pt-6 px-6 mb-0">
-                    <div>
-                      <p className="text-primary text-md font-semibold">
-                        Professional Details
-                      </p>
-                      <p className="text-small text-default-500">
-                        Manage your medical credentials
-                      </p>
-                    </div>
-                  </CardHeader>
-                  <CardBody className="space-y-4 px-6">
-                    <div className="space-y-2">
-                      <InputField
-                        label="Medical License Number"
-                        type="text"
-                        placeholder="Enter your license number"
-                        controllerProps={{
-                          control: professionalFormMethods.control,
-                          name: 'licenseNumber',
-                        }}
+              <>
+                <Tab key="professional" title="Professional">
+                  <Card>
+                    <CardHeader className="pt-6 px-6 mb-0">
+                      <div>
+                        <p className="text-primary text-md font-semibold">
+                          Professional Details
+                        </p>
+                        <p className="text-small text-default-500">
+                          Manage your medical credentials
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardBody className="space-y-4 px-6">
+                      <div className="space-y-2">
+                        <InputField
+                          label="Medical License Number"
+                          type="text"
+                          placeholder="Enter your license number"
+                          controllerProps={{
+                            control: professionalFormMethods.control,
+                            name: 'licenseNumber',
+                          }}
+                          color="primary"
+                          startContent={
+                            <LuFileText className="h-5 w-5 text-gray-400" />
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <InputField
+                          label="Specialization"
+                          type="text"
+                          placeholder="e.g., General Medicine, Cardiology"
+                          controllerProps={{
+                            control: professionalFormMethods.control,
+                            name: 'specialization',
+                          }}
+                          color="primary"
+                          startContent={
+                            <LuUser className="h-5 w-5 text-gray-400" />
+                          }
+                        />
+                      </div>
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <h4 className="font-medium text-blue-900 mb-2">
+                          Commission Rate
+                        </h4>
+                        <p className="text-sm text-blue-700">
+                          Your current commission rate is{' '}
+                          <span className="font-semibold">5%</span> on all
+                          referral orders.
+                        </p>
+                      </div>
+                    </CardBody>
+                    <CardFooter className="px-6 pb-6">
+                      <Button
+                        onClick={handleProfileSave}
+                        size="md"
                         color="primary"
-                        startContent={
-                          <LuFileText className="h-5 w-5 text-gray-400" />
-                        }
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <InputField
-                        label="Specialization"
-                        type="text"
-                        placeholder="e.g., General Medicine, Cardiology"
-                        controllerProps={{
-                          control: professionalFormMethods.control,
-                          name: 'specialization',
-                        }}
-                        color="primary"
-                        startContent={
-                          <LuUser className="h-5 w-5 text-gray-400" />
-                        }
-                      />
-                    </div>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <h4 className="font-medium text-blue-900 mb-2">
-                        Commission Rate
-                      </h4>
-                      <p className="text-sm text-blue-700">
-                        Your current commission rate is{' '}
-                        <span className="font-semibold">5%</span> on all
-                        referral orders.
-                      </p>
-                    </div>
-                  </CardBody>
-                  <CardFooter className="px-6 pb-6">
-                    <Button
-                      onClick={handleProfileSave}
-                      size="md"
-                      color="primary"
-                    >
-                      Save Changes
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Tab>
-            )}
+                      >
+                        Save Changes
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </Tab>
 
-            {isDoctor && (
-              <Tab key="payout" title="Payout">
-                <Card>
-                  <CardHeader className="pt-6 px-6 mb-0">
-                    <div>
-                      <p className="text-primary text-md font-semibold">
-                        Payout Information
-                      </p>
-                      <p className="text-small text-default-500">
-                        Manage your bank account for commission payouts
-                      </p>
-                    </div>
-                  </CardHeader>
-                  <CardBody className="space-y-4 px-6">
-                    <div className="space-y-2">
-                      <InputField
-                        label="Account Holder Name"
-                        type="text"
-                        placeholder="Enter account holder name"
-                        controllerProps={{
-                          control: payoutFormMethods.control,
-                          name: 'accountHolderName',
-                        }}
+                <Tab key="payout" title="Payout">
+                  <Card>
+                    <CardHeader className="pt-6 px-6 mb-0">
+                      <div>
+                        <p className="text-primary text-md font-semibold">
+                          Payout Information
+                        </p>
+                        <p className="text-small text-default-500">
+                          Manage your bank account for commission payouts
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardBody className="space-y-4 px-6">
+                      <div className="space-y-2">
+                        <InputField
+                          label="Account Holder Name"
+                          type="text"
+                          placeholder="Enter account holder name"
+                          controllerProps={{
+                            control: payoutFormMethods.control,
+                            name: 'accountHolderName',
+                          }}
+                          color="primary"
+                          startContent={
+                            <LuUser className="h-5 w-5 text-gray-400" />
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <InputField
+                          label="Bank Name"
+                          type="text"
+                          placeholder="Enter bank name"
+                          controllerProps={{
+                            control: payoutFormMethods.control,
+                            name: 'bankName',
+                          }}
+                          color="primary"
+                          startContent={
+                            <LuCreditCard className="h-5 w-5 text-gray-400" />
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <InputField
+                          label="Account Number"
+                          type="text"
+                          placeholder="Enter account number"
+                          controllerProps={{
+                            control: payoutFormMethods.control,
+                            name: 'accountNumber',
+                          }}
+                          color="primary"
+                          startContent={
+                            <LuCreditCard className="h-5 w-5 text-gray-400" />
+                          }
+                        />
+                        <p className="text-sm text-gray-600">
+                          Your account number is encrypted and securely stored
+                        </p>
+                      </div>
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <h4 className="font-medium text-yellow-900 mb-2">
+                          Payout Schedule
+                        </h4>
+                        <p className="text-sm text-yellow-700">
+                          Commissions are paid out monthly on the 1st of each
+                          month for the previous month's referrals.
+                        </p>
+                      </div>
+                    </CardBody>
+                    <CardFooter className="px-6 pb-6">
+                      <Button
+                        onClick={handlePayoutSave}
+                        size="md"
                         color="primary"
-                        startContent={
-                          <LuUser className="h-5 w-5 text-gray-400" />
-                        }
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <InputField
-                        label="Bank Name"
-                        type="text"
-                        placeholder="Enter bank name"
-                        controllerProps={{
-                          control: payoutFormMethods.control,
-                          name: 'bankName',
-                        }}
-                        color="primary"
-                        startContent={
-                          <LuCreditCard className="h-5 w-5 text-gray-400" />
-                        }
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <InputField
-                        label="Account Number"
-                        type="text"
-                        placeholder="Enter account number"
-                        controllerProps={{
-                          control: payoutFormMethods.control,
-                          name: 'accountNumber',
-                        }}
-                        color="primary"
-                        startContent={
-                          <LuCreditCard className="h-5 w-5 text-gray-400" />
-                        }
-                      />
-                      <p className="text-sm text-gray-600">
-                        Your account number is encrypted and securely stored
-                      </p>
-                    </div>
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                      <h4 className="font-medium text-yellow-900 mb-2">
-                        Payout Schedule
-                      </h4>
-                      <p className="text-sm text-yellow-700">
-                        Commissions are paid out monthly on the 1st of each
-                        month for the previous month's referrals.
-                      </p>
-                    </div>
-                  </CardBody>
-                  <CardFooter className="px-6 pb-6">
-                    <Button
-                      onClick={handlePayoutSave}
-                      size="md"
-                      color="primary"
-                    >
-                      Save Payout Details
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Tab>
+                      >
+                        Save Payout Details
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </Tab>
+              </>
             )}
 
             <Tab key="security" title="Security">

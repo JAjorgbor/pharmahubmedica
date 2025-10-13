@@ -34,19 +34,19 @@ const recentOrders = [
         productName: 'Vitamin D3 1000 IU',
         productImage: '/vitamin-d3-supplement-bottle.jpg',
         quantity: 2,
-        price: 12.99,
-        totalPrice: 25.98,
+        price: 12999,
+        totalPrice: 25998,
       },
       {
         productId: 2,
         productName: 'Pain Relief Tablets',
         productImage: '/pain-relief-medicine-tablets.jpg',
         quantity: 1,
-        price: 8.49,
-        totalPrice: 8.49,
+        price: 8499,
+        totalPrice: 8499,
       },
     ],
-    totalAmount: 34.47,
+    totalAmount: 34497,
     status: 'pending',
     orderDate: '2024-01-15T10:30:00Z',
     notes: 'Customer requested fast delivery',
@@ -63,11 +63,11 @@ const recentOrders = [
         productName: 'Digital Thermometer',
         productImage: '/digital-medical-thermometer.jpg',
         quantity: 1,
-        price: 24.99,
-        totalPrice: 24.99,
+        price: 24999,
+        totalPrice: 24999,
       },
     ],
-    totalAmount: 24.99,
+    totalAmount: 24999,
     status: 'fulfilled',
     orderDate: '2024-01-14T15:45:00Z',
     fulfillmentDate: '2024-01-15T09:00:00Z',
@@ -84,11 +84,11 @@ const recentOrders = [
         productName: 'Omega-3 Fish Oil',
         productImage: '/omega-3-capsules.png',
         quantity: 3,
-        price: 19.99,
-        totalPrice: 59.97,
+        price: 19999,
+        totalPrice: 59997,
       },
     ],
-    totalAmount: 59.97,
+    totalAmount: 59997,
     status: 'confirmed',
     orderDate: '2024-01-13T12:20:00Z',
     referralId: 'REF-001',
@@ -244,7 +244,7 @@ const DashboardSection = () => {
                         </div>
                         <div className="text-right space-y-2">
                           <p className="font-medium">
-                            ${order.totalAmount.toFixed(2)}
+                            {currencyFormatter(order.totalAmount)}
                           </p>
                           <Chip
                             color={getStatusColor(order.status)}
@@ -277,17 +277,17 @@ const DashboardSection = () => {
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="md:p-3">
+          <Card className="p-2">
             <CardHeader>
               <LuShoppingBag className="mx-auto text-primary" size={40} />
             </CardHeader>
-            <CardBody className="text-center py-2">
+            <CardBody className="text-center">
               <h3 className="font-semibold mb-2">Browse Products</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Explore our wide range of medicines and health products
               </p>
             </CardBody>
-            <CardFooter className="py-2">
+            <CardFooter>
               <Button
                 as={Link}
                 className="w-full bg-[#031D91] hover:bg-blue-800 text-white"
@@ -298,7 +298,7 @@ const DashboardSection = () => {
             </CardFooter>
           </Card>
 
-          <Card className="md:p-3">
+          <Card className="p-2">
             <CardHeader>
               <FaWhatsapp className="mx-auto text-primary" size={40} />
             </CardHeader>
@@ -308,14 +308,14 @@ const DashboardSection = () => {
                 Place orders directly through WhatsApp for quick service
               </p>
             </CardBody>
-            <CardFooter className="py-2">
+            <CardFooter>
               <Button variant="ghost" className="border w-full shadow-xs">
                 Contact Us
               </Button>
             </CardFooter>
           </Card>
 
-          <Card className="md:p-3">
+          <Card className="p-2">
             <CardHeader>
               <LuEye className="mx-auto text-primary" size={40} />
             </CardHeader>
@@ -325,7 +325,7 @@ const DashboardSection = () => {
                 View and track all your previous orders and purchases
               </p>
             </CardBody>
-            <CardFooter className="py-2">
+            <CardFooter>
               <Button
                 variant="ghost"
                 as={Link}

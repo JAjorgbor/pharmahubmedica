@@ -52,7 +52,7 @@ export default function AboutPage() {
       <div className="max-w-7xl px-5   mx-auto space-y-5 text-center">
         <h2 className="text-3xl font-bold text-primary">Our Values</h2>
         <p>The principles that guide everything we do at PharmaHub Medica.</p>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5 pt-5">
           <Card className="md:p-3">
             <CardBody>
               <div className="flex flex-col items-center gap-4">

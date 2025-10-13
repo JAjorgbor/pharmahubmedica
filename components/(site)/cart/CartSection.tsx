@@ -1,5 +1,12 @@
 import { currencyFormatter } from '@/utils/currencyFormatter'
-import { Button, Card, CardBody, CardHeader, Chip } from '@heroui/react'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Image as HeroUiImage,
+} from '@heroui/react'
 import Image from 'next/image'
 import { FaWhatsapp } from 'react-icons/fa'
 import { LuMinus, LuPlus, LuTrash2 } from 'react-icons/lu'
@@ -19,62 +26,65 @@ const CartSection = () => {
             {Array(3)
               .fill(null)
               .map((_, index) => (
-                <Card key={index}>
+                <Card key={index} className="md:p-3">
                   <CardBody>
-                    <div className="flex justify-between">
-                      <div className="flex gap-4">
-                        <Image
-                          src="https://dummyimage.com/150x100"
-                          alt="product image"
-                          height={100}
-                          width={100}
-                          className="rounded-xl object-cover object-center"
-                        />
-                        <div className="space-y-4">
+                    <div className="flex gap-4">
+                      <HeroUiImage
+                        src="https://dummyimage.com/150x100"
+                        alt="product image"
+                        height={160}
+                        width={200}
+                        as={Image}
+                        className="object-cover"
+                      />
+                      <div className="w-full flex flex-col gap-4 justify-between min-h-full">
+                        <div className="flex justify-between items-start mb-4 md:mb-0">
                           <div className="space-y-2">
-                            <p className="text-lg font-semibold ">
+                            <p
+                              className="text-lg font-semibold truncate max-w-44 sm:max-w-64"
+                              title="Pain Rellief Tablets"
+                            >
                               Pain Rellief Tablets
                             </p>
-                            <Chip color="primary" size="sm" variant="bordered">
+                            <Chip color="primary" size="sm" variant="flat">
                               Pain Killers
                             </Chip>
                           </div>
+                          <button className="text-danger cursor-pointer">
+                            <LuTrash2 size={18} />
+                          </button>
+                        </div>
 
+                        <div className="flex justify-between flex-wrap">
                           <div className="flex gap-2 items-center">
                             Quantity:{' '}
                             <div className="flex border border-foreground-300 rounded-xl">
                               <button
                                 type="button"
-                                className="hover:bg-foreground-100 text-foreground-500 p-1.5 rounded-l-xl cursor-pointer"
+                                className="hover:bg-foreground-100 text-foreground-500 py-1 px-1.5 rounded-l-xl cursor-pointer"
                               >
                                 <LuMinus size={15} />
                               </button>
                               <input
                                 type="text"
-                                className="border-none outline-none p-1.5 w-8"
+                                className="border-none outline-none py-1 px-1.5 w-8"
                               />
                               <button
                                 type="button"
-                                className="hover:bg-foreground-100 text-foreground-500 p-1.5 rounded-r-xl cursor-pointer"
+                                className="hover:bg-foreground-100 text-foreground-500 py-1 px-1.5 rounded-r-xl cursor-pointer"
                               >
                                 <LuPlus size={15} />
                               </button>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col justify-between items-center">
-                        <button className="text-danger cursor-pointer">
-                          <LuTrash2 size={18} />
-                        </button>
-
-                        <div className="space-y">
-                          <p className="text-lg font-semibold text-primary">
-                            {currencyFormatter(2000)}
-                          </p>
-                          <p className="text-sm text-foreground-500">
-                            {currencyFormatter(2000)} each
-                          </p>
+                          <div className="space-y">
+                            <p className="text-lg font-semibold text-primary">
+                              {currencyFormatter(2000)}
+                            </p>
+                            <p className="text-sm text-foreground-500">
+                              {currencyFormatter(2000)} each
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -1,19 +1,21 @@
 'use client'
 import * as React from 'react'
 
-// 1. import `HeroUIProvider` component
 import { HeroUIProvider } from '@heroui/system'
 import { ToastProvider } from '@heroui/react'
+import { Provider } from 'react-redux'
+import { store } from '@/features/store'
 
 function Providers({ children }: { children: React.ReactNode }) {
-  // 2. Wrap HeroUIProvider at the root of your app
   return (
     <>
-      <HeroUIProvider>
-        <ToastProvider />
+      <Provider store={store}>
+        <HeroUIProvider>
+          <ToastProvider />
 
-        {children}
-      </HeroUIProvider>
+          {children}
+        </HeroUIProvider>
+      </Provider>
     </>
   )
 }
