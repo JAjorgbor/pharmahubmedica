@@ -54,13 +54,13 @@ export const UserPanel = () => {
               variant="flat"
               color="primary"
               as={Link}
-              href="/portal/dashboard"
+              href="/admin/dashboard"
             >
               Dashboard
             </DropdownItem>
             <DropdownItem
               as={Link}
-              href="/portal/settings"
+              href="/admin/settings"
               key="settings"
               startContent={<LuSettings />}
               variant="flat"
@@ -83,7 +83,7 @@ export const UserPanel = () => {
   )
 }
 
-const PortalHeader = () => {
+const AdminHeader = () => {
   const { scrollY } = useScroll() // reactive MotionValue
   const [scrollHeight, setScrollHeight] = useState(0)
 
@@ -122,19 +122,6 @@ const PortalHeader = () => {
         </NavbarContent>
         <NavbarContent className="flex gap-6 items-center" justify="end">
           <NavbarItem>
-            <PhoneNumberDisplay className="hidden md:flex" />
-          </NavbarItem>
-          <NavbarItem>
-            <Badge content={2} color="danger">
-              <Link
-                href="/cart"
-                className="bg-white rounded-xl p-1.5 hover:text-primary shadow text-foreground-600"
-              >
-                <LuShoppingCart size={18} />
-              </Link>
-            </Badge>
-          </NavbarItem>
-          <NavbarItem>
             <UserPanel />
           </NavbarItem>
         </NavbarContent>
@@ -143,4 +130,4 @@ const PortalHeader = () => {
     </>
   )
 }
-export default PortalHeader
+export default AdminHeader
