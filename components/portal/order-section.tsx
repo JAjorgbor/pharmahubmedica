@@ -208,7 +208,7 @@ const OrderSection = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 space-x-4">
             <Button
               as={Link}
               href="/portal/orders"
@@ -243,7 +243,7 @@ const OrderSection = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex items-center space-x-4 pb-4 border-b border-b-foreground-200 last:border-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 pb-4 border-b border-b-foreground-200 last:border-0">
                     <div className="relative h-16 w-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                       <Image
                         src="/multivitamin-tablets-bottle.jpg"
@@ -267,7 +267,7 @@ const OrderSection = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-4 pb-4 border-b border-b-foreground-200 last:border-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 pb-4 border-b border-b-foreground-200 last:border-0">
                     <div className="relative h-16 w-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                       <Image
                         src="/digital-blood-pressure-monitor.png"

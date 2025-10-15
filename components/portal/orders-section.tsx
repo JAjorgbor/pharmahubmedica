@@ -9,7 +9,7 @@ import {
   LuPackage,
   LuSearch,
 } from 'react-icons/lu'
-import OrderCard from './OrderCard'
+import OrderCard from './order-card'
 
 const orders = [
   {
@@ -211,30 +211,72 @@ const OrdersSection = () => {
           </div>
         </div>
 
-        <Card>
-          <CardBody className="px-0 py-10">
-            <div className="flex items-center space-x-4">
-              <div className="relative flex-1 max-w-sm">
+        <Card className="p-4 md:p-0">
+          <CardBody className="px-2 py-6 sm:py-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="relative flex-1">
                 <Input
                   placeholder="Search orders..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 md:pl-2 w-full"
                   startContent={
                     <LuSearch className="text-muted-foreground h-4 w-4" />
                   }
                 />
               </div>
-              <Chip color="danger" className="text-sm text-white rounded-md">
+              <Chip
+                color="danger"
+                className="text-sm text-white rounded-md self-end sm:self-center"
+              >
                 {filteredOrders.length} orders
               </Chip>
             </div>
           </CardBody>
         </Card>
 
-        <Tabs aria-label="Orders" defaultSelectedKey="all" className="mb-2">
+        {/* <div className="flex flex-col w-full">
+          <Tabs
+            aria-label="Orders"
+            defaultSelectedKey="all"
+            className="mb-2"
+            classNames={
+              {
+                // tabList: 'overflow-x-auto gap-2 sm:gap-4 sm:flex-wrap',
+              }
+            }
+          >
+            {tabs.map((tab) => (
+              <Tab key={tab.key} title={tab.label}>
+                <div className="space-y-4">
+                  {tab.orders.length > 0 ? (
+                    tab.orders.map((order) => (
+                      <OrderCard key={order.id} order={order} />
+                    ))
+                  ) : (
+                    <Card>
+                      <CardBody className="p-12 text-center">
+                        {tab.emptyIcon}
+                        <p className="text-foreground-500">{tab.emptyText}</p>
+                      </CardBody>
+                    </Card>
+                  )}
+                </div>
+              </Tab>
+            ))}
+          </Tabs>
+        </div> */}
+        <Tabs
+          aria-label="Orders"
+          defaultSelectedKey="all"
+          className="mb-2"
+          classNames={{
+            tabList: 'flex-wrap',
+            tab: 'w-24',
+          }}
+        >
           {tabs.map((tab) => (
-            <Tab key={tab.key} title={tab.label}>
+            <Tab key={tab.key} title={tab.label} className="">
               <div className="space-y-4">
                 {tab.orders.length > 0 ? (
                   tab.orders.map((order) => (

@@ -1,4 +1,4 @@
-import OrderSection from '@/components/portal/OrderSection'
+import OrderSection from '@/components/portal/order-section'
 
 export const metadata = { title: 'Order' }
 

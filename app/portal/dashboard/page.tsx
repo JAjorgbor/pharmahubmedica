@@ -1,4 +1,4 @@
-import DashboardSection from '@/components/portal/DashboardSection'
+import DashboardSection from '@/components/portal/dashboard-section'
 
 export const metadata = { title: 'Dashboard' }
 

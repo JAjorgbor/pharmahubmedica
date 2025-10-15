@@ -1,4 +1,4 @@
-import ReferralsSection from '@/components/portal/ReferralsSection'
+import ReferralsSection from '@/components/portal/referrals-section'
 
 export const metadata = { title: 'Referrals' }
 
