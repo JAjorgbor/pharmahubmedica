@@ -1,3 +1,4 @@
+import Footer from '@/components/scaffold/footer'
 import PortalHeader from '@/components/scaffold/portal-header'
 import PortalSidebar from '@/components/scaffold/portal-sidebar'
 import type { FC, ReactNode } from 'react'
@@ -16,6 +17,7 @@ const Portallayout: FC<PortallayoutProps> = ({ children }) => {
           {children}
         </div>
       </div>
+      <Footer />
     </>
   )
 }

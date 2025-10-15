@@ -10,15 +10,18 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import {
+  LuBox,
   LuChevronLeft,
   LuChevronRight,
   LuHandshake,
   LuHouse,
   LuLayoutDashboard,
   LuLayoutList,
+  LuPackage,
+  LuUsers,
 } from 'react-icons/lu'
 
-const PortalSidebar = () => {
+const AdminSidebar = () => {
   const isMobile = useMediaQuery('md')
   const [collapsed, setCollapsed] = useState(false)
   const { openSidebar } = useAppSelector((state) => state.sidebar)
@@ -115,7 +118,7 @@ const PortalSidebar = () => {
             className="py-2 !bg-white hover:!bg-white border-b border-b-foreground-200"
           >
             <span className="text-primary font-semibold text-lg">
-              User Portal
+              Admin Console
             </span>
           </MenuItem>
         </Menu>
@@ -143,27 +146,43 @@ const PortalSidebar = () => {
         </SubMenu> */}
           <MenuItem
             icon={<LuLayoutDashboard />}
-            component={<Link href="/portal/dashboard" />}
+            component={<Link href="/admin/dashboard" />}
             className="text-foreground-600"
           >
             {' '}
             Dashboard{' '}
           </MenuItem>
           <MenuItem
+            icon={<LuPackage />}
+            component={<Link href="/admin/products" />}
+            className="text-foreground-600"
+          >
+            {' '}
+            Products{' '}
+          </MenuItem>
+          <MenuItem
             icon={<LuLayoutList />}
-            component={<Link href="/portal/orders" />}
+            component={<Link href="/admin/orders" />}
             className="text-foreground-600"
           >
             {' '}
             Orders{' '}
           </MenuItem>
           <MenuItem
-            icon={<LuHandshake />}
-            component={<Link href="/portal/referrals" />}
+            icon={<LuUsers />}
+            component={<Link href="/admin/users" />}
             className="text-foreground-600"
           >
             {' '}
-            Referrals
+            Users{' '}
+          </MenuItem>
+          <MenuItem
+            icon={<LuHandshake />}
+            component={<Link href="/admin/referral-partners" />}
+            className="text-foreground-600"
+          >
+            {' '}
+            Referral Partners
           </MenuItem>
         </Menu>
         <Menu
@@ -197,4 +216,4 @@ const PortalSidebar = () => {
   )
 }
 
-export default PortalSidebar
+export default AdminSidebar

@@ -1,5 +1,4 @@
 import Providers from '@/app/providers'
-import Footer from '@/components/scaffold/footer'
 import logo from '@/public/logo.png'
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
@@ -63,10 +62,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={lato.className}>
-        <Providers>
-          {children}
-          <Footer />
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

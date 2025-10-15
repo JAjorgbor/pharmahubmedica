@@ -1,3 +1,4 @@
+import Footer from '@/components/scaffold/footer'
 import Header from '@/components/scaffold/header'
 import type { FC, ReactNode } from 'react'
 
@@ -10,6 +11,7 @@ const layout: FC<layoutProps> = ({ children }) => {
     <>
       <Header />
       <main>{children}</main>
+      <Footer />
     </>
   )
 }
