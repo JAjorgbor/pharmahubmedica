@@ -293,7 +293,7 @@ const ReferralsSection = () => {
               <h2 className="font-bold text-lg">Referral Management</h2>
 
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
-                <div className="relative w-full sm:w-64">
+                <div className="min-w-44">
                   <InputField
                     type="search"
                     placeholder="Search referrals..."
@@ -315,59 +315,63 @@ const ReferralsSection = () => {
               onSelectionChange={(value) =>
                 setTableData(tabs.find((each) => each.key == value).referrals)
               }
+              classNames={{ tabList: 'max-w-4/5 flex-wrap', tab: 'w-20' }}
             >
               {tabs.map((tab) => (
                 <Tab key={tab.key} title={tab.label}>
-                  <div className="overflow-x-auto">
-                    {tab.referrals.length > 0 ? (
-                      <Table
-                        aria-label="Referral table"
-                        removeWrapper
-                        shadow="none"
-                        classNames={{
-                          base: 'min-w-[700px]',
-                        }}
+                  {
+                    <Table
+                      aria-label="Referral table"
+                      removeWrapper
+                      shadow="none"
+                      classNames={{
+                        base: 'min-w-full max-w-0 overflow-x-auto',
+                      }}
+                    >
+                      <TableHeader>
+                        {table.getHeaderGroups().flatMap((headerGroup) =>
+                          headerGroup.headers.map((header) => (
+                            <TableColumn
+                              key={header.id}
+                              className="text-xs font-bold uppercase"
+                            >
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                            </TableColumn>
+                          ))
+                        )}
+                      </TableHeader>
+                      <TableBody
+                        items={tab.referrals || []}
+                        emptyContent={
+                          <div className="text-center py-12">
+                            {tab.emptyIcon}
+                            <p className="text-foreground-500">
+                              {tab.emptyText}
+                            </p>
+                          </div>
+                        }
                       >
-                        <TableHeader>
-                          {table.getHeaderGroups().flatMap((headerGroup) =>
-                            headerGroup.headers.map((header) => (
-                              <TableColumn
-                                key={header.id}
-                                className="text-xs font-bold uppercase"
+                        {table.getRowModel().rows.map((row) => (
+                          <TableRow key={row.id}>
+                            {row.getVisibleCells().map((cell) => (
+                              <TableCell
+                                key={cell.id}
+                                className="text-sm px-2 py-2"
                               >
                                 {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
+                                  cell.column.columnDef.cell,
+                                  cell.getContext()
                                 )}
-                              </TableColumn>
-                            ))
-                          )}
-                        </TableHeader>
-                        <TableBody emptyContent={'No referrals found'}>
-                          {table.getRowModel().rows.map((row) => (
-                            <TableRow key={row.id}>
-                              {row.getVisibleCells().map((cell) => (
-                                <TableCell
-                                  key={cell.id}
-                                  className="text-sm px-2 py-2"
-                                >
-                                  {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                  )}
-                                </TableCell>
-                              ))}
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    ) : (
-                      <div className="text-center py-12">
-                        {tab.emptyIcon}
-                        <p className="text-foreground-500">{tab.emptyText}</p>
-                      </div>
-                    )}
-                  </div>
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  }
                 </Tab>
               ))}
             </Tabs>

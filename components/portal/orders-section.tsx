@@ -211,10 +211,10 @@ const OrdersSection = () => {
           </div>
         </div>
 
-        <Card className="p-4 md:p-0 w-full">
+        <Card className="p-4 md:p-0">
           <CardBody className="px-2 py-6 sm:py-4">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-              <div className="relative flex-1 min-w-0 max-w-full">
+              <div className="relative flex-1">
                 <Input
                   placeholder="Search orders..."
                   value={searchTerm}
@@ -266,29 +266,34 @@ const OrdersSection = () => {
             ))}
           </Tabs>
         </div> */}
-
-        <div className="flex flex-col w-full">
-          <Tabs aria-label="Orders" defaultSelectedKey="all" className="mb-2">
-            {tabs.map((tab) => (
-              <Tab key={tab.key} title={tab.label}>
-                <div className="space-y-4">
-                  {tab.orders.length > 0 ? (
-                    tab.orders.map((order) => (
-                      <OrderCard key={order.id} order={order} />
-                    ))
-                  ) : (
-                    <Card>
-                      <CardBody className="p-12 text-center">
-                        {tab.emptyIcon}
-                        <p className="text-foreground-500">{tab.emptyText}</p>
-                      </CardBody>
-                    </Card>
-                  )}
-                </div>
-              </Tab>
-            ))}
-          </Tabs>
-        </div>
+        <Tabs
+          aria-label="Orders"
+          defaultSelectedKey="all"
+          className="mb-2"
+          classNames={{
+            tabList: 'flex-wrap',
+            tab: 'w-24',
+          }}
+        >
+          {tabs.map((tab) => (
+            <Tab key={tab.key} title={tab.label} className="">
+              <div className="space-y-4">
+                {tab.orders.length > 0 ? (
+                  tab.orders.map((order) => (
+                    <OrderCard key={order.id} order={order} />
+                  ))
+                ) : (
+                  <Card>
+                    <CardBody className="p-12 text-center">
+                      {tab.emptyIcon}
+                      <p className="text-foreground-500">{tab.emptyText}</p>
+                    </CardBody>
+                  </Card>
+                )}
+              </div>
+            </Tab>
+          ))}
+        </Tabs>
       </div>
     </div>
   )
