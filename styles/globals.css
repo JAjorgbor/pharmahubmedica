@@ -3,12 +3,12 @@
 /* Note: You may need to change the path to fit your project structure */
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 
-* {
-  box-sizing: border-box;
+@base {
+  button {
+    @apply cursor-pointer;
+  }
 }
-body {
-  margin: 0;
-}
+
 /* CSS TO HIDE HORIZONTAL SCROLLBAR */
 /* chrome and chromium based */
 .react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {

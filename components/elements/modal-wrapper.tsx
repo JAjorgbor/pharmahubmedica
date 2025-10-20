@@ -104,7 +104,7 @@ const ModalWrapper: FC<ModalWrapperProps> = ({
               }`}
             >
               <h3
-                className={`font-normal  flex gap-3 items-center font-semibold text-foreground-600 ${
+                className={`flex gap-3 items-center font-semibold text-foreground-600 ${
                   headerFullWidth ? 'flex-grow' : ''
                 }`}
               >

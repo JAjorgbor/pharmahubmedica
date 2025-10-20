@@ -163,7 +163,7 @@ const InputField = <T extends FieldValues>({
   defaultValue,
   variant = 'bordered',
   radius = 'md',
-  color = 'secondary',
+  color = 'primary',
   startContentPlacement = 'inside',
   onChange = () => null,
   switchSize = 'sm',
@@ -520,7 +520,7 @@ const InputField = <T extends FieldValues>({
             variant={variant}
             color={color}
             startContent={startContent}
-            listboxProps={{ color: 'secondary', variant: 'flat' }}
+            listboxProps={{ color: 'primary', variant: 'flat' }}
             isInvalid={!!controllerFieldState.error?.message}
             endContent={<>{endContent}</>}
             classNames={{
@@ -535,9 +535,9 @@ const InputField = <T extends FieldValues>({
             defaultSelectedKeys={defaultValue ? [defaultValue] : ['']}
             onSelectionChange={(value: any) => {
               controllerField.onChange(value)
-              if (onChange) onChange(value)
-              setSelectFieldValue(value)
               const array = Array.from(value)
+              if (onChange) onChange(array[0])
+              setSelectFieldValue(value)
               controllerField.onChange(array[0])
             }}
             disabled={disabled}
@@ -562,7 +562,7 @@ const InputField = <T extends FieldValues>({
             placeholder={placeholder as string}
             variant={variant}
             color={color}
-            listboxProps={{ color: 'secondary', variant: 'flat' }}
+            listboxProps={{ color: 'primary', variant: 'flat' }}
             startContent={startContent}
             defaultSelectedKey={defaultValue}
             isInvalid={!!controllerFieldState.error?.message}
@@ -608,7 +608,7 @@ const InputField = <T extends FieldValues>({
             className="p-0 ml-0"
             disabled={disabled}
             isInvalid={!!controllerFieldState.error?.message}
-            color="secondary"
+            color="primary"
             size="sm"
             radius={'none'}
             isSelected={!!controllerField.value}
@@ -632,7 +632,7 @@ const InputField = <T extends FieldValues>({
               ((<HiX size={switchSize == 'sm' ? 10 : 12} />) as any)
             }
             size={switchSize}
-            color="secondary"
+            color="primary"
             defaultSelected={defaultChecked}
             className="p-0"
             classNames={{
@@ -710,7 +710,7 @@ const InputField = <T extends FieldValues>({
           //     enableSearch={true}
           //     disableSearchIcon={true}
           //     inputProps={{
-          //       className: `relative w-full outline-none inline-flex tap-highlight-transparent flex-row items-center shadow-xs px-3 gap-3 border-medium border-default-200 hover:border-default-400 h-10 min-h-10 rounded-medium !duration-150 focus:border-secondary transition-colors motion-reduce:transition-none is-filled ${baseClass} pl-11`,
+          //       className: `relative w-full outline-none inline-flex tap-highlight-transparent flex-row items-center shadow-xs px-3 gap-3 border-medium border-default-200 hover:border-default-400 h-10 min-h-10 rounded-medium !duration-150 focus:border-primary transition-colors motion-reduce:transition-none is-filled ${baseClass} pl-11`,
           //       name: controllerProps?.name,
           //     }}
           //     countryCodeEditable={false}

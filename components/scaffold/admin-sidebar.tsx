@@ -1,5 +1,12 @@
 'use client'
-import { Menu, MenuItem, Sidebar, sidebarClasses } from 'react-pro-sidebar'
+import {
+  Menu,
+  MenuItem,
+  Sidebar,
+  sidebarClasses,
+  SubMenu,
+  menuClasses,
+} from 'react-pro-sidebar'
 
 import { setOpenSidebar } from '@/features/sidebarSlice'
 import { useAppDispatch, useAppSelector } from '@/features/store'
@@ -11,10 +18,12 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import {
   LuBox,
+  LuBoxes,
   LuChevronLeft,
   LuChevronRight,
   LuHandshake,
   LuHouse,
+  LuLayers,
   LuLayoutDashboard,
   LuLayoutList,
   LuPackage,
@@ -152,14 +161,37 @@ const AdminSidebar = () => {
             {' '}
             Dashboard{' '}
           </MenuItem>
-          <MenuItem
-            icon={<LuPackage />}
-            component={<Link href="/admin/products" />}
+          <SubMenu
+            label="Inventory"
+            icon={<LuLayers />}
             className="text-foreground-600"
+            rootStyles={{
+              [`.${menuClasses.SubMenuExpandIcon} span`]: {
+                width: '7px',
+                height: '7px',
+                // top: '2px',
+                // position: 'relative',
+              },
+            }}
           >
-            {' '}
-            Products{' '}
-          </MenuItem>
+            <MenuItem
+              icon={<LuBoxes />}
+              component={<Link href="/admin/collections" />}
+              className="text-foreground-600"
+            >
+              {' '}
+              Collections
+            </MenuItem>
+            <MenuItem
+              icon={<LuPackage />}
+              component={<Link href="/admin/products" />}
+              className="text-foreground-600"
+            >
+              {' '}
+              Products{' '}
+            </MenuItem>
+          </SubMenu>
+
           <MenuItem
             icon={<LuLayoutList />}
             component={<Link href="/admin/orders" />}
