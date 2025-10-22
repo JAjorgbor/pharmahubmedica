@@ -15,10 +15,6 @@
     "@fontsource/roboto": "^5.0.2",
     "@heroui/react": "^2.8.4",
     "@hookform/resolvers": "^5.2.2",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/lab": "5.0.0-alpha.133",
-    "@mui/material": "^5.13.3",
-    "@mui/styles": "^5.13.2",
     "@portabletext/react": "^3.0.4",
     "@reduxjs/toolkit": "^2.9.0",
     "@sanity/desk-tool": "^2.36.2",
@@ -60,6 +56,7 @@
   "devDependencies": {
     "@types/node": "^24.5.2",
     "@types/react": "^19.1.13",
+    "eslint": "^9.38.0",
     "next": "15.5.3",
     "react": "19.1.1",
     "react-dom": "19.1.1",
