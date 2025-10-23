@@ -3,10 +3,8 @@
 /* Note: You may need to change the path to fit your project structure */
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 
-@base {
-  button {
-    @apply cursor-pointer;
-  }
+button {
+  @apply cursor-pointer;
 }
 
 /* CSS TO HIDE HORIZONTAL SCROLLBAR */

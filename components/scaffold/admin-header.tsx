@@ -100,13 +100,15 @@ const AdminHeader = () => {
     <>
       <div className="pt-3" />
       <Navbar
-        className={cn(
-          'max-w-[93%] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out',
-          scrollHeight > 100
-            ? 'md:max-w-4xl shadow-lg'
-            : 'md:max-w-[1240px] bg-white shadow'
-        )}
-        classNames={{ wrapper: 'max-w-full' }}
+        classNames={{
+          base: cn(
+            'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
+            scrollHeight > 100
+              ? 'md:max-w-4xl shadow-lg'
+              : 'md:max-w-7xl bg-white shadow'
+          ),
+          wrapper: 'max-w-full px-0',
+        }}
       >
         {/* <div className="flex justify-between gap-4 border-b max-w-7xl px-5  mx-auto items-center px-5 py-3"> */}
         <NavbarContent className="flex gap-3 items-center">

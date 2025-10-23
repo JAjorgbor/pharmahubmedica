@@ -11,7 +11,7 @@ import {
 import { setOpenSidebar } from '@/features/sidebarSlice'
 import { useAppDispatch, useAppSelector } from '@/features/store'
 import useMediaQuery from '@/hooks/useMediaQuery'
-import { theme } from '@/library/theme'
+import { theme } from '@/library/config'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -61,7 +61,7 @@ const AdminSidebar = () => {
             position: 'sticky',
             top: '0',
             flexDirection: 'column',
-            height: '100vh', // force full height
+            height: '100dvh', // force full height
             overflow: 'hidden', // prevent scrollbars
             background: 'white',
           },

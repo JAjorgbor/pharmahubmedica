@@ -150,8 +150,8 @@ const ProductsSection = () => {
 
   return (
     <>
-      <div className="space-y-6 max-w-7xl px-5 mx-auto">
-        <div className="flex justify-between gap-6 items-center py-5 flex-wrap">
+      <div className="space-y-6 max-w-7xl p-5 mx-auto">
+        <div className="flex justify-between gap-6 items-center flex-wrap">
           <div className="space-y-1">
             <h1 className="text-3xl text-primary font-semibold">Products</h1>
             <p className="text-foreground-500">
@@ -178,7 +178,7 @@ const ProductsSection = () => {
               endContent={<LuExternalLink />}
               size="sm"
             >
-              View Catgegories
+              View Collections
             </Button>
           </CardHeader>
           <CardBody className="space-y-6">

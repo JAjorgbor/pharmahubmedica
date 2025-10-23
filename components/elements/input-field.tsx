@@ -1,18 +1,11 @@
 'use client'
-import parsePhoneNumberFromString, {
-  getCountries,
-  getCountryCallingCode,
-} from 'libphonenumber-js'
+import parsePhoneNumberFromString from 'libphonenumber-js'
 
 import {
   Autocomplete,
   AutocompleteItem,
   Checkbox,
   Divider,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
   Input,
   InputOtp,
   Select,
@@ -20,7 +13,7 @@ import {
   Switch,
   Textarea,
 } from '@heroui/react'
-import { ComponentProps, ReactNode, useEffect, useMemo, useState } from 'react'
+import { ComponentProps, ReactNode, useEffect, useState } from 'react'
 import {
   FieldValues,
   useController,
@@ -29,12 +22,11 @@ import {
 } from 'react-hook-form'
 import { FiSearch } from 'react-icons/fi'
 import { HiCheck, HiX } from 'react-icons/hi'
-import { PiCaretDown, PiEye, PiEyeSlash } from 'react-icons/pi'
-import PhoneNumberInput from 'react-phone-input-2'
+import { PiEye, PiEyeSlash } from 'react-icons/pi'
 import 'react-phone-input-2/lib/style.css'
 
-import Flag from 'react-world-flags'
 import { cn } from '@/utils/cn'
+import { currencyFormatter } from '@/utils/currencyFormatter'
 
 // const westAfrica = [
 //   'BJ',
@@ -54,13 +46,6 @@ import { cn } from '@/utils/cn'
 //   'SL',
 //   'TG',
 // ]
-const countries = getCountries()
-  // .filter((each) => westAfrica.includes(each))
-  .map((countryCode) => ({
-    code: String(countryCode).toLowerCase(),
-    dialCode: `+${getCountryCallingCode(countryCode)}`,
-    name: new Intl.DisplayNames(['en'], { type: 'region' }).of(countryCode),
-  }))
 
 interface InputFieldPropsBase<T extends FieldValues> {
   type:
@@ -190,44 +175,7 @@ const InputField = <T extends FieldValues>({
   const [selectFieldValue, setSelectFieldValue] = useState<any>([''])
   const [amountValue, setAmountValue] = useState(value || '')
   const [disabledKeys, setDisabledKeys] = useState<string[]>()
-  const [phoneCountrySearchValue, setPhoneCountrySearchValue] = useState('')
   const [formattedPhonenumber, setFormattedPhonenumber] = useState('')
-
-  const [selectedCountry, setSelectedCountry] = useState(
-    countries.find((each) => each.code == 'ng')
-  )
-
-  const filteredCountries = useMemo(
-    () =>
-      countries.filter((country) =>
-        country?.name
-          ?.toLowerCase()
-          .includes(phoneCountrySearchValue.toLowerCase())
-      ),
-    [phoneCountrySearchValue]
-  )
-
-  const strippedValue = (value: string) => {
-    const phoneNumber = parsePhoneNumberFromString(value, 'NG')
-    return phoneNumber?.isValid() ? phoneNumber.number : ''
-  }
-
-  const countryDropdownItems = useMemo(
-    () =>
-      filteredCountries.map((country) => (
-        <DropdownItem
-          key={country.code}
-          startContent={
-            <Flag className="size-4" code={country.code.toUpperCase()} />
-          }
-          className="capitalize"
-        >
-          {country.name}{' '}
-          <span className="text-foreground-500">{country.dialCode}</span>
-        </DropdownItem>
-      )),
-    [filteredCountries]
-  )
 
   const { control: defaultControl } = useForm()
   const defaultControllerProps: any = {
@@ -244,30 +192,19 @@ const InputField = <T extends FieldValues>({
     controllerProps?.control ? controllerProps : defaultControllerProps
   )
 
+  function parseCurrency(value) {
+    if (typeof value !== 'string') return value
+    return Number(value.replace(/[^0-9.-]+/g, ''))
+  }
   const formatToCurrency = (value: string) => {
     // Remove non-numeric characters except decimal
-    const numericValue = value.replace(/[^\d.]/g, '')
-
-    // Format the number as currency
-    const parts = numericValue.split('.')
-
-    // Format integer part with commas
-    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-
-    // Join with the decimal part if it exists
-    return parts.length > 1
-      ? `${integerPart}.${parts[1].slice(0, 2)}`
-      : `${integerPart}`
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Number(value))
   }
-
-  useEffect(() => {
-    if (type == 'amount') {
-      const rawValue = value || 0
-      const formattedValue = formatToCurrency(String(rawValue))
-      setAmountValue(formattedValue)
-      // Notify parent component with the numeric value
-    }
-  }, [value, type])
 
   useEffect(() => {
     const value = controllerField?.value
@@ -646,8 +583,8 @@ const InputField = <T extends FieldValues>({
               } `,
             }}
             isDisabled={disabled}
-            isSelected={Boolean(value)}
-            onValueChange={onChange}
+            isSelected={!!controllerField.value}
+            onValueChange={controllerField.onChange}
           />
         )
       case 'radio':
@@ -833,14 +770,15 @@ const InputField = <T extends FieldValues>({
             type="tel"
             min={min}
             className={`${baseClass}`}
-            placeholder={placeholder}
+            placeholder={placeholder || currencyFormatter(0)}
             value={amountValue as string}
             onValueChange={(value) => {
-              const rawValue = value
+              const rawValue = parseCurrency(value)
+              const formatted = formatToCurrency(rawValue)
+              setAmountValue(formatted)
               // Notify parent component with the numeric value
-              const numericValue =
-                parseFloat(rawValue.replace(/[^\d.]/g, '')) || 0
-              controllerField.onChange(numericValue)
+
+              controllerField.onChange(rawValue)
             }}
           />
         )
@@ -962,7 +900,7 @@ const InputField = <T extends FieldValues>({
               <p>
                 <span
                   className={cn(
-                    `font-bold text-primary-600 font-light`,
+                    `text-primary-600 font-light`,
                     classNames.label
                   )}
                 >
