@@ -9,6 +9,7 @@ export interface IProduct {
   updatedAt: string
   createdAt: string
   inStock: boolean
+  visible: boolean
 }
 
 export const products: IProduct[] = [
@@ -23,6 +24,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-01T12:00:00Z',
     createdAt: '2025-09-15T09:30:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '2',
@@ -35,6 +37,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-02T08:45:00Z',
     createdAt: '2025-09-16T10:00:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '3',
@@ -47,6 +50,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-03T14:10:00Z',
     createdAt: '2025-09-17T08:20:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '4',
@@ -59,6 +63,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-04T11:25:00Z',
     createdAt: '2025-09-18T07:00:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '5',
@@ -71,6 +76,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-05T15:40:00Z',
     createdAt: '2025-09-19T09:50:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '6',
@@ -83,6 +89,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-06T10:30:00Z',
     createdAt: '2025-09-20T11:10:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '7',
@@ -95,6 +102,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-07T13:00:00Z',
     createdAt: '2025-09-21T08:00:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '8',
@@ -107,6 +115,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-08T09:15:00Z',
     createdAt: '2025-09-22T07:45:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '9',
@@ -119,6 +128,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-09T12:00:00Z',
     createdAt: '2025-09-23T09:30:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '10',
@@ -131,6 +141,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-10T14:25:00Z',
     createdAt: '2025-09-24T08:55:00Z',
     inStock: false,
+    visible: false,
   },
   {
     _id: '11',
@@ -143,6 +154,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-11T10:40:00Z',
     createdAt: '2025-09-25T07:30:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '12',
@@ -155,6 +167,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-12T11:50:00Z',
     createdAt: '2025-09-26T10:00:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '13',
@@ -167,6 +180,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-13T09:10:00Z',
     createdAt: '2025-09-27T08:10:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '14',
@@ -179,6 +193,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-14T13:25:00Z',
     createdAt: '2025-09-28T07:15:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '15',
@@ -191,6 +206,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-15T15:40:00Z',
     createdAt: '2025-09-29T09:45:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '16',
@@ -203,6 +219,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-16T11:00:00Z',
     createdAt: '2025-09-30T08:00:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '17',
@@ -215,6 +232,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-17T10:20:00Z',
     createdAt: '2025-10-01T07:40:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '18',
@@ -227,6 +245,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-18T09:50:00Z',
     createdAt: '2025-10-02T09:00:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '19',
@@ -239,6 +258,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-19T12:00:00Z',
     createdAt: '2025-10-03T08:30:00Z',
     inStock: true,
+    visible: true,
   },
   {
     _id: '20',
@@ -251,6 +271,7 @@ export const products: IProduct[] = [
     updatedAt: '2025-10-20T08:15:00Z',
     createdAt: '2025-10-04T09:10:00Z',
     inStock: true,
+    visible: true,
   },
 ]
 

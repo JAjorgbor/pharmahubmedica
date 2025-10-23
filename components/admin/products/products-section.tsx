@@ -63,35 +63,31 @@ const ProductsSection = () => {
         header: 'Price',
         cell: ({ getValue }) => currencyFormatter(getValue()),
       }),
-      columnHelper.accessor('category', {
-        id: 'category',
-        header: 'Category',
+      columnHelper.accessor('visible', {
+        id: 'visible',
+        header: 'Visibility',
         filterFn: (row: { original: IProduct }, columnId, filterValue) => {
           if (typeof filterValue == 'undefined') return false
 
           return filterValue == 'all'
             ? true
-            : filterValue == row.original.category
+            : filterValue == 'visible'
+            ? row.original.inStock == true
+            : row.original.inStock == false
         },
-        cell: ({ getValue }) => getValue(),
-      }),
-      columnHelper.accessor('createdAt', {
-        id: 'createdAt',
-        header: 'Created At',
-        cell: ({ getValue }) => (
-          <span className="text-sm text-foreground-600">
-            {moment(getValue()).format('D MMMM, YYYY')}
-          </span>
-        ),
-      }),
-      columnHelper.accessor('updatedAt', {
-        id: 'updatedAt',
-        header: 'Last Updated',
-        cell: ({ getValue }) => (
-          <span className="text-sm text-foreground-600">
-            {moment(getValue()).format('D MMMM, YYYY')}
-          </span>
-        ),
+        cell: ({ getValue }) => {
+          return (
+            <div className="capitalize">
+              <Chip
+                color={getValue() ? 'success' : 'warning'}
+                variant="flat"
+                size="sm"
+              >
+                {getValue() ? 'Visible' : 'Hidden'}
+              </Chip>
+            </div>
+          )
+        },
       }),
       columnHelper.accessor('inStock', {
         id: 'inStock',
@@ -118,6 +114,37 @@ const ProductsSection = () => {
             </div>
           )
         },
+      }),
+      columnHelper.accessor('category', {
+        id: 'category',
+        header: 'Category',
+        filterFn: (row: { original: IProduct }, columnId, filterValue) => {
+          if (typeof filterValue == 'undefined') return false
+
+          return filterValue == 'all'
+            ? true
+            : filterValue == row.original.category
+        },
+        cell: ({ getValue }) => getValue(),
+      }),
+
+      columnHelper.accessor('createdAt', {
+        id: 'createdAt',
+        header: 'Created At',
+        cell: ({ getValue }) => (
+          <span className="text-sm text-foreground-600">
+            {moment(getValue()).format('D MMMM, YYYY')}
+          </span>
+        ),
+      }),
+      columnHelper.accessor('updatedAt', {
+        id: 'updatedAt',
+        header: 'Last Updated',
+        cell: ({ getValue }) => (
+          <span className="text-sm text-foreground-600">
+            {moment(getValue()).format('D MMMM, YYYY')}
+          </span>
+        ),
       }),
 
       columnHelper.display({
@@ -196,12 +223,23 @@ const ProductsSection = () => {
               items={items}
               allowsSortingFor={['createdAt', 'updatedAt', 'price', 'stock']}
               topContent={({ table, searchField }) => {
-                const getSubscriberStatusCount = (status: string) => {
+                const getInStockStatusCount = (status: string) => {
                   if (items) {
                     if (status == 'all') return items.length
                     else if (status == 'inStock')
                       return items.filter((each) => each.inStock).length
                     else if (status == 'outOfStock')
+                      return items.filter((each) => each.inStock == false)
+                        .length
+                  }
+                  return '-'
+                }
+                const getVisibilityStatusCount = (status: string) => {
+                  if (items) {
+                    if (status == 'all') return items.length
+                    else if (status == 'visible')
+                      return items.filter((each) => each.inStock).length
+                    else if (status == 'hidden')
                       return items.filter((each) => each.inStock == false)
                         .length
                   }
@@ -219,8 +257,8 @@ const ProductsSection = () => {
 
                 return (
                   <div className="flex justify-between items-center w-full gap-3 flex-wrap">
-                    {searchField}
-                    <div className="gap-4 grid grid-cols-2 w-full md:w-1/3">
+                    <div className="w-full lg:w-1/4">{searchField}</div>
+                    <div className="gap-4 grid grid-cols-2 md:grid-cols-3 w-full lg:w-1/2">
                       <InputField
                         type="select"
                         controllerProps={{
@@ -229,17 +267,48 @@ const ProductsSection = () => {
                         }}
                         options={[
                           {
-                            label: `All (${getSubscriberStatusCount('all')})`,
+                            label: `All Visibility(${getVisibilityStatusCount(
+                              'all'
+                            )})`,
                             value: 'all',
                           },
                           {
-                            label: `In Stock (${getSubscriberStatusCount(
+                            label: `Visible (${getVisibilityStatusCount(
+                              'visible'
+                            )})`,
+                            value: 'visible',
+                          },
+                          {
+                            label: `Hidden (${getVisibilityStatusCount(
+                              'hidden'
+                            )})`,
+                            value: 'hidden',
+                          },
+                        ]}
+                        onChange={(value) => {
+                          table.getColumn('visible')?.setFilterValue(value)
+                          setStatusFilter(value)
+                        }}
+                      />
+                      <InputField
+                        type="select"
+                        controllerProps={{
+                          name: 'status filter',
+                          defaultValue: statusFilter,
+                        }}
+                        options={[
+                          {
+                            label: `All (${getInStockStatusCount('all')})`,
+                            value: 'all',
+                          },
+                          {
+                            label: `In Stock (${getInStockStatusCount(
                               'inStock'
                             )})`,
                             value: 'inStock',
                           },
                           {
-                            label: `Out of Stock (${getSubscriberStatusCount(
+                            label: `Out of Stock (${getInStockStatusCount(
                               'outOfStock'
                             )})`,
                             value: 'outOfStock',
@@ -256,6 +325,7 @@ const ProductsSection = () => {
                           name: 'category filter',
                           defaultValue: statusFilter,
                         }}
+                        className="col-span-2 md:col-span-1"
                         value={categoryFilter}
                         options={[
                           {

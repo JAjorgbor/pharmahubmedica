@@ -217,8 +217,8 @@ const SearchField = <I,>({
     <InputField
       controllerProps={{ name: 'search field' }}
       type="search"
-      classNames={{ base: 'w-full md:w-1/3' }}
-      className="w-full md:w-44"
+      classNames={{ base: 'w-full' }}
+      className="w-full"
       placeholder="Search inventory"
       startContent={<LuSearch className="w-4 h-4" />}
       onChange={(value) => setGlobalFilter(value)}
