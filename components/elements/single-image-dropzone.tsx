@@ -105,7 +105,10 @@ export default function SingleImageDropzone<T extends FieldValues>({
           `border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition grid place-items-center w-full flex-grow group`,
           isDragActive
             ? 'border-primary bg-blue-50'
-            : 'border-foreground-300 hover:border-primary'
+            : 'border-foreground-300 hover:border-primary',
+          localError || controllerFieldState.error?.message
+            ? 'border-danger'
+            : ''
         )}
       >
         <input {...getInputProps()} />
@@ -115,7 +118,12 @@ export default function SingleImageDropzone<T extends FieldValues>({
             <LuImage
               size={80}
               strokeWidth={1}
-              className="text-foreground-500 group-hover:text-primary"
+              className={cn(
+                'text-foreground-500 group-hover:text-primary',
+                localError || controllerFieldState.error?.message
+                  ? 'text-danger'
+                  : ''
+              )}
             />
             <p className="text-foreground-500">
               Drag & drop an image here, or{' '}

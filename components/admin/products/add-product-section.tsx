@@ -5,6 +5,8 @@ import SingleImageDropzone from '@/components/elements/single-image-dropzone'
 import { categories } from '@/library/dummy-data'
 import {
   addToast,
+  BreadcrumbItem,
+  Breadcrumbs,
   Button,
   Card,
   CardBody,
@@ -16,6 +18,7 @@ import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { z } from 'zod'
+import Link from 'next/link'
 
 export const productSchema = z.object({
   productName: z
@@ -69,10 +72,22 @@ const AddProductSection = () => {
     }
   }
   return (
-    <>
+    <div className="space-y-5">
+      <div className="space-y-1">
+        <h2 className="text-primary text-2xl font-semibold">Add Product</h2>
+        <Breadcrumbs>
+          <BreadcrumbItem>
+            <Link href="/admin/dashboard">Dashboard</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Link href="/admin/products">Products</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>Add</BreadcrumbItem>
+        </Breadcrumbs>
+      </div>
       <Card>
         <CardHeader>
-          <h2 className="text-lg text-primary">Add Product To Inventory</h2>
+          <h3 className="">Add Product To Inventory</h3>
         </CardHeader>
         <CardBody>
           <form
@@ -201,7 +216,7 @@ const AddProductSection = () => {
           </div>
         </CardFooter>
       </Card>
-    </>
+    </div>
   )
 }
 

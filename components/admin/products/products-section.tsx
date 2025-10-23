@@ -4,6 +4,8 @@ import TableWrapper from '@/components/elements/table-wrapper'
 import { categories, IProduct, products } from '@/library/dummy-data'
 import { currencyFormatter } from '@/utils/currencyFormatter'
 import {
+  BreadcrumbItem,
+  Breadcrumbs,
   Button,
   Card,
   CardBody,
@@ -154,9 +156,12 @@ const ProductsSection = () => {
         <div className="flex justify-between gap-6 items-center flex-wrap">
           <div className="space-y-1">
             <h1 className="text-3xl text-primary font-semibold">Products</h1>
-            <p className="text-foreground-500">
-              Manage your pharmacy inventory and product catalog.
-            </p>
+            <Breadcrumbs>
+              <BreadcrumbItem>
+                <Link href="/admin/dashboard">Dashboard</Link>
+              </BreadcrumbItem>
+              <BreadcrumbItem>Products</BreadcrumbItem>
+            </Breadcrumbs>
           </div>
           <Button
             color="primary"
@@ -167,8 +172,11 @@ const ProductsSection = () => {
             Add Product
           </Button>
         </div>
+        <p className="text-foreground-500">
+          Manage your pharmacy inventory and product catalog.
+        </p>
         <Card className="p-3">
-          <CardHeader className="font-bold justify-between items-center">
+          <CardHeader className="justify-between items-center">
             Product Inventory{' '}
             <Button
               color="primary"
