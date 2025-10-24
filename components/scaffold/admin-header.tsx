@@ -88,7 +88,7 @@ const AdminHeader = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
 
   const dispatch = useAppDispatch()
-  const { openSidebar } = useAppSelector((state) => state.sidebar)
+  const { title } = useAppSelector((state) => state.header)
 
   useEffect(() => {
     // subscribe to changes
@@ -119,7 +119,9 @@ const AdminHeader = () => {
             >
               <LuMenu size={20} />
             </button>
-            <h1 className="text-xl font-semibold text-primary">Dashboard</h1>
+            <h1 className="text-xl font-semibold text-primary">
+              {title || 'Dashboard'}
+            </h1>
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="flex gap-6 items-center" justify="end">

@@ -34,6 +34,7 @@ const columnHelper = createColumnHelper<IProduct>()
 
 const ProductsSection = () => {
   const [statusFilter, setStatusFilter] = useState('all')
+  const [visibilityFilter, setVisibilityFilter] = useState('all')
   const [categoryFilter, setCategoryFilter] = useState('all')
 
   const columns = useMemo(
@@ -80,7 +81,7 @@ const ProductsSection = () => {
             <div className="capitalize">
               <Chip
                 color={getValue() ? 'success' : 'warning'}
-                variant="flat"
+                variant="dot"
                 size="sm"
               >
                 {getValue() ? 'Visible' : 'Hidden'}
@@ -182,7 +183,9 @@ const ProductsSection = () => {
       <div className="space-y-6 max-w-7xl p-5 mx-auto">
         <div className="flex justify-between gap-6 items-center flex-wrap">
           <div className="space-y-1">
-            <h1 className="text-3xl text-primary font-semibold">Products</h1>
+            <h1 className="text-3xl text-primary font-semibold">
+              Product Inventory
+            </h1>
             <Breadcrumbs>
               <BreadcrumbItem>
                 <Link href="/admin/dashboard">Dashboard</Link>
@@ -200,11 +203,10 @@ const ProductsSection = () => {
           </Button>
         </div>
         <p className="text-foreground-500">
-          Manage your pharmacy inventory and product catalog.
+          Manage the pharmacy inventory and product catalog.
         </p>
         <Card className="p-3">
-          <CardHeader className="justify-between items-center">
-            Product Inventory{' '}
+          <CardHeader className="justify-end items-center">
             <Button
               color="primary"
               variant="light"
@@ -238,9 +240,9 @@ const ProductsSection = () => {
                   if (items) {
                     if (status == 'all') return items.length
                     else if (status == 'visible')
-                      return items.filter((each) => each.inStock).length
+                      return items.filter((each) => each.visible).length
                     else if (status == 'hidden')
-                      return items.filter((each) => each.inStock == false)
+                      return items.filter((each) => each.visible == false)
                         .length
                   }
                   return '-'
@@ -257,13 +259,15 @@ const ProductsSection = () => {
 
                 return (
                   <div className="flex justify-between items-center w-full gap-3 flex-wrap">
-                    <div className="w-full lg:w-1/4">{searchField}</div>
+                    <div className="w-full lg:w-1/4">
+                      {searchField('Search inventory')}
+                    </div>
                     <div className="gap-4 grid grid-cols-2 md:grid-cols-3 w-full lg:w-1/2">
                       <InputField
                         type="select"
                         controllerProps={{
                           name: 'status filter',
-                          defaultValue: statusFilter,
+                          defaultValue: visibilityFilter,
                         }}
                         options={[
                           {
@@ -287,7 +291,7 @@ const ProductsSection = () => {
                         ]}
                         onChange={(value) => {
                           table.getColumn('visible')?.setFilterValue(value)
-                          setStatusFilter(value)
+                          setVisibilityFilter(value)
                         }}
                       />
                       <InputField

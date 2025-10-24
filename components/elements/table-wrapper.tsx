@@ -38,7 +38,7 @@ interface TableWrapperProps<
   emptyContent?: ReactNode
   topContent?: (params?: {
     table: TableType<I>
-    searchField: ReactNode
+    searchField: (placeholder: string) => ReactNode
   }) => ReactNode
   bottomContent?: (params?: {
     table: TableType<I>
@@ -102,8 +102,12 @@ const TableWrapper = <
       {isHydrated &&
         topContent?.({
           table,
-          searchField: (
-            <SearchField table={table} setGlobalFilter={setGlobalFilter} />
+          searchField: (placeholder) => (
+            <SearchField
+              table={table}
+              setGlobalFilter={setGlobalFilter}
+              placeholder={placeholder}
+            />
           ),
         })}
       <div className="overflow-hidden">
@@ -209,9 +213,11 @@ const SelectPagination = <I,>({ table }: { table: TableType<I> }) => {
 const SearchField = <I,>({
   table,
   setGlobalFilter,
+  placeholder,
 }: {
   table: TableType<I>
   setGlobalFilter: Dispatch<SetStateAction<any>>
+  placeholder?: string
 }) => {
   return (
     <InputField
@@ -219,7 +225,7 @@ const SearchField = <I,>({
       type="search"
       classNames={{ base: 'w-full' }}
       className="w-full"
-      placeholder="Search inventory"
+      placeholder={placeholder}
       startContent={<LuSearch className="w-4 h-4" />}
       onChange={(value) => setGlobalFilter(value)}
     />

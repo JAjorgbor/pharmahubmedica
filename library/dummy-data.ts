@@ -275,13 +275,35 @@ export const products: IProduct[] = [
   },
 ]
 
-export const categories = [
+export interface ICategory {
+  _id: string
+  name: string
+  slug: string
+  description: string
+  image: string
+  products: number
+  visible: boolean
+  updatedAt: string
+  createdAt: string
+  subcategories: { name: string; slug: string }[]
+}
+
+export const categories: ICategory[] = [
   {
     _id: 'c1',
     name: 'Pain Relief',
     slug: 'pain-relief',
     description: 'Medications and creams to reduce pain and inflammation.',
     image: 'https://dummyimage.com/600x400/ffc107/000&text=Pain+Relief',
+    products: 42,
+    visible: true,
+    subcategories: [
+      { name: 'Analgesic Tablets', slug: 'analgesic-tablets' },
+      { name: 'Pain Relief Creams', slug: 'pain-relief-creams' },
+      { name: 'Joint & Muscle Rubs', slug: 'joint-muscle-rubs' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c2',
@@ -291,6 +313,15 @@ export const categories = [
       'Essential vitamins, minerals, and daily supplements for overall health.',
     image:
       'https://dummyimage.com/600x400/ffeb3b/000&text=Vitamins+%26+Supplements',
+    products: 78,
+    visible: false,
+    subcategories: [
+      { name: 'Multivitamins', slug: 'multivitamins' },
+      { name: 'Mineral Supplements', slug: 'mineral-supplements' },
+      { name: 'Herbal Supplements', slug: 'herbal-supplements' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c3',
@@ -298,6 +329,15 @@ export const categories = [
     slug: 'first-aid',
     description: 'Supplies and creams for minor cuts, burns, and injuries.',
     image: 'https://dummyimage.com/600x400/8bc34a/fff&text=First+Aid',
+    products: 36,
+    visible: true,
+    subcategories: [
+      { name: 'Bandages & Plasters', slug: 'bandages-plasters' },
+      { name: 'Antiseptics', slug: 'antiseptics' },
+      { name: 'Burn Creams', slug: 'burn-creams' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c4',
@@ -305,6 +345,15 @@ export const categories = [
     slug: 'cold-and-flu',
     description: 'Relief products for cough, fever, and flu symptoms.',
     image: 'https://dummyimage.com/600x400/f44336/fff&text=Cold+%26+Flu',
+    products: 51,
+    visible: true,
+    subcategories: [
+      { name: 'Cough Syrups', slug: 'cough-syrups' },
+      { name: 'Fever Reducers', slug: 'fever-reducers' },
+      { name: 'Nasal Sprays', slug: 'nasal-sprays' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c5',
@@ -312,6 +361,15 @@ export const categories = [
     slug: 'personal-care',
     description: 'Everyday hygiene and body care essentials.',
     image: 'https://dummyimage.com/600x400/9c27b0/fff&text=Personal+Care',
+    products: 65,
+    visible: false,
+    subcategories: [
+      { name: 'Oral Care', slug: 'oral-care' },
+      { name: 'Deodorants', slug: 'deodorants' },
+      { name: 'Bath & Body', slug: 'bath-body' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c6',
@@ -320,6 +378,15 @@ export const categories = [
     description:
       'Moisturizers, sunscreens, and facial cleansers for healthy skin.',
     image: 'https://dummyimage.com/600x400/00bcd4/fff&text=Skin+Care',
+    visible: true,
+    products: 70,
+    subcategories: [
+      { name: 'Moisturizers', slug: 'moisturizers' },
+      { name: 'Sunscreens', slug: 'sunscreens' },
+      { name: 'Cleansers', slug: 'cleansers' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c7',
@@ -327,6 +394,15 @@ export const categories = [
     slug: 'baby-care',
     description: 'Gentle and safe products for babies and infants.',
     image: 'https://dummyimage.com/600x400/4caf50/fff&text=Baby+Care',
+    products: 58,
+    visible: false,
+    subcategories: [
+      { name: 'Baby Lotion', slug: 'baby-lotion' },
+      { name: 'Diapers', slug: 'diapers' },
+      { name: 'Baby Powder', slug: 'baby-powder' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c8',
@@ -334,6 +410,15 @@ export const categories = [
     slug: 'digestive-health',
     description: 'Probiotics and aids for digestive balance and gut health.',
     image: 'https://dummyimage.com/600x400/795548/fff&text=Digestive+Health',
+    products: 33,
+    visible: true,
+    subcategories: [
+      { name: 'Probiotics', slug: 'probiotics' },
+      { name: 'Antacids', slug: 'antacids' },
+      { name: 'Laxatives', slug: 'laxatives' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c9',
@@ -342,6 +427,15 @@ export const categories = [
     description:
       'Products promoting intimacy, safety, and reproductive health.',
     image: 'https://dummyimage.com/600x400/673ab7/fff&text=Sexual+Wellness',
+    products: 24,
+    visible: false,
+    subcategories: [
+      { name: 'Condoms', slug: 'condoms' },
+      { name: 'Lubricants', slug: 'lubricants' },
+      { name: 'Fertility Aids', slug: 'fertility-aids' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c10',
@@ -349,6 +443,15 @@ export const categories = [
     slug: 'respiratory-care',
     description: 'Sprays and treatments for nasal and respiratory relief.',
     image: 'https://dummyimage.com/600x400/2196f3/fff&text=Respiratory+Care',
+    products: 29,
+    visible: true,
+    subcategories: [
+      { name: 'Inhalers', slug: 'inhalers' },
+      { name: 'Nasal Drops', slug: 'nasal-drops' },
+      { name: 'Steam Inhalants', slug: 'steam-inhalants' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
   {
     _id: 'c11',
@@ -357,5 +460,14 @@ export const categories = [
     description:
       'Digital thermometers, blood pressure monitors, and other home-use devices.',
     image: 'https://dummyimage.com/600x400/009688/fff&text=Medical+Devices',
+    products: 41,
+    visible: false,
+    subcategories: [
+      { name: 'Thermometers', slug: 'thermometers' },
+      { name: 'Blood Pressure Monitors', slug: 'blood-pressure-monitors' },
+      { name: 'Glucometers', slug: 'glucometers' },
+    ],
+    createdAt: '2025-10-23T21:00:00.000Z',
+    updatedAt: '2025-10-23T21:00:00.000Z',
   },
 ]

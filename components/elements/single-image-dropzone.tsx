@@ -92,7 +92,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
   }
 
   return (
-    <div className={cn('flex flex-col gap-1', className)}>
+    <div className={cn('flex flex-col gap-0.5', className)}>
       {label && (
         <p className="text-sm text-primary flex">
           {label}
@@ -117,7 +117,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
           <div className="flex flex-col items-center">
             <LuImage
               size={80}
-              strokeWidth={1}
+              strokeWidth={0.7}
               className={cn(
                 'text-foreground-500 group-hover:text-primary',
                 localError || controllerFieldState.error?.message
@@ -128,6 +128,8 @@ export default function SingleImageDropzone<T extends FieldValues>({
             <p className="text-foreground-500">
               Drag & drop an image here, or{' '}
               <span className="text-primary">browse</span>
+              <br />
+              Max file size of 5MB applies.
             </p>
           </div>
         ) : (

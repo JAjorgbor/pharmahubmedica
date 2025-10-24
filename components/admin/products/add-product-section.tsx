@@ -37,7 +37,7 @@ export const productSchema = z.object({
   description: z
     .string({ error: 'Description is required' })
     .min(1, 'Description is required'),
-  visibility: z.boolean().optional(),
+  visible: z.boolean().optional(),
   inStock: z.boolean().optional(),
   productImage: z
     .any()
@@ -51,6 +51,7 @@ export const productSchema = z.object({
 export type ProductFormFields = z.infer<typeof productSchema>
 
 const AddProductSection = () => {
+  const defaultValues = { visible: true, inStock: true }
   const formMethods = useForm<ProductFormFields>({
     resolver: zodResolver(productSchema),
   })
@@ -74,7 +75,9 @@ const AddProductSection = () => {
   return (
     <div className="space-y-5">
       <div className="space-y-1">
-        <h2 className="text-primary text-2xl font-semibold">Add Product</h2>
+        <h2 className="text-primary text-2xl font-semibold">
+          Add Product To Inventory
+        </h2>
         <Breadcrumbs>
           <BreadcrumbItem>
             <Link href="/admin/dashboard">Dashboard</Link>
@@ -87,7 +90,7 @@ const AddProductSection = () => {
       </div>
       <Card>
         <CardHeader>
-          <h3 className="">Add Product To Inventory</h3>
+          <h3>Product Details</h3>
         </CardHeader>
         <CardBody>
           <form
@@ -167,12 +170,12 @@ const AddProductSection = () => {
               />
               <div className="space-y-4 md:col-span-2">
                 <InputField
-                  label="Visibility"
+                  label="Visible"
                   type="switch"
                   className="md:w-1/2 lg:w-1/3"
                   controllerProps={{
                     control: formMethods.control,
-                    name: 'visibility',
+                    name: 'visible',
                   }}
                 />
                 <InputField

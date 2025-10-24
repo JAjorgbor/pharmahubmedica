@@ -1,11 +1,11 @@
 'use client'
 import {
   Menu,
+  menuClasses,
   MenuItem,
   Sidebar,
   sidebarClasses,
   SubMenu,
-  menuClasses,
 } from 'react-pro-sidebar'
 
 import { setOpenSidebar } from '@/features/sidebarSlice'
@@ -17,8 +17,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import {
-  LuBox,
   LuBoxes,
+  LuBuilding2,
   LuChevronLeft,
   LuChevronRight,
   LuHandshake,
@@ -27,6 +27,7 @@ import {
   LuLayoutDashboard,
   LuLayoutList,
   LuPackage,
+  LuSettings,
   LuUsers,
 } from 'react-icons/lu'
 
@@ -177,7 +178,7 @@ const AdminSidebar = () => {
             <MenuItem
               icon={<LuBoxes />}
               component={<Link href="/admin/collections" />}
-              className="text-foreground-600"
+              className="text-foreground-600 bg-foreground-100"
             >
               {' '}
               Collections
@@ -185,7 +186,7 @@ const AdminSidebar = () => {
             <MenuItem
               icon={<LuPackage />}
               component={<Link href="/admin/products" />}
-              className="text-foreground-600"
+              className="text-foreground-600 bg-foreground-100"
             >
               {' '}
               Products{' '}
@@ -215,6 +216,22 @@ const AdminSidebar = () => {
           >
             {' '}
             Referral Partners
+          </MenuItem>
+          <MenuItem
+            icon={<LuBuilding2 />}
+            component={<Link href="/admin/team" />}
+            className="text-foreground-600"
+          >
+            {' '}
+            Team
+          </MenuItem>
+          <MenuItem
+            icon={<LuSettings />}
+            component={<Link href="/admin/settings" />}
+            className="text-foreground-600"
+          >
+            {' '}
+            Settings
           </MenuItem>
         </Menu>
         <Menu
