@@ -133,18 +133,20 @@ const ProductsSection = () => {
         id: 'createdAt',
         header: 'Created At',
         cell: ({ getValue }) => (
-          <span className="text-sm text-foreground-600">
-            {moment(getValue()).format('D MMMM, YYYY')}
-          </span>
+          <div className="text-xs text-foreground-600 space-y-1">
+            <p>{moment(getValue()).format('D MMMM, YYYY')}</p>
+            <p>at {moment(getValue()).format('hh:mm A')}</p>
+          </div>
         ),
       }),
       columnHelper.accessor('updatedAt', {
         id: 'updatedAt',
         header: 'Last Updated',
         cell: ({ getValue }) => (
-          <span className="text-sm text-foreground-600">
-            {moment(getValue()).format('D MMMM, YYYY')}
-          </span>
+          <div className="text-xs text-foreground-600 space-y-1">
+            <p>{moment(getValue()).format('D MMMM, YYYY')}</p>
+            <p>at {moment(getValue()).format('hh:mm A')}</p>
+          </div>
         ),
       }),
 
@@ -262,7 +264,7 @@ const ProductsSection = () => {
                     <div className="w-full lg:w-1/4">
                       {searchField('Search inventory')}
                     </div>
-                    <div className="gap-4 grid grid-cols-2 md:grid-cols-3 w-full lg:w-1/2">
+                    <div className="gap-3 grid grid-cols-2 md:grid-cols-3 w-full lg:w-1/2">
                       <InputField
                         type="select"
                         controllerProps={{

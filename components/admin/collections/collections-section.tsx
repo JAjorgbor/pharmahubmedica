@@ -95,18 +95,20 @@ const CollectionsSection = () => {
         id: 'createdAt',
         header: 'Created At',
         cell: ({ getValue }) => (
-          <span className="text-sm text-foreground-600">
-            {moment(getValue()).format('D MMMM, YYYY')}
-          </span>
+          <div className="text-xs text-foreground-600 space-y-1">
+            <p>{moment(getValue()).format('D MMMM, YYYY')}</p>
+            <p>at {moment(getValue()).format('hh:mm A')}</p>
+          </div>
         ),
       }),
       columnHelper.accessor('updatedAt', {
         id: 'updatedAt',
         header: 'Last Updated',
         cell: ({ getValue }) => (
-          <span className="text-sm text-foreground-600">
-            {moment(getValue()).format('D MMMM, YYYY')}
-          </span>
+          <div className="text-xs text-foreground-600 space-y-1">
+            <p>{moment(getValue()).format('D MMMM, YYYY')}</p>
+            <p>at {moment(getValue()).format('hh:mm A')}</p>
+          </div>
         ),
       }),
 

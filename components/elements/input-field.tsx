@@ -20,7 +20,7 @@ import {
   UseControllerProps,
   useForm,
 } from 'react-hook-form'
-import { FiSearch } from 'react-icons/fi'
+import { LuSearch } from 'react-icons/lu'
 import { HiCheck, HiX } from 'react-icons/hi'
 import { PiEye, PiEyeSlash } from 'react-icons/pi'
 import 'react-phone-input-2/lib/style.css'
@@ -301,7 +301,7 @@ const InputField = <T extends FieldValues>({
               radius={radius}
               variant={variant}
               color={color}
-              type="search"
+              type="text"
               startContent={startContent}
               className={`${baseClass}`}
               placeholder={placeholder}
@@ -323,7 +323,7 @@ const InputField = <T extends FieldValues>({
               type="button"
               className="p-2 rounded-md bg-blue-100 hover:bg-blue-200 text-primary"
             >
-              <FiSearch size={18} />
+              <LuSearch size={18} />
             </button>
           </div>
         )

@@ -23,7 +23,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
-import { LuClipboardList, LuSearch } from 'react-icons/lu'
+import { LuClipboardList } from 'react-icons/lu'
 
 type DefaultItemProps = { _id: string }
 
@@ -58,9 +58,9 @@ const TableWrapper = <
   bottomContent,
   isLoading = false,
   emptyContent = (
-    <div className="flex flex-col justify-center items-center gap-5 text-foreground-500">
-      <LuClipboardList size={50} />
-      <p className="text-center">
+    <div className="flex flex-col justify-center items-center gap-2 text-foreground-500">
+      <LuClipboardList size={70} strokeWidth={0.6} />
+      <p className="text-center text-sm">
         No items currently available for this table.
       </p>
     </div>
@@ -226,7 +226,6 @@ const SearchField = <I,>({
       classNames={{ base: 'w-full' }}
       className="w-full"
       placeholder={placeholder}
-      startContent={<LuSearch className="w-4 h-4" />}
       onChange={(value) => setGlobalFilter(value)}
     />
   )

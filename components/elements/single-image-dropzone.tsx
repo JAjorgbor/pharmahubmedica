@@ -64,7 +64,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
       if (fileRejections && fileRejections.length > 0) {
         const reason = fileRejections[0]?.errors?.[0]?.code
         if (reason === 'file-too-large') {
-          setLocalError('File is too large. Maximum size is 5MB.')
+          setLocalError('File is too large. Maximum size is 5mb.')
         } else {
           setLocalError('Invalid file. Please provide an image file.')
         }
@@ -125,11 +125,11 @@ export default function SingleImageDropzone<T extends FieldValues>({
                   : ''
               )}
             />
-            <p className="text-foreground-500">
+            <p className="text-foreground-500 text-xs">
               Drag & drop an image here, or{' '}
               <span className="text-primary">browse</span>
               <br />
-              Max file size of 5MB applies.
+              Max file size of 5mb applies.
             </p>
           </div>
         ) : (

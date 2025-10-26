@@ -2,138 +2,9 @@
 
 import { Card, CardBody, Chip, Input, Tab, Tabs } from '@heroui/react'
 import { useState } from 'react'
-import {
-  LuCircleCheckBig,
-  LuCircleX,
-  LuClock,
-  LuPackage,
-  LuSearch,
-} from 'react-icons/lu'
+import { LuCircleCheckBig, LuCircleX, LuClock, LuPackage } from 'react-icons/lu'
 import OrderCard from './order-card'
-
-const orders = [
-  {
-    id: 'ORD-001',
-    customerId: '3',
-    customerName: 'John Doe',
-    customerEmail: 'john@example.com',
-    customerPhone: '+1234567890',
-    items: [
-      {
-        productId: 1,
-        productName: 'Vitamin D3 1000 IU',
-        productImage: '/vitamin-d3-supplement-bottle.jpg',
-        quantity: 2,
-        price: 12.99,
-        totalPrice: 25.98,
-      },
-      {
-        productId: 2,
-        productName: 'Pain Relief Tablets',
-        productImage: '/pain-relief-medicine-tablets.jpg',
-        quantity: 1,
-        price: 8.49,
-        totalPrice: 8.49,
-      },
-    ],
-    totalAmount: 34.47,
-    status: 'pending',
-    orderDate: '2024-01-15T10:30:00Z',
-    notes: 'Customer requested fast delivery',
-  },
-  {
-    id: 'ORD-002',
-    customerId: '3',
-    customerName: 'Jane Smith',
-    customerEmail: 'jane@example.com',
-    customerPhone: '+1234567891',
-    items: [
-      {
-        productId: 3,
-        productName: 'Digital Thermometer',
-        productImage: '/digital-medical-thermometer.jpg',
-        quantity: 1,
-        price: 24.99,
-        totalPrice: 24.99,
-      },
-    ],
-    totalAmount: 24.99,
-    status: 'fulfilled',
-    orderDate: '2024-01-14T15:45:00Z',
-    fulfillmentDate: '2024-01-15T09:00:00Z',
-  },
-  {
-    id: 'ORD-003',
-    customerId: '2',
-    customerName: 'Dr. Sarah Johnson',
-    customerEmail: 'doctor@example.com',
-    customerPhone: '+1234567892',
-    items: [
-      {
-        productId: 4,
-        productName: 'Omega-3 Fish Oil',
-        productImage: '/omega-3-capsules.png',
-        quantity: 3,
-        price: 19.99,
-        totalPrice: 59.97,
-      },
-    ],
-    totalAmount: 59.97,
-    status: 'confirmed',
-    orderDate: '2024-01-13T12:20:00Z',
-    referralId: 'REF-001',
-  },
-  {
-    id: 'ORD-004',
-    customerId: '3',
-    customerName: 'Mary Wilson',
-    customerEmail: 'mary@example.com',
-    customerPhone: '+1234567893',
-    items: [
-      {
-        productId: 5,
-        productName: 'Blood Pressure Monitor',
-        productImage: '/digital-blood-pressure-monitor.png',
-        quantity: 1,
-        price: 49.99,
-        totalPrice: 49.99,
-      },
-      {
-        productId: 6,
-        productName: 'Multivitamin Complex',
-        productImage: '/multivitamin-tablets-bottle.jpg',
-        quantity: 2,
-        price: 16.99,
-        totalPrice: 33.98,
-      },
-    ],
-    totalAmount: 83.97,
-    status: 'cancelled',
-    orderDate: '2024-01-12T08:15:00Z',
-    notes: 'Customer cancelled due to change of mind',
-  },
-  {
-    id: 'ORD-005',
-    customerId: '3',
-    customerName: 'Robert Brown',
-    customerEmail: 'robert@example.com',
-    customerPhone: '+1234567894',
-    items: [
-      {
-        productId: 1,
-        productName: 'Vitamin D3 1000 IU',
-        productImage: '/vitamin-d3-supplement-bottle.jpg',
-        quantity: 1,
-        price: 12.99,
-        totalPrice: 12.99,
-      },
-    ],
-    totalAmount: 12.99,
-    status: 'fulfilled',
-    orderDate: '2024-01-11T16:30:00Z',
-    fulfillmentDate: '2024-01-12T11:00:00Z',
-  },
-]
+import { orders } from '@/library/dummy-data'
 
 const OrdersSection = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -141,7 +12,7 @@ const OrdersSection = () => {
   const userOrders = orders.filter((order) => order.customerId === '3')
   const filteredOrders = userOrders.filter(
     (order) =>
-      order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.items.some((item) =>
         item.productName.toLowerCase().includes(searchTerm.toLowerCase())
       )
@@ -220,9 +91,6 @@ const OrdersSection = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 md:pl-2 w-full"
-                  startContent={
-                    <LuSearch className="text-muted-foreground h-4 w-4" />
-                  }
                 />
               </div>
               <Chip
@@ -280,7 +148,7 @@ const OrdersSection = () => {
               <div className="space-y-4">
                 {tab.orders.length > 0 ? (
                   tab.orders.map((order) => (
-                    <OrderCard key={order.id} order={order} />
+                    <OrderCard key={order._id} order={order} />
                   ))
                 ) : (
                   <Card>
