@@ -88,7 +88,7 @@ const AdminHeader = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
 
   const dispatch = useAppDispatch()
-  const { openSidebar } = useAppSelector((state) => state.sidebar)
+  const { title } = useAppSelector((state) => state.header)
 
   useEffect(() => {
     // subscribe to changes
@@ -100,13 +100,15 @@ const AdminHeader = () => {
     <>
       <div className="pt-3" />
       <Navbar
-        className={cn(
-          'max-w-[93%] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out',
-          scrollHeight > 100
-            ? 'md:max-w-4xl shadow-lg'
-            : 'md:max-w-[1240px] bg-white shadow'
-        )}
-        classNames={{ wrapper: 'max-w-full' }}
+        classNames={{
+          base: cn(
+            'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
+            scrollHeight > 100
+              ? 'md:max-w-4xl shadow-lg'
+              : 'md:max-w-7xl bg-white shadow'
+          ),
+          wrapper: 'max-w-full px-0',
+        }}
       >
         {/* <div className="flex justify-between gap-4 border-b max-w-7xl px-5  mx-auto items-center px-5 py-3"> */}
         <NavbarContent className="flex gap-3 items-center">
@@ -117,7 +119,9 @@ const AdminHeader = () => {
             >
               <LuMenu size={20} />
             </button>
-            <h1 className="text-xl font-semibold text-primary">Dashboard</h1>
+            <h1 className="text-xl font-semibold text-primary">
+              {title || 'Dashboard'}
+            </h1>
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="flex gap-6 items-center" justify="end">

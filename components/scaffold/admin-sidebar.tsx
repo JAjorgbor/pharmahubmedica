@@ -1,23 +1,33 @@
 'use client'
-import { Menu, MenuItem, Sidebar, sidebarClasses } from 'react-pro-sidebar'
+import {
+  Menu,
+  menuClasses,
+  MenuItem,
+  Sidebar,
+  sidebarClasses,
+  SubMenu,
+} from 'react-pro-sidebar'
 
 import { setOpenSidebar } from '@/features/sidebarSlice'
 import { useAppDispatch, useAppSelector } from '@/features/store'
 import useMediaQuery from '@/hooks/useMediaQuery'
-import { theme } from '@/library/theme'
+import { theme } from '@/library/config'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import {
-  LuBox,
+  LuBoxes,
+  LuBuilding2,
   LuChevronLeft,
   LuChevronRight,
   LuHandshake,
   LuHouse,
+  LuLayers,
   LuLayoutDashboard,
   LuLayoutList,
   LuPackage,
+  LuSettings,
   LuUsers,
 } from 'react-icons/lu'
 
@@ -52,7 +62,7 @@ const AdminSidebar = () => {
             position: 'sticky',
             top: '0',
             flexDirection: 'column',
-            height: '100vh', // force full height
+            height: '100dvh', // force full height
             overflow: 'hidden', // prevent scrollbars
             background: 'white',
           },
@@ -152,14 +162,37 @@ const AdminSidebar = () => {
             {' '}
             Dashboard{' '}
           </MenuItem>
-          <MenuItem
-            icon={<LuPackage />}
-            component={<Link href="/admin/products" />}
+          <SubMenu
+            label="Inventory"
+            icon={<LuLayers />}
             className="text-foreground-600"
+            rootStyles={{
+              [`.${menuClasses.SubMenuExpandIcon} span`]: {
+                width: '7px',
+                height: '7px',
+                // top: '2px',
+                // position: 'relative',
+              },
+            }}
           >
-            {' '}
-            Products{' '}
-          </MenuItem>
+            <MenuItem
+              icon={<LuBoxes />}
+              component={<Link href="/admin/collections" />}
+              className="text-foreground-600 bg-foreground-100"
+            >
+              {' '}
+              Collections
+            </MenuItem>
+            <MenuItem
+              icon={<LuPackage />}
+              component={<Link href="/admin/products" />}
+              className="text-foreground-600 bg-foreground-100"
+            >
+              {' '}
+              Products{' '}
+            </MenuItem>
+          </SubMenu>
+
           <MenuItem
             icon={<LuLayoutList />}
             component={<Link href="/admin/orders" />}
@@ -183,6 +216,22 @@ const AdminSidebar = () => {
           >
             {' '}
             Referral Partners
+          </MenuItem>
+          <MenuItem
+            icon={<LuBuilding2 />}
+            component={<Link href="/admin/team" />}
+            className="text-foreground-600"
+          >
+            {' '}
+            Team
+          </MenuItem>
+          <MenuItem
+            icon={<LuSettings />}
+            component={<Link href="/admin/settings" />}
+            className="text-foreground-600"
+          >
+            {' '}
+            Settings
           </MenuItem>
         </Menu>
         <Menu

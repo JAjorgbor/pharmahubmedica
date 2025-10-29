@@ -15,7 +15,7 @@ const StatCard: FC<StatCardProps> = ({ title, icon, value }) => {
     <Card shadow="sm" className="p-3">
       <CardHeader className="justify-between">
         <p className="text-sm">{title}</p>
-        <Icon size={16} className="text-foreground-500" />
+        <Icon size={16} className="text-primary" />
       </CardHeader>
       <CardBody>
         <h2 className="text-xl font-semibold">{value}</h2>
