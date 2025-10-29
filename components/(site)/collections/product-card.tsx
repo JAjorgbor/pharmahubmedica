@@ -18,6 +18,7 @@ interface ProductCardProps {
 }
 
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
+  console.log('product', product)
   return (
     <Card className="p-0 group bg-background shadow-md transition-all transform hover:-translate-y-2">
       <CardHeader className="p-0 relative">
