@@ -173,7 +173,7 @@ const OrderSection = () => {
                 <div className="mt-6 pt-6 border-t border-t-foreground-200">
                   <div className="flex items-center justify-between text-lg font-semibold">
                     <span>Total Amount</span>
-                    <span className="text-[#031D91]">
+                    <span className="text-primary">
                       {currencyFormatter(2400)}
                     </span>
                   </div>

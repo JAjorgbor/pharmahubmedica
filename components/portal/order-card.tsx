@@ -1,3 +1,4 @@
+import { IOrder } from '@/library/dummy-data'
 import { Button, Card, CardBody, Chip } from '@heroui/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -40,13 +41,13 @@ const getStatusColor = (status: any) => {
   }
 }
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({ order }: { order: IOrder }) => {
   return (
     <Card>
       <CardBody className="p-6">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-2">
           <div>
-            <h3 className="font-semibold text-lg">{order.id}</h3>
+            <h3 className="font-semibold text-lg">{order._id}</h3>
             <p className="text-sm text-muted-foreground">
               Ordered on {new Date(order.orderDate).toLocaleDateString()}
             </p>
@@ -112,7 +113,7 @@ const OrderCard = ({ order }) => {
             </Button>
             <Button
               as={Link}
-              href={`/portal/orders/${order.id}`}
+              href={`/portal/orders/${order._id}`}
               variant="ghost"
               size="sm"
             >
@@ -122,7 +123,7 @@ const OrderCard = ({ order }) => {
             {order.status === 'fulfilled' && (
               <Button
                 size="sm"
-                className="bg-[#031D91] hover:bg-blue-800 text-white"
+                className="bg-primary hover:bg-blue-800 text-white"
               >
                 Reorder
               </Button>

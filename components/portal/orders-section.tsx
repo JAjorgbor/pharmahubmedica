@@ -75,7 +75,7 @@ const OrdersSection = () => {
       <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="flex items-center space-x-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#031D91]">My Orders</h1>
+            <h1 className="text-3xl font-bold text-primary">My Orders</h1>
             <p className="text-foreground-500">
               Track and manage your order history
             </p>

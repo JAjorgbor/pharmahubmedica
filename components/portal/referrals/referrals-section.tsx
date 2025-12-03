@@ -21,6 +21,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import {
   LuCircleCheckBig,
@@ -38,7 +39,7 @@ const referrals = [
     referee: 'Dr. Sarah Johnson',
     email: 'doctor@example.com',
     phoneNo: '+1234567892',
-    status: 'used',
+    status: 'active',
     createdOn: '2024-01-10T09:30:00Z',
     usedOn: '2024-01-15T09:00:00Z',
     commission: 150.28,
@@ -56,7 +57,7 @@ const referrals = [
     referee: 'Mary Wilson',
     email: 'mary@example.com',
     phoneNo: '+1234567893',
-    status: 'expired',
+    status: 'inactive',
     createdOn: '2024-03-12T11:00:00Z',
     commission: 235.45,
   },
@@ -66,9 +67,7 @@ const getStatusIcon = (status: any) => {
   switch (status) {
     case 'active':
       return <LuClock className="h-4 w-4" />
-    case 'used':
-      return <LuCircleCheckBig className="h-4 w-4" />
-    case 'expired':
+    case 'inactive':
       return <LuCircleX className="h-4 w-4" />
     default:
       return <LuClock className="h-4 w-4" />
@@ -78,11 +77,9 @@ const getStatusIcon = (status: any) => {
 const getStatusColor = (status: any) => {
   switch (status) {
     case 'active':
-      return 'primary'
-    case 'used':
       return 'success'
-    case 'expired':
-      return 'danger'
+    case 'inactive':
+      return 'warning'
     default:
       return 'default'
   }
@@ -122,22 +119,13 @@ const ReferralsSection = () => {
       emptyText: 'No active referrals',
     },
     {
-      key: 'used',
-      label: `Used (${getReferralsByStatus('used').length})`,
-      referrals: getReferralsByStatus('used'),
-      emptyIcon: (
-        <LuClock className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
-      ),
-      emptyText: 'No used referrals',
-    },
-    {
-      key: 'expired',
-      label: `Expired (${getReferralsByStatus('expired').length})`,
-      referrals: getReferralsByStatus('expired'),
+      key: 'inactive',
+      label: `Inactive (${getReferralsByStatus('inactive').length})`,
+      referrals: getReferralsByStatus('inactive'),
       emptyIcon: (
         <LuPackage className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
       ),
-      emptyText: 'No expired referrals',
+      emptyText: 'No inactive referrals',
     },
   ]
 
@@ -188,7 +176,7 @@ const ReferralsSection = () => {
       },
       {
         accessorKey: 'commission',
-        header: 'Commission',
+        header: 'Total Commission',
         cell: ({ row }) =>
           row.original.commission ? (
             <div className="font-medium text-green-600">
@@ -201,9 +189,14 @@ const ReferralsSection = () => {
       {
         id: 'actions',
         header: () => <div className="text-right">Actions</div>,
-        cell: ({ row }) => (
+        cell: ({ row, original }) => (
           <div className="flex items-center justify-end space-x-2">
-            <Button variant="light" size="sm" href="#" target="_blank">
+            <Button
+              as={Link}
+              variant="light"
+              size="sm"
+              href={`/portal/referrals/${'referral-id'}`}
+            >
               <LuEye className="h-4 w-4" />
             </Button>
           </div>
@@ -226,7 +219,7 @@ const ReferralsSection = () => {
       <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:space-x-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#031D91]">My Referrals</h1>
+            <h1 className="text-3xl font-bold text-primary">My Referrals</h1>
             <p className="text-foreground-500">
               Create and manage referrals to earn commission
             </p>
@@ -241,7 +234,7 @@ const ReferralsSection = () => {
           <Card className="p-5">
             <CardBody>
               <div className="flex items-center space-x-2">
-                <LuUserCheck className="h-8 w-8 text-[#031D91]" />
+                <LuUserCheck className="h-8 w-8 text-primary" />
                 <div>
                   <p className="text-sm font-medium">Total Referrals</p>
                   <p className="text-2xl font-bold">14</p>
@@ -277,7 +270,7 @@ const ReferralsSection = () => {
           <Card className="p-5">
             <CardBody>
               <div className="flex items-center space-x-2">
-                <LuPackage className="h-8 w-8 text-[#031D91]" />
+                <LuPackage className="h-8 w-8 text-primary" />
                 <div>
                   <p className="text-sm font-medium">Expired</p>
                   <p className="text-2xl font-bold">1</p>

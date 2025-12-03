@@ -105,7 +105,7 @@ const AdminHeader = () => {
             'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
             scrollHeight > 100
               ? 'md:max-w-4xl shadow-lg'
-              : 'md:max-w-7xl bg-white shadow'
+              : 'md:max-w-[77.5rem] bg-white shadow'
           ),
           wrapper: 'max-w-full px-0',
         }}

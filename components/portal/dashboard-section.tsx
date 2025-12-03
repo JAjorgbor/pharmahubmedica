@@ -130,7 +130,7 @@ const DashboardSection = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-[#031D91]">
+          <h1 className="text-3xl font-bold text-primary">
             Welcome back, Jane Doe!
           </h1>
           <p className="text-muted-foreground">
@@ -142,7 +142,7 @@ const DashboardSection = () => {
           <Card className="p-5">
             <CardBody>
               <div className="flex items-center space-x-2">
-                <LuShoppingBag className="h-8 w-8 text-[#031D91]" />
+                <LuShoppingBag className="h-8 w-8 text-primary" />
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">
                     Total Orders
@@ -184,7 +184,7 @@ const DashboardSection = () => {
           <Card className="p-5">
             <CardBody>
               <div className="flex items-center space-x-2">
-                <LuPackage className="h-8 w-8 text-[#031D91]" />
+                <LuPackage className="h-8 w-8 text-primary" />
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">
                     Total Spent
@@ -267,7 +267,7 @@ const DashboardSection = () => {
                 size={40}
                 <p className="mt-2 text-muted-foreground">No orders yet</p>
                 <Link href="/collections">
-                  <Button className="mt-4 bg-[#031D91] hover:bg-blue-800">
+                  <Button className="mt-4 bg-primary hover:bg-blue-800">
                     Start Shopping
                   </Button>
                 </Link>
@@ -290,7 +290,7 @@ const DashboardSection = () => {
             <CardFooter>
               <Button
                 as={Link}
-                className="w-full bg-[#031D91] hover:bg-blue-800 text-white"
+                className="w-full bg-primary hover:bg-blue-800 text-white"
                 href="/collections"
               >
                 Shop Now

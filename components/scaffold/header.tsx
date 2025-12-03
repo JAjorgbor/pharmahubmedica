@@ -29,14 +29,13 @@ const Header = () => {
   }, [scrollY])
   return (
     <>
-      <div className="pt-3 md:hidden" />
+      <div className="pt-5 md:hidden" />
       <Navbar
         classNames={{
           base: cn(
             'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
-            scrollHeight > 100
-              ? 'md:max-w-4xl shadow-lg'
-              : 'md:max-w-7xl bg-white shadow'
+            scrollHeight > 100 && 'max-w-4xl shadow-lg',
+            'md:max-w-7xl md:relative md:backdrop-blur-none md:shadow-none'
           ),
           wrapper: 'max-w-full px-0',
         }}
@@ -60,7 +59,7 @@ const Header = () => {
                 height={80}
                 width={200}
                 alt="logo"
-                className="w-40 hidden md:inline-block"
+                className="w-40 hidden md:-ml-6 md:inline-block"
               />
             </Link>
           </NavbarBrand>
@@ -97,7 +96,7 @@ const Header = () => {
         </NavbarContent>
         {/* </div> */}
       </Navbar>
-      <hr className="border-foreground-300 max-w-7xl px-5 mx-auto" />
+      <hr className="border-foreground-300 max-w-7xl px-5 mx-auto z-40 relative my-3" />
       <Navbar
         className={cn(
           'hidden md:block mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',

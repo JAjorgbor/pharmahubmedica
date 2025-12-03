@@ -16,6 +16,7 @@ import {
   LuHouse,
   LuLayoutDashboard,
   LuLayoutList,
+  LuSettings,
 } from 'react-icons/lu'
 
 const PortalSidebar = () => {
@@ -164,6 +165,14 @@ const PortalSidebar = () => {
           >
             {' '}
             Referrals
+          </MenuItem>
+          <MenuItem
+            icon={<LuSettings />}
+            component={<Link href="/portal/settings" />}
+            className="text-foreground-600"
+          >
+            {' '}
+            Settings
           </MenuItem>
         </Menu>
         <Menu
