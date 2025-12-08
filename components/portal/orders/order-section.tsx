@@ -85,21 +85,12 @@ const OrderSection = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="flex items-center justify-between">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 space-x-4">
-            <Button
-              as={Link}
-              href="/portal/orders"
-              variant="flat"
-              size="sm"
-              className="font-bold"
-              startContent={<LuChevronLeft className="h-4 w-4 mr-2" />}
-            >
-              Back
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <Button isIconOnly as={Link} href="/portal/orders" variant="light">
+              <LuChevronLeft size={25} />
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Order ORD-023
-              </h1>
+              <h1 className="text-3xl font-bold text-primary">Order ORD-023</h1>
               <p className="text-gray-600">Placed on July 23, 2025 at 12:14</p>
             </div>
           </div>

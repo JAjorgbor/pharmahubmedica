@@ -1,4 +1,4 @@
-import SettingsSection from '@/components/portal/settings-section'
+import SettingsSection from '@/components/portal/settings/settings-section'
 
 export const metadata = { title: 'Settings' }
 

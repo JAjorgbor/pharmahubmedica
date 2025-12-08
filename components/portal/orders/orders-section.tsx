@@ -1,10 +1,20 @@
 'use client'
 
-import { Card, CardBody, Chip, Input, Tab, Tabs } from '@heroui/react'
+import {
+  BreadcrumbItem,
+  Breadcrumbs,
+  Card,
+  CardBody,
+  Chip,
+  Input,
+  Tab,
+  Tabs,
+} from '@heroui/react'
 import { useState } from 'react'
 import { LuCircleCheckBig, LuCircleX, LuClock, LuPackage } from 'react-icons/lu'
-import OrderCard from './order-card'
+import OrderCard from '@/components/portal/orders/order-card'
 import { orders } from '@/library/dummy-data'
+import Link from 'next/link'
 
 const OrdersSection = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -76,11 +86,19 @@ const OrdersSection = () => {
         <div className="flex items-center space-x-4">
           <div>
             <h1 className="text-3xl font-bold text-primary">My Orders</h1>
-            <p className="text-foreground-500">
-              Track and manage your order history
-            </p>
+            <Breadcrumbs>
+              <BreadcrumbItem>
+                <Link href="/portal/dashboard">Dashboard</Link>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <Link href="#">Orders</Link>
+              </BreadcrumbItem>
+            </Breadcrumbs>
           </div>
         </div>
+        <p className="text-foreground-500">
+          Track and manage your order history
+        </p>
 
         <Card className="p-4 md:p-0">
           <CardBody className="px-2 py-6 sm:py-4">

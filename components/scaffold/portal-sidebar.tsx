@@ -37,6 +37,7 @@ const PortalSidebar = () => {
   useEffect(() => {
     setIsHydrated(true)
   }, [])
+  const isActive = (path) => pathname.includes(path)
   return (
     isHydrated && (
       <Sidebar
@@ -131,7 +132,7 @@ const PortalSidebar = () => {
               height: '40px',
               borderRadius: '10px',
               transition: 'all 0.1s ease-in-out',
-              ['&:hover']: {
+              ['&.active, &.ps-active']: {
                 backgroundColor: theme.colors.primary,
                 color: 'white',
               },
@@ -146,6 +147,7 @@ const PortalSidebar = () => {
             icon={<LuLayoutDashboard />}
             component={<Link href="/portal/dashboard" />}
             className="text-foreground-600"
+            active={isActive('/portal/dashboard')}
           >
             {' '}
             Dashboard{' '}
@@ -154,6 +156,7 @@ const PortalSidebar = () => {
             icon={<LuLayoutList />}
             component={<Link href="/portal/orders" />}
             className="text-foreground-600"
+            active={isActive('/portal/orders')}
           >
             {' '}
             Orders{' '}
@@ -162,6 +165,7 @@ const PortalSidebar = () => {
             icon={<LuHandshake />}
             component={<Link href="/portal/referrals" />}
             className="text-foreground-600"
+            active={isActive('/portal/referrals')}
           >
             {' '}
             Referrals
@@ -170,6 +174,7 @@ const PortalSidebar = () => {
             icon={<LuSettings />}
             component={<Link href="/portal/settings" />}
             className="text-foreground-600"
+            active={isActive('/portal/settings')}
           >
             {' '}
             Settings

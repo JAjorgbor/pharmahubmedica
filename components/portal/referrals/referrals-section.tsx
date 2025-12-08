@@ -3,6 +3,8 @@
 import InputField from '@/components/elements/input-field'
 import { currencyFormatter } from '@/utils/currencyFormatter'
 import {
+  BreadcrumbItem,
+  Breadcrumbs,
   Button,
   Card,
   CardBody,
@@ -220,15 +222,21 @@ const ReferralsSection = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:space-x-4">
           <div>
             <h1 className="text-3xl font-bold text-primary">My Referrals</h1>
-            <p className="text-foreground-500">
-              Create and manage referrals to earn commission
-            </p>
+            <Breadcrumbs>
+              <BreadcrumbItem>
+                <Link href="/portal/dashboard">Dashboard</Link>
+              </BreadcrumbItem>
+              <BreadcrumbItem>Referrals</BreadcrumbItem>
+            </Breadcrumbs>
           </div>
 
           <Button size="md" startContent={<LuPlus />} color="primary">
             Create Referral
           </Button>
         </div>
+        <p className="text-foreground-500">
+          Create and manage referrals to earn commission
+        </p>
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
           <Card className="p-5">

@@ -2,6 +2,9 @@
 import { currencyFormatter } from '@/utils/currencyFormatter'
 import {
   addToast,
+  BreadcrumbItem,
+  Breadcrumbs,
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -13,7 +16,9 @@ import {
 } from '@heroui/react'
 import React, { useMemo, useState } from 'react'
 import {
+  LuArrowLeft,
   LuBox,
+  LuChevronLeft,
   LuCircleCheckBig,
   LuClock,
   LuCoins,
@@ -187,15 +192,36 @@ const ReferralDetailsSection = () => {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:space-x-4">
-          <div>
-            <h1 className="text-3xl font-bold text-primary">
-              [Referral User Name]
-            </h1>
-            <p className="text-foreground-500">
-              Monitor orders from this referral patients and track commissions
-            </p>
+          <div className="flex gap-4 items-center">
+            <Button
+              isIconOnly
+              as={Link}
+              href="/portal/referrals"
+              variant="light"
+            >
+              <LuChevronLeft size={25} />
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-primary">
+                [Referral User Name]
+              </h1>
+              <Breadcrumbs>
+                <BreadcrumbItem>
+                  <Link href="/portal/dashboard">Dashboard</Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                  <Link href="/portal/referrals">Referrals</Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                  <Link href="#">[Referral Id]</Link>
+                </BreadcrumbItem>
+              </Breadcrumbs>
+            </div>
           </div>
         </div>
+        <p className="text-foreground-500">
+          Monitor orders from this referral patients and track commissions
+        </p>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
           <Card className="p-5">
             <CardBody>

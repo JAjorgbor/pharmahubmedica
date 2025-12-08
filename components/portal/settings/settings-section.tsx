@@ -1,6 +1,8 @@
 'use client'
 
 import {
+  BreadcrumbItem,
+  Breadcrumbs,
   Button,
   Card,
   CardBody,
@@ -21,7 +23,8 @@ import {
   LuUser,
 } from 'react-icons/lu'
 import z from 'zod'
-import InputField from '../elements/input-field'
+import InputField from '../../elements/input-field'
+import Link from 'next/link'
 
 const profileSchema = z.object({
   firstName: z.string({ error: 'First name is required' }),
@@ -62,13 +65,13 @@ const SettingsSection = () => {
     resolver: zodResolver(profileSchema),
   })
   const securityFormMethods = useForm<SecurityFormFields>({
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(securitySchema),
   })
   const professionalFormMethods = useForm<ProfessionalFormFields>({
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(professionalSchema),
   })
   const payoutFormMethods = useForm<PayoutFormFields>({
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(payoutSchema),
   })
 
   const isDoctor = true
@@ -82,11 +85,19 @@ const SettingsSection = () => {
       <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-primary">Settings</h1>
-          <p className="text-gray-600">
-            Manage your account settings and preferences
-          </p>
+          <Breadcrumbs>
+            <BreadcrumbItem>
+              <Link href="/portal/dashboard">Dashboard</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link href="#">Settings</Link>
+            </BreadcrumbItem>
+          </Breadcrumbs>
         </div>
-        <div className="mx-auto space-y-8 max-w-4xl ">
+        <p className="text-gray-600">
+          Manage your account settings and preferences
+        </p>
+        <div className=" space-y-8 max-w-4xl ">
           <Tabs
             aria-label="Settings"
             defaultSelectedKey="profile"
