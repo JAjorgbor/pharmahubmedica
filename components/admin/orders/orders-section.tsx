@@ -221,9 +221,7 @@ const OrdersSection = () => {
             Create Order
           </Button>
         </div>
-        <p className="text-foreground-500">
-          Manage and track customer orders..
-        </p>
+        <p className="text-foreground-500">Manage and track customer orders.</p>
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
           <Card className="py-4">
@@ -285,7 +283,11 @@ const OrdersSection = () => {
         </div>
 
         <Card>
-          <CardHeader>Order Management </CardHeader>
+          <CardHeader>
+            <Chip color="secondary" size="sm">
+              Total Orders : {items.length}
+            </Chip>{' '}
+          </CardHeader>
           <CardBody>
             <TableWrapper
               columns={columns}
@@ -326,7 +328,9 @@ const OrdersSection = () => {
                         }}
                         options={[
                           {
-                            label: `All Order Status(${getStatusCount('all')})`,
+                            label: `All Order Status (${getStatusCount(
+                              'all'
+                            )})`,
                             value: 'all',
                           },
                           {

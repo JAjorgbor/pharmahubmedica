@@ -189,9 +189,10 @@ const ReferralsSection = () => {
           ),
       },
       {
+        accessorKey: 'commission',
         id: 'actions',
         header: () => <div className="text-right">Actions</div>,
-        cell: ({ row, original }) => (
+        cell: () => (
           <div className="flex items-center justify-end space-x-2">
             <Button
               as={Link}

@@ -23,9 +23,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
-import { LuClipboardList } from 'react-icons/lu'
+import { LuArrowUpDown, LuClipboardList } from 'react-icons/lu'
 
-type DefaultItemProps = { _id: string }
+type DefaultItemProps = {}
 
 interface TableWrapperProps<
   I extends DefaultItemProps,
@@ -133,10 +133,15 @@ const TableWrapper = <
                           : null
                       }
                     >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      <div className="inline-flex gap-2 items-center">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {allowsSortingFor?.includes(header.id) && (
+                          <LuArrowUpDown />
+                        )}
+                      </div>
                     </TableColumn>
                   ))
                 ) as any
@@ -151,7 +156,7 @@ const TableWrapper = <
               }
             >
               {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.original._id} className="text-nevada">
+                <TableRow key={row.id} className="text-nevada">
                   {row.getVisibleCells().map((cell, index) => (
                     <TableCell key={index}>
                       {flexRender(

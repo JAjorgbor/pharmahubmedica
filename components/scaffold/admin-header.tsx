@@ -86,6 +86,11 @@ export const UserPanel = () => {
 const AdminHeader = () => {
   const { scrollY } = useScroll() // reactive MotionValue
   const [scrollHeight, setScrollHeight] = useState(0)
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => {
+    setHydrated(true)
+  }, [])
 
   const dispatch = useAppDispatch()
   const { title } = useAppSelector((state) => state.header)
@@ -120,7 +125,7 @@ const AdminHeader = () => {
               <LuMenu size={20} />
             </button>
             <h1 className="text-xl font-semibold text-primary">
-              {title || 'Dashboard'}
+              {hydrated ? title : 'Dashboard'}
             </h1>
           </NavbarBrand>
         </NavbarContent>

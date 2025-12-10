@@ -89,11 +89,18 @@ const AddCollectionModal = ({ isOpen, setIsOpen }: BaseModalProps) => {
             placeholder="Describe this collection..."
             controllerProps={{ name: 'description', control }}
           />
-          <InputField
-            label="Visible"
-            type="switch"
-            controllerProps={{ name: 'visible', control }}
-          />
+          <div className="space-y-1">
+            <InputField
+              label="Visible"
+              type="switch"
+              controllerProps={{ name: 'visible', control }}
+            />
+            <p className="text-foreground-500 text-sm">
+              Toggle to control whether this collection and all its products are
+              visible to customers in the store. When turned off, the collection
+              and its products will be hidden from public view.
+            </p>
+          </div>
         </div>
       </form>
     </ModalWrapper>

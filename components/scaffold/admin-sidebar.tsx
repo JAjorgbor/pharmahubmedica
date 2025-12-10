@@ -21,6 +21,7 @@ import {
   LuBuilding2,
   LuChevronLeft,
   LuChevronRight,
+  LuContactRound,
   LuHandshake,
   LuHouse,
   LuLayers,
@@ -201,22 +202,36 @@ const AdminSidebar = () => {
             {' '}
             Orders{' '}
           </MenuItem>
-          <MenuItem
-            icon={<LuUsers />}
-            component={<Link href="/admin/users" />}
+          <SubMenu
+            label="Contacts"
+            icon={<LuContactRound />}
             className="text-foreground-600"
+            rootStyles={{
+              [`.${menuClasses.SubMenuExpandIcon} span`]: {
+                width: '7px',
+                height: '7px',
+                // top: '2px',
+                // position: 'relative',
+              },
+            }}
           >
-            {' '}
-            Users{' '}
-          </MenuItem>
-          <MenuItem
-            icon={<LuHandshake />}
-            component={<Link href="/admin/referral-partners" />}
-            className="text-foreground-600"
-          >
-            {' '}
-            Referral Partners
-          </MenuItem>
+            <MenuItem
+              icon={<LuUsers />}
+              component={<Link href="/admin/customers" />}
+              className="text-foreground-600 bg-foreground-100"
+            >
+              {' '}
+              Customers{' '}
+            </MenuItem>
+            <MenuItem
+              icon={<LuHandshake />}
+              component={<Link href="/admin/referral-partners" />}
+              className="text-foreground-600 bg-foreground-100"
+            >
+              {' '}
+              Referral Partners
+            </MenuItem>
+          </SubMenu>
           <MenuItem
             icon={<LuBuilding2 />}
             component={<Link href="/admin/team" />}

@@ -170,7 +170,10 @@ const CollectionsSection = () => {
           structured and easy to navigate.
         </p>
         <Card className="p-3">
-          <CardHeader className="justify-end items-center">
+          <CardHeader className="justify-between gap-4 flex-wrap items-center">
+            <Chip color="secondary" size="sm">
+              Total Collections : {items.length}
+            </Chip>
             <Button
               color="primary"
               variant="light"

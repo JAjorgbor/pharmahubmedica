@@ -208,7 +208,10 @@ const ProductsSection = () => {
           Manage the pharmacy inventory and product catalog.
         </p>
         <Card className="p-3">
-          <CardHeader className="justify-end items-center">
+          <CardHeader className="justify-between flex-wrap gap-4 items-center">
+            <Chip color="secondary" size="sm">
+              Total Products : {items.length}
+            </Chip>
             <Button
               color="primary"
               variant="light"
@@ -273,7 +276,7 @@ const ProductsSection = () => {
                         }}
                         options={[
                           {
-                            label: `All Visibility(${getVisibilityStatusCount(
+                            label: `All Visibility (${getVisibilityStatusCount(
                               'all'
                             )})`,
                             value: 'all',

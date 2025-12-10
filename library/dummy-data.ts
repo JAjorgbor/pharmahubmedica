@@ -626,3 +626,111 @@ export const orders: IOrder[] = [
     fulfillmentDate: '2024-01-12T11:00:00Z',
   },
 ]
+
+export interface IUser {
+  id: string
+  email: string
+  name: string
+  phone?: string
+  address?: string
+  licenseNumber?: string // For doctors
+  specialization?: string // For doctors
+  totalSpent?: number // For doctors (percentage000)
+  commissionRate?: number // For doctors (percentage000)
+  paidCommissions?: number // For doctors (percentage000)
+  pendingCommissions?: number // For doctors (percentage000)
+  referrals?: number // For doctors (percentage000)
+  isActive: boolean
+  createdAt: string
+}
+
+export const users: IUser[] = [
+  {
+    id: '1',
+    email: 'admin@pharmacare.com',
+    name: 'Admin User',
+    phone: '+1234567890',
+    totalSpent: 1500,
+    referrals: 15,
+    commissionRate: 1.5,
+    paidCommissions: 2500,
+    pendingCommissions: 1500,
+    address: '123 Admin St, City, State',
+    isActive: true,
+    createdAt: '2024-01-01T00:00:00Z',
+  },
+  {
+    id: '2',
+    email: 'doctor@example.com',
+    name: 'Dr. Sarah Johnson',
+    phone: '+1234567891',
+    address: '456 Medical Ave, City, State',
+    licenseNumber: 'MD12345',
+    specialization: 'General Medicine',
+    totalSpent: 5000,
+    referrals: 50,
+    commissionRate: 5,
+    paidCommissions: 15000,
+    pendingCommissions: 5000,
+    isActive: true,
+    createdAt: '2024-01-15T00:00:00Z',
+  },
+  {
+    id: '3',
+    email: 'user@example.com',
+    name: 'John Doe',
+    phone: '+1234567892',
+    address: '789 Customer Rd, City, State',
+    isActive: true,
+    totalSpent: 17000,
+    referrals: 170,
+    commissionRate: 1.7,
+    paidCommissions: 17000,
+    pendingCommissions: 7000,
+    createdAt: '2024-02-01T00:00:00Z',
+  },
+  {
+    id: '4',
+    email: 'doctor2@example.com',
+    name: 'Dr. Michael Chen',
+    phone: '+1234567893',
+    address: '321 Health Blvd, City, State',
+    licenseNumber: 'MD67890',
+    specialization: 'Cardiology',
+    totalSpent: 7000,
+    referrals: 70,
+    commissionRate: 7,
+    paidCommissions: 70000,
+    pendingCommissions: 2700,
+    isActive: true,
+    createdAt: '2024-02-10T00:00:00Z',
+  },
+  {
+    id: '5',
+    email: 'user2@example.com',
+    name: 'Jane Smith',
+    phone: '+1234567894',
+    address: '654 Main St, City, State',
+    isActive: true,
+    totalSpent: 2000,
+    referrals: 20,
+    commissionRate: 2,
+    paidCommissions: 20000,
+    pendingCommissions: 6000,
+    createdAt: '2024-02-15T00:00:00Z',
+  },
+  {
+    id: '6',
+    email: 'inactive@example.com',
+    name: 'Inactive User',
+    phone: '+1234567895',
+    address: '987 Old St, City, State',
+    totalSpent: 1000,
+    referrals: 10,
+    commissionRate: 1,
+    paidCommissions: 10000,
+    pendingCommissions: 500,
+    isActive: false,
+    createdAt: '2024-01-20T00:00:00Z',
+  },
+]

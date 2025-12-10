@@ -19,6 +19,7 @@ import { useForm } from 'react-hook-form'
 
 import { z } from 'zod'
 import Link from 'next/link'
+import { LuChevronLeft } from 'react-icons/lu'
 
 export const productSchema = z.object({
   productName: z
@@ -74,19 +75,24 @@ const AddProductSection = () => {
   }
   return (
     <div className="space-y-5">
-      <div className="space-y-1">
-        <h2 className="text-primary text-2xl font-semibold">
-          Add Product To Inventory
-        </h2>
-        <Breadcrumbs>
-          <BreadcrumbItem>
-            <Link href="/admin/dashboard">Dashboard</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <Link href="/admin/products">Products</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem>Add</BreadcrumbItem>
-        </Breadcrumbs>
+      <div className="flex items-center gap-2">
+        <Button isIconOnly as={Link} href="/admin/products" variant="light">
+          <LuChevronLeft size={25} />
+        </Button>
+        <div className="space-y-1">
+          <h2 className="text-primary text-2xl font-semibold">
+            Add Product To Inventory
+          </h2>
+          <Breadcrumbs>
+            <BreadcrumbItem>
+              <Link href="/admin/dashboard">Dashboard</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link href="/admin/products">Products</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>Add</BreadcrumbItem>
+          </Breadcrumbs>
+        </div>
       </div>
       <Card>
         <CardHeader>
