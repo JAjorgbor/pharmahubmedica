@@ -11,7 +11,10 @@ function Providers({ children }: { children: React.ReactNode }) {
     <>
       <Provider store={store}>
         <HeroUIProvider>
-          <ToastProvider />
+          <ToastProvider
+            regionProps={{ classNames: { base: 'z-[999]' } }}
+            placement="top-center"
+          />
 
           {children}
         </HeroUIProvider>

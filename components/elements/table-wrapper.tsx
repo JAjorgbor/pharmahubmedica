@@ -25,38 +25,32 @@ import {
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
 import { LuArrowUpDown, LuClipboardList } from 'react-icons/lu'
 
-type DefaultItemProps = {}
-
-interface TableWrapperProps<
-  I extends DefaultItemProps,
-  C extends ColumnDef<I, any>[]
-> {
+interface TableWrapperProps<TData> {
   allowsSortingFor?: string[]
-  items: I[]
-  columns: C
+  items: TData[]
+  columns: ColumnDef<TData, any>[]
   isLoading?: boolean
   emptyContent?: ReactNode
   topContent?: (params?: {
-    table: TableType<I>
+    table: TableType<TData>
     searchField: (placeholder: string) => ReactNode
   }) => ReactNode
   bottomContent?: (params?: {
-    table: TableType<I>
+    table: TableType<TData>
     rowPerPage: ReactNode
     pagination: ReactNode
   }) => ReactNode
+  ariaLabel?: string
 }
 
-const TableWrapper = <
-  I extends DefaultItemProps,
-  C extends ColumnDef<I, any>[]
->({
+const TableWrapper = <TData,>({
   allowsSortingFor = [],
   items,
   columns,
   topContent,
   bottomContent,
   isLoading = false,
+  ariaLabel = 'Data Table',
   emptyContent = (
     <div className="flex flex-col justify-center items-center gap-2 text-foreground-500">
       <LuClipboardList size={70} strokeWidth={0.6} />
@@ -65,9 +59,8 @@ const TableWrapper = <
       </p>
     </div>
   ),
-}: TableWrapperProps<I, C>) => {
+}: TableWrapperProps<TData>) => {
   const [globalFilter, setGlobalFilter] = useState<any>('')
-  const [categoryFilter, setCategoryFilter] = useState('all')
   const [isHydrated, setIsHydrated] = useState(false)
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -113,6 +106,7 @@ const TableWrapper = <
       <div className="overflow-hidden">
         <div className="min-w-full max-w-0 overflow-auto">
           <Table
+            aria-label={ariaLabel}
             removeWrapper
             classNames={{
               tbody: 'divide-y divide-foreground-200',
@@ -139,7 +133,7 @@ const TableWrapper = <
                           header.getContext()
                         )}
                         {allowsSortingFor?.includes(header.id) && (
-                          <LuArrowUpDown />
+                          <LuArrowUpDown aria-label={`Sort by ${header.id}`} />
                         )}
                       </div>
                     </TableColumn>
@@ -190,6 +184,7 @@ const SelectRowsPerPage = <I,>({ table }: { table: TableType<I> }) => {
         className="bg-transparent outline-none text-foreground-600 text-small"
         onChange={(e) => table.setPageSize(Number(e.target.value))}
         defaultValue={'5'}
+        aria-label="Select number of rows per page"
       >
         <option value="5">5</option>
         <option value="10">10</option>
@@ -232,6 +227,7 @@ const SearchField = <I,>({
       className="w-full"
       placeholder={placeholder}
       onChange={(value) => setGlobalFilter(value)}
+      aria-label={placeholder || 'Search table'}
     />
   )
 }

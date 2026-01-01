@@ -1,8 +1,11 @@
 'use client'
-import AddCollectionModal from '@/components/admin/collections/add-collection-modal'
+import { ICategory } from '@/api-client/admin/interfaces/category.interfaces'
+import AddCollectionDrawer from '@/components/admin/collections/add-collection-drawer'
+import UpdateCollectionDrawer from '@/components/admin/collections/update-collection-drawer'
+import DeleteCollectionModal from '@/components/admin/collections/delete-collection-modal'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
-import { categories, ICategory } from '@/library/dummy-data'
+import useGetCategories from '@/hooks/requests/useGetCategories'
 import {
   Chip,
   Dropdown,
@@ -27,9 +30,17 @@ import { LuExternalLink, LuPlus } from 'react-icons/lu'
 const columnHelper = createColumnHelper<ICategory>()
 
 const CollectionsSection = () => {
-  const items = categories
   const [visibilityFilter, setVisibilityFilter] = useState('all')
   const [showAddCollectionModal, setShowAddCollectionModal] = useState(false)
+  const [showUpdateCollectionModal, setShowUpdateCollectionModal] =
+    useState(false)
+  const [showDeleteCollectionModal, setShowDeleteCollectionModal] =
+    useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<ICategory>()
+
+  const { categories, categoriesLoading, categoriesError } = useGetCategories()
+
+  const items = categories
 
   const columns = useMemo(
     () => [
@@ -38,8 +49,8 @@ const CollectionsSection = () => {
         header: 'Category',
         cell: ({ row: { original: item } }) => (
           <div className="flex gap-2 items-center">
-            <Image
-              src={item.image}
+            <img
+              src={item.image.url}
               alt={`${item.name} image`}
               width={100}
               height={100}
@@ -52,7 +63,7 @@ const CollectionsSection = () => {
           </div>
         ),
       }),
-      columnHelper.accessor('products', {
+      columnHelper.accessor('productsCount', {
         id: 'products',
         header: 'products',
         cell: ({ getValue }) => getValue(),
@@ -126,12 +137,22 @@ const CollectionsSection = () => {
               <DropdownItem
                 key="manage"
                 showDivider
-                as={Link}
-                href={`/admin/products?category=${item.name}`}
+                onPress={() => {
+                  setShowUpdateCollectionModal(true)
+                  setSelectedCategory(item)
+                }}
               >
                 Manage
               </DropdownItem>
-              <DropdownItem key="delete" color="danger" variant="flat">
+              <DropdownItem
+                key="delete"
+                color="danger"
+                variant="flat"
+                onPress={() => {
+                  setSelectedCategory(item)
+                  setShowDeleteCollectionModal(true)
+                }}
+              >
                 Delete Category
               </DropdownItem>
             </DropdownMenu>
@@ -139,7 +160,7 @@ const CollectionsSection = () => {
         ),
       }),
     ],
-    [items]
+    []
   )
 
   return (
@@ -172,7 +193,7 @@ const CollectionsSection = () => {
         <Card className="p-3">
           <CardHeader className="justify-between gap-4 flex-wrap items-center">
             <Chip color="secondary" size="sm">
-              Total Collections : {items.length}
+              Total Collections : {items?.length}
             </Chip>
             <Button
               color="primary"
@@ -190,6 +211,7 @@ const CollectionsSection = () => {
             <TableWrapper
               columns={columns}
               items={items}
+              isLoading={categoriesLoading}
               allowsSortingFor={[
                 'createdAt',
                 'updatedAt',
@@ -260,9 +282,19 @@ const CollectionsSection = () => {
           </CardBody>
         </Card>
       </div>
-      <AddCollectionModal
+      <AddCollectionDrawer
         isOpen={showAddCollectionModal}
         setIsOpen={setShowAddCollectionModal}
+      />
+      <UpdateCollectionDrawer
+        isOpen={showUpdateCollectionModal}
+        setIsOpen={setShowUpdateCollectionModal}
+        selectedCategory={selectedCategory!}
+      />
+      <DeleteCollectionModal
+        isOpen={showDeleteCollectionModal}
+        setIsOpen={setShowDeleteCollectionModal}
+        category={selectedCategory!}
       />
     </>
   )

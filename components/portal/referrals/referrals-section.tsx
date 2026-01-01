@@ -1,7 +1,7 @@
 'use client'
 
 import InputField from '@/components/elements/input-field'
-import { currencyFormatter } from '@/utils/currencyFormatter'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   BreadcrumbItem,
   Breadcrumbs,

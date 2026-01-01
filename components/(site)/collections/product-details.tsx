@@ -1,4 +1,4 @@
-import { currencyFormatter } from '@/utils/currencyFormatter'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import { Button, Card, CardBody, Chip, Divider } from '@heroui/react'
 import Image from 'next/image'
 import { FaWhatsapp } from 'react-icons/fa'

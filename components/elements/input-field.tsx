@@ -26,7 +26,7 @@ import { PiEye, PiEyeSlash } from 'react-icons/pi'
 import 'react-phone-input-2/lib/style.css'
 
 import { cn } from '@/utils/cn'
-import { currencyFormatter } from '@/utils/currencyFormatter'
+import { currencyFormatter } from '@/utils/currency-formatter'
 
 // const westAfrica = [
 //   'BJ',

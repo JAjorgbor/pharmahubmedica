@@ -1,5 +1,5 @@
 'use client'
-import { currencyFormatter } from '@/utils/currencyFormatter'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import { Button, Card, CardBody, CardHeader, Chip } from '@heroui/react'
 import Link from 'next/link'
 import React from 'react'

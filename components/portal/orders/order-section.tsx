@@ -1,7 +1,7 @@
 'use client'
 
 import { orders } from '@/library/dummy-data'
-import { currencyFormatter } from '@/utils/currencyFormatter'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import { Button, Card, CardBody, Chip } from '@heroui/react'
 import Image from 'next/image'
 import Link from 'next/link'

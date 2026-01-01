@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/utils/cn'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
   FieldValues,
@@ -45,17 +45,36 @@ export default function SingleImageDropzone<T extends FieldValues>({
     controllerProps?.control ? controllerProps : defaultControllerProps
   )
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const selectedFile = acceptedFiles[0] // only one file allowed
-    if (selectedFile) {
-      // clear any previous local errors
-      setLocalError(null)
-      setFile(selectedFile)
-      controllerField.onChange(selectedFile)
-      setPreview(URL.createObjectURL(selectedFile)) // generate a preview
+  useEffect(() => {
+    const value = controllerField.value
+    if (!value) {
+      setFile(null)
+      setPreview(null)
+      return
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
+    if (value instanceof File) {
+      setFile(value)
+      const objectUrl = URL.createObjectURL(value)
+      setPreview(objectUrl)
+      return () => URL.revokeObjectURL(objectUrl)
+    } else if (typeof value === 'string') {
+      setPreview(value)
+      setFile(null)
+    }
+  }, [controllerField.value])
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const selectedFile = acceptedFiles[0] // only one file allowed
+      if (selectedFile) {
+        // clear any previous local errors
+        setLocalError(null)
+        controllerField.onChange(selectedFile)
+      }
+    },
+    [controllerField]
+  )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -86,9 +105,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
     // clear any local errors when removing
     setLocalError(null)
 
-    setFile(null)
     controllerField.onChange(null)
-    setPreview(null)
   }
 
   return (
@@ -102,7 +119,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
       <div
         {...getRootProps()}
         className={cn(
-          `border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition grid place-items-center w-full flex-grow group`,
+          `border-2 border-dashed rounded-xl text-center cursor-pointer transition grid place-items-center w-full flex-grow group h-[250px]`,
           isDragActive
             ? 'border-primary bg-blue-50'
             : 'border-foreground-300 hover:border-primary',
@@ -111,7 +128,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
             : ''
         )}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} className="hidden" />
 
         {!file ? (
           <div className="flex flex-col items-center">
@@ -133,11 +150,15 @@ export default function SingleImageDropzone<T extends FieldValues>({
             </p>
           </div>
         ) : (
-          <div className="relative inline-block">
+          <div className="relative inline-block max-h-full">
             <img
               src={preview || ''}
               alt="Preview"
-              className="h-4/5 w-4/5 object-cover rounded-lg mx-auto"
+              className="object-contain rounded-lg mx-auto"
+              style={{
+                maxWidth: '100%',
+                maxHeight: '150px',
+              }}
             />
             <button
               type="button"

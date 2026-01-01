@@ -2,7 +2,7 @@
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
 import { IUser, users } from '@/library/dummy-data'
-import { currencyFormatter } from '@/utils/currencyFormatter'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   BreadcrumbItem,
   Breadcrumbs,

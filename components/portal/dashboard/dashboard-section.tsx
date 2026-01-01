@@ -1,6 +1,6 @@
 'use client'
 
-import { currencyFormatter } from '@/utils/currencyFormatter'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   Button,
   Card,

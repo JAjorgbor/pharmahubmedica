@@ -2,7 +2,7 @@
 import StatCard from '@/components/admin/dashboard/stat-card'
 import { IoCashOutline } from 'react-icons/io5'
 import React from 'react'
-import { currencyFormatter } from '@/utils/currencyFormatter'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import { LuEye, LuPackage, LuShoppingBag, LuUsers } from 'react-icons/lu'
 import { Button } from '@heroui/react'
 import RecentOrders from '@/components/admin/dashboard/recent-orders'

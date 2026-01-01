@@ -13,6 +13,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'dummyimage.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-d3319f4c6aa74751b22d54fdab3c060c.r2.dev',
+      },
     ],
   },
   async headers() {
