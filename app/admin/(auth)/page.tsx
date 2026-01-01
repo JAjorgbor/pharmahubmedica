@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
         title:
           error?.status === 500
             ? error?.statusText
-            : error?.data?.message ||
+            : error?.data?.error ||
               error?.message ||
               'Something went wrong. Please try again later.',
         color: 'danger',

@@ -207,6 +207,14 @@ const InputField = <T extends FieldValues>({
   }
 
   useEffect(() => {
+    if (type === 'amount') {
+      const rawValue = parseCurrency(controllerField.value)
+      const formatted = formatToCurrency(rawValue)
+      setAmountValue(formatted)
+    }
+  }, [controllerField.value])
+
+  useEffect(() => {
     const value = controllerField?.value
     const defaultValue =
       controllerFormState?.defaultValues?.[controllerProps?.name as string]
@@ -510,11 +518,12 @@ const InputField = <T extends FieldValues>({
             isDisabled={disabled}
             listboxProps={{ color: 'primary', variant: 'flat' }}
             startContent={startContent}
-            defaultSelectedKey={defaultValue}
+            defaultSelectedKey={defaultValue || controllerField?.value}
             isInvalid={!!controllerFieldState.error?.message}
             selectedKey={value as string}
             onSelectionChange={(value: any) => {
-              onChange(value)
+              controllerField.onChange(value)
+              if (onChange) onChange(value)
             }}
             size={size}
             inputProps={{
@@ -559,7 +568,10 @@ const InputField = <T extends FieldValues>({
             size="sm"
             radius={'none'}
             isSelected={!!controllerField.value}
-            onValueChange={controllerField.onChange}
+            onValueChange={(value) => {
+              onChange?.(value)
+              controllerField.onChange(value)
+            }}
             classNames={{
               icon: 'text-white',
             }}

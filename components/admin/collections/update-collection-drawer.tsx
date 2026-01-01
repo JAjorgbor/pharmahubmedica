@@ -14,8 +14,8 @@ import {
   createCategory,
   updateCategory,
 } from '@/api-client/admin/requests/category.requests'
-import useGetCategories from '@/hooks/requests/useGetCategories'
-import { ICategory } from '@/api-client/admin/interfaces/category.interfaces'
+import useGetCategories from '@/hooks/requests/admin/useGetAdminCategories'
+import { ICategory } from '@/api-client/interfaces/category.interfaces'
 import useGetImageFileFromUrl from '@/hooks/useGetImageFromUrl'
 
 const schema = z.object({
@@ -99,7 +99,7 @@ const UpdateCollectionDrawer = ({
     } catch (error: any) {
       addToast({
         title:
-          error?.data?.message ||
+          error?.data?.error ||
           error?.message ||
           'Something went wrong. Please try again later',
         color: 'danger',

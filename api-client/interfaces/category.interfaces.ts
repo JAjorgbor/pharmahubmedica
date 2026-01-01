@@ -12,7 +12,7 @@ export interface ICategory {
   __v: number
 }
 
-export interface Image {
+interface Image {
   url: string
   key: string
 }

@@ -1,7 +1,10 @@
 'use client'
+import { IProduct } from '@/api-client/interfaces/product.interfaces'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
-import { categories, IProduct, products } from '@/library/dummy-data'
+import useGetAdminCategories from '@/hooks/requests/admin/useGetAdminCategories'
+import useGetAdminProducts from '@/hooks/requests/admin/useGetAdminProducts'
+import DeleteProductModal from '@/components/admin/products/delete-product-modal'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   BreadcrumbItem,
@@ -15,20 +18,14 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Skeleton,
 } from '@heroui/react'
-import {
-  ColumnFiltersState,
-  createColumnHelper,
-  SortingState,
-} from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
-import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FiMoreVertical } from 'react-icons/fi'
 import { LuExternalLink, LuPlus } from 'react-icons/lu'
-
-const items = products
 
 const columnHelper = createColumnHelper<IProduct>()
 
@@ -36,25 +33,32 @@ const ProductsSection = () => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [visibilityFilter, setVisibilityFilter] = useState('all')
   const [categoryFilter, setCategoryFilter] = useState('all')
+  const [showDeleteProductModal, setShowDeleteProductModal] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<IProduct>()
+
+  const { categories, categoriesLoading } = useGetAdminCategories()
+  const { products, productsLoading } = useGetAdminProducts()
+
+  const items = products
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('productName', {
-        id: 'productName',
+      columnHelper.accessor('name', {
+        id: 'name',
         header: 'Product',
         cell: ({ row: { original: item } }) => (
           <div className="flex gap-2 items-center">
-            <Image
-              src={item.image}
-              alt={`${item.productName} image`}
+            <img
+              src={item.image?.url}
+              alt={`${item.name} image`}
               width={100}
               height={100}
               className="object-cover rounded-lg size-16 object-center"
             />
 
             <div className="space-y-1">
-              <h3 className="font-bold flex flex-col">{`${item.productName}`}</h3>
-              <p className="text-xs text-foreground-600">ID:{item.productId}</p>
+              <h3 className="font-bold flex flex-col">{`${item.name}`}</h3>
+              <p className="text-xs text-foreground-600">ID:[Product ID]</p>
             </div>
           </div>
         ),
@@ -116,7 +120,7 @@ const ProductsSection = () => {
           )
         },
       }),
-      columnHelper.accessor('category', {
+      columnHelper.accessor('category.name', {
         id: 'category',
         header: 'Category',
         filterFn: (row: { original: IProduct }, columnId, filterValue) => {
@@ -124,7 +128,7 @@ const ProductsSection = () => {
 
           return filterValue == 'all'
             ? true
-            : filterValue == row.original.category
+            : filterValue == row.original.category._id
         },
         cell: ({ getValue }) => getValue(),
       }),
@@ -169,7 +173,15 @@ const ProductsSection = () => {
               >
                 Manage
               </DropdownItem>
-              <DropdownItem key="delete" color="danger" variant="flat">
+              <DropdownItem
+                key="delete"
+                color="danger"
+                variant="flat"
+                onPress={() => {
+                  setSelectedProduct(item)
+                  setShowDeleteProductModal(true)
+                }}
+              >
                 Delete Product
               </DropdownItem>
             </DropdownMenu>
@@ -210,7 +222,7 @@ const ProductsSection = () => {
         <Card className="p-3">
           <CardHeader className="justify-between flex-wrap gap-4 items-center">
             <Chip color="secondary" size="sm">
-              Total Products : {items.length}
+              Total Products : {items?.length}
             </Chip>
             <Button
               color="primary"
@@ -227,6 +239,7 @@ const ProductsSection = () => {
             {' '}
             <TableWrapper
               columns={columns}
+              isLoading={productsLoading}
               items={items}
               allowsSortingFor={['createdAt', 'updatedAt', 'price', 'stock']}
               topContent={({ table, searchField }) => {
@@ -257,7 +270,8 @@ const ProductsSection = () => {
                   if (items) {
                     if (value == 'all') return items.length
 
-                    return items.filter((each) => each.category == value).length
+                    return items.filter((each) => each.category.name == value)
+                      .length
                   }
                   return '-'
                 }
@@ -328,35 +342,39 @@ const ProductsSection = () => {
                           setStatusFilter(value)
                         }}
                       />
-                      <InputField
-                        type="select"
-                        controllerProps={{
-                          name: 'category filter',
-                          defaultValue: statusFilter,
-                        }}
-                        className="col-span-2 md:col-span-1"
-                        value={categoryFilter}
-                        options={[
-                          {
-                            label: `All Categories (${getCategoryCount(
-                              'all'
-                            )})`,
-                            value: 'all',
-                          },
+                      {categoriesLoading ? (
+                        <Skeleton className="h-10 rounded-lg col-span-2 md:col-span-1" />
+                      ) : (
+                        <InputField
+                          type="select"
+                          controllerProps={{
+                            name: 'category filter',
+                            defaultValue: statusFilter,
+                          }}
+                          className="col-span-2 md:col-span-1"
+                          value={categoryFilter}
+                          options={[
+                            {
+                              label: `All Categories (${getCategoryCount(
+                                'all'
+                              )})`,
+                              value: 'all',
+                            },
 
-                          ...(categories.map((each) => ({
-                            label: `${each.name} (${getCategoryCount(
-                              each.name
-                            )})`,
-                            value: each.name,
-                          })) as any),
-                        ]}
-                        onChange={(value) => {
-                          table.getColumn('category')?.setFilterValue(value)
+                            ...(categories?.map((each) => ({
+                              label: `${each.name} (${getCategoryCount(
+                                each.name
+                              )})`,
+                              value: each.name,
+                            })) || ([] as any)),
+                          ]}
+                          onChange={(value) => {
+                            table.getColumn('category')?.setFilterValue(value)
 
-                          setCategoryFilter(value)
-                        }}
-                      />
+                            setCategoryFilter(value)
+                          }}
+                        />
+                      )}
                     </div>
                     {/* </div> */}
                   </div>
@@ -372,6 +390,11 @@ const ProductsSection = () => {
           </CardBody>
         </Card>
       </div>
+      <DeleteProductModal
+        isOpen={showDeleteProductModal}
+        setIsOpen={setShowDeleteProductModal}
+        product={selectedProduct!}
+      />
     </>
   )
 }

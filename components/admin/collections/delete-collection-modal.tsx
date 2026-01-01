@@ -5,8 +5,8 @@ import ModalWrapper, {
 } from '@/components/elements/modal-wrapper'
 import { Button, addToast } from '@heroui/react'
 import { deleteCategory } from '@/api-client/admin/requests/category.requests'
-import useGetCategories from '@/hooks/requests/useGetCategories'
-import { ICategory } from '@/api-client/admin/interfaces/category.interfaces'
+import useGetCategories from '@/hooks/requests/admin/useGetAdminCategories'
+import { ICategory } from '@/api-client/interfaces/category.interfaces'
 
 interface DeleteCollectionModalProps extends BaseModalProps {
   category: ICategory
@@ -35,7 +35,7 @@ const DeleteCollectionModal: React.FC<DeleteCollectionModalProps> = ({
     } catch (error: any) {
       addToast({
         title:
-          error?.data?.message || error?.message || 'Failed to delete category',
+          error?.data?.error || error?.message || 'Failed to delete category',
         color: 'danger',
         severity: 'danger',
       })

@@ -119,7 +119,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
       <div
         {...getRootProps()}
         className={cn(
-          `border-2 border-dashed rounded-xl text-center cursor-pointer transition grid place-items-center w-full flex-grow group h-[250px]`,
+          `border-2 border-dashed rounded-xl text-center cursor-pointer transition grid place-items-center w-full flex-grow group h-[250px] relative`,
           isDragActive
             ? 'border-primary bg-blue-50'
             : 'border-foreground-300 hover:border-primary',
@@ -150,15 +150,11 @@ export default function SingleImageDropzone<T extends FieldValues>({
             </p>
           </div>
         ) : (
-          <div className="relative inline-block max-h-full">
+          <div className="relative justify-center items-center size-full ">
             <img
               src={preview || ''}
               alt="Preview"
-              className="object-contain rounded-lg mx-auto"
-              style={{
-                maxWidth: '100%',
-                maxHeight: '150px',
-              }}
+              className="absolute max-w-full max-h-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 object-contain rounded-lg"
             />
             <button
               type="button"

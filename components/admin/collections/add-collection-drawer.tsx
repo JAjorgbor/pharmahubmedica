@@ -11,7 +11,7 @@ import z from 'zod'
 import customValidation from '@/utils/custom-validation'
 import { FiXCircle, FiPlusCircle } from 'react-icons/fi'
 import { createCategory } from '@/api-client/admin/requests/category.requests'
-import useGetCategories from '@/hooks/requests/useGetCategories'
+import useGetCategories from '@/hooks/requests/admin/useGetAdminCategories'
 
 const schema = z.object({
   data: z.object({
@@ -71,7 +71,7 @@ const AddCollectionDrawer = ({ isOpen, setIsOpen }: BaseModalProps) => {
     } catch (error: any) {
       addToast({
         title:
-          error?.data?.message ||
+          error?.data?.error ||
           error?.message ||
           'Something went wrong. Please try again later',
         color: 'danger',

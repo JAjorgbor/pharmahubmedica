@@ -1,8 +1,9 @@
-import { ICategory } from '@/api-client/admin/interfaces/category.interfaces'
+'use client'
+import { ICategory } from '@/api-client/interfaces/category.interfaces'
 import { getCategories } from '@/api-client/admin/requests/category.requests'
 import useSWR from 'swr'
 
-const useGetCategories = () => {
+const useGetAdminCategories = () => {
   const fetcher = async () => {
     const {
       data: { categories },
@@ -21,4 +22,4 @@ const useGetCategories = () => {
     mutateCategories: mutate,
   }
 }
-export default useGetCategories
+export default useGetAdminCategories

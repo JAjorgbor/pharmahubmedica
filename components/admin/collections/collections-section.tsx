@@ -1,11 +1,11 @@
 'use client'
-import { ICategory } from '@/api-client/admin/interfaces/category.interfaces'
+import { ICategory } from '@/api-client/interfaces/category.interfaces'
 import AddCollectionDrawer from '@/components/admin/collections/add-collection-drawer'
 import UpdateCollectionDrawer from '@/components/admin/collections/update-collection-drawer'
 import DeleteCollectionModal from '@/components/admin/collections/delete-collection-modal'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
-import useGetCategories from '@/hooks/requests/useGetCategories'
+import useGetCategories from '@/hooks/requests/admin/useGetAdminCategories'
 import {
   Chip,
   Dropdown,

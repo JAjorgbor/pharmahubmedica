@@ -28,7 +28,7 @@ const ContactForm = () => {
     } catch (error: any) {
       addToast({
         title:
-          error?.data?.message ||
+          error?.data?.error ||
           error?.message ||
           'Something went wrong. Please try again later.',
         color: 'danger',
