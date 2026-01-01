@@ -15,7 +15,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'pub-d3319f4c6aa74751b22d54fdab3c060c.r2.dev',
+        hostname: String(process.env.CLOUDFLARE_HOST_URL),
       },
     ],
   },
