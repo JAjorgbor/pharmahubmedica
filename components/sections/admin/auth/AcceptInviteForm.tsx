@@ -65,6 +65,7 @@ export default function AcceptInviteForm() {
           error?.status === 500
             ? 'Internal server error'
             : error?.data?.error ||
+              error?.data?.message ||
               error?.message ||
               'Failed to accept invite. Please try again or contact support.',
         color: 'danger',

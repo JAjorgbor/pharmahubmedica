@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addToast, Button } from '@heroui/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Cookies from 'js-cookie'
@@ -20,6 +20,9 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function LoginForm() {
   const [keepLoading, setKeepLoading] = useState(false)
+
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callback') || '/admin/dashboard'
 
   const router = useRouter()
   const {
@@ -40,16 +43,15 @@ export default function LoginForm() {
       Cookies.set('adminAccessToken', res.accessToken)
       Cookies.set('adminUserId', res.user._id)
 
-      router.push('/admin/dashboard')
+      router.push(callbackUrl)
       setKeepLoading(true)
     } catch (error: any) {
       addToast({
         title:
-          error?.status === 500
-            ? error?.statusText
-            : error?.data?.message ||
-              error?.message ||
-              'Something went wrong. Please try again later.',
+          error?.data?.error ||
+          error?.data?.message ||
+          error?.message ||
+          'Something went wrong. Please try again later.',
         color: 'danger',
       })
     }

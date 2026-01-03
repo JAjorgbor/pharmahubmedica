@@ -14,9 +14,9 @@ const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
           <Image
             src="/logo.svg"
             alt="PharmaHub Medica Logo"
-            width={180}
-            height={60}
-            className="h-12 w-auto"
+            width={200}
+            height={100}
+            className="w-auto"
             priority
           />
         </Link>

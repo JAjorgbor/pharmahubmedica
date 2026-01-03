@@ -6,4 +6,5 @@ export interface IAdminUser {
   status: string
   role: string
   gender: string
+  phoneNumber?: string
 }

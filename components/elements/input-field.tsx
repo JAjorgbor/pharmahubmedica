@@ -212,7 +212,15 @@ const InputField = <T extends FieldValues>({
       const formatted = formatToCurrency(rawValue)
       setAmountValue(formatted)
     }
-  }, [controllerField.value])
+  }, [controllerField.value, type])
+
+  useEffect(() => {
+    if (type === 'phoneNumber') {
+      const formatted = parsePhoneNumberFromString(controllerField.value, 'NG')
+      const rawValue = formatted?.formatNational()
+      setFormattedPhonenumber(rawValue)
+    }
+  }, [controllerField.value, type])
 
   useEffect(() => {
     const value = controllerField?.value

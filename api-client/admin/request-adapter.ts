@@ -5,101 +5,71 @@ const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
   timeout: 30000,
-  headers: {
-    common: {
-      'Content-Type': 'application/json',
-    },
-  },
+  headers: { 'Content-Type': 'application/json' },
 })
 
-// === Refresh Token Lock Logic ===
-let isRefreshing = false
-let failedQueue: any[] = []
+const refreshClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
+  timeout: 30000,
+  headers: { 'Content-Type': 'application/json' },
+})
 
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error)
-    } else {
-      prom.resolve(token)
-    }
-  })
-  failedQueue = []
+const clearAllCookies = () => {
+  Object.keys(Cookies.get()).forEach((k) => Cookies.remove(k))
 }
 
-axiosInstance.interceptors.request.use(async (config) => {
-  const accessToken = Cookies.get('adminAccessToken')
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`
+const redirectToAdminLogin = () => {
+  if (typeof window === 'undefined') return
+  const path = window.location.pathname
+  if (
+    ['/admin', '/admin/verify-access', '/admin/reset-password'].includes(path)
+  )
+    return
+  window.location.replace(`/admin?callback=${encodeURIComponent(path)}`)
+}
+
+axiosInstance.interceptors.request.use((config) => {
+  const token = Cookies.get('adminAccessToken')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
   }
   return config
 })
+
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response
-  },
+  (r) => r,
   async (error) => {
-    const originalConfig = error.config
+    if (!error?.response) return Promise.reject(error)
 
-    if (
-      (error?.response &&
-        error.response?.status === 401 &&
-        error.response?.data?.message !== 'Incorrect email or password' &&
-        !originalConfig._retry) ||
-      (error.response.status === 403 &&
-        error.response &&
-        !originalConfig._retry)
-    ) {
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({
-            resolve: (token: string) => {
-              originalConfig.headers.Authorization = `Bearer ${token}`
-              resolve(axiosInstance(originalConfig))
-            },
-            reject: (err: any) => {
-              reject(err)
-            },
-          })
-        })
-      }
+    const original = error.config
+    const status = error.response.status
+    const msg = error.response.data?.message
 
-      originalConfig._retry = true // Mark as retried
-      isRefreshing = true
+    const shouldRefresh =
+      !original._retry &&
+      ((status === 401 && msg !== 'Incorrect email or password') ||
+        status === 403) &&
+      !original.url?.includes('admin/auth/refresh-tokens')
 
-      try {
-        const { data } = await axiosInstance.post('admin/auth/refresh-tokens')
+    if (!shouldRefresh) return Promise.reject(error)
 
-        Cookies.set('adminAccessToken', data.accessToken)
-        axiosInstance.defaults.headers.Authorization = `Bearer ${data.accessToken}`
-        processQueue(null, data.accessToken)
+    original._retry = true
 
-        originalConfig.headers.Authorization = `Bearer ${data.accessToken}`
+    try {
+      const { data } = await refreshClient.post('admin/auth/refresh-tokens')
+      if (!data?.accessToken) throw new Error('No access token returned')
 
-        return axiosInstance(originalConfig) // Retry original request with new token
-      } catch (error) {
-        processQueue(error, null)
+      Cookies.set('adminAccessToken', data.accessToken)
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`
+      original.headers.Authorization = `Bearer ${data.accessToken}`
 
-        const whiteListedAdminRoutes = [
-          '/admin',
-          '/admin/verify-access',
-          '/admin/reset-password',
-        ]
-        console.log(error)
-        const cookieJar = Cookies.get() // Get all existing cookies
-        for (const cookieName in cookieJar) {
-          Cookies.remove(cookieName) // Remove each cookie
-        }
-
-        const pathname = window.location.pathname
-        window.location.href = `/admin?callback=${pathname}`
-        return Promise.reject(error)
-      } finally {
-        isRefreshing = false
-      }
+      return axiosInstance(original)
+    } catch (e) {
+      clearAllCookies()
+      redirectToAdminLogin()
+      return Promise.reject(e)
     }
-
-    return Promise.reject(error.response)
   }
 )
 

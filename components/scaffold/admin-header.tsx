@@ -33,14 +33,16 @@ import { useAppDispatch, useAppSelector } from '@/features/store'
 import { setOpenSidebar } from '@/features/sidebarSlice'
 import useGetAdminUser from '@/hooks/requests/admin/useGetAdminUser'
 import { Skeleton } from '@heroui/react'
+import LogoutConfirmationModal from './logout-confirmation-modal'
 
 export const UserPanel = () => {
   const { adminUser, adminUserLoading } = useGetAdminUser()
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
   return (
     <>
       <Dropdown>
         <DropdownTrigger>
-          <Avatar size="sm" />
+          <Avatar size="sm" className="cursor-pointer" />
         </DropdownTrigger>
         <DropdownMenu
           topContent={
@@ -87,11 +89,17 @@ export const UserPanel = () => {
             color="danger"
             variant="flat"
             startContent={<LuLogOut />}
+            onPress={() => setIsLogoutModalOpen(true)}
           >
             Log Out
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
+
+      <LogoutConfirmationModal
+        isOpen={isLogoutModalOpen}
+        setIsOpen={setIsLogoutModalOpen}
+      />
     </>
   )
 }
