@@ -52,7 +52,7 @@ export default function InviteTeamMemberDrawer({
       email: '',
       phoneNumber: '',
       gender: 'Male',
-      role: 'administrator' as InviteFormValues['role'],
+      role: 'operations' as InviteFormValues['role'],
     },
   })
 
@@ -82,8 +82,27 @@ export default function InviteTeamMemberDrawer({
       setIsOpen={setIsOpen}
       title="Invite Team Member"
       size="xl"
+      footer={
+        <div className="flex justify-end gap-3 pt-4">
+          <Button variant="flat" onPress={() => setIsOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            color="primary"
+            type="submit"
+            form="invite-team-member-modal"
+            isLoading={isSubmitting}
+          >
+            Send Invitation
+          </Button>
+        </div>
+      }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 py-2">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        id="invite-team-member-modal"
+        className="space-y-6 py-2"
+      >
         <div className="grid grid-cols-2 gap-4">
           <InputField
             type="text"
@@ -132,15 +151,6 @@ export default function InviteTeamMemberDrawer({
         />
 
         <RoleRadioGroup control={control} name="role" />
-
-        <div className="flex justify-end gap-3 pt-4 pb-10">
-          <Button variant="flat" onPress={() => setIsOpen(false)}>
-            Cancel
-          </Button>
-          <Button color="primary" type="submit" isLoading={isSubmitting}>
-            Send Invitation
-          </Button>
-        </div>
       </form>
     </DrawerWrapper>
   )

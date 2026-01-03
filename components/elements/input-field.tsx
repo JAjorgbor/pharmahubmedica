@@ -216,7 +216,10 @@ const InputField = <T extends FieldValues>({
 
   useEffect(() => {
     if (type === 'phoneNumber') {
-      const formatted = parsePhoneNumberFromString(controllerField.value, 'NG')
+      const formatted = parsePhoneNumberFromString(
+        controllerField.value || '',
+        'NG'
+      )
       const rawValue = formatted?.formatNational()
       setFormattedPhonenumber(rawValue)
     }
