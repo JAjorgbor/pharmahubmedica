@@ -50,6 +50,7 @@ const AdminSidebar = () => {
   useEffect(() => {
     setIsHydrated(true)
   }, [])
+  const isActive = (path: string) => pathname.includes(path)
   return (
     isHydrated && (
       <Sidebar
@@ -126,7 +127,7 @@ const AdminSidebar = () => {
                 </button>
               )
             }
-            className="py-2 !bg-white hover:!bg-white border-b border-b-foreground-200"
+            className="py-2 bg-white! hover:bg-white! border-b border-b-foreground-200"
           >
             <span className="text-primary font-semibold text-lg">
               Admin Console
@@ -139,16 +140,26 @@ const AdminSidebar = () => {
             root: {
               padding: '5px',
             },
-            button: {
+            button: ({ active, isSubmenu }) => ({
               padding: '10px 5px',
               height: '40px',
               borderRadius: '10px',
               transition: 'all 0.1s ease-in-out',
+              backgroundColor: active
+                ? isSubmenu
+                  ? '#E0E7FF'
+                  : theme.colors.primary
+                : 'transparent',
+              color: active
+                ? isSubmenu
+                  ? theme.colors.primary
+                  : 'white'
+                : undefined,
               ['&:hover']: {
                 backgroundColor: theme.colors.primary,
                 color: 'white',
               },
-            },
+            }),
           }}
         >
           {/* <SubMenu label="Charts">
@@ -159,6 +170,7 @@ const AdminSidebar = () => {
             icon={<LuLayoutDashboard />}
             component={<Link href="/admin/dashboard" />}
             className="text-foreground-600"
+            active={isActive('/admin/dashboard')}
           >
             {' '}
             Dashboard{' '}
@@ -167,6 +179,9 @@ const AdminSidebar = () => {
             label="Inventory"
             icon={<LuLayers />}
             className="text-foreground-600"
+            active={
+              isActive('/admin/collections') || isActive('/admin/products')
+            }
             rootStyles={{
               [`.${menuClasses.SubMenuExpandIcon} span`]: {
                 width: '7px',
@@ -180,6 +195,7 @@ const AdminSidebar = () => {
               icon={<LuBoxes />}
               component={<Link href="/admin/collections" />}
               className="text-foreground-600 bg-foreground-100"
+              active={isActive('/admin/collections')}
             >
               {' '}
               Collections
@@ -188,6 +204,7 @@ const AdminSidebar = () => {
               icon={<LuPackage />}
               component={<Link href="/admin/products" />}
               className="text-foreground-600 bg-foreground-100"
+              active={isActive('/admin/products')}
             >
               {' '}
               Products{' '}
@@ -198,6 +215,7 @@ const AdminSidebar = () => {
             icon={<LuLayoutList />}
             component={<Link href="/admin/orders" />}
             className="text-foreground-600"
+            active={isActive('/admin/orders')}
           >
             {' '}
             Orders{' '}
@@ -206,6 +224,10 @@ const AdminSidebar = () => {
             label="Contacts"
             icon={<LuContactRound />}
             className="text-foreground-600"
+            active={
+              isActive('/admin/customers') ||
+              isActive('/admin/referral-partners')
+            }
             rootStyles={{
               [`.${menuClasses.SubMenuExpandIcon} span`]: {
                 width: '7px',
@@ -219,6 +241,7 @@ const AdminSidebar = () => {
               icon={<LuUsers />}
               component={<Link href="/admin/customers" />}
               className="text-foreground-600 bg-foreground-100"
+              active={isActive('/admin/customers')}
             >
               {' '}
               Customers{' '}
@@ -227,6 +250,7 @@ const AdminSidebar = () => {
               icon={<LuHandshake />}
               component={<Link href="/admin/referral-partners" />}
               className="text-foreground-600 bg-foreground-100"
+              active={isActive('/admin/referral-partners')}
             >
               {' '}
               Referral Partners
@@ -236,6 +260,7 @@ const AdminSidebar = () => {
             icon={<LuBuilding2 />}
             component={<Link href="/admin/team" />}
             className="text-foreground-600"
+            active={isActive('/admin/team')}
           >
             {' '}
             Team
@@ -244,6 +269,7 @@ const AdminSidebar = () => {
             icon={<LuSettings />}
             component={<Link href="/admin/settings" />}
             className="text-foreground-600"
+            active={isActive('/admin/settings')}
           >
             {' '}
             Settings

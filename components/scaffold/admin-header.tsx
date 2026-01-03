@@ -31,8 +31,11 @@ import { cn } from '@/utils/cn'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/features/store'
 import { setOpenSidebar } from '@/features/sidebarSlice'
+import useGetAdminUser from '@/hooks/requests/admin/useGetAdminUser'
+import { Skeleton } from '@heroui/react'
 
 export const UserPanel = () => {
+  const { adminUser, adminUserLoading } = useGetAdminUser()
   return (
     <>
       <Dropdown>
@@ -41,10 +44,20 @@ export const UserPanel = () => {
         </DropdownTrigger>
         <DropdownMenu
           topContent={
-            <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2">
-              Anastasia Oghenebrohien
-              <p className="text-sm text-foreground-500">anastasia@email.com</p>
-            </div>
+            adminUserLoading ? (
+              <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2 space-x-2">
+                <Skeleton className="h-4 w-2/5 rounded-lg inline-block" />
+                <Skeleton className="h-4 w-1/3 rounded-lg inline-block" />
+                <Skeleton className="h-4 w-5/6 rounded-lg block" />
+              </div>
+            ) : (
+              <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2">
+                {adminUser?.firstName} {adminUser?.lastName}
+                <p className="text-sm text-foreground-500">
+                  {adminUser?.email}
+                </p>
+              </div>
+            )
           }
         >
           <DropdownSection showDivider>

@@ -80,7 +80,7 @@ axiosInstance.interceptors.response.use(
       } catch (error) {
         processQueue(error, null)
 
-        const whiteListedPortalRoutes = [
+        const whiteListedAdminRoutes = [
           '/admin',
           '/admin/verify-access',
           '/admin/reset-password',
@@ -92,7 +92,6 @@ axiosInstance.interceptors.response.use(
         }
 
         const pathname = window.location.pathname
-        const searchParams = new URLSearchParams(window.location.search)
         window.location.href = `/admin?callback=${pathname}`
         return Promise.reject(error)
       } finally {
