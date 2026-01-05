@@ -1,3 +1,4 @@
+import { apiFetch } from '@/api-client/fetch-client'
 import CollectionsSection from '@/components/admin/collections/collections-section'
 import SetHeaderTitle from '@/components/scaffold/set-header-title'
 

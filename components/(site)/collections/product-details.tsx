@@ -1,6 +1,9 @@
+'use client'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import { Button, Card, CardBody, Chip, Divider } from '@heroui/react'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { useState } from 'react'
 import { FaWhatsapp } from 'react-icons/fa'
 import {
   LuClock,
@@ -8,231 +11,199 @@ import {
   LuPlus,
   LuShield,
   LuShoppingCart,
-  LuStar,
   LuTruck,
 } from 'react-icons/lu'
 
 const ProductDetails = () => {
-  const features = [
-    'Fast-acting formula',
-    'Reduces fever and pain',
-    'Easy to swallow tablets',
-    'Suitable for adults and children 12+',
-    '24 tablets per pack',
-  ]
+  const [quantity, setQuantity] = useState(1)
+
+  // This would eventually come from props
+  const product = {
+    name: 'Pain Relief Tablets',
+    price: 5000,
+    oldPrice: 6800,
+    description:
+      'Fast-acting pain relief tablets specifically engineered for rapid absorption. Ideal for treating headaches, muscle aches, and minor pains associated with common colds or minor injuries.',
+    category: { name: 'Medicine' },
+    subcategory: { name: 'Pain Relief' },
+    inStock: true,
+    image: {
+      url: '/pain-relief-medicine-tablets.jpg',
+    },
+  }
 
   return (
-    <div className="max-w-7xl space-y-10 mx-auto p-5 min-h-screen">
-      <div className="space-y-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="max-w-6xl mx-auto p-6 md:p-12 min-h-screen"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        {/* Left Column: Single Image */}
+        <motion.div
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl bg-neutral-50 border border-neutral-100"
+        >
+          <Image
+            src={product.image.url}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform hover:scale-105 duration-700"
+            priority
+          />
+        </motion.div>
+
+        {/* Right Column: Info */}
+        <motion.div
+          initial={{ x: 20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col justify-center space-y-8"
+        >
           <div className="space-y-4">
-            <div className="aspect-square overflow-hidden rounded-lg border">
-              <Image
-                src="/pain-relief-medicine-tablets.jpg"
-                alt={'Product Image'}
-                className="w-full h-full object-cover"
-                width={300}
-                height={300}
-              />
+            <div className="flex flex-wrap gap-2">
+              <Chip
+                variant="flat"
+                color="primary"
+                size="sm"
+                className="font-bold"
+              >
+                {product.category.name}
+              </Chip>
+              <Chip
+                variant="flat"
+                color="secondary"
+                size="sm"
+                className="font-medium"
+              >
+                {product.subcategory.name}
+              </Chip>
+              {product.inStock ? (
+                <Chip
+                  variant="dot"
+                  color="success"
+                  size="sm"
+                  className="bg-transparent text-success-600 font-medium"
+                >
+                  In Stock
+                </Chip>
+              ) : (
+                <Chip
+                  variant="dot"
+                  color="danger"
+                  size="sm"
+                  className="bg-transparent text-danger-600 font-medium"
+                >
+                  Out of Stock
+                </Chip>
+              )}
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-black text-[#031D91] tracking-tight">
+              {product.name}
+            </h1>
+
+            <div className="flex items-baseline gap-4">
+              <span className="text-4xl font-black text-primary">
+                {currencyFormatter(product.price)}
+              </span>
+              {product.oldPrice && (
+                <span className="text-xl text-neutral-400 line-through">
+                  {currencyFormatter(product.oldPrice)}
+                </span>
+              )}
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <Chip color="secondary" className="mb-2">
-                Medicine
-              </Chip>
+          <p className="text-lg text-neutral-600 leading-relaxed font-medium">
+            {product.description}
+          </p>
 
-              <h1 className="text-3xl font-bold text-[#031D91] mb-2">
-                Pain Relief Tablets
-              </h1>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <LuStar
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < Math.floor(4)
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  4.6 (89 reviews)
-                </span>
-              </div>
-            </div>
+          <Divider />
 
-            <div className="flex items-center space-x-3">
-              <span className="text-3xl font-bold text-[#031D91]">
-                {currencyFormatter(5000)}
-              </span>
-              <span className="text-xl text-muted-foreground line-through">
-                {currencyFormatter(6800)}
-              </span>
-
-              <Chip color="secondary">
-                Save {''}
-                {currencyFormatter(1800)}
-              </Chip>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="font-medium text-green-700">In Stock</span>
-            </div>
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <div className="flex items-center space-x-2">
-                <Chip
-                  color="warning"
-                  className="border-yellow-500 text-yellow-700"
-                >
-                  Prescription Required
-                </Chip>
-              </div>
-              <p className="text-sm text-yellow-700 mt-2">
-                This product requires a valid prescription. Please have your
-                prescription ready when ordering.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Description</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Fast-acting pain relief tablets for headaches, muscle aches, and
-                minor pain. Contains acetaminophen for effective pain management
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <span className="font-medium">Active Ingredient: </span>
-                <span className="text-muted-foreground">
-                  Acetaminophen 500mg
-                </span>
-              </div>
-              <div>
-                <span className="font-medium">Dosage: </span>
-                <span className="text-muted-foreground">
-                  1-2 tablets every 4-6 hours as needed
-                </span>
-              </div>
-              <div>
-                <span className="font-medium">Manufacturer: </span>
-                <span className="text-muted-foreground">
-                  MediCare Pharmaceuticals
-                </span>
-              </div>
-            </div>
-
-            <Divider />
-
-            <div className="flex items-center space-x-4">
-              <span className="font-medium">Quantity:</span>
-              <div className="flex items-center">
+          <div className="space-y-6">
+            <div className="flex items-center gap-8">
+              <span className="font-bold text-neutral-800">Quantity</span>
+              <div className="flex items-center bg-neutral-100 p-1.5 rounded-2xl">
                 <Button
-                  variant="ghost"
+                  isIconOnly
+                  variant="light"
                   size="sm"
-                  // onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  // disabled={quantity <= 1}
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="bg-white hover:scale-110 active:scale-90"
                 >
                   <LuMinus className="h-4 w-4" />
                 </Button>
-                <span className="px-4 py-2 font-medium">4</span>
+                <span className="w-12 text-center font-black text-lg">
+                  {quantity}
+                </span>
                 <Button
-                  variant="ghost"
+                  isIconOnly
+                  variant="light"
                   size="sm"
-                  // onClick={() => setQuantity(quantity + 1)}
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="bg-white hover:scale-110 active:scale-90"
                 >
                   <LuPlus className="h-4 w-4" />
                 </Button>
               </div>
             </div>
 
-            <Button
-              color="primary"
-              startContent={<FaWhatsapp size={20} />}
-              fullWidth
-              className="text-white"
-            >
-              Buy on WhatsApp
-            </Button>
-            <Button
-              color="primary"
-              variant="bordered"
-              startContent={<LuShoppingCart size={20} />}
-              fullWidth
-              className="text-primary hover:bg-white"
-            >
-              Add to Cart
-            </Button>
-
-            <div className="mt-2">
-              <h3 className="text-lg font-semibold mb-3">Key Features</h3>
-              <ul className="space-y-2">
-                {features.map((feature, index) => (
-                  <li key={index} className="flex items-start space-x-2">
-                    <div className="w-2 h-2 bg-[#031D91] rounded-full mt-2 flex-shrink-0" />
-                    <span className="text-muted-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                color="primary"
+                size="lg"
+                startContent={<LuShoppingCart className="h-5 w-5" />}
+                className="flex-1 py-3 font-bold rounded-2xl shadow-xl shadow-primary/20"
+              >
+                Add to Cart
+              </Button>
+              <Button
+                size="lg"
+                className="flex-1 bg-[#25D366] py-3 text-white font-bold  rounded-2xl shadow-xl shadow-green-500/10"
+                startContent={<FaWhatsapp className="h-6 w-6" />}
+              >
+                Buy via WhatsApp
+              </Button>
             </div>
           </div>
-        </div>
-
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5 pt-5">
-          <Card className="md:p-3">
-            <CardBody>
-              <div className="flex flex-col items-center gap-4">
-                <span className="text-primary">
-                  <LuShield size={50} />
-                </span>
-                <h3 className="text-primary text-xl font-semibold">
-                  Licensed Pharmacy
-                </h3>
-                <p className="text-foreground-500 text-center">
-                  All products are sourced from licensed suppliers
-                </p>
-              </div>
-            </CardBody>
-          </Card>
-          <Card className="md:p-3">
-            <CardBody>
-              <div className="flex flex-col items-center gap-4">
-                <span className="text-primary">
-                  <LuTruck size={50} />
-                </span>
-                <h3 className="text-primary text-xl font-semibold">
-                  Fast Delivery
-                </h3>
-                <p className="text-foreground-500 text-center">
-                  Quick delivery between 24-48 hours
-                </p>
-              </div>
-            </CardBody>
-          </Card>
-          <Card className="md:p-3">
-            <CardBody>
-              <div className="flex flex-col items-center gap-4">
-                <span className="text-primary">
-                  <LuClock size={50} />
-                </span>
-                <h3 className="text-primary text-xl font-semibold">
-                  24/7 Support
-                </h3>
-                <p className="text-foreground-500 text-center">
-                  Round-the-clock customer assistance
-                </p>
-              </div>
-            </CardBody>
-          </Card>
-        </div>
+        </motion.div>
       </div>
-    </div>
+
+      {/* Trust Badges */}
+      <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          {
+            icon: LuShield,
+            title: 'Licensed Pharmacy',
+            text: '100% Quality Assurance',
+          },
+          {
+            icon: LuTruck,
+            title: 'Express Delivery',
+            text: 'Doorstep Delivery',
+          },
+          {
+            icon: LuClock,
+            title: '24/7 Support',
+            text: 'Medical Consultations',
+          },
+        ].map((badge, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center text-center p-6 space-y-3"
+          >
+            <div className="p-4 rounded-3xl bg-neutral-50 text-primary">
+              <badge.icon size={36} />
+            </div>
+            <h4 className="font-black text-[#031D91] text-lg">{badge.title}</h4>
+            <p className="text-neutral-500 font-medium">{badge.text}</p>
+          </div>
+        ))}
+      </div>
+    </motion.div>
   )
 }
 

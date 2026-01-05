@@ -89,7 +89,6 @@ const ModalWrapper: FC<ModalWrapperProps> = ({
         classNames={{
           wrapper: 'z-[199]',
           backdrop: 'z-[199] bg-primary/10 backdrop-blur-sm',
-          base: ` ${className} my-10 mx-5`,
         }}
         hideCloseButton={hideCloseButton}
       >

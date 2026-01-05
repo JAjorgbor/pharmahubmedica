@@ -77,7 +77,7 @@ const TeamSection = () => {
           Add Team Member
         </Button>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 ">
         <Chip color="secondary" size="sm">
           Total Team Members: {teamMembersLoading ? '...' : teamMembers?.length}
         </Chip>
@@ -128,7 +128,7 @@ const TeamSection = () => {
         </div>
       </div>
 
-      <div className="grid @lg:grid-cols-3 gap-4">
+      <div className="grid @2xl:grid-cols-2 @5xl:grid-cols-3 gap-4">
         {teamMembersLoading
           ? Array.from({ length: 6 }).map((_, index) => (
               <Card key={index}>
@@ -200,7 +200,7 @@ const TeamSection = () => {
                             {member.status}
                           </Chip>
                         </div>
-                        {adminUserRolesPermissions[adminUser.role].includes(
+                        {adminUserRolesPermissions[adminUser?.role].includes(
                           'updateAdminUser'
                         ) && (
                           <Button

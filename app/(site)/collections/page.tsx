@@ -1,8 +1,15 @@
-import CollectionsSection from '@/components/(site)/collections/collections-section'
+import { CollectionsSectionSkeleton } from '@/components/(site)/collections/collections-section'
+import CollectionsSectionShell from '@/components/(site)/collections/collections-section-shell'
+import { Suspense } from 'react'
 
 export const metadata = { title: 'Collections' }
 
-export default function CollectionsPage() {
+export default async function CollectionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page: string }>
+}) {
+  const searchParamsData = await searchParams
   return (
     <div className="py-10">
       <div className="px-5">
@@ -14,7 +21,9 @@ export default function CollectionsPage() {
           </p>
         </div>
       </div>
-      <CollectionsSection />
+      <Suspense fallback={<CollectionsSectionSkeleton />}>
+        <CollectionsSectionShell searchParams={searchParamsData} />
+      </Suspense>
     </div>
   )
 }

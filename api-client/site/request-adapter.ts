@@ -19,18 +19,15 @@ const clearAllCookies = () => {
   Object.keys(Cookies.get()).forEach((k) => Cookies.remove(k))
 }
 
-const redirectToAdminLogin = () => {
+const redirectToPortalLogin = () => {
   if (typeof window === 'undefined') return
   const path = window.location.pathname
-  if (
-    ['/admin', '/admin/verify-access', '/admin/reset-password'].includes(path)
-  )
-    return
-  window.location.replace(`/admin?callback=${encodeURIComponent(path)}`)
+  if (['/portal', '/portal/reset-password'].includes(path)) return
+  window.location.replace(`/portal?callback=${encodeURIComponent(path)}`)
 }
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = Cookies.get('adminAccessToken')
+  const token = Cookies.get('accessToken')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -50,24 +47,24 @@ axiosInstance.interceptors.response.use(
       !original._retry &&
       status === 401 &&
       msg !== 'Incorrect email or password' &&
-      !original.url?.includes('admin/auth/refresh-tokens')
+      !original.url?.includes('auth/refresh-tokens')
 
     if (!shouldRefresh) return Promise.reject(error.response)
 
     original._retry = true
 
     try {
-      const { data } = await refreshClient.post('admin/auth/refresh-tokens')
+      const { data } = await refreshClient.post('auth/refresh-tokens')
       if (!data?.accessToken) throw new Error('No access token returned')
 
-      Cookies.set('adminAccessToken', data.accessToken)
+      Cookies.set('accessToken', data.accessToken)
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`
       original.headers.Authorization = `Bearer ${data.accessToken}`
 
       return axiosInstance(original)
     } catch (error) {
       clearAllCookies()
-      redirectToAdminLogin()
+      redirectToPortalLogin()
       return Promise.reject(error.response)
     }
   }
