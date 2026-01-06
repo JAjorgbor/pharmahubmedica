@@ -1,17 +1,19 @@
 'use client'
+import { ICategory } from '@/api-client/interfaces/category.interfaces'
 import {
   Card,
   CardBody,
   CardHeader,
   Chip,
   Image as HeroUiImage,
+  Skeleton,
 } from '@heroui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { FC } from 'react'
 
 interface CategoryCardProps {
-  category: any
+  category: ICategory
 }
 
 const CategoryCard: FC<CategoryCardProps> = ({ category }) => {
@@ -19,14 +21,14 @@ const CategoryCard: FC<CategoryCardProps> = ({ category }) => {
     <Card
       className="p-0 group bg-background shadow-none border border-foreground-200 hover:drop-shadow-xl transition-all transform hover:-translate-y-2"
       as={Link}
-      href={'/collections/collection-name'}
+      href={`/collections/${category?.slug}`}
     >
       <CardHeader className="p-0 relative">
         <HeroUiImage
-          src={category?.coverImage}
+          src={category?.image?.url}
           height={200}
           width={200}
-          as={Image}
+          // as={Image}
           alt={`${category?.name} image`}
           className="object-cover w-full group-hover:scale-125"
           classNames={{ wrapper: 'min-w-full' }}
@@ -38,7 +40,7 @@ const CategoryCard: FC<CategoryCardProps> = ({ category }) => {
           className="absolute top-3 right-3 z-20 bg-white text-primary"
           color="primary"
         >
-          10 Items
+          {category?.productsCount} Items
         </Chip>
       </CardHeader>
       <CardBody>
@@ -53,3 +55,20 @@ const CategoryCard: FC<CategoryCardProps> = ({ category }) => {
   )
 }
 export default CategoryCard
+
+export const CategoryCardSkeleton = () => {
+  return (
+    <Card className="p-0 group bg-background shadow-none border border-foreground-200 hover:drop-shadow-xl transition-all transform hover:-translate-y-2">
+      <CardHeader className="p-0 relative">
+        <Skeleton className="h-[200px] w-full rounded-b-2xl block" />
+      </CardHeader>
+      <CardBody>
+        <div className="py-1 px-3 space-y-2">
+          <Skeleton className="rounded-xl w-36 h-5" />
+          <Skeleton className="rounded-xl w-[90%] h-3" />
+          <Skeleton className="rounded-xl w-2/5 h-2" />
+        </div>
+      </CardBody>
+    </Card>
+  )
+}

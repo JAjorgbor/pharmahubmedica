@@ -1,0 +1,12 @@
+import axiosInstance from '@/api-client/site/request-adapter'
+
+export const getCategories = (params?: { page: number; limit?: number }) =>
+  axiosInstance.get('categories', { params })
+
+export const getCategory = (slug: string) =>
+  axiosInstance.get(`categories/${slug}`)
+
+export const getProductsForCategory = (
+  slug: string,
+  params?: { page: number; limit?: number }
+) => axiosInstance.get(`categories/${slug}/products`, { params })

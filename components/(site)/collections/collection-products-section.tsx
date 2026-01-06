@@ -1,11 +1,17 @@
 'use client'
+import { ICategory } from '@/api-client/interfaces/category.interfaces'
+import { IMeta } from '@/api-client/interfaces/global.interfaces'
+import { IProduct } from '@/api-client/interfaces/product.interfaces'
 import ProductCard from '@/components/(site)/collections/product-card'
 import InputField from '@/components/elements/input-field'
 import ModalWrapper, {
   BaseModalProps,
 } from '@/components/elements/modal-wrapper'
+import useGetCategoryProducts from '@/hooks/requests/useGetCategoryProducts'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import {
+  BreadcrumbItem,
+  Breadcrumbs,
   Button,
   Card,
   CardBody,
@@ -17,21 +23,61 @@ import {
   Slider,
   Tooltip,
 } from '@heroui/react'
-import React, { FC, useState } from 'react'
-import { LuFilter, LuRefreshCcw, LuRefreshCcwDot } from 'react-icons/lu'
+import Link from 'next/link'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { FC, useState } from 'react'
+import { FiHome } from 'react-icons/fi'
+import { LuFilter, LuRefreshCcw } from 'react-icons/lu'
 
-const CollectionProductsSection = () => {
+const CollectionProductsSection = ({
+  serverData,
+  category,
+}: {
+  serverData: { products: IProduct[]; meta: IMeta }
+  category: ICategory
+}) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const params = useParams()
+  const searchParams = useSearchParams()
+  const page = searchParams.get('page')
+  const paramsFilter = { page: Number(page) || 1, limit: 10 }
+  const {
+    productsData: { products, meta },
+    productsLoading,
+    productsError,
+  } = useGetCategoryProducts({
+    slug: String(params.collectionSlug),
+    params: paramsFilter,
+    fallbackData: serverData,
+  })
+  const router = useRouter()
   return (
     <div className="max-w-7xl mx-auto p-5 py-10">
       <div
         className="mx-auto text-center max-w-4xl space-y-5 mb-10 px-5 py-10 bg-no-repeat text-white rounded-xl relative overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: 'url(/multivitamin-tablets-bottle.jpg)' }}
+        style={{ backgroundImage: `url(${category?.image?.url})` }}
       >
-        <h1 className="text-4xl font-bold z-10 relative">Medicines</h1>
-        <p className="md:text-lg z-10 relative">
-          Over-the-counter and prescription medications.
-        </p>
+        <h1 className="text-4xl font-bold z-10 relative">{category?.name}</h1>
+        <Breadcrumbs
+          classNames={{ base: 'relative z-10', list: 'justify-center' }}
+        >
+          <BreadcrumbItem
+            classNames={{ item: 'text-white', separator: 'text-white' }}
+          >
+            <FiHome />
+          </BreadcrumbItem>
+          <BreadcrumbItem
+            classNames={{ item: 'text-white', separator: 'text-white' }}
+          >
+            <Link href="/collections">Collections</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem
+            classNames={{ item: 'text-white', separator: 'text-white' }}
+          >
+            {category?.name}
+          </BreadcrumbItem>
+        </Breadcrumbs>
+        <p className="md:text-lg z-10 relative">{category?.description}</p>
         <div className="bg-primary/40 absolute inset-0 w-full-h-full " />
       </div>
       <div className="flex justify-between lg:justify-end items-center flex-wrap gap-4 mb-8">
@@ -51,22 +97,27 @@ const CollectionProductsSection = () => {
       <div className="flex gap-8 items-start">
         <Filter isOpen={isFilterOpen} setIsOpen={setIsFilterOpen} />
         <div className="flex-grow">
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
-            {Array(10)
-              .fill(null)
-              .map((each, index) => (
-                <ProductCard
-                  key={index}
-                  product={{
-                    name: 'Tylenol',
-                    price: 3000,
-                    coverImage: 'https://dummyimage.com/200x150',
-                  }}
-                />
-              ))}
+          <div
+            className={`grid gap-6 ${
+              products?.length > 3
+                ? 'grid-cols-[repeat(auto-fit,minmax(200px,1fr))] '
+                : 'grid-cols-2 md:grid-cols-4'
+            }`}
+          >
+            {products?.map((product, index) => (
+              <ProductCard key={index} product={product} />
+            ))}
           </div>
           <div className="flex justify-center mt-10">
-            <Pagination total={10} />
+            <Pagination
+              total={meta?.totalPages}
+              page={paramsFilter.page}
+              onChange={(page) =>
+                router.replace(
+                  `/collections/${params.collectionSlug}?page=${page}`
+                )
+              }
+            />
           </div>
         </div>
       </div>

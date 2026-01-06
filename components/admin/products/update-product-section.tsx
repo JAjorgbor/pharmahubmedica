@@ -107,7 +107,6 @@ const UpdateProductSection = () => {
     } catch (error: any) {
       addToast({
         title:
-          error?.data?.error ||
           error?.data?.message ||
           error?.message ||
           'Something went wrong. Please try again later.',
@@ -125,7 +124,7 @@ const UpdateProductSection = () => {
   )
 
   const isLoading = productLoading || isImageFetching
-  console.log(selectedCategory)
+
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-2">

@@ -1,4 +1,5 @@
 'use client'
+import { IProduct } from '@/api-client/interfaces/product.interfaces'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   Button,
@@ -14,16 +15,15 @@ import Link from 'next/link'
 import type { FC } from 'react'
 
 interface ProductCardProps {
-  product: any
+  product: IProduct
 }
 
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
-  console.log('product', product)
   return (
     <Card className="p-0 group bg-background shadow-md transition-all transform hover:-translate-y-2">
       <CardHeader className="p-0 relative">
         <HeroUiImage
-          src={product?.coverImage}
+          src={product?.image.url}
           height={200}
           width={200}
           as={Image}
@@ -39,7 +39,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           className="absolute top-3 right-3 z-20 bg-white text-primary"
           color="primary"
         >
-          Subcategory
+          {product?.subcategory?.name}
         </Chip>
       </CardHeader>
       <CardBody>
@@ -57,7 +57,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           fullWidth
           color="primary"
           as={Link}
-          href={'/collections/collection-name/product'}
+          href={`/collections/${product.category.slug}/${product.slug}`}
           size="sm"
         >
           View Details

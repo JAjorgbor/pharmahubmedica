@@ -35,10 +35,7 @@ const DeleteCollectionModal: React.FC<DeleteCollectionModalProps> = ({
     } catch (error: any) {
       addToast({
         title:
-          error?.data?.error ||
-          error?.data?.message ||
-          error?.message ||
-          'Failed to delete category',
+          error?.data?.message || error?.message || 'Failed to delete category',
         color: 'danger',
         severity: 'danger',
       })

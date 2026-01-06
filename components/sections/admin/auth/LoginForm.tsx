@@ -41,14 +41,13 @@ export default function LoginForm() {
     try {
       const { data: res } = await login(data)
       Cookies.set('adminAccessToken', res.accessToken)
-      Cookies.set('adminUserId', res.user._id)
+      Cookies.set('adminUserId', res.user._id, { expires: 60 })
 
       router.push(callbackUrl)
       setKeepLoading(true)
     } catch (error: any) {
       addToast({
         title:
-          error?.data?.error ||
           error?.data?.message ||
           error?.message ||
           'Something went wrong. Please try again later.',
