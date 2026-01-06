@@ -87,6 +87,8 @@ const Header = () => {
           <NavbarItem>
             <div className="flex gap-2">
               <Button
+                as={Link}
+                href={'/portal/login'}
                 size="sm"
                 color="primary"
                 variant="light"
@@ -94,7 +96,12 @@ const Header = () => {
               >
                 Sign In
               </Button>
-              <Button size="sm" color="primary">
+              <Button
+                as={Link}
+                href={'/portal/register'}
+                size="sm"
+                color="primary"
+              >
                 Sign Up
               </Button>
             </div>
