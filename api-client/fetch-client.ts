@@ -18,13 +18,19 @@ export async function apiFetch(path: string, options: ApiFetchOptions = {}) {
         'Content-Type': 'application/json',
         ...(options.headers || {}),
       },
-      credentials: 'include', // ← withCredentials
+      credentials: 'include',
       signal: controller.signal,
     })
 
-    return res.json()
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}))
+      const error = { status: res.status, data: errorData }
+      return { error }
+    }
+
+    return { data: res.json() }
   } catch (error) {
-    throw error
+    return { error }
   } finally {
     clearTimeout(timeout)
   }

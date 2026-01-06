@@ -7,10 +7,11 @@ const CollectionsSectionShell = async ({
   searchParams: { page: string }
 }) => {
   const page = searchParams.page || 1
-  const data = await apiFetch(`/categories?page=${page}`, {
+  const { data, error } = await apiFetch(`/categories?page=${page}`, {
     next: { revalidate: 0 },
   })
-  return <CollectionsSection serverData={data} />
+  if (error) throw error
+  return <CollectionsSection serverData={data as any} />
 }
 
 export default CollectionsSectionShell

@@ -1,9 +1,10 @@
 'use client'
+import { IProduct } from '@/api-client/interfaces/product.interfaces'
 import { currencyFormatter } from '@/utils/currency-formatter'
-import { Button, Card, CardBody, Chip, Divider } from '@heroui/react'
+import { Button, Card, CardBody, Chip, Divider, Skeleton } from '@heroui/react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { FaWhatsapp } from 'react-icons/fa'
 import {
   LuClock,
@@ -14,29 +15,18 @@ import {
   LuTruck,
 } from 'react-icons/lu'
 
-const ProductDetails = () => {
-  const [quantity, setQuantity] = useState(1)
+interface ProductDetailsProps {
+  product: IProduct
+}
 
-  // This would eventually come from props
-  const product = {
-    name: 'Pain Relief Tablets',
-    price: 5000,
-    oldPrice: 6800,
-    description:
-      'Fast-acting pain relief tablets specifically engineered for rapid absorption. Ideal for treating headaches, muscle aches, and minor pains associated with common colds or minor injuries.',
-    category: { name: 'Medicine' },
-    subcategory: { name: 'Pain Relief' },
-    inStock: true,
-    image: {
-      url: '/pain-relief-medicine-tablets.jpg',
-    },
-  }
+const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
+  const [quantity, setQuantity] = useState(1)
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-6xl mx-auto p-6 md:p-12 min-h-screen"
+      className="max-w-6xl mx-auto p-6 md:p-12 min-h-[80vh]"
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
         {/* Left Column: Single Image */}
@@ -101,7 +91,7 @@ const ProductDetails = () => {
               )}
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-black text-[#031D91] tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-black text-[#031D91] tracking-tight leading-tight">
               {product.name}
             </h1>
 
@@ -109,11 +99,6 @@ const ProductDetails = () => {
               <span className="text-4xl font-black text-primary">
                 {currencyFormatter(product.price)}
               </span>
-              {product.oldPrice && (
-                <span className="text-xl text-neutral-400 line-through">
-                  {currencyFormatter(product.oldPrice)}
-                </span>
-              )}
             </div>
           </div>
 
@@ -156,13 +141,13 @@ const ProductDetails = () => {
                 color="primary"
                 size="lg"
                 startContent={<LuShoppingCart className="h-5 w-5" />}
-                className="flex-1 py-3 font-bold rounded-2xl shadow-xl shadow-primary/20"
+                className="flex-1 py-5 font-bold rounded-2xl shadow-xl shadow-primary/20 text-lg"
               >
                 Add to Cart
               </Button>
               <Button
                 size="lg"
-                className="flex-1 bg-[#25D366] py-3 text-white font-bold  rounded-2xl shadow-xl shadow-green-500/10"
+                className="flex-1 bg-[#25D366] py-5 text-white font-bold rounded-2xl shadow-xl shadow-green-500/10 text-lg"
                 startContent={<FaWhatsapp className="h-6 w-6" />}
               >
                 Buy via WhatsApp
@@ -204,6 +189,40 @@ const ProductDetails = () => {
         ))}
       </div>
     </motion.div>
+  )
+}
+
+export const ProductDetailsSkeleton = () => {
+  return (
+    <div className="max-w-6xl mx-auto p-6 md:p-12 min-h-[80vh]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <Skeleton className="rounded-3xl aspect-square" />
+        <div className="flex flex-col justify-center space-y-8">
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <Skeleton className="w-20 h-6 rounded-full" />
+              <Skeleton className="w-24 h-6 rounded-full" />
+              <Skeleton className="w-20 h-6 rounded-full" />
+            </div>
+            <Skeleton className="w-3/4 h-12 rounded-xl" />
+            <Skeleton className="w-1/3 h-10 rounded-xl" />
+          </div>
+          <div className="space-y-3">
+            <Skeleton className="w-full h-4 rounded-lg" />
+            <Skeleton className="w-full h-4 rounded-lg" />
+            <Skeleton className="w-2/3 h-4 rounded-lg" />
+          </div>
+          <Divider />
+          <div className="space-y-6">
+            <Skeleton className="w-32 h-8 rounded-xl" />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Skeleton className="flex-1 h-14 rounded-2xl" />
+              <Skeleton className="flex-1 h-14 rounded-2xl" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
