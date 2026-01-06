@@ -9,6 +9,7 @@ import useGetCategories from '@/hooks/requests/useGetCategories'
 import { Pagination } from '@heroui/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { FC } from 'react'
+import EmptyState from '@/components/elements/empty-state'
 
 const CollectionsSection: FC<{
   serverData: { categories: ICategory[]; meta: IMeta }
@@ -40,25 +41,39 @@ const CollectionsSection: FC<{
             placeholder="Search categories..."
           />
         </div>
-        <div
-          className={`grid gap-6 ${
-            categories?.length > 3
-              ? 'grid-cols-[repeat(auto-fit,minmax(250px,1fr))] '
-              : 'grid-cols-2 md:grid-cols-4'
-          }`}
-        >
-          {categories?.map((category, index) => (
-            <CategoryCard key={index} category={category} />
-          ))}
-        </div>
 
-        <div className="flex justify-center">
-          <Pagination
-            total={meta.totalPages}
-            page={paramsFilter.page}
-            onChange={(value) => router.replace(`/collections?page=${value}`)}
+        {categories?.length === 0 ? (
+          <EmptyState
+            title="No categories found"
+            description="We can't find any categories matching your criteria. Try clearing your search."
+            buttonText="View all categories"
+            onButtonPress={() => router.replace('/collections')}
           />
-        </div>
+        ) : (
+          <>
+            <div
+              className={`grid gap-6 ${
+                categories?.length > 3
+                  ? 'grid-cols-[repeat(auto-fit,minmax(250px,1fr))] '
+                  : 'grid-cols-2 md:grid-cols-4'
+              }`}
+            >
+              {categories?.map((category, index) => (
+                <CategoryCard key={index} category={category} />
+              ))}
+            </div>
+
+            <div className="flex justify-center">
+              <Pagination
+                total={meta.totalPages}
+                page={paramsFilter.page}
+                onChange={(value) =>
+                  router.replace(`/collections?page=${value}`)
+                }
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

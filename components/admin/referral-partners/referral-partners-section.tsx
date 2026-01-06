@@ -114,7 +114,12 @@ const ReferralPartnersSection = () => {
         id: 'action',
 
         cell: ({ row: { original: item } }) => (
-          <Button size="sm" variant="bordered">
+          <Button
+            size="sm"
+            variant="bordered"
+            as={Link}
+            href={`/admin/referral-partners/${item.id}`}
+          >
             Manage
           </Button>
         ),

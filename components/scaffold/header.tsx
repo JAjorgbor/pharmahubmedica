@@ -9,13 +9,15 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
+  Spinner,
   Tooltip,
 } from '@heroui/react'
 import Image from 'next/image'
-import { LuChevronDown, LuShoppingCart } from 'react-icons/lu'
+import { LuArrowRight, LuChevronDown, LuShoppingCart } from 'react-icons/lu'
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils/cn'
 import Link from 'next/link'
+import useGetCategories from '@/hooks/requests/useGetCategories'
 
 const Header = () => {
   const { scrollY } = useScroll() // reactive MotionValue
@@ -27,6 +29,10 @@ const Header = () => {
       setScrollHeight(latest)
     })
   }, [scrollY])
+  const { categoriesData, categoriesLoading } = useGetCategories({
+    params: { page: 1, limit: 10 },
+  })
+  const { categories, meta } = categoriesData || {}
   return (
     <>
       <div className="pt-5 md:hidden" />
@@ -115,19 +121,27 @@ const Header = () => {
           <NavbarItem isActive>
             <Tooltip
               content={
-                <div className="flex flex-col max-h-52 flex-wrap gap-2">
-                  {Array(20)
-                    .fill(null)
-                    .map((_, index) => (
+                categoriesLoading ? (
+                  <Spinner title="Fetching collections..." />
+                ) : (
+                  <div className="flex flex-col max-h-52 flex-wrap gap-2">
+                    {categories?.map((each, index) => (
                       <Link
-                        href="#"
+                        href={`/collections/${each?.slug}`}
                         key={index}
-                        className="px-2 py-1 text-foreground-500 text-sm hover:bg-foreground-100 hover:text-primary transition-colors rounded-lg min-w-36"
+                        className="px-2 py-1 text-foreground-500 text-sm hover:bg-foreground-100 hover:text-primary transition-colors rounded-lg min-w-36 truncate"
                       >
-                        Link {index}
+                        {each?.name}
                       </Link>
                     ))}
-                </div>
+                    <Link
+                      href={`/collections`}
+                      className="px-2 py-1 text-sm hover:bg-foreground-100 text-primary transition-colors rounded-lg min-w-36 flex gap-2 items-center"
+                    >
+                      View All <LuArrowRight size={15} />
+                    </Link>
+                  </div>
+                )
               }
             >
               <Link

@@ -9,6 +9,7 @@ import {
   CardHeader,
   Chip,
   Image as HeroUiImage,
+  Skeleton,
 } from '@heroui/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -37,6 +38,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           size="sm"
           variant="dot"
           className="absolute top-3 right-3 z-20 bg-white text-primary"
+          classNames={{ content: 'max-w-24 truncate' }}
           color="primary"
         >
           {product?.subcategory?.name}
@@ -67,3 +69,22 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
   )
 }
 export default ProductCard
+
+export const ProductCardSkeleton = () => {
+  return (
+    <Card className="p-0 group bg-background shadow-md transition-all transform hover:-translate-y-2">
+      <CardHeader className="p-0 relative">
+        <Skeleton className="h-48 rounded-t-xl w-full block" />
+      </CardHeader>
+      <CardBody>
+        <div className="py-1 px-3 space-y-2">
+          <Skeleton className="h-6 rounded-xl w-full" />
+          <Skeleton className="h-4 rounded-xl w-2/3" />
+        </div>
+      </CardBody>
+      <CardFooter>
+        <Skeleton className="h-8 rounded-xl w-full" />
+      </CardFooter>
+    </Card>
+  )
+}

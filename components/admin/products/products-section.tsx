@@ -285,7 +285,7 @@ const ProductsSection = () => {
                       <InputField
                         type="select"
                         controllerProps={{
-                          name: 'status filter',
+                          name: 'visibility filter',
                           defaultValue: visibilityFilter,
                         }}
                         options={[
@@ -365,7 +365,7 @@ const ProductsSection = () => {
                               label: `${each.name} (${getCategoryCount(
                                 each.name
                               )})`,
-                              value: each.name,
+                              value: each._id,
                             })) || ([] as any)),
                           ]}
                           onChange={(value) => {

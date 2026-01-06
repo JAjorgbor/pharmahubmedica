@@ -200,7 +200,7 @@ const TeamSection = () => {
                             {member.status}
                           </Chip>
                         </div>
-                        {adminUserRolesPermissions[adminUser?.role].includes(
+                        {adminUserRolesPermissions[adminUser?.role]?.includes(
                           'updateAdminUser'
                         ) && (
                           <Button
