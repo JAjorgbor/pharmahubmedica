@@ -27,8 +27,8 @@ export async function apiFetch(path: string, options: ApiFetchOptions = {}) {
       const error = { status: res.status, data: errorData }
       return { error }
     }
-
-    return { data: res.json() }
+    const jsonResponse = await res.json()
+    return { data: jsonResponse }
   } catch (error) {
     return { error }
   } finally {

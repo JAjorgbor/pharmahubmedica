@@ -6,7 +6,8 @@ export interface ICategory {
   visible: boolean
   subcategories: Subcategory[]
   slug: string
-  productsCount: number
+  productsCount?: number
+  visibleProductsCount?: number
   createdAt: Date
   updatedAt: Date
   __v: number

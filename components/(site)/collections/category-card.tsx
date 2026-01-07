@@ -40,7 +40,7 @@ const CategoryCard: FC<CategoryCardProps> = ({ category }) => {
           className="absolute top-3 right-3 z-20 bg-white text-primary"
           color="primary"
         >
-          {category?.productsCount} Items
+          {category?.visibleProductsCount} Items
         </Chip>
       </CardHeader>
       <CardBody>

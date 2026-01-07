@@ -13,13 +13,15 @@ const CollectionProductsSectionShell: FC<
   CollectionProductsSectionShellProps
 > = async ({ params, searchParams }) => {
   const cleanedParams = cleanObject(searchParams)
-  let category
-  try {
-    category = await apiFetch(`/categories/${params.collectionSlug}`)
-  } catch (error: any) {
-    if (error.status === 404) notFound()
-    throw error
-  }
+
+  const { data: category, error: categoryError } = await apiFetch(
+    `/categories/${params.collectionSlug}`,
+    {
+      next: { revalidate: 0 },
+    }
+  )
+  if (categoryError?.status === 404) notFound()
+  if (categoryError) throw categoryError
 
   const { subcategories, ...rest } = cleanedParams
   const subcategoriesArray = Array.isArray(subcategories)
@@ -45,7 +47,10 @@ const CollectionProductsSectionShell: FC<
   if (error?.status === 404) notFound()
   if (error) throw error
   return (
-    <CollectionProductsSection serverData={data as any} category={category} />
+    <CollectionProductsSection
+      serverData={data as any}
+      category={category as any}
+    />
   )
 }
 export default CollectionProductsSectionShell

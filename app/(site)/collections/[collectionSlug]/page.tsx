@@ -1,5 +1,4 @@
 import CollectionProductsSectionShell from '@/components/(site)/collections/collection-products-section-shell'
-import CollectionProductsSection from '@/components/(site)/collections/collection-products-section'
 
 export const metadata = { title: 'Collection Page' }
 
@@ -11,6 +10,7 @@ export default async function CollectionPage({
   searchParams: Promise<{ page: string; minPrice: string; maxPrice: string }>
 }) {
   const paramsData = await params
+  console.log(paramsData)
   const searchParamsData = await searchParams
   return (
     <>

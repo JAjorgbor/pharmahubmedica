@@ -299,7 +299,7 @@ const Filter: FC<FilterProps> = ({ isOpen, setIsOpen, category, maxPrice }) => {
 const CollectionProductsSectionSkeleton = () => {
   return (
     <div className="max-w-7xl mx-auto p-5 py-10">
-      <Skeleton className="mx-auto text-center w-full h-[200px] max-w-4xl space-y-5 mb-10 px-5 py-10 bg-no-repeat text-white rounded-xl relative overflow-hidden bg-cover bg-center" />
+      <Skeleton className="mx-auto text-center w-full h-[250px] max-w-4xl space-y-5 mb-10 px-5 py-10 bg-no-repeat text-white rounded-xl relative overflow-hidden bg-cover bg-center" />
       <div className="flex gap-8 items-start">
         <Card className="hidden md:block w-56">
           <CardBody className="space-y-4">
