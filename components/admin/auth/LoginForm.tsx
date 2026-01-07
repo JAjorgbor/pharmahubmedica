@@ -40,7 +40,7 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       const { data: res } = await login(data)
-      Cookies.set('adminAccessToken', res.accessToken)
+      Cookies.set('adminAccessToken', res.accessToken, { expires: 60 })
       Cookies.set('adminUserId', res.user._id, { expires: 60 })
 
       router.push(callbackUrl)

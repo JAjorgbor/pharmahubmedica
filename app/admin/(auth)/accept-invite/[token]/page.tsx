@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import AcceptInviteForm from '@/components/sections/admin/auth/AcceptInviteForm'
+import AcceptInviteForm from '@/components/admin/auth/AcceptInviteForm'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {

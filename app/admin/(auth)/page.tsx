@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import LoginForm from '@/components/sections/admin/auth/LoginForm'
+import LoginForm from '@/components/admin/auth/LoginForm'
 
 export const metadata: Metadata = {
   title: 'Admin Login | PharmaHub Medica',

@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import ForgotPasswordForm from '@/components/sections/admin/auth/ForgotPasswordForm'
+import ForgotPasswordForm from '@/components/admin/auth/ForgotPasswordForm'
 
 export const metadata: Metadata = {
   title: 'Forgot Password | PharmaHub Medica',

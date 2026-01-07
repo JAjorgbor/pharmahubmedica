@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import VerifyOtpForm from '@/components/sections/admin/auth/VerifyOtpForm'
+import VerifyOtpForm from '@/components/admin/auth/VerifyOtpForm'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
