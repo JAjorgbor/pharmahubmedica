@@ -1,6 +1,5 @@
 'use client'
-import { Button } from '@heroui/react'
-import Image from 'next/image'
+import { Image, Button } from '@heroui/react'
 import { LuArrowRight, LuClock, LuShield, LuTruck } from 'react-icons/lu'
 import { FaWhatsapp } from 'react-icons/fa'
 
@@ -8,7 +7,7 @@ export default function HomePage() {
   return (
     <>
       <div className="bg-primary-gradient">
-        <div className="max-w-7xl px-5   mx-auto p-5 py-10 flex flex-col md:flex-row gap-8 items-center text-white">
+        <div className="max-w-7xl px-5   mx-auto p-5 py-10 flex flex-col lg:flex-row gap-8 items-center text-white">
           <div className="flex-1 space-y-3">
             <h1 className="text-4xl md:text-5xl font-bold">
               Your Health, Our Priority:
@@ -38,11 +37,11 @@ export default function HomePage() {
             </div>
           </div>
           <Image
-            src="https://dummyimage.com/500x500"
+            src="/hero.jpg"
             className="rounded-2xl flex-1 h-96 w-full object-cover object-center"
             alt="hero image"
-            width={500}
-            height={500}
+            width={'100%'}
+            height={400}
           />
         </div>
       </div>
