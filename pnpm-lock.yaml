@@ -14,6 +14,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.11.0
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.1.1))(@types/react@19.2.7)(react@19.1.1)
+      '@eslint/eslintrc':
+        specifier: ^3.3.3
+        version: 3.3.3
       '@fontsource/roboto':
         specifier: ^5.0.2
         version: 5.2.9
