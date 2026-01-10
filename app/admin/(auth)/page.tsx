@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import LoginForm from '@/components/admin/auth/LoginForm'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'Admin Login | PharmaHub Medica',
@@ -17,7 +18,9 @@ export default function AdminLoginPage() {
           Enter your credentials to access the dashboard
         </p>
       </div>
-      <LoginForm />
+      <Suspense>
+        <LoginForm />
+      </Suspense>
     </div>
   )
 }

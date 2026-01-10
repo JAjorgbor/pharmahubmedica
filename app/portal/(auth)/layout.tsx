@@ -5,11 +5,9 @@ import { FC, ReactNode } from 'react'
 
 interface AuthLayoutProps {
   children: ReactNode
-  title: string
-  subtitle: string
 }
 
-const AuthLayout: FC<AuthLayoutProps> = ({ children, title, subtitle }) => {
+const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-gray-50 p-4 lg:p-6 gap-4 lg:gap-6">
       <div className="hidden lg:flex flex-col justify-between p-12 text-white relative overflow-hidden rounded-[2.5rem] shadow-2xl bg-primary">
