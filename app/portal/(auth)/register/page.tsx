@@ -1,4 +1,4 @@
-import RegisterForm from '@/components/sections/portal/auth/RegisterForm'
+import RegisterForm from '@/components/portal/auth/RegisterForm'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'

@@ -133,7 +133,7 @@ export default function RegisterForm() {
       <div className="text-center text-sm">
         Already have an account?{' '}
         <Link
-          href="/portal/login"
+          href="/portal"
           className="font-semibold text-primary hover:underline"
         >
           Sign In

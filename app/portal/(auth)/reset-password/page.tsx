@@ -4,11 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Portal Reset Password | PharmaHub Medica',
+  title: 'Portal Set New Password | PharmaHub Medica',
   description: 'Reset your password for the PharmaHub Medica portal',
 }
 
-export default function ResetPasswordPage() {
+export default function SetNewPasswordPage() {
   return (
     <div className="h-full flex flex-col items-center justify-center p-6 sm:p-12">
       <div className="w-full max-w-md space-y-8">
@@ -27,16 +27,16 @@ export default function ResetPasswordPage() {
 
         <div className="space-y-3 text-center flex flex-col items-center justify-center lg:text-left">
           <h2 className="text-4xl font-bold tracking-tight text-foreground">
-            Reset Password
+            Set New Password
           </h2>
           <p className="text-muted-foreground text-lg">
-            We'll send you a link to reset your password
+            Enter a new password to regain access to your portal
           </p>
         </div>
 
         <div className="rounded-3xl shadow-xl shadow-primary/5 p-2 bg-white">
           <div className="overflow-hidden rounded-3xl">
-            <ResetPasswordForm />
+            <SetNewPasswordPage />
           </div>
         </div>
       </div>
