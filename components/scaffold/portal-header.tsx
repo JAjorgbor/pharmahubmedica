@@ -31,8 +31,11 @@ import { cn } from '@/utils/cn'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/features/store'
 import { setOpenSidebar } from '@/features/sidebarSlice'
+import LogoutConfirmationModal from '@/components/scaffold/portal-logout-confirmation-modal'
 
 export const UserPanel = () => {
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
+
   return (
     <>
       <Dropdown>
@@ -74,11 +77,17 @@ export const UserPanel = () => {
             color="danger"
             variant="flat"
             startContent={<LuLogOut />}
+            onPress={() => setIsLogoutModalOpen(true)}
           >
             Log Out
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
+
+      <LogoutConfirmationModal
+        isOpen={isLogoutModalOpen}
+        setIsOpen={setIsLogoutModalOpen}
+      />
     </>
   )
 }
