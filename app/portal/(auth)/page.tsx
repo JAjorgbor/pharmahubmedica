@@ -1,4 +1,4 @@
-import LoginForm from '@/components/sections/portal/auth/LoginForm'
+import LoginForm from '@/components/portal/auth/LoginForm'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'

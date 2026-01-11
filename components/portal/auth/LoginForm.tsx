@@ -1,9 +1,11 @@
 'use client'
 
+import { login } from '@/api-client/portal/requests/auth.requests'
 import InputField from '@/components/elements/input-field'
 import { addToast, Button } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
+import Cookies from 'js-cookie'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -38,9 +40,9 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      //   const { data: res } = await login(data)
-      //   Cookies.set('portalAccessToken', res.accessToken)
-      //   Cookies.set('portalUserId', res.user._id)
+      const { data: res } = await login(data)
+      Cookies.set('portalAccessToken', res.accessToken)
+      Cookies.set('portalUserId', res.user._id)
 
       router.push(callbackUrl)
       setKeepLoading(true)

@@ -1,16 +1,14 @@
-import RegisterForm from '@/components/portal/auth/RegisterForm'
+import ResetPasswordForm from '@/components/portal/auth/ResetPasswordForm'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Portal Registration | PharmaHub Medica',
-  description:
-    'Register to have access to the PharmaHub Medica portal dashboard',
+  title: 'Portal Set New Password | PharmaHub Medica',
+  description: 'Reset your password for the PharmaHub Medica portal',
 }
 
-export default function RegisterPage() {
+export default function SetNewPasswordPage() {
   return (
     <div className="h-full flex flex-col items-center justify-center p-6 sm:p-12">
       <div className="w-full max-w-md space-y-8">
@@ -29,18 +27,16 @@ export default function RegisterPage() {
 
         <div className="space-y-3 text-center flex flex-col items-center justify-center lg:text-left">
           <h2 className="text-4xl font-bold tracking-tight text-foreground">
-            Create Account
+            Set New Password
           </h2>
           <p className="text-muted-foreground text-lg">
-            Join PharmaHub and take control of your health today
+            Enter a new password to regain access to your portal
           </p>
         </div>
 
         <div className="rounded-3xl shadow-xl shadow-primary/5 p-2 bg-white">
           <div className="overflow-hidden rounded-3xl">
-            <Suspense>
-              <RegisterForm />
-            </Suspense>
+            <SetNewPasswordPage />
           </div>
         </div>
       </div>
