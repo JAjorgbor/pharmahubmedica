@@ -1,7 +1,5 @@
 import type { FC, ReactNode } from 'react'
 
-export const dynamic = 'force-dynamic'
-
 interface layoutProps {
   children: ReactNode
 }
