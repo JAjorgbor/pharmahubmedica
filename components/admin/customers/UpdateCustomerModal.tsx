@@ -43,7 +43,7 @@ const UpdateCustomerModal = ({
       lastName: '',
       email: '',
       phoneNumber: '',
-      status: 'pending',
+      status: 'pending' as const,
     },
   })
 
@@ -87,11 +87,8 @@ const UpdateCustomerModal = ({
   return (
     <ModalWrapper
       isOpen={isOpen}
-      onClose={handleClose}
+      setIsOpen={handleClose}
       title={`Update Customer`}
-      classNames={{
-        body: 'overflow-visible',
-      }}
       footer={
         <div className="flex justify-end w-full gap-4">
           <button
@@ -113,11 +110,13 @@ const UpdateCustomerModal = ({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <InputField
+            type="text"
             label="First Name"
             placeholder="Enter first name"
             controllerProps={{ control, name: 'firstName' }}
           />
           <InputField
+            type="text"
             label="Last Name"
             placeholder="Enter last name"
             controllerProps={{ control, name: 'lastName' }}
@@ -125,13 +124,14 @@ const UpdateCustomerModal = ({
         </div>
 
         <InputField
+          type="email"
           label="Email Address"
           placeholder="Enter email address"
-          readOnly
           controllerProps={{ control, name: 'email' }}
         />
 
         <InputField
+          type="phoneNumber"
           label="Phone Number"
           placeholder="Enter phone number"
           controllerProps={{ control, name: 'phoneNumber' }}

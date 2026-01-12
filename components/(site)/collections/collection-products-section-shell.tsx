@@ -9,9 +9,10 @@ interface CollectionProductsSectionShellProps {
   searchParams: { page: string; minPrice: string; maxPrice: string }
 }
 
-const CollectionProductsSectionShell: FC<
-  CollectionProductsSectionShellProps
-> = async ({ params, searchParams }) => {
+const CollectionProductsSectionShell = async ({
+  params,
+  searchParams,
+}: CollectionProductsSectionShellProps) => {
   const cleanedParams = cleanObject(searchParams)
 
   const { data: category, error: categoryError } = await apiFetch(

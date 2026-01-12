@@ -14,14 +14,14 @@ import {
   setNewPassword,
 } from '@/api-client/portal/requests/auth.requests'
 
-const resetPasswordSchema = z.object({
+const setNewPasswordSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
-type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
+type ResetPasswordFormValues = z.infer<typeof setNewPasswordSchema>
 
-export default function ResetPasswordForm() {
+export default function SetNewPasswordForm() {
   const [keepLoading, setKeepLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -32,7 +32,7 @@ export default function ResetPasswordForm() {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<ResetPasswordFormValues>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: zodResolver(setNewPasswordSchema),
     defaultValues: {
       password: '',
       confirmPassword: '',
