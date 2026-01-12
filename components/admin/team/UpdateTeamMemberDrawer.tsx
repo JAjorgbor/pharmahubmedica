@@ -10,6 +10,7 @@ import InputField from '@/components/elements/input-field'
 import RoleRadioGroup from './RoleRadioGroup'
 import { updateTeamMember } from '@/api-client/admin/requests/admin.team.requests'
 import { IAdminUser } from '@/api-client/admin/interfaces/admin.user.interfaces'
+import useGetAdminUser from '@/hooks/requests/admin/useGetAdminUser'
 
 const updateSchema = z.object({
   firstName: z.string().min(2, 'First name is required'),
@@ -42,6 +43,7 @@ export default function UpdateTeamMemberDrawer({
   member,
   onSuccess,
 }: UpdateTeamMemberDrawerProps) {
+  const { adminUser } = useGetAdminUser()
   const {
     control,
     handleSubmit,
@@ -162,7 +164,11 @@ export default function UpdateTeamMemberDrawer({
           isRequired
         />
 
-        <RoleRadioGroup control={control} name="role" />
+        <RoleRadioGroup
+          control={control}
+          name="role"
+          currentUserRole={adminUser?.role}
+        />
       </form>
     </DrawerWrapper>
   )

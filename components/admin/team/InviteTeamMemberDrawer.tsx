@@ -9,6 +9,7 @@ import DrawerWrapper from '@/components/elements/drawer-wrapper'
 import InputField from '@/components/elements/input-field'
 import RoleRadioGroup from './RoleRadioGroup'
 import { inviteTeamMember } from '@/api-client/admin/requests/admin.team.requests'
+import useGetAdminUser from '@/hooks/requests/admin/useGetAdminUser'
 
 const inviteSchema = z.object({
   firstName: z.string().min(2, 'First name is required'),
@@ -39,6 +40,7 @@ export default function InviteTeamMemberDrawer({
   setIsOpen,
   onSuccess,
 }: InviteTeamMemberDrawerProps) {
+  const { adminUser } = useGetAdminUser()
   const {
     control,
     handleSubmit,
@@ -150,7 +152,11 @@ export default function InviteTeamMemberDrawer({
           isRequired
         />
 
-        <RoleRadioGroup control={control} name="role" />
+        <RoleRadioGroup
+          control={control}
+          name="role"
+          currentUserRole={adminUser?.role}
+        />
       </form>
     </DrawerWrapper>
   )

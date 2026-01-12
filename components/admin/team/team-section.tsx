@@ -33,17 +33,23 @@ const TeamSection = () => {
 
   const { adminUser } = useGetAdminUser()
 
-  const filteredMembers = teamMembers?.filter((member) => {
-    const matchesSearch =
-      member.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      member.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      member.email.toLowerCase().includes(search.toLowerCase())
-    const matchesRole = roleFilter === 'all' || member.role === roleFilter
-    const matchesStatus =
-      statusFilter === 'all' || member.status === statusFilter
+  const filteredMembers = teamMembers
+    ?.filter((member) => {
+      const matchesSearch =
+        member.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        member.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        member.email.toLowerCase().includes(search.toLowerCase())
+      const matchesRole = roleFilter === 'all' || member.role === roleFilter
+      const matchesStatus =
+        statusFilter === 'all' || member.status === statusFilter
 
-    return matchesSearch && matchesRole && matchesStatus
-  })
+      return matchesSearch && matchesRole && matchesStatus
+    })
+    .sort((a, b) => {
+      if (a.role === 'administrator' && b.role !== 'administrator') return -1
+      if (a.role !== 'administrator' && b.role === 'administrator') return 1
+      return 0
+    })
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -200,9 +206,27 @@ const TeamSection = () => {
                             {member.status}
                           </Chip>
                         </div>
-                        {adminUserRolesPermissions[adminUser?.role]?.includes(
-                          'updateAdminUser'
-                        ) && (
+                        {(() => {
+                          const currentUserRole = adminUser?.role
+                          if (!currentUserRole) return false
+
+                          const hasBasePermission =
+                            adminUserRolesPermissions[
+                              currentUserRole
+                            ]?.includes('updateAdminUser')
+                          if (!hasBasePermission) return false
+
+                          if (currentUserRole === 'devOps') return true
+                          if (currentUserRole === 'administrator')
+                            return member.role !== 'devOps'
+                          if (currentUserRole === 'operations')
+                            return (
+                              member.role !== 'devOps' &&
+                              member.role !== 'administrator'
+                            )
+
+                          return true
+                        })() && (
                           <Button
                             isIconOnly
                             size="sm"

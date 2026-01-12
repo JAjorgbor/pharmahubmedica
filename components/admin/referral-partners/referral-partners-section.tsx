@@ -1,8 +1,9 @@
 'use client'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
-import { IUser, users } from '@/library/dummy-data'
-import { currencyFormatter } from '@/utils/currency-formatter'
+import { IReferralPartner } from '@/api-client/admin/interfaces/referral.interfaces'
+import useGetReferralPartners from '@/hooks/requests/admin/useGetReferralPartners'
+import { capitalCase } from 'change-case'
 import {
   BreadcrumbItem,
   Breadcrumbs,
@@ -11,92 +12,123 @@ import {
   CardBody,
   CardHeader,
   Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Skeleton,
+  addToast,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
+import AddReferralPartnerModal from './AddReferralPartnerModal'
+import UpdateReferralPartnerModal from './UpdateReferralPartnerModal'
+import ToggleReferralPartnerStatusModal from './ToggleReferralPartnerStatusModal'
 import React, { useMemo, useState } from 'react'
-import { FiXCircle } from 'react-icons/fi'
+import { FiMoreVertical, FiXCircle } from 'react-icons/fi'
 import { IoCashOutline } from 'react-icons/io5'
-import { LuClock, LuExternalLink, LuHandshake } from 'react-icons/lu'
+import { LuClock, LuExternalLink, LuHandshake, LuPlus } from 'react-icons/lu'
+import { currencyFormatter } from '@/utils/currency-formatter'
+import { toggleReferralPartnerStatus } from '@/api-client/admin/requests/referral.requests'
 
-const columnHelper = createColumnHelper<IUser>()
+const columnHelper = createColumnHelper<IReferralPartner>()
 
 const ReferralPartnersSection = () => {
   const [statusFilter, setStatusFilter] = useState('all')
-  const items = users
+  const { referralPartners, referralPartnersLoading, mutateReferralPartners } =
+    useGetReferralPartners()
+  const items = useMemo(() => referralPartners || [], [referralPartners])
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false)
+  const [isToggleOpen, setIsToggleOpen] = useState(false)
+  const [selectedPartner, setSelectedPartner] =
+    useState<IReferralPartner | null>(null)
+
+  const stats = useMemo(() => {
+    return items.reduce(
+      (acc, curr) => {
+        if (curr.status === 'active') acc.active++
+        else acc.inactive++
+        acc.paid += curr.paidCommissions || 0
+        acc.pending += curr.pendingCommissions || 0
+        return acc
+      },
+      { active: 0, inactive: 0, paid: 0, pending: 0 }
+    )
+  }, [items])
+
   const columns = useMemo(
     () => [
-      columnHelper.accessor('name', {
+      columnHelper.accessor('user', {
         id: 'name',
         header: 'User',
         cell: ({ row: { original: item } }) => (
           <div className="flex gap-2 items-center">
-            <Image
-              src={`https://dummyimage.com/100x100/009688/fff&text=${item.name
-                .charAt(0)
-                .toUpperCase()}`}
-              alt={`profile image`}
-              width={100}
-              height={100}
-              className="object-cover rounded-full size-10 object-center"
-            />
-
-            <div className="space-y-1">
-              <h3 className="font-bold flex flex-col">{`${item.name}`}</h3>
-              <p className="text-xs text-foreground-600">{item.email}</p>
-            </div>
+            {item.user ? (
+              <div className="space-y-1">
+                <h3 className="font-bold flex flex-col">{`${
+                  item.user.firstName
+                } ${item.user.lastName || ''}`}</h3>
+                <p className="text-xs text-foreground-600">{item.user.email}</p>
+                <p className="text-[10px] text-primary">
+                  {capitalCase(item.profession)}
+                </p>
+              </div>
+            ) : (
+              <span>User Deleted</span>
+            )}
           </div>
         ),
       }),
-      columnHelper.accessor('phone', {
-        id: 'phone',
-        header: 'Phone Number',
-        cell: ({ getValue }) => getValue(),
+      columnHelper.accessor('referralCode', {
+        header: 'Code',
+        cell: ({ getValue }) => <span className="font-mono">{getValue()}</span>,
       }),
-      columnHelper.accessor('isActive', {
+      columnHelper.accessor('status', {
         header: 'Status',
-        filterFn: (row: { original: IUser }, columnId, filterValue) => {
-          if (typeof filterValue == 'undefined') return false
-
-          return filterValue == 'all'
-            ? true
-            : filterValue == 'active'
-            ? row.original.isActive == true
-            : row.original.isActive == false
+        filterFn: (
+          row: { original: IReferralPartner },
+          columnId,
+          filterValue
+        ) => {
+          if (typeof filterValue == 'undefined' || filterValue == 'all')
+            return true
+          return row.original.status == filterValue
         },
         cell: ({ getValue }) => {
           return (
             <div className="capitalize">
               <Chip
-                color={getValue() ? 'success' : 'warning'}
+                color={getValue() === 'active' ? 'success' : 'warning'}
                 variant="dot"
                 size="sm"
               >
-                {getValue() ? 'Active' : 'Inactive'}
+                {getValue()}
               </Chip>
             </div>
           )
         },
       }),
-      columnHelper.accessor('referrals', {
+      columnHelper.accessor('referralsCount', {
         header: 'Referrals',
-        cell: ({ getValue }) => (getValue() ? getValue() : '—'),
+        cell: ({ getValue }) => getValue() || 0,
       }),
-      columnHelper.accessor('commissionRate', {
+      columnHelper.accessor('commission.rate', {
         header: 'Commission Rate',
-        cell: ({ getValue }) => (getValue() ? `${getValue()}%` : '—'),
+        cell: ({ row: { original } }) =>
+          `${original.commission.rate}${
+            original.commission.rateType === 'percentage' ? '%' : ''
+          }`,
       }),
       columnHelper.accessor('paidCommissions', {
         header: 'Paid Commissions',
-        cell: ({ getValue }) =>
-          getValue() ? currencyFormatter(getValue()) : '—',
+        cell: ({ getValue }) => currencyFormatter(getValue() || 0),
       }),
       columnHelper.accessor('pendingCommissions', {
         header: 'Pending Commissions',
-        cell: ({ getValue }) =>
-          getValue() ? currencyFormatter(getValue()) : '—',
+        cell: ({ getValue }) => currencyFormatter(getValue() || 0),
       }),
 
       columnHelper.accessor('createdAt', {
@@ -114,14 +146,47 @@ const ReferralPartnersSection = () => {
         id: 'action',
 
         cell: ({ row: { original: item } }) => (
-          <Button
-            size="sm"
-            variant="bordered"
-            as={Link}
-            href={`/admin/referral-partners/${item.id}`}
-          >
-            Manage
-          </Button>
+          <div className="relative flex justify-end items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <FiMoreVertical className="text-default-500" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Referral Partner Action">
+                <DropdownItem
+                  key="toggle"
+                  className={
+                    item.status === 'active' ? 'text-danger' : 'text-success'
+                  }
+                  color={item.status === 'active' ? 'danger' : 'success'}
+                  onPress={() => {
+                    setSelectedPartner(item)
+                    setIsToggleOpen(true)
+                  }}
+                >
+                  {item.status === 'active'
+                    ? 'Deactivate Partner'
+                    : 'Activate Partner'}
+                </DropdownItem>
+                <DropdownItem
+                  key="update"
+                  onPress={() => {
+                    setSelectedPartner(item)
+                    setIsUpdateOpen(true)
+                  }}
+                >
+                  Update Details
+                </DropdownItem>
+                <DropdownItem
+                  key="view"
+                  href={`/admin/referral-partners/${item._id}`}
+                >
+                  View Referrals
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
         ),
       }),
     ],
@@ -143,6 +208,13 @@ const ReferralPartnersSection = () => {
               <BreadcrumbItem>Referral Partners</BreadcrumbItem>
             </Breadcrumbs>
           </div>
+          <Button
+            startContent={<LuPlus />}
+            color="primary"
+            onPress={() => setIsAddOpen(true)}
+          >
+            Add Partner
+          </Button>
         </div>
         <p className="text-foreground-500">
           Manage referral partners and commission payouts.
@@ -158,7 +230,9 @@ const ReferralPartnersSection = () => {
                 />
                 <div className="space-y-1">
                   <p>Active Partners</p>
-                  <p className="text-xl font-semibold">1</p>
+                  <p className="text-xl font-semibold">
+                    {referralPartnersLoading ? '...' : stats.active}
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -173,7 +247,9 @@ const ReferralPartnersSection = () => {
                 />
                 <div className="space-y-1">
                   <p>Inactive Partners</p>
-                  <p className="text-xl font-semibold">1</p>
+                  <p className="text-xl font-semibold">
+                    {referralPartnersLoading ? '...' : stats.inactive}
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -189,7 +265,9 @@ const ReferralPartnersSection = () => {
                 <div className="space-y-1">
                   <p>Paid Commissions</p>
                   <p className="text-xl font-semibold">
-                    {currencyFormatter(100000)}
+                    {referralPartnersLoading
+                      ? '...'
+                      : currencyFormatter(stats.paid)}
                   </p>
                 </div>
               </div>
@@ -206,7 +284,9 @@ const ReferralPartnersSection = () => {
                 <div className="space-y-1">
                   <p>Pending Payouts</p>
                   <p className="text-xl font-semibold">
-                    {currencyFormatter(5000)}
+                    {referralPartnersLoading
+                      ? '...'
+                      : currencyFormatter(stats.pending)}
                   </p>
                 </div>
               </div>
@@ -216,7 +296,8 @@ const ReferralPartnersSection = () => {
         <Card className="p-3">
           <CardHeader className="justify-between gap-4 flex-wrap items-center">
             <Chip color="secondary" size="sm">
-              Total Referral Partners : {items.length}
+              Total Referral Partners :{' '}
+              {referralPartnersLoading ? '...' : items.length}
             </Chip>
             <Button
               color="primary"
@@ -230,25 +311,26 @@ const ReferralPartnersSection = () => {
             </Button>
           </CardHeader>
           <CardBody className="space-y-6">
-            {' '}
             <TableWrapper
               columns={columns}
               items={items}
+              isLoading={referralPartnersLoading}
               allowsSortingFor={[
                 'createdAt',
-                'referrals',
+                'referralsCount',
                 'paidCommissions',
                 'pendingCommissions',
                 'commissionRate',
               ]}
               topContent={({ table, searchField }) => {
-                const getIsActiveStatusCount = (status: string) => {
+                const getStatusCount = (status: string) => {
                   if (items) {
                     if (status == 'all') return items.length
                     else if (status == 'active')
-                      return items.filter((each) => each.isActive).length
+                      return items.filter((each) => each.status === 'active')
+                        .length
                     else if (status == 'inactive')
-                      return items.filter((each) => each.isActive == false)
+                      return items.filter((each) => each.status === 'inactive')
                         .length
                   }
                   return '-'
@@ -266,34 +348,28 @@ const ReferralPartnersSection = () => {
                         controllerProps={{
                           name: 'status filter',
                           defaultValue: statusFilter,
+                          control: null,
                         }}
                         options={[
                           {
-                            label: `All Referral Partners (${getIsActiveStatusCount(
-                              'all'
-                            )})`,
+                            label: `All Partners (${getStatusCount('all')})`,
                             value: 'all',
                           },
                           {
-                            label: `Active (${getIsActiveStatusCount(
-                              'active'
-                            )})`,
+                            label: `Active (${getStatusCount('active')})`,
                             value: 'active',
                           },
                           {
-                            label: `Inactive (${getIsActiveStatusCount(
-                              'inactive'
-                            )})`,
+                            label: `Inactive (${getStatusCount('inactive')})`,
                             value: 'inactive',
                           },
                         ]}
                         onChange={(value) => {
-                          table.getColumn('isActive')?.setFilterValue(value)
+                          table.getColumn('status')?.setFilterValue(value)
                           setStatusFilter(value)
                         }}
                       />
                     </div>
-                    {/* </div> */}
                   </div>
                 )
               }}
@@ -307,6 +383,23 @@ const ReferralPartnersSection = () => {
           </CardBody>
         </Card>
       </div>
+      <AddReferralPartnerModal
+        isOpen={isAddOpen}
+        setIsOpen={setIsAddOpen}
+        onSuccess={() => mutateReferralPartners()}
+      />
+      <UpdateReferralPartnerModal
+        isOpen={isUpdateOpen}
+        setIsOpen={setIsUpdateOpen}
+        onSuccess={() => mutateReferralPartners()}
+        referralPartner={selectedPartner}
+      />
+      <ToggleReferralPartnerStatusModal
+        isOpen={isToggleOpen}
+        setIsOpen={setIsToggleOpen}
+        onSuccess={() => mutateReferralPartners()}
+        referralPartner={selectedPartner}
+      />
     </>
   )
 }

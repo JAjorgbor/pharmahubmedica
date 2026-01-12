@@ -156,7 +156,7 @@ const InputField = <T extends FieldValues>({
   noWhiteSpace = false,
   renderLabelRight = false,
   renderLabelLeft = false,
-  min = 1,
+  min = 0,
   max,
   size = 'md',
   startContent = null,
@@ -229,8 +229,12 @@ const InputField = <T extends FieldValues>({
     const value = controllerField?.value
     const defaultValue =
       controllerFormState?.defaultValues?.[controllerProps?.name as string]
-    if (defaultValue || value)
-      setSelectFieldValue(new Set([defaultValue || value]))
+    if (defaultValue) {
+      setSelectFieldValue(new Set([defaultValue]))
+    }
+    if (value) {
+      setSelectFieldValue(new Set([value]))
+    }
   }, [
     controllerProps?.name,
     controllerFormState?.defaultValues,
@@ -539,7 +543,7 @@ const InputField = <T extends FieldValues>({
             size={size}
             inputProps={{
               classNames: {
-                inputWrapper: `${baseClass} relative shadow-none rounded-r-lg p-1`,
+                inputWrapper: `${baseClass} relative shadow-none p-1`,
                 input: '!text-nevada outline-none',
               },
             }}
@@ -643,6 +647,7 @@ const InputField = <T extends FieldValues>({
             disabled={disabled}
             isDisabled={disabled}
             type="number"
+            step="any"
             startContent={startContent}
             min={min}
             max={max}
@@ -654,13 +659,17 @@ const InputField = <T extends FieldValues>({
               ]
             }
             onValueChange={(value) => {
+              console.log(value)
               const newValue = value
               const parsedValue = parseFloat(newValue)
               if (!isNaN(parsedValue)) {
                 if (controllerField.onChange) {
                   controllerField.onChange(parsedValue)
-
-                  if (controllerField.onChange) controllerField.onChange(value)
+                  if (onChange) onChange(parsedValue)
+                }
+              } else {
+                if (controllerField.onChange) {
+                  controllerField.onChange(value)
                   if (onChange) onChange(value)
                 }
               }
@@ -670,81 +679,6 @@ const InputField = <T extends FieldValues>({
         )
       case 'phoneNumber':
         return (
-          // <div className="relative w-full">
-          //   <PhoneNumberInput
-          //     disabled={disabled}
-          //     country={selectedCountry?.code as string}
-          //     containerClass="!my-0"
-          //     disableDropdown
-          //     buttonClass="!bg-white !border-none !border-none !rounded-l-lg !m-[1px] !hidden"
-          //     regions={['america', 'europe', 'asia', 'oceania', 'africa']}
-          //     enableSearch={true}
-          //     disableSearchIcon={true}
-          //     inputProps={{
-          //       className: `relative w-full outline-none inline-flex tap-highlight-transparent flex-row items-center shadow-xs px-3 gap-3 border-medium border-default-200 hover:border-default-400 h-10 min-h-10 rounded-medium !duration-150 focus:border-primary transition-colors motion-reduce:transition-none is-filled ${baseClass} pl-11`,
-          //       name: controllerProps?.name,
-          //     }}
-          //     countryCodeEditable={false}
-          //     onChange={(
-          //       phoneValue: string
-          //       // countryData: any,
-          //       // event: React.ChangeEvent<HTMLInputElement>,
-          //     ) => {
-          //       const normalizedValue = phoneValue.startsWith('+')
-          //         ? phoneValue
-          //         : `+${phoneValue}`
-          //       onChange(normalizedValue)
-          //       if (controllerField.onChange) {
-          //         controllerField.onChange(normalizedValue)
-          //       }
-          //     }}
-          //     value={controllerField.value}
-          //     placeholder={placeholder}
-          //   />
-          //   <div className="absolute top-0 left-0 h-full  rounded-l-lg w-10 py-1.5">
-          //     <Dropdown>
-          //       <DropdownTrigger>
-          //         <button
-          //           type="button"
-          //           className="w-full h-full flex items-center justify-center gap-1 px-1  border-r"
-          //         >
-          //           <Flag
-          //             className="size-4"
-          //             code={selectedCountry?.code.toUpperCase()}
-          //             fallback={
-          //               <span>{selectedCountry?.code.toUpperCase()}</span>
-          //             }
-          //           />
-          //           <PiCaretDown size={15} />
-          //         </button>
-          //       </DropdownTrigger>
-          //       <DropdownMenu
-          //         aria-label="Countries"
-          //         className="max-h-56 overflow-y-auto"
-          //         selectedKeys={new Set([String(selectedCountry?.code)])}
-          //         onAction={(key) => {
-          //           const country = countries.find(
-          //             (country) => country.code === key
-          //           )
-          //           setSelectedCountry(country!)
-          //         }}
-          //         topContent={
-          //           <input
-          //             type="search"
-          //             placeholder="Search country..."
-          //             className="p-1 border  rounded-lg !border-gray-300 ring-0 w-full"
-          //             value={phoneCountrySearchValue}
-          //             onChange={(e) =>
-          //               setPhoneCountrySearchValue(e.target.value)
-          //             }
-          //           />
-          //         }
-          //       >
-          //         {countryDropdownItems as any}
-          //       </DropdownMenu>
-          //     </Dropdown>
-          //   </div>
-          // </div>
           <>
             <Input
               type="tel"
@@ -782,15 +716,6 @@ const InputField = <T extends FieldValues>({
                 }
               }}
             />
-
-            {/* <Input
-              type="number"
-              startContent={startContent}
-              min={min}
-              max={max}
-              className={`${baseClass}`}
-              placeholder={placeholder}
-            /> */}
           </>
         )
       case 'amount':
@@ -818,79 +743,6 @@ const InputField = <T extends FieldValues>({
             }}
           />
         )
-      // case 'image':
-      //   return (
-      //     <div className=''>
-      //       <Input
-      //radius = 'sm'
-      //variant = { variant }
-      //         disabled={disabled}
-      //         type='file'
-      //         accept='.jpg, .jpeg, .png'
-      //         className={`hidden`}
-      //         {...register}
-      //         onChange={(e) => {
-      //           onChange(e)
-      //           register.onChange(e)
-      //         }}
-      //       />
-      //     </div>
-      //   )
-      // case 'file':
-      //   return (
-      //     <>
-      //       <Input
-      //radius = 'sm'
-      //variant = { variant }
-      //         disabled={disabled}
-      //         type='file'
-      //         accept='.jpg, .jpeg, .png'
-      //         className={`hidden`}
-      //         onValueChange={(e) => {
-      //           onChange(e)
-      //            controllerField.onChange(e)
-      //           setFileName(e.target.files?.[0]?.name || 'No File Chosen')
-      //         }}
-      //       />
-      //       <div
-      //         tabIndex={-1}
-      //         aria-label='input file'
-      //         className={`${baseClass} flex w-full gap-4`}
-      //       >
-      //         <span className='border-r pr-3'>
-      //           <FiFile size={18} />
-      //         </span>
-      //         <span className='flex-grow'>{fileName}</span>
-      //       </div>
-      //     </>
-      //   )
-      // case 'postal-code':
-      //   return (
-      //     <Input
-      // radius = 'sm'
-      // variant = { variant }
-      //       disabled={disabled}
-      //       type='text'
-      //       className={`text-gray-700 p-2 w-full rounded-sm border border-gray-300 ${
-      //         !!errorMessage ? 'border-red-400' : 'focus:border-green-500'
-      //       }`}
-      //       {...register}
-      //       value={register?.value}
-      //       defaultValue={defaultregister?.defaultValue}
-      //       maxLength={10}
-      //       onChange={(e) => {
-      //         const newValue = e.target.value.replace(/\D/g, '')
-      //         register?.onChange({
-      //           target: {
-      //             value: newValue,
-      //           },
-      //         })
-      //         if (onChange) onChange(newValue)
-      //       }}
-      //       placeholder={placeholder}
-      //       autoComplete={autoComplete}
-      //     />
-      //   )
       default:
         return null
     }

@@ -1,5 +1,4 @@
 import { useState, useEffect, useReducer } from 'react'
-import { toast } from 'react-toastify'
 
 const initialState = []
 const reducer = (state, action) => {
@@ -25,10 +24,10 @@ const reducer = (state, action) => {
         ({ item }) => item?._id === action.payload._id
       )
       // if (cartItem){
-        const itemIndex = array.indexOf(cartItem)
+      const itemIndex = array.indexOf(cartItem)
       cartItem.count = action.count
       array[itemIndex] = cartItem
-    // }
+      // }
       return array
     }
     case 'REMOVE_ITEM': {

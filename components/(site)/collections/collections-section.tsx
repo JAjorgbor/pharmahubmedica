@@ -51,13 +51,7 @@ const CollectionsSection: FC<{
           />
         ) : (
           <>
-            <div
-              className={`grid gap-6 ${
-                categories?.length > 3
-                  ? 'grid-cols-[repeat(auto-fit,minmax(250px,1fr))] '
-                  : 'grid-cols-2 md:grid-cols-4'
-              }`}
-            >
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {categories?.map((category, index) => (
                 <CategoryCard key={index} category={category} />
               ))}
@@ -90,8 +84,8 @@ export const CollectionsSectionSkeleton = () => {
             Shop by Category
           </h2>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6">
-          {Array.from({ length: 10 }).map((_, index) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {Array.from({ length: 6 }).map((_, index) => (
             <CategoryCardSkeleton key={index} />
           ))}
         </div>

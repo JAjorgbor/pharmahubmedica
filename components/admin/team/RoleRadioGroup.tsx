@@ -10,6 +10,7 @@ interface RoleRadioGroupProps {
   control: Control<any>
   name: string
   label?: string
+  currentUserRole?: string
 }
 
 const CustomRadio = (props: any) => {
@@ -38,6 +39,7 @@ export default function RoleRadioGroup({
   control,
   name,
   label = 'Select Role',
+  currentUserRole,
 }: RoleRadioGroupProps) {
   const {
     field: { value, onChange },
@@ -47,6 +49,19 @@ export default function RoleRadioGroup({
     control,
     rules: { required: 'Please select a role' },
   })
+
+  const filteredRoles = Object.entries(adminUserRolesPermissions).filter(
+    ([role]) => {
+      if (
+        role === 'administrator' &&
+        currentUserRole !== 'administrator' &&
+        currentUserRole !== 'devOps'
+      )
+        return false
+      if (role === 'devOps' && currentUserRole !== 'devOps') return false
+      return true
+    }
+  )
 
   return (
     <div className="space-y-2">
@@ -59,17 +74,15 @@ export default function RoleRadioGroup({
         className="max-w-full"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {Object.entries(adminUserRolesPermissions).map(
-            ([role, permissions]) => (
-              <CustomRadio
-                key={role}
-                value={role}
-                description={`Permissions: ${permissions.length}`}
-              >
-                {role.replace(/([A-Z])/g, ' $1').trim()}
-              </CustomRadio>
-            )
-          )}
+          {filteredRoles.map(([role, permissions]) => (
+            <CustomRadio
+              key={role}
+              value={role}
+              description={`Permissions: ${permissions.length}`}
+            >
+              {role.replace(/([A-Z])/g, ' $1').trim()}
+            </CustomRadio>
+          ))}
         </div>
       </RadioGroup>
       {value && (

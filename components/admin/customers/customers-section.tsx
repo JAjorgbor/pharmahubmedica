@@ -1,8 +1,7 @@
 'use client'
 import InputField from '@/components/elements/input-field'
-import TableWrapper from '@/components/elements/table-wrapper'
-import { IUser, users } from '@/library/dummy-data'
-import { currencyFormatter } from '@/utils/currency-formatter'
+import { ICustomer } from '@/api-client/admin/interfaces/customer.interfaces'
+import useGetCustomers from '@/hooks/requests/admin/useGetCustomers'
 import {
   BreadcrumbItem,
   Breadcrumbs,
@@ -15,6 +14,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Skeleton,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
@@ -22,22 +22,32 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useMemo, useState } from 'react'
 import { FiMoreVertical } from 'react-icons/fi'
-import { LuExternalLink, LuPlus } from 'react-icons/lu'
+import { LuExternalLink, LuPlus, LuPencil, LuTrash } from 'react-icons/lu'
+import { currencyFormatter } from '@/utils/currency-formatter'
+import TableWrapper from '@/components/elements/table-wrapper'
+import UpdateCustomerModal from './UpdateCustomerModal'
 
-const columnHelper = createColumnHelper<IUser>()
+const columnHelper = createColumnHelper<ICustomer>()
 
 const CustomersSection = () => {
   const [statusFilter, setStatusFilter] = useState('all')
-  const items = users
+  const { customers, customersLoading, mutateCustomers } = useGetCustomers()
+  const items = useMemo(() => customers || [], [customers])
+  const [selectedCustomer, setSelectedCustomer] = useState<ICustomer | null>(
+    null
+  )
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false)
+
   const columns = useMemo(
     () => [
-      columnHelper.accessor('name', {
+      // ... previous columns ...
+      columnHelper.accessor('firstName', {
         id: 'name',
-        header: 'User',
+        header: 'Customer',
         cell: ({ row: { original: item } }) => (
           <div className="flex gap-2 items-center">
             <Image
-              src={`https://dummyimage.com/100x100/009688/fff&text=${item.name
+              src={`https://dummyimage.com/100x100/009688/fff&text=${item.firstName
                 .charAt(0)
                 .toUpperCase()}`}
               alt={`profile image`}
@@ -47,37 +57,38 @@ const CustomersSection = () => {
             />
 
             <div className="space-y-1">
-              <h3 className="font-bold flex flex-col">{`${item.name}`}</h3>
+              <h3 className="font-bold flex flex-col">{`${item.firstName} ${
+                item.lastName || ''
+              }`}</h3>
               <p className="text-xs text-foreground-600">{item.email}</p>
             </div>
           </div>
         ),
       }),
-      columnHelper.accessor('phone', {
+      columnHelper.accessor('phoneNumber', {
         id: 'phone',
         header: 'Phone Number',
-        cell: ({ getValue }) => getValue(),
+        cell: ({ getValue }) => getValue() || '—',
       }),
-      columnHelper.accessor('isActive', {
+      columnHelper.accessor('status', {
         header: 'Status',
-        filterFn: (row: { original: IUser }, columnId, filterValue) => {
-          if (typeof filterValue == 'undefined') return false
-
-          return filterValue == 'all'
-            ? true
-            : filterValue == 'active'
-            ? row.original.isActive == true
-            : row.original.isActive == false
+        filterFn: (row: { original: ICustomer }, columnId, filterValue) => {
+          if (typeof filterValue == 'undefined' || filterValue == 'all')
+            return true
+          return row.original.status == filterValue
         },
         cell: ({ getValue }) => {
+          const status = getValue()
+          const color =
+            status === 'active'
+              ? 'success'
+              : status === 'pending'
+              ? 'warning'
+              : 'default'
           return (
             <div className="capitalize">
-              <Chip
-                color={getValue() ? 'success' : 'warning'}
-                variant="dot"
-                size="sm"
-              >
-                {getValue() ? 'Active' : 'Inactive'}
+              <Chip color={color} variant="dot" size="sm">
+                {status}
               </Chip>
             </div>
           )
@@ -88,9 +99,9 @@ const CustomersSection = () => {
         cell: ({ getValue }) =>
           getValue() ? currencyFormatter(getValue()) : '—',
       }),
-      columnHelper.display({
+      columnHelper.accessor('referredBy', {
         header: 'Referrer',
-        cell: () => '—',
+        cell: ({ getValue }) => getValue() || '—',
       }),
       columnHelper.accessor('createdAt', {
         id: 'createdAt',
@@ -107,9 +118,25 @@ const CustomersSection = () => {
         id: 'action',
 
         cell: ({ row: { original: item } }) => (
-          <Button size="sm" variant="bordered">
-            Manage
-          </Button>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light">
+                <FiMoreVertical className="text-gray-500" size={20} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Customer Actions">
+              <DropdownItem
+                key="edit"
+                startContent={<LuPencil />}
+                onPress={() => {
+                  setSelectedCustomer(item)
+                  setIsUpdateOpen(true)
+                }}
+              >
+                Edit Details
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         ),
       }),
     ],
@@ -135,7 +162,7 @@ const CustomersSection = () => {
       <Card className="p-3">
         <CardHeader className="justify-between gap-4 flex-wrap items-center">
           <Chip color="secondary" size="sm">
-            Total Customers : {items.length}
+            Total Customers : {customersLoading ? '...' : items.length}
           </Chip>
           <Button
             color="primary"
@@ -149,19 +176,16 @@ const CustomersSection = () => {
           </Button>
         </CardHeader>
         <CardBody className="space-y-6">
-          {' '}
           <TableWrapper
             columns={columns}
             items={items}
+            isLoading={customersLoading}
             allowsSortingFor={['createdAt', 'updatedAt', 'totalSpent']}
             topContent={({ table, searchField }) => {
-              const getIsActiveStatusCount = (status: string) => {
+              const getStatusCount = (status: string) => {
                 if (items) {
                   if (status == 'all') return items.length
-                  else if (status == 'active')
-                    return items.filter((each) => each.isActive).length
-                  else if (status == 'inactive')
-                    return items.filter((each) => each.isActive == false).length
+                  return items.filter((each) => each.status === status).length
                 }
                 return '-'
               }
@@ -178,32 +202,36 @@ const CustomersSection = () => {
                       controllerProps={{
                         name: 'status filter',
                         defaultValue: statusFilter,
+                        control: null,
                       }}
                       options={[
                         {
-                          label: `All Customers (${getIsActiveStatusCount(
-                            'all'
-                          )})`,
+                          label: `All Customers (${getStatusCount('all')})`,
                           value: 'all',
                         },
                         {
-                          label: `Active (${getIsActiveStatusCount('active')})`,
+                          label: `Active (${getStatusCount('active')})`,
                           value: 'active',
                         },
                         {
-                          label: `Inactive (${getIsActiveStatusCount(
-                            'inactive'
-                          )})`,
+                          label: `Pending (${getStatusCount('pending')})`,
+                          value: 'pending',
+                        },
+                        {
+                          label: `Inactive (${getStatusCount('inactive')})`,
                           value: 'inactive',
+                        },
+                        {
+                          label: `Waitlist (${getStatusCount('waitlist')})`,
+                          value: 'waitlist',
                         },
                       ]}
                       onChange={(value) => {
-                        table.getColumn('isActive')?.setFilterValue(value)
+                        table.getColumn('status')?.setFilterValue(value)
                         setStatusFilter(value)
                       }}
                     />
                   </div>
-                  {/* </div> */}
                 </div>
               )
             }}
@@ -216,6 +244,12 @@ const CustomersSection = () => {
           />
         </CardBody>
       </Card>
+      <UpdateCustomerModal
+        isOpen={isUpdateOpen}
+        setIsOpen={setIsUpdateOpen}
+        customer={selectedCustomer}
+        onSuccess={() => mutateCustomers()}
+      />
     </div>
   )
 }

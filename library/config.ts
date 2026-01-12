@@ -17,6 +17,9 @@ export const adminUserRolesPermissions = {
     'adminUserInvite',
     'updateAdminSettings',
     'adminUpdateStatus',
+    'getReferralPartners',
+    'manageReferralPartners',
+    'manageCustomers',
   ],
   administrator: [
     'getUsers',
@@ -28,6 +31,9 @@ export const adminUserRolesPermissions = {
     'adminUserInvite',
     'updateAdminSettings',
     'adminUpdateStatus',
+    'getReferralPartners',
+    'manageReferralPartners',
+    'manageCustomers',
   ],
   operations: [
     'getUsers',
@@ -39,6 +45,9 @@ export const adminUserRolesPermissions = {
     'adminUserInvite',
     'updateAdminSettings',
     'adminUpdateStatus',
+    'getReferralPartners',
+    'manageReferralPartners',
+    'manageCustomers',
   ],
   storeManager: [
     'getUsers',
