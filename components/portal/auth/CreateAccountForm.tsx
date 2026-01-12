@@ -75,11 +75,12 @@ export default function CreateAccountForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-      <div className="grid lg:grid-cols-2 gap-6 lg:gap-2">
+    <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-6">
+      <div className="grid lg:grid-cols-2 gap-4">
         <InputField
           type="text"
           label="First Name"
+          isName
           placeholder="First Name"
           controllerProps={{
             name: 'firstName',
@@ -92,71 +93,72 @@ export default function CreateAccountForm() {
           type="text"
           label="Last Name"
           placeholder="Last Name"
+          isName
           controllerProps={{
             name: 'lastName',
             control,
           }}
           isRequired
         />
-      </div>
 
-      <InputField
-        type="email"
-        label="Email Address"
-        placeholder="example@email.com"
-        controllerProps={{
-          name: 'email',
-          control,
-        }}
-        isRequired
-      />
+        <InputField
+          type="email"
+          label="Email Address"
+          placeholder="example@email.com"
+          controllerProps={{
+            name: 'email',
+            control,
+          }}
+          isRequired
+        />
 
-      <InputField
-        type="phoneNumber"
-        label="Phone Number"
-        placeholder="+234 800 000 0000"
-        controllerProps={{
-          name: 'phoneNumber',
-          control,
-        }}
-        isRequired
-      />
+        <InputField
+          type="phoneNumber"
+          label="Phone Number"
+          placeholder="+234 800 000 0000"
+          controllerProps={{
+            name: 'phoneNumber',
+            control,
+          }}
+          isRequired
+        />
 
-      <div>
         <InputField
           type="password"
           label="Password"
           placeholder="••••••••"
+          className="md:col-span-2"
           controllerProps={{
             name: 'password',
             control,
           }}
           isRequired
         />
+
+        <div className="space-y-1 md:col-span-2">
+          <p>
+            <span className="text-primary-600 font-light relative text-sm text-nevada font-oxygen">
+              Referral Code
+            </span>
+          </p>
+          <Input
+            color="primary"
+            variant="bordered"
+            placeholder="ENTER REFERRAL CODE"
+            value={referralCode}
+            isInvalid={!!errors.referralCode}
+            errorMessage={errors.referralCode?.message}
+            {...register('referralCode')}
+            onChange={(e) => {
+              const value = e.target.value
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, '')
+
+              setValue('referralCode', value, { shouldValidate: true })
+            }}
+          />
+        </div>
       </div>
-
-      <div className="space-y-1">
-        <p>
-          <span className="text-primary-600 font-light relative text-sm text-nevada font-oxygen">
-            Referral Code
-          </span>
-        </p>
-        <Input
-          color="primary"
-          variant="bordered"
-          placeholder="ENTER REFERRAL CODE"
-          value={referralCode}
-          isInvalid={!!errors.referralCode}
-          errorMessage={errors.referralCode?.message}
-          {...register('referralCode')}
-          onChange={(e) => {
-            const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '')
-
-            setValue('referralCode', value, { shouldValidate: true })
-          }}
-        />
-      </div>
-
       <Button
         type="submit"
         color="primary"

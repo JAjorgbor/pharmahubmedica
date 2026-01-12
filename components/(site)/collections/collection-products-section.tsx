@@ -94,7 +94,7 @@ const CollectionProductsSection = ({
         <p className="md:text-lg z-10 relative">{category?.description}</p>
         <div className="bg-primary/40 absolute inset-0 w-full-h-full " />
       </div>
-      <div className="flex justify-between lg:justify-end items-center flex-wrap gap-4 mb-8">
+      <div className="flex justify-between lg:justify-end items-center flex-wrap gap-4 !mb-0">
         <Button
           className="lg:hidden"
           startContent={<LuFilter />}

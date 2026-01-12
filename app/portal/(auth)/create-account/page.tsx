@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 
 export default function CreateAccountPage() {
   return (
-    <div className="h-full flex flex-col items-center justify-center p-6 sm:p-12">
+    <div className="h-full flex flex-col items-center justify-center md:p-6">
       <div className="w-full max-w-md space-y-8">
-        <div className="lg:hidden flex justify-center mb-8">
+        <div className="lg:hidden flex justify-center !mb-0">
           <Link href="/">
             <Image
               src="/logo.svg"

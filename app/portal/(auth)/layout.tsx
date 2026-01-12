@@ -10,7 +10,7 @@ interface AuthLayoutProps {
 const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-gray-50 p-4 lg:p-6 gap-4 lg:gap-6">
-      <div className="hidden lg:flex flex-col justify-between p-12 text-white relative overflow-hidden rounded-[2.5rem] shadow-2xl bg-primary">
+      <div className="hidden lg:flex flex-col justify-between p-12 text-white relative overflow-hidden rounded-3xl shadow-2xl bg-primary">
         <div className="absolute inset-0 z-0">
           <Image
             src="/portal-auth-banner.jpg"

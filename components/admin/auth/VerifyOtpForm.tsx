@@ -41,7 +41,7 @@ export default function VerifyOtpForm() {
 
   return (
     <div className="w-full">
-      <div className="mb-8">
+      <div className="!mb-0">
         <Link
           href="/admin/forgot-password"
           className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"

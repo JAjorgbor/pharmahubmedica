@@ -27,7 +27,7 @@ import AddReferralPartnerModal from './AddReferralPartnerModal'
 import UpdateReferralPartnerModal from './UpdateReferralPartnerModal'
 import ToggleReferralPartnerStatusModal from './ToggleReferralPartnerStatusModal'
 import React, { useMemo, useState } from 'react'
-import { FiMoreVertical, FiXCircle } from 'react-icons/fi'
+import { FiCheck, FiCopy, FiMoreVertical, FiXCircle } from 'react-icons/fi'
 import { IoCashOutline } from 'react-icons/io5'
 import { LuClock, LuExternalLink, LuHandshake, LuPlus } from 'react-icons/lu'
 import { currencyFormatter } from '@/utils/currency-formatter'
@@ -84,7 +84,27 @@ const ReferralPartnersSection = () => {
       }),
       columnHelper.accessor('referralCode', {
         header: 'Code',
-        cell: ({ getValue }) => <span className="font-mono">{getValue()}</span>,
+        cell: ({ getValue }) => {
+          const [isCopied, setIsCopied] = useState(false)
+          return (
+            <div className="flex items-center gap-2">
+              <span className="font-mono">{getValue()}</span>
+              <Button
+                size="sm"
+                variant="light"
+                color="primary"
+                isIconOnly
+                onPress={() => {
+                  navigator.clipboard.writeText(getValue())
+                  setIsCopied(true)
+                  setTimeout(() => setIsCopied(false), 2000)
+                }}
+              >
+                {isCopied ? <FiCheck /> : <FiCopy />}
+              </Button>
+            </div>
+          )
+        },
       }),
       columnHelper.accessor('status', {
         header: 'Status',

@@ -9,7 +9,7 @@ interface AuthLayoutProps {
 const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mb-8 flex flex-col items-center">
+      <div className="!mb-0 flex flex-col items-center">
         <Link href="/">
           <Image
             src="/logo.svg"
