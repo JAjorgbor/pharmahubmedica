@@ -8,6 +8,11 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { MdOutlineLockReset } from 'react-icons/md'
 import { z } from 'zod'
+import Cookies from 'js-cookie'
+import {
+  resetPassword,
+  setNewPassword,
+} from '@/api-client/portal/requests/auth.requests'
 
 const resetPasswordSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
@@ -18,11 +23,10 @@ type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
 
 export default function ResetPasswordForm() {
   const [keepLoading, setKeepLoading] = useState(false)
-
-  const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callback') || '/portal/dashboard'
-
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token')
+
   const {
     control,
     handleSubmit,
@@ -36,20 +40,36 @@ export default function ResetPasswordForm() {
   })
 
   const onSubmit = async (data: ResetPasswordFormValues) => {
-    try {
-      //   const { data: res } = await login(data)
-      //   Cookies.set('portalAccessToken', res.accessToken)
-      //   Cookies.set('portalUserId', res.user._id)
+    if (!token) {
+      addToast({
+        title: 'Reset token is missing from the URL.',
+        color: 'danger',
+      })
+      return
+    }
 
-      router.push(callbackUrl)
+    try {
+      const { data: res } = await setNewPassword(token, {
+        password: data.password,
+      })
+
       setKeepLoading(true)
+      Cookies.set('portalAccessToken', res.accessToken)
+      Cookies.set('portalUserId', res.user._id)
+
+      addToast({
+        title: 'Password reset successfully!',
+        color: 'success',
+      })
+
+      router.push('/portal/dashboard')
     } catch (error: any) {
       addToast({
         title:
           error?.data?.error ||
           error?.data?.message ||
           error?.message ||
-          'Something went wrong. Please try again later.',
+          'Failed to reset password. Please try again.',
         color: 'danger',
       })
     }

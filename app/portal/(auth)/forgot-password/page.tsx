@@ -1,4 +1,4 @@
-import ResetPasswordForm from '@/components/sections/portal/auth/ResetPasswordForm'
+import ResetPasswordForm from '@/components/portal/auth/ResetPasswordForm'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: 'Reset your password for the PharmaHub Medica portal',
 }
 
-export default function ForgotPasswordPage() {
+export default function ResetPasswordPage() {
   return (
     <div className="h-full flex flex-col items-center justify-center p-6 sm:p-12">
       <div className="w-full max-w-md space-y-8">
@@ -31,7 +31,7 @@ export default function ForgotPasswordPage() {
             Reset Password
           </h2>
           <p className="text-muted-foreground text-lg">
-            Enter a new password to regain access to your portal
+            We'll send you a link to reset your password
           </p>
         </div>
 

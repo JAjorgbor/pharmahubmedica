@@ -88,7 +88,7 @@ const Header = () => {
             <div className="flex gap-2">
               <Button
                 as={Link}
-                href={'/portal/login'}
+                href={'/portal'}
                 size="sm"
                 color="primary"
                 variant="light"
