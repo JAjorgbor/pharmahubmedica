@@ -1,27 +1,35 @@
 'use client'
 
+import { setNewPassword } from '@/api-client/portal/requests/auth.requests'
 import InputField from '@/components/elements/input-field'
 import { addToast, Button } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
+import Cookies from 'js-cookie'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { LuArrowLeft, LuMail } from 'react-icons/lu'
 import { MdOutlineLockReset } from 'react-icons/md'
 import { z } from 'zod'
-import Cookies from 'js-cookie'
-import { resetPassword } from '@/api-client/portal/requests/auth.requests'
-import { HiCheckCircle } from 'react-icons/hi'
 
-const resetPasswordSchema = z.object({
-  email: z.email('Invalid email address'),
-})
+const resetPasswordSchema = z
+  .object({
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z
+      .string()
+      .min(6, 'Password must be at least 6 characters'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  })
 
 type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
 
 export default function ResetPasswordForm() {
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [keepLoading, setKeepLoading] = useState(false)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token')
 
   const {
     control,
@@ -30,70 +38,66 @@ export default function ResetPasswordForm() {
   } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      email: '',
+      password: '',
+      confirmPassword: '',
     },
   })
 
   const onSubmit = async (data: ResetPasswordFormValues) => {
+    if (!token) {
+      addToast({
+        title: 'Reset token is missing from the URL.',
+        color: 'danger',
+      })
+      return
+    }
+
     try {
-      await resetPassword(data)
-      setIsSuccess(true)
+      const { data: res } = await setNewPassword(token, {
+        password: data.password,
+      })
+
+      setKeepLoading(true)
+      Cookies.set('portalAccessToken', res.accessToken)
+      Cookies.set('portalUserId', res.user._id)
+
+      addToast({
+        title: 'Password reset successfully!',
+        color: 'success',
+      })
+
+      router.push('/portal/dashboard')
     } catch (error: any) {
       addToast({
         title:
           error?.data?.error ||
           error?.data?.message ||
           error?.message ||
-          'Failed to send reset email. Please try again.',
+          'Failed to reset password. Please try again.',
         color: 'danger',
       })
     }
   }
 
-  if (isSuccess) {
-    return (
-      <div className="p-6 space-y-6 flex flex-col items-center text-center">
-        <div className="flex justify-center">
-          <div className="rounded-full bg-green-100 p-4">
-            <LuMail className="h-8 w-8 text-green-600" />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold text-foreground">
-            Check your email
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            We've sent a password reset link to your email address. Please click
-            the link in the email to reset your password.
-          </p>
-        </div>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 w-full text-left">
-          <p className="text-xs text-muted-foreground">
-            <span className="font-medium text-foreground">Tip:</span> The link
-            expires after a short time. If you don't see the email, check your
-            spam folder.
-          </p>
-        </div>
-        <div className="space-y-3 w-full">
-          <Button
-            href="/login"
-            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold h-11"
-          >
-            Back to login
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
       <InputField
-        type="email"
-        label="Email Address"
-        placeholder="example@email.com"
+        type="password"
+        label="Password"
+        placeholder="••••••••"
         controllerProps={{
-          name: 'email',
+          name: 'password',
+          control,
+        }}
+        isRequired
+      />
+
+      <InputField
+        type="password"
+        label="Confirm Password"
+        placeholder="••••••••"
+        controllerProps={{
+          name: 'confirmPassword',
           control,
         }}
         isRequired
@@ -103,19 +107,11 @@ export default function ResetPasswordForm() {
         type="submit"
         color="primary"
         className="w-full py-6 text-base font-semibold"
-        isLoading={isSubmitting}
+        isLoading={isSubmitting || keepLoading}
       >
-        Send Reset Link
+        <MdOutlineLockReset className="h-6 w-6" />
+        Reset Password
       </Button>
-      <div className="text-center">
-        <Link
-          href="/portal"
-          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-        >
-          <LuArrowLeft className="mr-2 h-4 w-4" />
-          Back to login
-        </Link>
-      </div>
     </form>
   )
 }

@@ -1,4 +1,4 @@
-import RegisterForm from '@/components/portal/auth/RegisterForm'
+import CreateAccountForm from '@/components/portal/auth/CreateAccountForm'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     'Register to have access to the PharmaHub Medica portal dashboard',
 }
 
-export default function RegisterPage() {
+export default function CreateAccountPage() {
   return (
     <div className="h-full flex flex-col items-center justify-center p-6 sm:p-12">
       <div className="w-full max-w-md space-y-8">
@@ -39,7 +39,7 @@ export default function RegisterPage() {
         <div className="rounded-3xl shadow-xl shadow-primary/5 p-2 bg-white">
           <div className="overflow-hidden rounded-3xl">
             <Suspense>
-              <RegisterForm />
+              <CreateAccountForm />
             </Suspense>
           </div>
         </div>

@@ -25,7 +25,7 @@ const registerSchema = z.object({
 
 type RegisterFormValues = z.infer<typeof registerSchema>
 
-export default function RegisterForm() {
+export default function CreateAccountForm() {
   const [keepLoading, setKeepLoading] = useState(false)
 
   const searchParams = useSearchParams()

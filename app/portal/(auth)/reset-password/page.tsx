@@ -1,15 +1,15 @@
-import SetNewPasswordForm from '@/components/portal/auth/SetNewPasswordForm'
+import ResetPasswordForm from '@/components/portal/auth/ResetPasswordForm'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Portal Set New Password | PharmaHub Medica',
+  title: 'Reset Password | PharmaHub Medica',
   description: 'Reset your password for the PharmaHub Medica portal',
 }
 
-export default function SetNewPasswordPage() {
+export default function ResetPasswordPage() {
   return (
     <div className="h-full flex flex-col items-center justify-center p-6 sm:p-12">
       <div className="w-full max-w-md space-y-8">
@@ -38,7 +38,7 @@ export default function SetNewPasswordPage() {
         <div className="rounded-3xl shadow-xl shadow-primary/5 p-2 bg-white">
           <div className="overflow-hidden rounded-3xl">
             <Suspense>
-              <SetNewPasswordForm />
+              <ResetPasswordForm />
             </Suspense>
           </div>
         </div>
