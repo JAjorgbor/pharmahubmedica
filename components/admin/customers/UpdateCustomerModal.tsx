@@ -3,7 +3,7 @@ import { ICustomer } from '@/api-client/admin/interfaces/customer.interfaces'
 import { updateCustomer } from '@/api-client/admin/requests/customer.requests'
 import InputField from '@/components/elements/input-field'
 import ModalWrapper from '@/components/elements/modal-wrapper'
-import { addToast } from '@heroui/react'
+import { addToast, Button } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -80,7 +80,6 @@ const UpdateCustomerModal = ({
   }
 
   const handleClose = () => {
-    reset()
     setIsOpen(false)
   }
 
@@ -91,23 +90,26 @@ const UpdateCustomerModal = ({
       title={`Update Customer`}
       footer={
         <div className="flex justify-end w-full gap-4">
-          <button
-            onClick={handleClose}
-            className="px-6 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors"
-          >
+          <Button onPress={handleClose} color="default" variant="bordered">
             Cancel
-          </button>
-          <button
-            onClick={handleSubmit(onSubmit)}
+          </Button>
+          <Button
             disabled={isSubmitting}
-            className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors disabled:opacity-50"
+            type="submit"
+            isLoading={isSubmitting}
+            color="primary"
+            form="update-customer-form"
           >
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
-          </button>
+            Save Changes
+          </Button>
         </div>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        id="update-customer-form"
+        className="space-y-4"
+      >
         <div className="grid grid-cols-2 gap-4">
           <InputField
             type="text"
@@ -127,6 +129,7 @@ const UpdateCustomerModal = ({
           type="email"
           label="Email Address"
           placeholder="Enter email address"
+          disabled
           controllerProps={{ control, name: 'email' }}
         />
 
@@ -144,7 +147,6 @@ const UpdateCustomerModal = ({
             { label: 'Pending', value: 'pending' },
             { label: 'Active', value: 'active' },
             { label: 'Inactive', value: 'inactive' },
-            { label: 'Waitlist', value: 'waitlist' },
           ]}
           controllerProps={{ control, name: 'status' }}
         />

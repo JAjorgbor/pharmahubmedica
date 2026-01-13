@@ -1,3 +1,6 @@
+import { IReferralPartner } from '@/api-client/admin/interfaces/referral.interfaces'
+import { string } from 'zod'
+
 export interface ICustomer {
   _id: string
   id?: string
@@ -8,7 +11,7 @@ export interface ICustomer {
   gender?: 'male' | 'female'
   status: 'pending' | 'active' | 'inactive' | 'waitlist'
   isReferralPartner: boolean
-  referredBy?: string
+  referredBy?: IReferralPartner
   totalSpent?: number
   createdAt: string
   updatedAt: string

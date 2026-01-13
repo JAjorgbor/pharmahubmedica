@@ -23,3 +23,6 @@ export const updateReferralPartner = (
 
 export const toggleReferralPartnerStatus = (id: string) =>
   axiosInstance.patch(`admin/referral-partners/toggle-status/${id}`)
+
+export const getReferralPartnerReferrals = (id: string) =>
+  axiosInstance.get(`admin/referral-partners/referrals/${id}`)

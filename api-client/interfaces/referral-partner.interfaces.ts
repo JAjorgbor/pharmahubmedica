@@ -29,13 +29,3 @@ interface User {
   lastName: string
   email: string
 }
-
-export interface IReferralUser {
-  _id: string
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber?: string
-  status: string
-  joinedAt: string
-}

@@ -65,4 +65,17 @@ export const adminUserRolesPermissions = {
   driver: ['getUsers', 'getAdminUsers', 'getInventory'],
 } as const
 
+export const referralPartnerProfessions = {
+  doctor: 'Dr',
+  nurse: 'Nurse',
+  pharmacist: 'Pharm',
+  chemist: 'Chem',
+  'lab technician': 'Lab Tech',
+  other: '',
+} as const
+
+export const normalizedReferralPartnerProfessions = Object.keys(
+  referralPartnerProfessions
+)
+
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB

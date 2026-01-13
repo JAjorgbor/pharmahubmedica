@@ -26,6 +26,7 @@ import { LuExternalLink, LuPlus, LuPencil, LuTrash } from 'react-icons/lu'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import TableWrapper from '@/components/elements/table-wrapper'
 import UpdateCustomerModal from './UpdateCustomerModal'
+import { referralPartnerProfessions } from '@/library/config'
 
 const columnHelper = createColumnHelper<ICustomer>()
 
@@ -40,31 +41,35 @@ const CustomersSection = () => {
 
   const columns = useMemo(
     () => [
-      // ... previous columns ...
-      columnHelper.accessor('firstName', {
-        id: 'name',
-        header: 'Customer',
-        cell: ({ row: { original: item } }) => (
-          <div className="flex gap-2 items-center">
-            <Image
-              src={`https://dummyimage.com/100x100/009688/fff&text=${item.firstName
-                .charAt(0)
-                .toUpperCase()}`}
-              alt={`profile image`}
-              width={100}
-              height={100}
-              className="object-cover rounded-full size-10 object-center"
-            />
+      columnHelper.accessor(
+        (item) => `${item?.firstName} ${item?.lastName} ${item?.email}`,
+        {
+          id: 'name',
+          header: 'Customer',
+          cell: ({ row: { original: item } }) => (
+            <div className="flex gap-2 items-center">
+              <Image
+                src={`https://dummyimage.com/100x100/009688/fff&text=${item.firstName
+                  .charAt(0)
+                  .toUpperCase()}`}
+                alt={`profile image`}
+                width={100}
+                height={100}
+                className="object-cover rounded-full size-10 object-center"
+              />
 
-            <div className="space-y-1">
-              <h3 className="font-bold flex flex-col">{`${item.firstName} ${
-                item.lastName || ''
-              }`}</h3>
-              <p className="text-xs text-foreground-600">{item.email}</p>
+              <div className="space-y-1">
+                <h3 className="font-bold flex flex-col max-w-44 truncate">{`${
+                  item.firstName
+                } ${item.lastName || ''}`}</h3>
+                <p className="text-xs text-foreground-600 max-w-44 truncate">
+                  {item.email}
+                </p>
+              </div>
             </div>
-          </div>
-        ),
-      }),
+          ),
+        }
+      ),
       columnHelper.accessor('phoneNumber', {
         id: 'phone',
         header: 'Phone Number',
@@ -100,8 +105,25 @@ const CustomersSection = () => {
           getValue() ? currencyFormatter(getValue()) : '—',
       }),
       columnHelper.accessor('referredBy', {
-        header: 'Referrer',
-        cell: ({ getValue }) => getValue() || '—',
+        header: 'Referred By',
+        cell: ({ getValue }) =>
+          getValue() ? (
+            <div className="">
+              <Link
+                href={`/admin/referral-partners/${getValue()._id}`}
+                className="max-w-44 truncate hover:text-primary text-sm"
+              >
+                {getValue().profession !== 'other' &&
+                  referralPartnerProfessions[getValue().profession]}{' '}
+                {getValue().user.firstName} {getValue().user.lastName}
+              </Link>
+              <p className="text-foreground-400 text-xs max-w-44 truncate">
+                {getValue().user.email}
+              </p>
+            </div>
+          ) : (
+            '—'
+          ),
       }),
       columnHelper.accessor('createdAt', {
         id: 'createdAt',
@@ -220,10 +242,6 @@ const CustomersSection = () => {
                         {
                           label: `Inactive (${getStatusCount('inactive')})`,
                           value: 'inactive',
-                        },
-                        {
-                          label: `Waitlist (${getStatusCount('waitlist')})`,
-                          value: 'waitlist',
                         },
                       ]}
                       onChange={(value) => {

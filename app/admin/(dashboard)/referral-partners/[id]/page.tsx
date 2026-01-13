@@ -1,4 +1,4 @@
-import PartnerReferralsSection from '@/components/admin/referral-partners/partner-referrals-section'
+import PartnerDetailssSection from '@/components/admin/referral-partners/partner-details-section'
 import SetHeaderTitle from '@/components/scaffold/set-header-title'
 
 export const metadata = {
@@ -14,7 +14,7 @@ export default async function PartnerReferralsPage({
   return (
     <>
       <SetHeaderTitle title="Partner Referrals" />
-      <PartnerReferralsSection partnerId={id} />
+      <PartnerDetailssSection partnerId={id} />
     </>
   )
 }

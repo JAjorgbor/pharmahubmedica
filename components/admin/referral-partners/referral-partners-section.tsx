@@ -1,9 +1,9 @@
 'use client'
+import { IReferralPartner } from '@/api-client/admin/interfaces/referral.interfaces'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
-import { IReferralPartner } from '@/api-client/admin/interfaces/referral.interfaces'
 import useGetReferralPartners from '@/hooks/requests/admin/useGetReferralPartners'
-import { capitalCase } from 'change-case'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   BreadcrumbItem,
   Breadcrumbs,
@@ -16,22 +16,18 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Skeleton,
-  addToast,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
+import { capitalCase } from 'change-case'
 import moment from 'moment'
-import Image from 'next/image'
 import Link from 'next/link'
-import AddReferralPartnerModal from './AddReferralPartnerModal'
-import UpdateReferralPartnerModal from './UpdateReferralPartnerModal'
-import ToggleReferralPartnerStatusModal from './ToggleReferralPartnerStatusModal'
-import React, { useMemo, useState } from 'react'
-import { FiCheck, FiCopy, FiMoreVertical, FiXCircle } from 'react-icons/fi'
+import { useMemo, useState } from 'react'
+import { FiCheck, FiCopy, FiMoreVertical } from 'react-icons/fi'
 import { IoCashOutline } from 'react-icons/io5'
-import { LuClock, LuExternalLink, LuHandshake, LuPlus } from 'react-icons/lu'
-import { currencyFormatter } from '@/utils/currency-formatter'
-import { toggleReferralPartnerStatus } from '@/api-client/admin/requests/referral.requests'
+import { LuExternalLink, LuHandshake, LuPlus } from 'react-icons/lu'
+import AddReferralPartnerModal from './AddReferralPartnerModal'
+import ToggleReferralPartnerStatusModal from '@/components/admin/referral-partners/ToggleReferralPartnerStatusModal'
+import UpdateReferralPartnerModal from '@/components/admin/referral-partners/UpdateReferralPartnerModal'
 
 const columnHelper = createColumnHelper<IReferralPartner>()
 
@@ -170,10 +166,26 @@ const ReferralPartnersSection = () => {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <FiMoreVertical className="text-default-500" />
+                  <FiMoreVertical className="text-default-500" size={17} />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="Referral Partner Action">
+                <DropdownItem
+                  key="view"
+                  href={`/admin/referral-partners/${item._id}`}
+                  as={Link}
+                >
+                  View Referrals
+                </DropdownItem>
+                <DropdownItem
+                  key="update"
+                  onPress={() => {
+                    setSelectedPartner(item)
+                    setIsUpdateOpen(true)
+                  }}
+                >
+                  Update Details
+                </DropdownItem>
                 <DropdownItem
                   key="toggle"
                   className={
@@ -188,21 +200,6 @@ const ReferralPartnersSection = () => {
                   {item.status === 'active'
                     ? 'Deactivate Partner'
                     : 'Activate Partner'}
-                </DropdownItem>
-                <DropdownItem
-                  key="update"
-                  onPress={() => {
-                    setSelectedPartner(item)
-                    setIsUpdateOpen(true)
-                  }}
-                >
-                  Update Details
-                </DropdownItem>
-                <DropdownItem
-                  key="view"
-                  href={`/admin/referral-partners/${item._id}`}
-                >
-                  View Referrals
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
