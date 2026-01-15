@@ -21,7 +21,11 @@ interface ProductCardProps {
 
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
   return (
-    <Card className="p-0 group bg-background shadow-md transition-all transform hover:-translate-y-2">
+    <Card
+      className="p-0 group bg-background shadow-md transition-all transform hover:-translate-y-2"
+      as={Link}
+      href={`/collections/${product.category.slug}/${product.slug}`}
+    >
       <CardHeader className="p-0 relative">
         <HeroUiImage
           src={product?.image.url}
@@ -55,13 +59,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         </div>
       </CardBody>
       <CardFooter>
-        <Button
-          fullWidth
-          color="primary"
-          as={Link}
-          href={`/collections/${product.category.slug}/${product.slug}`}
-          size="sm"
-        >
+        <Button fullWidth color="primary" size="sm">
           View Details
         </Button>
       </CardFooter>

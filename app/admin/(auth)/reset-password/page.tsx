@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import ResetPasswordForm from '@/components/admin/auth/ResetPasswordForm'
+import ResetPasswordForm from '@/components/admin/auth/reset-password-form'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {

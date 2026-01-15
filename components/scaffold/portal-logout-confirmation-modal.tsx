@@ -33,8 +33,8 @@ export default function LogoutConfirmationModal({
       Cookies.remove('portalAccessToken')
       Cookies.remove('portalUserId')
 
-      // Redirect to portal login
-      window.location.href = '/portal'
+      // Redirect to site home page
+      window.location.href = '/'
     }
   }
 

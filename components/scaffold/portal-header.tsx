@@ -15,6 +15,7 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
+  Skeleton,
   Tooltip,
 } from '@heroui/react'
 import Image from 'next/image'
@@ -32,9 +33,11 @@ import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/features/store'
 import { setOpenSidebar } from '@/features/sidebarSlice'
 import LogoutConfirmationModal from '@/components/scaffold/portal-logout-confirmation-modal'
+import useGetPortalUser from '@/hooks/requests/useGetPortalUser'
 
 export const UserPanel = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
+  const { portalUser, portalUserLoading } = useGetPortalUser()
 
   return (
     <>
@@ -44,10 +47,20 @@ export const UserPanel = () => {
         </DropdownTrigger>
         <DropdownMenu
           topContent={
-            <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2">
-              Anastasia Oghenebrohien
-              <p className="text-sm text-foreground-500">anastasia@email.com</p>
-            </div>
+            portalUserLoading ? (
+              <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2 space-x-2">
+                <Skeleton className="h-4 w-2/5 rounded-lg inline-block" />
+                <Skeleton className="h-4 w-1/3 rounded-lg inline-block" />
+                <Skeleton className="h-4 w-5/6 rounded-lg block" />
+              </div>
+            ) : (
+              <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2">
+                {portalUser?.firstName} {portalUser?.lastName}
+                <p className="text-sm text-foreground-500">
+                  {portalUser?.email}
+                </p>
+              </div>
+            )
           }
         >
           <DropdownSection showDivider>

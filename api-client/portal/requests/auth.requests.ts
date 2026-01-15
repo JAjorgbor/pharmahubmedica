@@ -1,4 +1,4 @@
-import axiosInstance from '@/api-client/portal/request-adapter'
+import axiosInstance from '@/api-client/request-adapter'
 
 export const createAccount = (data: any) =>
   axiosInstance.post('portal/auth/create-account', data)

@@ -1,4 +1,5 @@
 'use client'
+import DeliveryMethodsSettings from './delivery-methods-settings'
 import InputField from '@/components/elements/input-field'
 import SingleImageDropzone from '@/components/elements/single-image-dropzone'
 import {
@@ -53,7 +54,7 @@ const SettingsSection = () => {
             className="mb-2"
             classNames={{
               tabList: 'flex-wrap',
-              tab: 'w-24',
+              tab: 'w-32',
             }}
           >
             <Tab title="Personal">
@@ -111,7 +112,7 @@ const SettingsSection = () => {
                     </div>
                   </CardBody>
                   <CardFooter className="mt-6">
-                    <div className="grid grid-cols-2 gap-4 md:w-1/2">
+                    <div className="grid grid-cols-2 gap-4 w-full md:w-1/2">
                       <Button size="sm" color="danger">
                         Reset
                       </Button>
@@ -249,6 +250,15 @@ const SettingsSection = () => {
                         </p>
                       </div>
                     </div>
+                  </CardBody>
+                </Card>
+              </div>
+            </Tab>
+            <Tab title="Delivery Methods">
+              <div className="space-y-6">
+                <Card>
+                  <CardBody>
+                    <DeliveryMethodsSettings />
                   </CardBody>
                 </Card>
               </div>

@@ -27,7 +27,7 @@ const redirectToPortalLogin = () => {
 }
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = Cookies.get('accessToken')
+  const token = Cookies.get('portalAccessToken')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -47,17 +47,17 @@ axiosInstance.interceptors.response.use(
       !original._retry &&
       status === 401 &&
       msg !== 'Incorrect email or password' &&
-      !original.url?.includes('auth/refresh-tokens')
+      !original.url?.includes('portal/auth/refresh-tokens')
 
     if (!shouldRefresh) return Promise.reject(error.response)
 
     original._retry = true
 
     try {
-      const { data } = await refreshClient.post('auth/refresh-tokens')
+      const { data } = await refreshClient.post('portal/auth/refresh-tokens')
       if (!data?.accessToken) throw new Error('No access token returned')
 
-      Cookies.set('accessToken', data.accessToken, { expires: 60 })
+      Cookies.set('portalAccessToken', data.accessToken, { expires: 60 })
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`
       original.headers.Authorization = `Bearer ${data.accessToken}`
 

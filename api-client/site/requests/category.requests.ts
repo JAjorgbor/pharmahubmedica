@@ -1,4 +1,4 @@
-import axiosInstance from '@/api-client/site/request-adapter'
+import axiosInstance from '@/api-client/request-adapter'
 
 export const getCategories = (params?: { page: number; limit?: number }) =>
   axiosInstance.get('categories', { params })

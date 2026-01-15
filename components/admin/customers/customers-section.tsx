@@ -25,7 +25,7 @@ import { FiMoreVertical } from 'react-icons/fi'
 import { LuExternalLink, LuPlus, LuPencil, LuTrash } from 'react-icons/lu'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import TableWrapper from '@/components/elements/table-wrapper'
-import UpdateCustomerModal from './UpdateCustomerModal'
+import UpdateCustomerModal from './update-customer-modal'
 import { referralPartnerProfessions } from '@/library/config'
 
 const columnHelper = createColumnHelper<ICustomer>()

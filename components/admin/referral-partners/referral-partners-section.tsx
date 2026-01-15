@@ -25,7 +25,7 @@ import { useMemo, useState } from 'react'
 import { FiCheck, FiCopy, FiMoreVertical } from 'react-icons/fi'
 import { IoCashOutline } from 'react-icons/io5'
 import { LuExternalLink, LuHandshake, LuPlus } from 'react-icons/lu'
-import AddReferralPartnerModal from './AddReferralPartnerModal'
+import AddReferralPartnerModal from './add-referral-partner-modal'
 import ToggleReferralPartnerStatusModal from '@/components/admin/referral-partners/ToggleReferralPartnerStatusModal'
 import UpdateReferralPartnerModal from '@/components/admin/referral-partners/UpdateReferralPartnerModal'
 

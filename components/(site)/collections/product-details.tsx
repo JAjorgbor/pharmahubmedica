@@ -1,7 +1,16 @@
 'use client'
 import { IProduct } from '@/api-client/interfaces/product.interfaces'
+import useCart from '@/hooks/useCart'
 import { currencyFormatter } from '@/utils/currency-formatter'
-import { Button, Card, CardBody, Chip, Divider, Skeleton } from '@heroui/react'
+import {
+  addToast,
+  Button,
+  Card,
+  CardBody,
+  Chip,
+  Divider,
+  Skeleton,
+} from '@heroui/react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { FC, useState } from 'react'
@@ -21,6 +30,30 @@ interface ProductDetailsProps {
 
 const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
   const [quantity, setQuantity] = useState(1)
+  const { items, addProductToCart } = useCart()
+  const productExistInCart = items.find(
+    (item) => item.product._id === product._id
+  )
+
+  const handleAddToCart = () => {
+    if (!product.inStock) {
+      addToast({
+        title: 'This product is not in stock',
+        color: 'warning',
+        severity: 'warning',
+      })
+      return
+    }
+    addProductToCart({ product, quantity })
+    addToast({
+      title: productExistInCart
+        ? 'Product updated in cart'
+        : 'Product added to cart',
+      color: 'primary',
+      severity: 'primary',
+    })
+    setQuantity(1)
+  }
 
   return (
     <motion.div
@@ -28,7 +61,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
       animate={{ opacity: 1 }}
       className="max-w-6xl mx-auto p-6 md:p-12 min-h-[80vh]"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-16">
         {/* Left Column: Single Image */}
         <motion.div
           initial={{ x: -20, opacity: 0 }}
@@ -82,9 +115,9 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
               ) : (
                 <Chip
                   variant="dot"
-                  color="danger"
+                  color="warning"
                   size="sm"
-                  className="bg-transparent text-danger-600 font-medium"
+                  className="bg-transparent text-warning-600 font-medium"
                 >
                   Out of Stock
                 </Chip>
@@ -108,8 +141,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 
           <Divider />
 
-          <div className="space-y-6">
-            <div className="flex items-center gap-8">
+          <div className="md:flex space-y-8 md:space-y-0 gap-8">
+            <div className="flex items-center gap-6 flex-1">
               <span className="font-bold text-neutral-800">Quantity</span>
               <div className="flex items-center bg-neutral-100 p-1.5 rounded-2xl">
                 <Button
@@ -136,23 +169,15 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                color="primary"
-                size="lg"
-                startContent={<LuShoppingCart className="h-5 w-5" />}
-                className="flex-1 py-5 font-bold rounded-2xl shadow-xl shadow-primary/20 text-lg"
-              >
-                Add to Cart
-              </Button>
-              <Button
-                size="lg"
-                className="flex-1 bg-[#25D366] py-5 text-white font-bold rounded-2xl shadow-xl shadow-green-500/10 text-lg"
-                startContent={<FaWhatsapp className="h-6 w-6" />}
-              >
-                Buy via WhatsApp
-              </Button>
-            </div>
+            <Button
+              color="primary"
+              size="lg"
+              startContent={<LuShoppingCart />}
+              className="flex-1  font-bold rounded-2xl shadow-xl shadow-primary/20  w-full"
+              onPress={handleAddToCart}
+            >
+              {productExistInCart ? 'Update In cart' : 'Add to Cart'}
+            </Button>
           </div>
         </motion.div>
       </div>

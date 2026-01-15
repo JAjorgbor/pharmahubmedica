@@ -18,6 +18,9 @@ import { useEffect, useState } from 'react'
 import { cn } from '@/utils/cn'
 import Link from 'next/link'
 import useGetCategories from '@/hooks/requests/useGetCategories'
+import useCart from '@/hooks/useCart'
+import useGetPortalUser from '@/hooks/requests/useGetPortalUser'
+import { UserPanel } from '@/components/scaffold/portal-header'
 
 const Header = () => {
   const { scrollY } = useScroll() // reactive MotionValue
@@ -33,6 +36,8 @@ const Header = () => {
     params: { page: 1, limit: 10 },
   })
   const { categories, meta } = categoriesData || {}
+  const { items } = useCart()
+  const { portalUser } = useGetPortalUser()
   return (
     <>
       <div className="pt-5 md:hidden" />
@@ -75,7 +80,7 @@ const Header = () => {
             <PhoneNumberDisplay className="hidden md:flex" />
           </NavbarItem>
           <NavbarItem className="md:hidden">
-            <Badge content={2} color="danger">
+            <Badge content={items.length || undefined} color="danger">
               <Link
                 href="/cart"
                 className="bg-white rounded-xl p-1.5 hover:text-primary shadow text-foreground-600"
@@ -85,26 +90,30 @@ const Header = () => {
             </Badge>
           </NavbarItem>
           <NavbarItem>
-            <div className="flex gap-2">
-              <Button
-                as={Link}
-                href={'/portal'}
-                size="sm"
-                color="primary"
-                variant="light"
-                className="font-semibold"
-              >
-                Sign In
-              </Button>
-              <Button
-                as={Link}
-                href={'/portal/register'}
-                size="sm"
-                color="primary"
-              >
-                Sign Up
-              </Button>
-            </div>
+            {portalUser ? (
+              <UserPanel />
+            ) : (
+              <div className="flex gap-2">
+                <Button
+                  as={Link}
+                  href={'/portal'}
+                  size="sm"
+                  color="primary"
+                  variant="light"
+                  className="font-semibold"
+                >
+                  Sign In
+                </Button>
+                <Button
+                  as={Link}
+                  href={'/portal/register'}
+                  size="sm"
+                  color="primary"
+                >
+                  Sign Up
+                </Button>
+              </div>
+            )}
           </NavbarItem>
         </NavbarContent>
         {/* </div> */}
@@ -173,7 +182,7 @@ const Header = () => {
         </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem>
-            <Badge content={2} color="danger">
+            <Badge content={items.length || undefined} color="danger">
               <Link
                 href="/cart"
                 className="bg-white rounded-xl p-1.5 hover:text-primary shadow text-foreground-600"

@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import LoginForm from '@/components/admin/auth/LoginForm'
+import LoginForm from '@/components/admin/auth/login-form'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
