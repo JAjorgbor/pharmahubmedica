@@ -38,7 +38,7 @@ const CheckoutPolicyModal = ({
       hideCloseButton={true}
       headerFullWidth={false}
       footer={
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-4 w-full">
           <Button
             color="success"
             fullWidth
@@ -55,7 +55,7 @@ const CheckoutPolicyModal = ({
           <div className="flex gap-2">
             <Button
               color="primary"
-              variant="faded"
+              variant="flat"
               fullWidth
               as={Link}
               href={'/collections'}
