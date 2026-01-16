@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form'
 import z from 'zod'
 import Cookies from 'js-cookie'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createOrder } from '@/api-client/portal/requests/order.requests'
+import { orderRequests } from '@/api-client/portal/requests/order.requests'
 import useGetPortalUser from '@/hooks/requests/useGetPortalUser'
 
 const checkoutSchema = z.object({
@@ -84,7 +84,7 @@ const CheckoutSection = () => {
       }
       const {
         data: { order: response },
-      } = await createOrder(payload)
+      } = await orderRequests.createOrder(payload)
       setIsPolicyModalOpen(true)
       setOrderNumber(response.orderNumber)
       clearCart()

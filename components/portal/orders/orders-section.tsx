@@ -7,29 +7,32 @@ import {
   CardBody,
   Chip,
   Input,
+  Spinner,
   Tab,
   Tabs,
 } from '@heroui/react'
 import { useState } from 'react'
 import { LuCircleCheckBig, LuCircleX, LuClock, LuPackage } from 'react-icons/lu'
 import OrderCard from '@/components/portal/orders/order-card'
-import { orders } from '@/library/dummy-data'
 import Link from 'next/link'
+import { useGetPortalOrders } from '@/hooks/requests/portal/useOrders'
+import Cookies from 'js-cookie'
 
 const OrdersSection = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const userId = Cookies.get('portalUserId')
+  const { orders, ordersLoading } = useGetPortalOrders()
 
-  const userOrders = orders.filter((order) => order.customerId === '3')
-  const filteredOrders = userOrders.filter(
-    (order) =>
-      order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.items.some((item) =>
-        item.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredOrders = orders?.filter(
+    (order: any) =>
+      order.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.products.some((product: any) =>
+        product.productName.toLowerCase().includes(searchTerm.toLowerCase())
       )
   )
 
-  const getOrdersByStatus = (status) => {
-    return filteredOrders.filter((order) => order.status === status)
+  const getOrdersByStatus = (status: string) => {
+    return filteredOrders.filter((order: any) => order.orderStatus === status)
   }
 
   const tabs = [
@@ -43,31 +46,31 @@ const OrdersSection = () => {
       emptyText: 'No orders found',
     },
     {
-      key: 'pending',
-      label: `Pending (${getOrdersByStatus('pending').length})`,
-      orders: getOrdersByStatus('pending'),
+      key: 'processing',
+      label: `Processing (${getOrdersByStatus('processing').length})`,
+      orders: getOrdersByStatus('processing'),
       emptyIcon: (
         <LuClock className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
       ),
-      emptyText: 'No pending orders',
+      emptyText: 'No processing orders',
     },
     {
-      key: 'confirmed',
-      label: `Confirmed (${getOrdersByStatus('confirmed').length})`,
-      orders: getOrdersByStatus('confirmed'),
+      key: 'in-transit',
+      label: `In-Transit (${getOrdersByStatus('in-transit').length})`,
+      orders: getOrdersByStatus('in-transit'),
       emptyIcon: (
         <LuPackage className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
       ),
-      emptyText: 'No confirmed orders',
+      emptyText: 'No orders in transit',
     },
     {
-      key: 'fulfilled',
-      label: `Fulfilled (${getOrdersByStatus('fulfilled').length})`,
-      orders: getOrdersByStatus('fulfilled'),
+      key: 'delivered',
+      label: `Delivered (${getOrdersByStatus('delivered').length})`,
+      orders: getOrdersByStatus('delivered'),
       emptyIcon: (
         <LuCircleCheckBig className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
       ),
-      emptyText: 'No fulfilled orders',
+      emptyText: 'No delivered orders',
     },
     {
       key: 'cancelled',
@@ -121,23 +124,26 @@ const OrdersSection = () => {
           </CardBody>
         </Card>
 
-        {/* <div className="flex flex-col w-full">
+        {ordersLoading ? (
+          <div className="flex justify-center p-12">
+            <Spinner label="Loading orders..." />
+          </div>
+        ) : (
           <Tabs
             aria-label="Orders"
             defaultSelectedKey="all"
             className="mb-2"
-            classNames={
-              {
-                // tabList: 'overflow-x-auto gap-2 sm:gap-4 sm:flex-wrap',
-              }
-            }
+            classNames={{
+              tabList: 'flex-wrap overflow-x-auto',
+              tab: 'w-[120px]',
+            }}
           >
             {tabs.map((tab) => (
-              <Tab key={tab.key} title={tab.label}>
+              <Tab key={tab.key} title={tab.label} className="">
                 <div className="space-y-4">
                   {tab.orders.length > 0 ? (
-                    tab.orders.map((order) => (
-                      <OrderCard key={order.id} order={order} />
+                    tab.orders.map((order: any) => (
+                      <OrderCard key={order._id} order={order} />
                     ))
                   ) : (
                     <Card>
@@ -151,35 +157,7 @@ const OrdersSection = () => {
               </Tab>
             ))}
           </Tabs>
-        </div> */}
-        <Tabs
-          aria-label="Orders"
-          defaultSelectedKey="all"
-          className="mb-2"
-          classNames={{
-            tabList: 'flex-wrap',
-            tab: 'w-24',
-          }}
-        >
-          {tabs.map((tab) => (
-            <Tab key={tab.key} title={tab.label} className="">
-              <div className="space-y-4">
-                {tab.orders.length > 0 ? (
-                  tab.orders.map((order) => (
-                    <OrderCard key={order._id} order={order} />
-                  ))
-                ) : (
-                  <Card>
-                    <CardBody className="p-12 text-center">
-                      {tab.emptyIcon}
-                      <p className="text-foreground-500">{tab.emptyText}</p>
-                    </CardBody>
-                  </Card>
-                )}
-              </div>
-            </Tab>
-          ))}
-        </Tabs>
+        )}
       </div>
     </div>
   )

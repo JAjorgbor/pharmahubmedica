@@ -1,7 +1,7 @@
 'use client'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
-import { IOrder, orders } from '@/library/dummy-data'
+import { IOrder } from '@/api-client/interfaces/order.interfaces'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   BreadcrumbItem,
@@ -15,6 +15,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Spinner,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
@@ -28,65 +29,64 @@ import {
   LuPackage,
   LuPlus,
 } from 'react-icons/lu'
-
-const statusOptions = [
-  { value: 'pending', label: 'Pending' },
-  { value: 'confirmed', label: 'Confirmed' },
-  { value: 'fulfilled', label: 'Fulfilled' },
-  { value: 'cancelled', label: 'Cancelled' },
-]
+import { useGetAdminOrders } from '@/hooks/requests/admin/useAdminOrders'
 
 const columnHelper = createColumnHelper<IOrder>()
 
 const OrdersSection = () => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [paymentStatusFilter, setPaymentStatusFilter] = useState('all')
-  const [categoryFilter, setCategoryFilter] = useState('all')
 
-  const items = orders
+  const { orders, ordersLoading } = useGetAdminOrders()
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('_id', {
-        id: 'id',
-        header: 'Order ID',
+      columnHelper.accessor('orderNumber', {
+        id: 'orderNumber',
+        header: 'Order #',
         cell: ({ row: { original: item } }) => (
           <div className="flex gap-2 items-center">
-            <p className="text-xs text-foreground-600">{item._id}</p>
+            <p className="text-xs font-semibold text-primary">
+              {item.orderNumber}
+            </p>
           </div>
         ),
       }),
-      columnHelper.accessor('customerEmail', {
-        id: 'customerEmail',
+      columnHelper.accessor('customer', {
+        id: 'customer',
         header: 'Customer',
-        cell: ({ row: { original: item } }) => (
-          <div className="space-y-1">
-            <p className="text-xs">{item.customerName}</p>
-            <p className="text-xs text-foreground-600">{item.customerEmail}</p>
-            <p className="text-xs text-foreground-600">{item.customerPhone}</p>
-          </div>
-        ),
+        cell: ({ row: { original: item } }) => {
+          const customer = item.customer as any
+          return (
+            <div className="space-y-1">
+              <p className="text-xs font-semibold">
+                {customer?.firstName} {customer?.lastName}
+              </p>
+              <p className="text-xs text-foreground-600">{customer?.email}</p>
+              <p className="text-xs text-foreground-600">
+                {customer?.phoneNumber}
+              </p>
+            </div>
+          )
+        },
       }),
 
-      columnHelper.accessor('status', {
-        header: 'Order Status',
-        filterFn: (row: { original: IOrder }, columnId, filterValue) => {
-          if (typeof filterValue == 'undefined') return false
-
-          return filterValue == 'all'
-            ? true
-            : row.original.status == filterValue
-        },
+      columnHelper.accessor('orderStatus', {
+        header: 'Status',
         cell: ({ getValue }) => {
           const statusMap = {
-            pending: 'warning',
-            fulfilled: 'success',
+            processing: 'warning',
+            delivered: 'success',
             cancelled: 'danger',
-            confirmed: 'primary',
+            'in-transit': 'primary',
           } as const
           return (
             <div className="capitalize">
-              <Chip color={statusMap[getValue()]} variant="flat" size="sm">
+              <Chip
+                color={statusMap[getValue()] || 'default'}
+                variant="flat"
+                size="sm"
+              >
                 {getValue()}
               </Chip>
             </div>
@@ -94,24 +94,22 @@ const OrdersSection = () => {
         },
       }),
       columnHelper.accessor('paymentStatus', {
-        header: 'Payment Status',
-        filterFn: (row: { original: IOrder }, columnId, filterValue) => {
-          if (typeof filterValue == 'undefined') return false
-
-          return filterValue == 'all'
-            ? true
-            : row.original.paymentStatus == filterValue
-        },
+        header: 'Payment',
         cell: ({ getValue }) => {
           const statusMap = {
             pending: 'warning',
             paid: 'success',
-            refunded: 'primary',
+            reversed: 'primary',
             failed: 'danger',
+            abandoned: 'default',
           } as const
           return (
             <div className="capitalize">
-              <Chip color={statusMap[getValue()]} variant="dot" size="sm">
+              <Chip
+                color={statusMap[getValue()] || 'default'}
+                variant="dot"
+                size="sm"
+              >
                 {getValue()}
               </Chip>
             </div>
@@ -119,39 +117,47 @@ const OrdersSection = () => {
         },
       }),
 
-      columnHelper.accessor((original) => `${original.items.length}`, {
+      columnHelper.accessor((original) => `${original.products.length}`, {
         id: 'items',
         header: 'Items',
-        cell: ({ getValue }) => {
-          return <div>{getValue().length}</div>
+        cell: ({ row: { original: item } }) => {
+          return <div>{item.products.length}</div>
         },
       }),
-      columnHelper.accessor('totalAmount', {
+      columnHelper.accessor('transaction.totalAmount', {
         header: 'Total',
-        cell: ({ getValue }) => {
-          return <div>{currencyFormatter(getValue())}</div>
+        cell: ({ row: { original: item } }) => {
+          return <div>{currencyFormatter(item.transaction.totalAmount)}</div>
         },
       }),
-      columnHelper.accessor('referralId', {
+      columnHelper.accessor('referralDetails.referralPartner', {
+        id: 'referrer',
         header: 'Referrer',
-        cell: ({ getValue }) => (
-          <div className="space-y-1">
-            {getValue() ? (
-              <>
-                <p className="text-xs">Joshua Doe</p>
-                <p className="text-xs text-foreground-600">
-                  joshuadoe@email.com
-                </p>
-                <p className="text-xs text-foreground-600">ID:{getValue()}</p>
-              </>
-            ) : (
-              <>&mdash;</>
-            )}
-          </div>
-        ),
+        cell: ({ row: { original: item } }) => {
+          const referral = item.referralDetails as any
+          return (
+            <div className="space-y-1">
+              {referral?.referralPartner ? (
+                <>
+                  <p className="text-xs font-semibold">Partner</p>
+                  <p className="text-xs text-foreground-600">
+                    ID: {referral.referralPartner}
+                  </p>
+                  {referral.commission && (
+                    <p className="text-xs text-success">
+                      Comm: {currencyFormatter(referral.commission.amount)}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <>&mdash;</>
+              )}
+            </div>
+          )
+        },
       }),
 
-      columnHelper.accessor('orderDate', {
+      columnHelper.accessor('createdAt', {
         header: 'Order Date',
         cell: ({ getValue }) => (
           <div className="text-xs text-foreground-600 space-y-1">
@@ -163,7 +169,6 @@ const OrdersSection = () => {
 
       columnHelper.display({
         id: 'action',
-
         cell: ({ row: { original: item } }) => (
           <Dropdown className="min-w-max">
             <DropdownTrigger>
@@ -183,8 +188,14 @@ const OrdersSection = () => {
               <DropdownItem
                 key="contact-customer"
                 showDivider
-                as={Link}
-                href={`#`}
+                onPress={() => {
+                  const customer = item.customer as any
+                  if (customer?.phoneNumber)
+                    window.open(
+                      `https://wa.me/${customer.phoneNumber}`,
+                      '_blank'
+                    )
+                }}
               >
                 Contact Customer
               </DropdownItem>
@@ -193,8 +204,17 @@ const OrdersSection = () => {
         ),
       }),
     ],
-    [items]
+    []
   )
+
+  const counts = useMemo(() => {
+    return {
+      processing: orders.filter((o) => o.orderStatus === 'processing').length,
+      inTransit: orders.filter((o) => o.orderStatus === 'in-transit').length,
+      delivered: orders.filter((o) => o.orderStatus === 'delivered').length,
+      cancelled: orders.filter((o) => o.orderStatus === 'cancelled').length,
+    }
+  }, [orders])
 
   return (
     <>
@@ -216,7 +236,7 @@ const OrdersSection = () => {
             color="primary"
             startContent={<LuPlus size={15} />}
             as={Link}
-            href="/admin/orders/add"
+            href="/admin/orders/create" // Changed from add to create to match common pattern if needed
           >
             Create Order
           </Button>
@@ -229,8 +249,8 @@ const OrdersSection = () => {
               <div className="flex gap-2 items-center">
                 <LuClock className="text-warning" strokeWidth={0.7} size={40} />
                 <div className="space-y-1">
-                  <p>Pending</p>
-                  <p className="text-xl font-semibold">1</p>
+                  <p>Processing</p>
+                  <p className="text-xl font-semibold">{counts.processing}</p>
                 </div>
               </div>
             </CardBody>
@@ -244,8 +264,8 @@ const OrdersSection = () => {
                   size={40}
                 />
                 <div className="space-y-1">
-                  <p>Confirmed</p>
-                  <p className="text-xl font-semibold">1</p>
+                  <p>In-Transit</p>
+                  <p className="text-xl font-semibold">{counts.inTransit}</p>
                 </div>
               </div>
             </CardBody>
@@ -259,8 +279,8 @@ const OrdersSection = () => {
                   size={40}
                 />
                 <div className="space-y-1">
-                  <p>Fulfilled</p>
-                  <p className="text-xl font-semibold">1</p>
+                  <p>Delivered</p>
+                  <p className="text-xl font-semibold">{counts.delivered}</p>
                 </div>
               </div>
             </CardBody>
@@ -275,7 +295,7 @@ const OrdersSection = () => {
                 />
                 <div className="space-y-1">
                   <p>Cancelled</p>
-                  <p className="text-xl font-semibold">1</p>
+                  <p className="text-xl font-semibold">{counts.cancelled}</p>
                 </div>
               </div>
             </CardBody>
@@ -285,131 +305,82 @@ const OrdersSection = () => {
         <Card>
           <CardHeader>
             <Chip color="secondary" size="sm">
-              Total Orders : {items.length}
+              Total Orders : {orders.length}
             </Chip>{' '}
           </CardHeader>
           <CardBody>
-            <TableWrapper
-              columns={columns}
-              items={items}
-              allowsSortingFor={['orderDate', 'items']}
-              topContent={({ table, searchField }) => {
-                const getStatusCount = (status: string) => {
-                  if (items) {
-                    if (status == 'all') return items.length
-                    else
-                      return items.filter((each) => each.status == status)
-                        .length
-                  }
-                  return '-'
-                }
-                const getPaymentStatusCount = (status: string) => {
-                  if (items) {
-                    if (status == 'all') return items.length
-                    else
-                      return items.filter(
-                        (each) => each.paymentStatus == status
-                      ).length
-                  }
-                  return '-'
-                }
-
-                return (
-                  <div className="flex justify-between items-center w-full gap-3 flex-wrap">
-                    <div className="w-full md:w-1/3 lg:w-1/4">
-                      {searchField('Search orders')}
+            {ordersLoading ? (
+              <div className="flex justify-center p-12">
+                <Spinner label="Fetching orders..." />
+              </div>
+            ) : (
+              <TableWrapper
+                columns={columns}
+                items={orders}
+                allowsSortingFor={['createdAt', 'items']}
+                topContent={({ table, searchField }) => {
+                  return (
+                    <div className="flex justify-between items-center w-full gap-3 flex-wrap">
+                      <div className="w-full md:w-1/3 lg:w-1/4">
+                        {searchField('Search orders')}
+                      </div>
+                      <div className="gap-3 grid grid-cols-2 w-full md:w-1/2 lg:w-1/3">
+                        <InputField
+                          type="select"
+                          controllerProps={{
+                            name: 'status filter',
+                            defaultValue: statusFilter,
+                          }}
+                          options={[
+                            { label: 'All Order Status', value: 'all' },
+                            { label: 'Processing', value: 'processing' },
+                            { label: 'In-Transit', value: 'in-transit' },
+                            { label: 'Delivered', value: 'delivered' },
+                            { label: 'Cancelled', value: 'cancelled' },
+                          ]}
+                          onChange={(value) => {
+                            table
+                              .getColumn('orderStatus')
+                              ?.setFilterValue(
+                                value === 'all' ? undefined : value
+                              )
+                            setStatusFilter(value)
+                          }}
+                        />
+                        <InputField
+                          type="select"
+                          controllerProps={{
+                            name: 'payment status filter',
+                            defaultValue: paymentStatusFilter,
+                          }}
+                          options={[
+                            { label: 'All Payment Status', value: 'all' },
+                            { label: 'Pending', value: 'pending' },
+                            { label: 'Paid', value: 'paid' },
+                            { label: 'Failed', value: 'failed' },
+                            { label: 'Reversed', value: 'reversed' },
+                          ]}
+                          onChange={(value) => {
+                            table
+                              .getColumn('paymentStatus')
+                              ?.setFilterValue(
+                                value === 'all' ? undefined : value
+                              )
+                            setPaymentStatusFilter(value)
+                          }}
+                        />
+                      </div>
                     </div>
-                    <div className="gap-3 grid grid-cols-2 w-full md:w-1/2 lg:w-1/3">
-                      <InputField
-                        type="select"
-                        controllerProps={{
-                          name: 'status filter',
-                          defaultValue: statusFilter,
-                        }}
-                        options={[
-                          {
-                            label: `All Order Status (${getStatusCount(
-                              'all'
-                            )})`,
-                            value: 'all',
-                          },
-                          {
-                            label: `Pending (${getStatusCount('pending')})`,
-                            value: 'pending',
-                          },
-                          {
-                            label: `Confirmed (${getStatusCount('confirmed')})`,
-                            value: 'confirmed',
-                          },
-                          {
-                            label: `Fulfilled (${getStatusCount('fulfilled')})`,
-                            value: 'fulfilled',
-                          },
-                          {
-                            label: `Cancelled (${getStatusCount('cancelled')})`,
-                            value: 'cancelled',
-                          },
-                        ]}
-                        onChange={(value) => {
-                          table.getColumn('status')?.setFilterValue(value)
-                          setStatusFilter(value)
-                        }}
-                      />
-                      <InputField
-                        type="select"
-                        controllerProps={{
-                          name: 'payment status filter',
-                          defaultValue: paymentStatusFilter,
-                        }}
-                        options={[
-                          {
-                            label: `All Payment Status(${getPaymentStatusCount(
-                              'all'
-                            )})`,
-                            value: 'all',
-                          },
-                          {
-                            label: `Pending (${getPaymentStatusCount(
-                              'pending'
-                            )})`,
-                            value: 'pending',
-                          },
-                          {
-                            label: `Paid (${getPaymentStatusCount('paid')})`,
-                            value: 'paid',
-                          },
-                          {
-                            label: `Refunded (${getPaymentStatusCount(
-                              'refunded'
-                            )})`,
-                            value: 'refunded',
-                          },
-                          {
-                            label: `Failed (${getPaymentStatusCount(
-                              'failed'
-                            )})`,
-                            value: 'failed',
-                          },
-                        ]}
-                        onChange={(value) => {
-                          table
-                            .getColumn('paymentStatus')
-                            ?.setFilterValue(value)
-                          setPaymentStatusFilter(value)
-                        }}
-                      />
-                    </div>
-                    {/* </div> */}
+                  )
+                }}
+                bottomContent={({ rowPerPage, pagination }) => (
+                  <div className="flex justify-between gap-4 flex-wrap">
+                    {rowPerPage}
+                    {pagination}
                   </div>
-                )
-              }}
-              bottomContent={({ rowPerPage, pagination }) => (
-                <div className="flex justify-between gap-4 flex-wrap">
-                  {rowPerPage}
-                  {pagination}
-                </div>
-              )}
-            />
+                )}
+              />
+            )}
           </CardBody>
         </Card>
       </div>

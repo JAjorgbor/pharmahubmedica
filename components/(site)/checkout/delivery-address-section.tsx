@@ -5,7 +5,7 @@ import {
   CardBody,
   CardHeader,
   Chip,
-  Spinner,
+  Skeleton,
 } from '@heroui/react'
 import { useState } from 'react'
 import { LuMapPin, LuPencil, LuPlus } from 'react-icons/lu'
@@ -100,8 +100,25 @@ const DeliveryAddressSection = ({
   if (addressesLoading) {
     return (
       <Card className="p-3">
-        <CardBody className="flex justify-center items-center py-8">
-          <Spinner label="Loading addresses..." />
+        <CardHeader className="flex justify-between items-center pb-0">
+          <Skeleton className="rounded-lg">
+            <div className="h-8 w-40 bg-default-300"></div>
+          </Skeleton>
+          <Skeleton className="rounded-lg">
+            <div className="h-8 w-32 bg-default-300"></div>
+          </Skeleton>
+        </CardHeader>
+        <CardBody className="grid gap-4 md:grid-cols-2 mt-4">
+          {[1, 2].map((i) => (
+            <Card key={i} className="border-2 border-default-200 p-4 space-y-3">
+              <Skeleton className="rounded-lg w-16 h-6" />
+              <div className="space-y-2">
+                <Skeleton className="rounded-lg w-3/4 h-4" />
+                <Skeleton className="rounded-lg w-1/2 h-4" />
+                <Skeleton className="rounded-lg w-2/3 h-4" />
+              </div>
+            </Card>
+          ))}
         </CardBody>
       </Card>
     )

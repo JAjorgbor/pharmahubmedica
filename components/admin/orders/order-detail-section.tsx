@@ -1,9 +1,14 @@
 'use client'
 
 import { currencyFormatter } from '@/utils/currency-formatter'
-import { Button, Card, CardBody, Chip, Spinner } from '@heroui/react'
+import { Button, Card, CardBody, Chip, Spinner, addToast } from '@heroui/react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import InputField from '@/components/elements/input-field'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { FaWhatsapp } from 'react-icons/fa'
 import {
   LuCalendar,
@@ -13,14 +18,65 @@ import {
   LuClock,
   LuPackage,
   LuUserCheck,
+  LuPrinter,
+  LuSave,
 } from 'react-icons/lu'
-import { useGetPortalOrder } from '@/hooks/requests/portal/useOrders'
+import { useGetAdminOrder } from '@/hooks/requests/admin/useAdminOrders'
+import { adminOrderRequests } from '@/api-client/admin/requests/order.requests'
 import moment from 'moment'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
 
-const OrderSection = () => {
+const orderUpdateSchema = z.object({
+  orderStatus: z.enum(['processing', 'in-transit', 'delivered', 'cancelled']),
+  paymentStatus: z.enum(['pending', 'paid', 'failed', 'abandoned', 'reversed']),
+  trackingId: z.string().optional(),
+  note: z.string().optional(),
+})
+
+type OrderUpdateFormData = z.infer<typeof orderUpdateSchema>
+
+const orderStatusOptions = [
+  { label: 'Processing', value: 'processing' },
+  { label: 'In Transit', value: 'in-transit' },
+  { label: 'Delivered', value: 'delivered' },
+  { label: 'Cancelled', value: 'cancelled' },
+]
+
+const paymentStatusOptions = [
+  { label: 'Pending', value: 'pending' },
+  { label: 'Paid', value: 'paid' },
+  { label: 'Failed', value: 'failed' },
+  { label: 'Abandoned', value: 'abandoned' },
+  { label: 'Reversed', value: 'reversed' },
+]
+
+const OrderDetailSection = () => {
   const params = useParams()
   const orderId = params.id as string
-  const { order, orderLoading, orderError } = useGetPortalOrder(orderId)
+  const { order, orderLoading, orderError, mutateOrder } =
+    useGetAdminOrder(orderId)
+
+  const [isUpdating, setIsUpdating] = useState(false)
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = useForm<OrderUpdateFormData>({
+    resolver: zodResolver(orderUpdateSchema),
+  })
+
+  useEffect(() => {
+    if (order) {
+      reset({
+        orderStatus: order.orderStatus as any,
+        paymentStatus: order.paymentStatus as any,
+        trackingId: order.trackingId || '',
+        note: order.note || '',
+      })
+    }
+  }, [order, reset])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -37,20 +93,25 @@ const OrderSection = () => {
     }
   }
 
-  const getPaymentStatusColor = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return 'success'
-      case 'pending':
-        return 'warning'
-      case 'failed':
-        return 'danger'
-      case 'reversed':
-        return 'secondary'
-      case 'abandoned':
-        return 'default'
-      default:
-        return 'default'
+  const handleUpdateOrder = async (data: OrderUpdateFormData) => {
+    setIsUpdating(true)
+    try {
+      await adminOrderRequests.updateOrderStatus(orderId, data)
+      addToast({
+        title: 'Success',
+        description: 'Order updated successfully',
+        color: 'success',
+      })
+      mutateOrder()
+    } catch (error) {
+      addToast({
+        title: 'Error',
+        description:
+          error?.data?.message || error?.message || 'Failed to update order',
+        color: 'danger',
+      })
+    } finally {
+      setIsUpdating(false)
     }
   }
 
@@ -66,7 +127,7 @@ const OrderSection = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
         <p className="text-xl font-semibold text-danger">Order not found</p>
-        <Button as={Link} href="/portal/orders" variant="flat">
+        <Button as={Link} href="/admin/orders" variant="flat">
           Back to Orders
         </Button>
       </div>
@@ -74,17 +135,27 @@ const OrderSection = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50/50 pb-20">
       <div className="max-w-7xl mx-auto p-5 space-y-8">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <Button isIconOnly as={Link} href="/portal/orders" variant="light">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Button isIconOnly as={Link} href="/admin/orders" variant="light">
               <LuChevronLeft size={25} />
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-primary">
-                Order {order.orderNumber}
-              </h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold text-primary">
+                  Order {order.orderNumber}
+                </h1>
+                <Chip
+                  color={getStatusColor(order.orderStatus)}
+                  size="sm"
+                  variant="flat"
+                  className="font-semibold uppercase"
+                >
+                  {order.orderStatus}
+                </Chip>
+              </div>
               <p className="text-gray-600">
                 Placed on{' '}
                 {moment(order.createdAt).format('MMMM D, YYYY [at] hh:mm A')}
@@ -92,36 +163,30 @@ const OrderSection = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Chip
-              color={getStatusColor(order.orderStatus)}
-              size="sm"
-              variant="flat"
+            <Button variant="ghost" startContent={<LuPrinter />}>
+              Print Invoice
+            </Button>
+            <Button
+              color="primary"
+              startContent={<LuSave />}
+              onClick={handleSubmit(handleUpdateOrder)}
+              isLoading={isUpdating}
+              isDisabled={!isDirty}
             >
-              <span className="uppercase font-semibold text-xs">
-                {order.orderStatus}
-              </span>
-            </Chip>
-            <Chip
-              color={getPaymentStatusColor(order.paymentStatus)}
-              size="sm"
-              variant="dot"
-              className="border-none"
-            >
-              <span className="uppercase font-semibold text-xs">
-                {order.paymentStatus}
-              </span>
-            </Chip>
+              Save Changes
+            </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
+            {/* Order Items */}
             <Card>
               <CardBody className="p-6">
                 <div className="mb-4">
                   <h3 className="font-semibold text-lg">Order Items</h3>
                   <p className="text-sm text-foreground-500">
-                    Products in your order
+                    Products in this order
                   </p>
                 </div>
 
@@ -191,6 +256,89 @@ const OrderSection = () => {
               </CardBody>
             </Card>
 
+            {/* Customer & Delivery */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card shadow="sm">
+                <CardBody className="p-6">
+                  <h3 className="font-semibold text-lg mb-4">
+                    Customer Details
+                  </h3>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-xs text-foreground-500 uppercase font-bold">
+                        Name
+                      </p>
+                      <p className="font-medium">
+                        {order.customer.firstName} {order.customer.lastName}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground-500 uppercase font-bold">
+                        Email
+                      </p>
+                      <p className="font-medium">{order.customer.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground-500 uppercase font-bold">
+                        Phone
+                      </p>
+                      <p className="font-medium">
+                        {order.customer.phoneNumber}
+                      </p>
+                    </div>
+                    <Button
+                      as="a"
+                      href={`https://wa.me/${toWhatsAppNumber(
+                        order.customer.phoneNumber?.replace(/\D/g, ''),
+                        'NG'
+                      )}`}
+                      target="_blank"
+                      color="success"
+                      variant="flat"
+                      size="sm"
+                      startContent={<FaWhatsapp />}
+                      className="mt-2"
+                    >
+                      Contact Customer
+                    </Button>
+                  </div>
+                </CardBody>
+              </Card>
+
+              <Card shadow="sm">
+                <CardBody className="p-6">
+                  <h3 className="font-semibold text-lg mb-4">Delivery Info</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-xs text-foreground-500 uppercase font-bold">
+                        Method
+                      </p>
+                      <p className="font-medium">
+                        {order.deliveryMethod?.name}
+                      </p>
+                      <p className="text-xs text-foreground-400">
+                        {order.deliveryMethod?.description}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground-500 uppercase font-bold">
+                        Address
+                      </p>
+                      <p className="text-sm">
+                        {order.deliveryAddress?.street}
+                        <br />
+                        {order.deliveryAddress?.city},{' '}
+                        {order.deliveryAddress?.state}
+                        <br />
+                        {order.deliveryAddress?.postalCode}
+                      </p>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </div>
+
+            {/* Referral Info */}
             {order.referralDetails?.referralPartner && (
               <Card className="border-green-200 bg-green-50 shadow-sm">
                 <CardBody className="p-6">
@@ -199,14 +347,11 @@ const OrderSection = () => {
                       <LuUserCheck className="h-5 w-5" />
                       <span>Referral Applied</span>
                     </h1>
-                    <p className="text-green-700 text-sm">
-                      This order was placed using a referral code
-                    </p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-xs text-green-700 uppercase font-semibold">
-                        Referrer ID
+                        Partner ID
                       </p>
                       <p className="font-medium text-green-900">
                         {order.referralDetails.referralPartner}
@@ -226,130 +371,60 @@ const OrderSection = () => {
                 </CardBody>
               </Card>
             )}
-
-            <Card>
-              <CardBody className="p-6 space-y-4">
-                <div>
-                  <h3 className="font-semibold text-lg">
-                    Delivery Information
-                  </h3>
-                  <p className="text-sm text-foreground-500">
-                    Shipping details
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <p className="text-xs text-foreground-500 uppercase font-bold mb-1">
-                      Address
-                    </p>
-                    <p className="text-sm font-medium">
-                      {order.deliveryAddress.street}
-                    </p>
-                    <p className="text-sm font-medium">
-                      {order.deliveryAddress.city},{' '}
-                      {order.deliveryAddress.state}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-foreground-500 uppercase font-bold mb-1">
-                      Method
-                    </p>
-                    <p className="text-sm font-medium">
-                      {order.deliveryMethod.name}
-                    </p>
-                    <p className="text-sm text-foreground-400">
-                      {order.deliveryMethod.description}
-                    </p>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
           </div>
 
           <div className="space-y-6">
-            <Card>
-              <CardBody className="p-6">
-                <div className="mb-4">
-                  <h1 className="mb-2 font-bold uppercase text-xs text-foreground-500">
-                    Current Order Status
-                  </h1>
-                  <div className="flex items-center justify-between">
-                    <p className="text-gray-900 font-semibold capitalize">
-                      {order.orderStatus}
-                    </p>
-                    <div className="flex flex-col items-end gap-1">
-                      <Chip
-                        color={getStatusColor(order.orderStatus)}
-                        variant="flat"
-                        size="sm"
-                      >
-                        <div className="flex items-center gap-1">
-                          {order.orderStatus === 'processing' && (
-                            <LuClock size={14} />
-                          )}
-                          {order.orderStatus === 'in-transit' && (
-                            <LuPackage size={14} />
-                          )}
-                          {order.orderStatus === 'delivered' && (
-                            <LuCircleCheckBig size={14} />
-                          )}
-                          {order.orderStatus === 'cancelled' && (
-                            <LuCircleX size={14} />
-                          )}
-                          <span className="capitalize text-xs font-semibold">
-                            {order.orderStatus}
-                          </span>
-                        </div>
-                      </Chip>
-                      <Chip
-                        color={getPaymentStatusColor(order.paymentStatus)}
-                        variant="dot"
-                        size="sm"
-                        className="border-none"
-                      >
-                        <span className="capitalize text-xs font-semibold">
-                          Payment: {order.paymentStatus}
-                        </span>
-                      </Chip>
-                    </div>
-                  </div>
-                </div>
-                {order.trackingId && (
-                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-xs text-blue-700 font-bold uppercase mb-1">
-                      Tracking ID
-                    </p>
-                    <p className="font-mono font-bold text-blue-900">
-                      {order.trackingId}
-                    </p>
-                  </div>
-                )}
-                <Button
-                  color="success"
-                  startContent={<FaWhatsapp size={20} />}
-                  fullWidth
-                  className="text-white font-bold"
-                  as="a"
-                  href={`https://wa.me/2349132172737?text=Hello, I have a question about my order ${order.orderNumber}`}
-                  target="_blank"
-                >
-                  Contact Support
-                </Button>
+            {/* Status Management */}
+            <Card shadow="sm" className="border-primary/20">
+              <CardBody className="p-6 space-y-4">
+                <h3 className="font-bold text-lg">Manage Order</h3>
+
+                <InputField
+                  type="select"
+                  label="Order Status"
+                  placeholder="Select status"
+                  options={orderStatusOptions}
+                  controllerProps={{ control, name: 'orderStatus' }}
+                />
+
+                <InputField
+                  type="select"
+                  label="Payment Status"
+                  placeholder="Select status"
+                  options={paymentStatusOptions}
+                  controllerProps={{ control, name: 'paymentStatus' }}
+                />
+
+                <InputField
+                  type="text"
+                  label="Tracking ID"
+                  placeholder="Enter tracking number"
+                  controllerProps={{ control, name: 'trackingId' }}
+                />
+
+                <InputField
+                  type="textarea"
+                  label="Order Note"
+                  placeholder="Add a comment for the user"
+                  rows={3}
+                  controllerProps={{ control, name: 'note' }}
+                />
               </CardBody>
             </Card>
 
-            <Card>
-              <CardBody className="space-y-6 p-6">
-                <h1 className="mb-2 font-bold uppercase text-xs text-foreground-500">
+            {/* Timeline */}
+            <Card shadow="sm">
+              <CardBody className="p-6 space-y-6">
+                <h3 className="font-bold uppercase text-xs text-foreground-500">
                   Order Timeline
-                </h1>
+                </h3>
                 <div className="flex items-start space-x-3">
                   <LuCalendar className="h-5 w-5 text-gray-400 mt-0.5" />
                   <div>
                     <p className="text-xs text-gray-500 font-bold uppercase">
                       Placed
                     </p>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 text-sm">
                       {moment(order.createdAt).format(
                         'MMM D, YYYY [at] hh:mm A'
                       )}
@@ -363,7 +438,7 @@ const OrderSection = () => {
                       <p className="text-xs text-gray-500 font-bold uppercase">
                         Processed
                       </p>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-gray-900 text-sm">
                         {moment(order.orderAudit.processedAt).format(
                           'MMM D, YYYY [at] hh:mm A'
                         )}
@@ -378,7 +453,7 @@ const OrderSection = () => {
                       <p className="text-xs text-gray-500 font-bold uppercase">
                         In Transit
                       </p>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-gray-900 text-sm">
                         {moment(order.orderAudit.inTransitAt).format(
                           'MMM D, YYYY [at] hh:mm A'
                         )}
@@ -393,7 +468,7 @@ const OrderSection = () => {
                       <p className="text-xs text-gray-500 font-bold uppercase">
                         Delivered
                       </p>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-gray-900 text-sm">
                         {moment(order.orderAudit.deliveredAt).format(
                           'MMM D, YYYY [at] hh:mm A'
                         )}
@@ -408,7 +483,7 @@ const OrderSection = () => {
                       <p className="text-xs text-gray-500 font-bold uppercase">
                         Cancelled
                       </p>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-gray-900 text-sm">
                         {moment(order.orderAudit.cancelledAt).format(
                           'MMM D, YYYY [at] hh:mm A'
                         )}
@@ -418,17 +493,6 @@ const OrderSection = () => {
                 )}
               </CardBody>
             </Card>
-
-            {order.note && (
-              <Card>
-                <CardBody className="p-6">
-                  <h1 className="mb-2 font-bold uppercase text-xs text-foreground-500">
-                    Order Note
-                  </h1>
-                  <p className="text-sm text-gray-600">{order.note}</p>
-                </CardBody>
-              </Card>
-            )}
           </div>
         </div>
       </div>
@@ -436,4 +500,4 @@ const OrderSection = () => {
   )
 }
 
-export default OrderSection
+export default OrderDetailSection

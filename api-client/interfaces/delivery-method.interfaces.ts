@@ -3,6 +3,7 @@ export interface IDeliveryMethod {
   name: string
   fee: number
   estimatedDeliveryTime: string
+  description: string
   isActive: boolean
   visibility: boolean
   createdAt: string

@@ -4,7 +4,7 @@ import {
   CardHeader,
   Radio,
   RadioGroup,
-  Spinner,
+  Skeleton,
 } from '@heroui/react'
 import { LuTruck } from 'react-icons/lu'
 import { currencyFormatter } from '@/utils/currency-formatter'
@@ -28,8 +28,23 @@ const DeliveryMethodSection = ({
   if (deliveryMethodsLoading) {
     return (
       <Card className="p-3">
-        <CardBody className="flex justify-center items-center py-8">
-          <Spinner label="Loading delivery methods..." />
+        <CardHeader className="pb-0 text-xl font-bold flex items-center gap-2">
+          <Skeleton className="rounded-lg">
+            <div className="h-8 w-48 bg-default-300"></div>
+          </Skeleton>
+        </CardHeader>
+        <CardBody className="space-y-4 pt-4">
+          {[1, 2].map((i) => (
+            <Card key={i} className="border-2 border-default-200 p-4">
+              <div className="flex justify-between items-center">
+                <div className="space-y-2 flex-1">
+                  <Skeleton className="rounded-lg w-1/3 h-5" />
+                  <Skeleton className="rounded-lg w-1/2 h-4" />
+                </div>
+                <Skeleton className="rounded-lg w-16 h-6" />
+              </div>
+            </Card>
+          ))}
         </CardBody>
       </Card>
     )

@@ -119,13 +119,13 @@ const AddEditAddressModal = ({
         <InputField
           type="text"
           label="City"
-          placeholder="Ikeja"
+          placeholder="Asokoro"
           controllerProps={{ control, name: 'city' }}
         />
         <InputField
           type="text"
           label="State"
-          placeholder="Lagos"
+          placeholder="Abuja"
           controllerProps={{ control, name: 'state' }}
         />
 

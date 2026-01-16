@@ -4,6 +4,8 @@ import useCart from '@/hooks/useCart'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   addToast,
+  BreadcrumbItem,
+  Breadcrumbs,
   Button,
   Card,
   CardBody,
@@ -13,6 +15,7 @@ import {
 } from '@heroui/react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { FC, useState } from 'react'
 import { FaWhatsapp } from 'react-icons/fa'
 import {
@@ -61,6 +64,31 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
       animate={{ opacity: 1 }}
       className="max-w-6xl mx-auto p-6 md:p-12 min-h-[80vh]"
     >
+      <div className="mb-8">
+        <Breadcrumbs
+          size="sm"
+          itemClasses={{
+            item: 'text-neutral-500 font-medium',
+            separator: 'text-neutral-300',
+          }}
+        >
+          <BreadcrumbItem>
+            <Link href="/">Home</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Link href="/collections">Collections</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Link href={`/collections/${product.category.slug}`}>
+              {product.category.name}
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem className="text-primary font-bold">
+            {product.name}
+          </BreadcrumbItem>
+        </Breadcrumbs>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-16">
         {/* Left Column: Single Image */}
         <motion.div
@@ -220,6 +248,9 @@ const ProductDetails: FC<ProductDetailsProps> = ({ product }) => {
 export const ProductDetailsSkeleton = () => {
   return (
     <div className="max-w-6xl mx-auto p-6 md:p-12 min-h-[80vh]">
+      <div className="mb-8">
+        <Skeleton className="w-64 h-5 rounded-lg" />
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
         <Skeleton className="rounded-3xl aspect-square" />
         <div className="flex flex-col justify-center space-y-8">
