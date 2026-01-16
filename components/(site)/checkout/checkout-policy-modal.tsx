@@ -67,7 +67,8 @@ const CheckoutPolicyModal = ({
               color="primary"
               variant="ghost"
               fullWidth
-              onPress={() => setIsOpen(false)}
+              as={Link}
+              href={'/portal/orders'}
               className="flex-1"
             >
               View Orders

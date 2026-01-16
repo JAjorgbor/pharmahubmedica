@@ -57,7 +57,7 @@ export default function CreateAccountForm() {
     try {
       const { data: res } = await createAccount(data)
       Cookies.set('portalAccessToken', res.accessToken)
-      Cookies.set('portalUserId', res.user._id)
+      Cookies.set('portalUserId', res.user._id, { expires: 60 })
       console.log(res)
 
       router.push(callbackUrl)

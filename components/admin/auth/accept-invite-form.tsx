@@ -49,8 +49,8 @@ export default function AcceptInviteForm() {
         password: data.password,
       })
 
-      Cookies.set('adminAccessToken', res.accessToken)
-      Cookies.set('adminUserId', res.user._id)
+      Cookies.set('adminAccessToken', res.accessToken, { expires: 60 })
+      Cookies.set('adminUserId', res.user._id, { expires: 60 })
 
       addToast({
         title: 'Invite accepted successfully! Welcome aboard.',

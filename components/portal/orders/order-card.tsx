@@ -108,7 +108,15 @@ const OrderCard = ({ order }: { order: IOrder }) => {
             >
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <LuPackage className="text-gray-400" size={24} />
+                  {item.productImage ? (
+                    <img
+                      src={item.productImage?.url}
+                      alt={item.productName}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <LuPackage className="text-gray-400" size={24} />
+                  )}
                 </div>
                 <div className="flex-1">
                   <p className="font-bold">{item.productName}</p>

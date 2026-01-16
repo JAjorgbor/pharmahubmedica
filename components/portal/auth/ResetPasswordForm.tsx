@@ -59,7 +59,7 @@ export default function ResetPasswordForm() {
 
       setKeepLoading(true)
       Cookies.set('portalAccessToken', res.accessToken)
-      Cookies.set('portalUserId', res.user._id)
+      Cookies.set('portalUserId', res.user._id, { expires: 60 })
 
       addToast({
         title: 'Password reset successfully!',

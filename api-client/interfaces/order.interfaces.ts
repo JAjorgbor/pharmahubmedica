@@ -7,6 +7,10 @@ export interface IOrderItem {
   quantity: number
   price: number
   amount: number
+  productImage?: {
+    url: string
+    key: string
+  }
 }
 
 export interface IOrder {

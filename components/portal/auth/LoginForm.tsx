@@ -42,7 +42,9 @@ export default function LoginForm() {
     try {
       const { data: res } = await login(data)
       Cookies.set('portalAccessToken', res.accessToken)
-      Cookies.set('portalUserId', res.user._id)
+      Cookies.set('portalUserId', res.user._id, {
+        expires: 60,
+      })
 
       router.push(callbackUrl)
       setKeepLoading(true)
