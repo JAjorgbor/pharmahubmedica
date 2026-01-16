@@ -25,6 +25,8 @@ import { useGetAdminOrder } from '@/hooks/requests/admin/useAdminOrders'
 import { adminOrderRequests } from '@/api-client/admin/requests/order.requests'
 import moment from 'moment'
 import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+import UpdateOrderProductsModal from './update-order-products-modal'
+import { capitalCase } from 'change-case'
 
 const orderUpdateSchema = z.object({
   orderStatus: z.enum(['processing', 'in-transit', 'delivered', 'cancelled']),
@@ -57,6 +59,7 @@ const OrderDetailSection = () => {
     useGetAdminOrder(orderId)
 
   const [isUpdating, setIsUpdating] = useState(false)
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false)
 
   const {
     control,
@@ -153,7 +156,7 @@ const OrderDetailSection = () => {
                   variant="flat"
                   className="font-semibold uppercase"
                 >
-                  {order.orderStatus}
+                  {capitalCase(order.orderStatus)}
                 </Chip>
               </div>
               <p className="text-gray-600">
@@ -175,6 +178,15 @@ const OrderDetailSection = () => {
             >
               Save Changes
             </Button>
+            {order.orderStatus === 'processing' && (
+              <Button
+                color="secondary"
+                startContent={<LuPackage />}
+                onPress={() => setIsProductModalOpen(true)}
+              >
+                Update Products
+              </Button>
+            )}
           </div>
         </div>
 
@@ -504,6 +516,14 @@ const OrderDetailSection = () => {
           </div>
         </div>
       </div>
+
+      <UpdateOrderProductsModal
+        isOpen={isProductModalOpen}
+        onClose={() => setIsProductModalOpen(false)}
+        orderId={orderId}
+        currentProducts={order.products}
+        onSuccess={mutateOrder}
+      />
     </div>
   )
 }

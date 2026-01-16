@@ -23,4 +23,16 @@ export const adminOrderRequests = {
       url: `/admin/orders/${orderId}`,
       data,
     }),
+
+  updateOrderProducts: (
+    orderId: string,
+    products: { productId: string; quantity: number }[]
+  ) =>
+    adminRequestAdapter({
+      method: 'PATCH',
+      url: `/admin/orders/${orderId}/products`,
+      data: { products },
+    }),
 }
+
+export default adminOrderRequests

@@ -107,7 +107,7 @@ export default function LoginForm() {
       <div className="pt-2 text-center text-sm text-muted-foreground">
         New to PharmaHub?{' '}
         <Link
-          href="/portal/register"
+          href="/portal/create-account"
           className="font-bold text-primary hover:text-primary/80 transition-colors"
         >
           Create an account

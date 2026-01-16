@@ -24,7 +24,7 @@ type AddressFormData = z.infer<typeof addressSchema>
 interface AddEditAddressModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (data: any) => void
+  onSubmit: (data: any) => Promise<void>
   initialData?: IDeliveryAddress
 }
 
@@ -64,8 +64,8 @@ const AddEditAddressModal = ({
     }
   }, [isOpen, initialData, reset])
 
-  const onFormSubmit = (data: AddressFormData) => {
-    onSubmit({ ...initialData, ...data }) // Maintain ID if editing
+  const onFormSubmit = async (data: AddressFormData) => {
+    await onSubmit({ ...initialData, ...data }) // Maintain ID if editing
     onClose()
   }
 

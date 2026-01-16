@@ -17,11 +17,25 @@ import { useEffect, useState } from 'react'
 import { FaWhatsapp } from 'react-icons/fa'
 import { FiArrowRight } from 'react-icons/fi'
 import { LuMinus, LuPlus, LuTrash2, LuShoppingBag } from 'react-icons/lu'
+import Cookies from 'js-cookie'
+import LoginNoticeModal from './login-notice-modal'
+import { useRouter } from 'next/navigation'
 
 const CartSection = () => {
   const { items, clearCart } = useCart()
+  const router = useRouter()
+  const [isLoginNoticeOpen, setIsLoginNoticeOpen] = useState(false)
 
   const cartTotal = items.reduce((acc, item) => acc + item.amount, 0)
+
+  const handleProceedToCheckout = () => {
+    const userId = Cookies.get('portalUserId')
+    if (userId) {
+      router.push('/checkout')
+    } else {
+      setIsLoginNoticeOpen(true)
+    }
+  }
 
   if (items.length === 0) {
     return (
@@ -101,8 +115,7 @@ const CartSection = () => {
                   fullWidth
                   endContent={<FiArrowRight size={18} />}
                   color="primary"
-                  as={Link}
-                  href="/checkout"
+                  onPress={handleProceedToCheckout}
                 >
                   Proceed to Checkout
                 </Button>
@@ -120,6 +133,11 @@ const CartSection = () => {
           </CardBody>
         </Card>
       </div>
+
+      <LoginNoticeModal
+        isOpen={isLoginNoticeOpen}
+        setIsOpen={setIsLoginNoticeOpen}
+      />
     </div>
   )
 }

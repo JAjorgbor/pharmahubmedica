@@ -48,7 +48,7 @@ const CollectionProductsSection = ({
   const subcategorySlugs = searchParams.getAll('subcategories')
   const paramsFilter = {
     page: Number(page) || 1,
-    limit: 2,
+    limit: 10,
     minPrice: minPrice ? Number(minPrice) : undefined,
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
     subcategories: subcategorySlugs,

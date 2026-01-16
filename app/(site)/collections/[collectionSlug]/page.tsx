@@ -10,7 +10,6 @@ export default async function CollectionPage({
   searchParams: Promise<{ page: string; minPrice: string; maxPrice: string }>
 }) {
   const paramsData = await params
-  console.log(paramsData)
   const searchParamsData = await searchParams
   return (
     <>
