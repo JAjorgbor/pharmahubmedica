@@ -23,7 +23,6 @@ const LoginNoticeModal = ({ isOpen, setIsOpen }: LoginNoticeModalProps) => {
           <Button
             color="primary"
             fullWidth
-            size="lg"
             className="font-semibold"
             as={Link}
             href="/portal/create-account?callback=/checkout"
@@ -35,7 +34,6 @@ const LoginNoticeModal = ({ isOpen, setIsOpen }: LoginNoticeModalProps) => {
             color="primary"
             variant="bordered"
             fullWidth
-            size="lg"
             className="font-semibold"
             as={Link}
             href="/portal?callback=/checkout"

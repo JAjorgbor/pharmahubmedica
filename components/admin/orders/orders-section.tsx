@@ -30,6 +30,7 @@ import {
   LuPlus,
 } from 'react-icons/lu'
 import { useGetAdminOrders } from '@/hooks/requests/admin/useAdminOrders'
+import { referralPartnerProfessions } from '@/library/config'
 
 const columnHelper = createColumnHelper<IOrder>()
 
@@ -130,22 +131,29 @@ const OrdersSection = () => {
           return <div>{currencyFormatter(item.transaction.totalAmount)}</div>
         },
       }),
-      columnHelper.accessor('referralDetails.referralPartner', {
+      columnHelper.accessor('referralDetails', {
         id: 'referrer',
         header: 'Referrer',
-        cell: ({ row: { original: item } }) => {
-          const referral = item.referralDetails as any
+        cell: ({ getValue }) => {
           return (
             <div className="space-y-1">
-              {referral?.referralPartner ? (
+              {getValue()?.referralPartner ? (
                 <>
-                  <p className="text-xs font-semibold">Partner</p>
-                  <p className="text-xs text-foreground-600">
-                    ID: {referral.referralPartner}
+                  <p className="text-xs font-semibold">
+                    {
+                      referralPartnerProfessions[
+                        getValue()?.referralPartner.profession
+                      ]
+                    }{' '}
+                    {getValue()?.referralPartner.user.firstName}{' '}
+                    {getValue()?.referralPartner.user.lastName}
                   </p>
-                  {referral.commission && (
+                  <p className="text-xs text-foreground-600">
+                    Code: {getValue()?.referralPartner.referralCode}
+                  </p>
+                  {getValue()?.commission && (
                     <p className="text-xs text-success">
-                      Comm: {currencyFormatter(referral.commission.amount)}
+                      Comm: {currencyFormatter(getValue()?.commission.amount)}
                     </p>
                   )}
                 </>
@@ -193,7 +201,7 @@ const OrdersSection = () => {
                   if (customer?.phoneNumber)
                     window.open(
                       `https://wa.me/${customer.phoneNumber}`,
-                      '_blank'
+                      '_blank',
                     )
                 }}
               >
@@ -204,7 +212,7 @@ const OrdersSection = () => {
         ),
       }),
     ],
-    []
+    [],
   )
 
   const counts = useMemo(() => {
@@ -342,7 +350,7 @@ const OrdersSection = () => {
                             table
                               .getColumn('orderStatus')
                               ?.setFilterValue(
-                                value === 'all' ? undefined : value
+                                value === 'all' ? undefined : value,
                               )
                             setStatusFilter(value)
                           }}
@@ -364,7 +372,7 @@ const OrdersSection = () => {
                             table
                               .getColumn('paymentStatus')
                               ?.setFilterValue(
-                                value === 'all' ? undefined : value
+                                value === 'all' ? undefined : value,
                               )
                             setPaymentStatusFilter(value)
                           }}

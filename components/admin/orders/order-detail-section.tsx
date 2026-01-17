@@ -1,14 +1,18 @@
 'use client'
 
-import { currencyFormatter } from '@/utils/currency-formatter'
-import { Button, Card, CardBody, Chip, Spinner, addToast } from '@heroui/react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { adminOrderRequests } from '@/api-client/admin/requests/order.requests'
 import InputField from '@/components/elements/input-field'
+import { useGetAdminOrder } from '@/hooks/requests/admin/useAdminOrders'
+import { currencyFormatter } from '@/utils/currency-formatter'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+import { Button, Card, CardBody, Chip, Spinner, addToast } from '@heroui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { capitalCase } from 'change-case'
+import moment from 'moment'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { FaWhatsapp } from 'react-icons/fa'
 import {
   LuCalendar,
@@ -17,16 +21,12 @@ import {
   LuCircleX,
   LuClock,
   LuPackage,
-  LuUserCheck,
   LuPrinter,
   LuSave,
 } from 'react-icons/lu'
-import { useGetAdminOrder } from '@/hooks/requests/admin/useAdminOrders'
-import { adminOrderRequests } from '@/api-client/admin/requests/order.requests'
-import moment from 'moment'
-import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+import { z } from 'zod'
 import UpdateOrderProductsModal from './update-order-products-modal'
-import { capitalCase } from 'change-case'
+import OrderReferralDetails from '@/components/admin/orders/order-referral-details'
 
 const orderUpdateSchema = z.object({
   orderStatus: z.enum(['processing', 'in-transit', 'delivered', 'cancelled']),
@@ -60,6 +60,8 @@ const OrderDetailSection = () => {
 
   const [isUpdating, setIsUpdating] = useState(false)
   const [isProductModalOpen, setIsProductModalOpen] = useState(false)
+  const [isReferralUpdating, setIsReferralUpdating] = useState(false)
+  const [referralStatus, setReferralStatus] = useState<string>('')
 
   const {
     control,
@@ -178,15 +180,6 @@ const OrderDetailSection = () => {
             >
               Save Changes
             </Button>
-            {order.orderStatus === 'processing' && (
-              <Button
-                color="secondary"
-                startContent={<LuPackage />}
-                onPress={() => setIsProductModalOpen(true)}
-              >
-                Update Products
-              </Button>
-            )}
           </div>
         </div>
 
@@ -195,11 +188,23 @@ const OrderDetailSection = () => {
             {/* Order Items */}
             <Card>
               <CardBody className="p-6">
-                <div className="mb-4">
-                  <h3 className="font-semibold text-lg">Order Items</h3>
-                  <p className="text-sm text-foreground-500">
-                    Products in this order
-                  </p>
+                <div className="mb-4 flex justify-between flex-wrap gap-5 items-center">
+                  <div className="">
+                    <h3 className="font-semibold text-lg">Order Items</h3>
+                    <p className="text-sm text-foreground-500">
+                      Products in this order
+                    </p>
+                  </div>
+                  {order.orderStatus === 'processing' && (
+                    <Button
+                      color="secondary"
+                      size="sm"
+                      startContent={<LuPackage />}
+                      onPress={() => setIsProductModalOpen(true)}
+                    >
+                      Update Products
+                    </Button>
+                  )}
                 </div>
 
                 <div className="space-y-4">
@@ -208,7 +213,7 @@ const OrderDetailSection = () => {
                       key={index}
                       className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 pb-4 border-b border-b-foreground-200 last:border-0"
                     >
-                      <div className="relative h-16 w-16 rounded-lg overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center border">
+                      <div className="relative h-16 w-16 rounded-lg overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center ">
                         {item.productImage ? (
                           <img
                             src={item.productImage?.url}
@@ -246,7 +251,7 @@ const OrderDetailSection = () => {
                       {currencyFormatter(
                         order.transaction.subTotal ||
                           order.transaction.totalAmount -
-                            (order.transaction.deliveryFee || 0)
+                            (order.transaction.deliveryFee || 0),
                       )}
                     </span>
                   </div>
@@ -310,7 +315,7 @@ const OrderDetailSection = () => {
                       as="a"
                       href={`https://wa.me/${toWhatsAppNumber(
                         order.customer.phoneNumber?.replace(/\D/g, ''),
-                        'NG'
+                        'NG',
                       )}`}
                       target="_blank"
                       color="success"
@@ -359,38 +364,7 @@ const OrderDetailSection = () => {
             </div>
 
             {/* Referral Info */}
-            {order.referralDetails?.referralPartner && (
-              <Card className="border-green-200 bg-green-50 shadow-sm">
-                <CardBody className="p-6">
-                  <div className="flex flex-col mb-4">
-                    <h1 className="flex items-center space-x-2 text-green-900 font-bold">
-                      <LuUserCheck className="h-5 w-5" />
-                      <span>Referral Applied</span>
-                    </h1>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-green-700 uppercase font-semibold">
-                        Partner ID
-                      </p>
-                      <p className="font-medium text-green-900">
-                        {order.referralDetails.referralPartner}
-                      </p>
-                    </div>
-                    {order.transaction.discountCode && (
-                      <div>
-                        <p className="text-xs text-green-700 uppercase font-semibold">
-                          Discount Code
-                        </p>
-                        <p className="font-mono text-sm font-medium text-green-900 uppercase">
-                          {order.transaction.discountCode}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </CardBody>
-              </Card>
-            )}
+            <OrderReferralDetails orderId={orderId} />
           </div>
 
           <div className="space-y-6">
@@ -446,7 +420,7 @@ const OrderDetailSection = () => {
                     </p>
                     <p className="font-medium text-gray-900 text-sm">
                       {moment(order.createdAt).format(
-                        'MMM D, YYYY [at] hh:mm A'
+                        'MMM D, YYYY [at] hh:mm A',
                       )}
                     </p>
                   </div>
@@ -460,7 +434,7 @@ const OrderDetailSection = () => {
                       </p>
                       <p className="font-medium text-gray-900 text-sm">
                         {moment(order.orderAudit.processedAt).format(
-                          'MMM D, YYYY [at] hh:mm A'
+                          'MMM D, YYYY [at] hh:mm A',
                         )}
                       </p>
                     </div>
@@ -475,7 +449,7 @@ const OrderDetailSection = () => {
                       </p>
                       <p className="font-medium text-gray-900 text-sm">
                         {moment(order.orderAudit.inTransitAt).format(
-                          'MMM D, YYYY [at] hh:mm A'
+                          'MMM D, YYYY [at] hh:mm A',
                         )}
                       </p>
                     </div>
@@ -490,7 +464,7 @@ const OrderDetailSection = () => {
                       </p>
                       <p className="font-medium text-gray-900 text-sm">
                         {moment(order.orderAudit.deliveredAt).format(
-                          'MMM D, YYYY [at] hh:mm A'
+                          'MMM D, YYYY [at] hh:mm A',
                         )}
                       </p>
                     </div>
@@ -505,7 +479,7 @@ const OrderDetailSection = () => {
                       </p>
                       <p className="font-medium text-gray-900 text-sm">
                         {moment(order.orderAudit.cancelledAt).format(
-                          'MMM D, YYYY [at] hh:mm A'
+                          'MMM D, YYYY [at] hh:mm A',
                         )}
                       </p>
                     </div>

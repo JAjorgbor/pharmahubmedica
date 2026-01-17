@@ -189,7 +189,7 @@ const InputField = <T extends FieldValues>({
     fieldState: controllerFieldState,
     formState: controllerFormState,
   } = useController(
-    controllerProps?.control ? controllerProps : defaultControllerProps
+    controllerProps?.control ? controllerProps : defaultControllerProps,
   )
 
   function parseCurrency(value) {
@@ -218,7 +218,7 @@ const InputField = <T extends FieldValues>({
     if (type === 'phoneNumber') {
       const formatted = parsePhoneNumberFromString(
         controllerField.value || '',
-        'NG'
+        'NG',
       )
       const rawValue = formatted?.formatNational()
       setFormattedPhonenumber(rawValue)
@@ -488,7 +488,7 @@ const InputField = <T extends FieldValues>({
             color={color}
             isDisabled={disabled}
             startContent={startContent}
-            listboxProps={{ color: 'primary', variant: 'flat' }}
+            listboxProps={{ color: color, variant: 'flat' }}
             isInvalid={!!controllerFieldState.error?.message}
             endContent={<>{endContent}</>}
             classNames={{
@@ -761,7 +761,7 @@ const InputField = <T extends FieldValues>({
             ? 'flex items-center gap-1 space-y-0'
             : 'space-y-1',
           classNames.base,
-          disabled && 'cursor-not-allowed'
+          disabled && 'cursor-not-allowed',
         )}
       >
         {type == 'radio' ||
@@ -774,29 +774,30 @@ const InputField = <T extends FieldValues>({
               </p>
             )
           : renderLabelLeft
-          ? label && (
-              <p
-                className={cn(
-                  `order-1 text-primary-600 font-light`,
-                  classNames.label
-                )}
-              >
-                {label} {isRequired && <span className="text-red-700">*</span>}
-              </p>
-            )
-          : label && (
-              <p>
-                <span
+            ? label && (
+                <p
                   className={cn(
-                    `text-primary-600 font-light`,
-                    classNames.label
+                    `order-1 text-primary-600 font-light`,
+                    classNames.label,
                   )}
                 >
-                  {label}
-                </span>
-                {isRequired && <span className="text-red-700">*</span>}
-              </p>
-            )}
+                  {label}{' '}
+                  {isRequired && <span className="text-red-700">*</span>}
+                </p>
+              )
+            : label && (
+                <p>
+                  <span
+                    className={cn(
+                      `text-primary-600 font-light`,
+                      classNames.label,
+                    )}
+                  >
+                    {label}
+                  </span>
+                  {isRequired && <span className="text-red-700">*</span>}
+                </p>
+              )}
         <div className={`relative ${type !== 'passCode' ? 'flex' : ''}`}>
           {startContent && startContentPlacement == 'outside' && (
             <div className="bg-white grid place-items-center px-2.5 text-nevada">

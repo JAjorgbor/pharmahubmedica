@@ -3,6 +3,8 @@
 /* Note: You may need to change the path to fit your project structure */
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 
+@source inline("{text,bg,border}-{primary,success,warning,danger}-{500,600,700,900}");
+
 button {
   @apply cursor-pointer;
 }

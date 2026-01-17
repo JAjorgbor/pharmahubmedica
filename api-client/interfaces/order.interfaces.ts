@@ -1,3 +1,4 @@
+import { IReferralPartner } from '@/api-client/interfaces/referral-partner.interfaces'
 import { IDeliveryAddress } from './delivery-address.interfaces'
 import { IDeliveryMethod } from './delivery-method.interfaces'
 
@@ -43,12 +44,12 @@ export interface IOrder {
   note?: string
   trackingId?: string
   referralDetails?: {
-    referralPartner: string
+    referralPartner: IReferralPartner
     commission: {
       rate: number
       rateType: 'percentage' | 'fixed'
       amount: number
-      status: 'paid' | 'pending' | 'canceled'
+      status: 'paid' | 'pending' | 'cancelled'
       note: string
     }
   }
@@ -68,4 +69,6 @@ export interface IUpdateOrderStatus {
   paymentStatus?: IOrder['paymentStatus']
   trackingId?: string
   note?: string
+  referralCommissionStatus?: 'paid' | 'pending' | 'cancelled'
+  referralCommissionNote?: string
 }
