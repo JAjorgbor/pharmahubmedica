@@ -2,7 +2,7 @@
 
 import { setNewPassword } from '@/api-client/portal/requests/auth.requests'
 import InputField from '@/components/elements/input-field'
-import { addToast, Button } from '@heroui/react'
+import { addToast, Button, Card, CardBody } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Cookies from 'js-cookie'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -80,38 +80,42 @@ export default function ResetPasswordForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-      <InputField
-        type="password"
-        label="Password"
-        placeholder="••••••••"
-        controllerProps={{
-          name: 'password',
-          control,
-        }}
-        isRequired
-      />
+    <Card className="max-w-sm mx-auto">
+      <CardBody className="p-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <InputField
+            type="password"
+            label="Password"
+            placeholder="••••••••"
+            controllerProps={{
+              name: 'password',
+              control,
+            }}
+            isRequired
+          />
 
-      <InputField
-        type="password"
-        label="Confirm Password"
-        placeholder="••••••••"
-        controllerProps={{
-          name: 'confirmPassword',
-          control,
-        }}
-        isRequired
-      />
+          <InputField
+            type="password"
+            label="Confirm Password"
+            placeholder="••••••••"
+            controllerProps={{
+              name: 'confirmPassword',
+              control,
+            }}
+            isRequired
+          />
 
-      <Button
-        type="submit"
-        color="primary"
-        className="w-full py-6 text-base font-semibold"
-        isLoading={isSubmitting || keepLoading}
-      >
-        <MdOutlineLockReset className="h-6 w-6" />
-        Reset Password
-      </Button>
-    </form>
+          <Button
+            type="submit"
+            color="primary"
+            className="w-full py-6 text-base font-semibold"
+            isLoading={isSubmitting || keepLoading}
+          >
+            <MdOutlineLockReset className="h-6 w-6" />
+            Reset Password
+          </Button>
+        </form>
+      </CardBody>
+    </Card>
   )
 }

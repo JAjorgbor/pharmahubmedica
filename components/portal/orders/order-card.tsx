@@ -67,11 +67,11 @@ const OrderCard = ({ order }: { order: IOrder }) => {
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-2">
           <div>
             <h3 className="font-semibold text-lg">{order.orderNumber}</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-foreground-500">
               Ordered on {moment(order.createdAt).format('D MMMM, YYYY')}
             </p>
             {order.orderAudit.deliveredAt !== 'not-available' && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground-500">
                 Delivered on{' '}
                 {moment(order.orderAudit.deliveredAt).format('D MMMM, YYYY')}
               </p>

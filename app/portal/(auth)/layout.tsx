@@ -25,7 +25,7 @@ const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
         <div className="z-20 relative">
           <Link href="/">
             <Image
-              src="/logo.svg"
+              src="/png-transparent-logo.png"
               alt="PharmaHub Medica Logo"
               width={200}
               height={100}

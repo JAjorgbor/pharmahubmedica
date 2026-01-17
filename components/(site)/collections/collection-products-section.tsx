@@ -94,7 +94,7 @@ const CollectionProductsSection = ({
         <p className="md:text-lg z-10 relative">{category?.description}</p>
         <div className="bg-primary/40 absolute inset-0 w-full-h-full " />
       </div>
-      <div className="flex justify-between lg:justify-end items-center flex-wrap gap-4 !mb-0">
+      <div className="flex justify-between lg:justify-end items-center flex-wrap gap-4 ">
         <Button
           className="lg:hidden"
           startContent={<LuFilter />}
@@ -146,7 +146,7 @@ const CollectionProductsSection = ({
                   page={paramsFilter.page}
                   onChange={(page) => {
                     const paramValues = new URLSearchParams(
-                      searchParams.toString()
+                      searchParams.toString(),
                     )
 
                     paramValues.delete('page')
@@ -154,7 +154,7 @@ const CollectionProductsSection = ({
                     router.replace(
                       `/collections/${
                         params.collectionSlug
-                      }?${paramValues.toString()}`
+                      }?${paramValues.toString()}`,
                     )
                   }}
                 />
@@ -188,7 +188,7 @@ const Filter: FC<FilterProps> = ({ isOpen, setIsOpen, category, maxPrice }) => {
 
   const [priceFilter, setPriceFilter] = useState([defaultMin, defaultMax])
   const [subcategorySlugs, setSubcategorySlugs] = useState<string[]>(
-    paramSubcategorySlugs || []
+    paramSubcategorySlugs || [],
   )
 
   const handleFilterApply = () => {

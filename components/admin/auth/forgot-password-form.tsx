@@ -58,7 +58,7 @@ export default function ForgotPasswordForm() {
           the link in the email to reset your password.
         </p>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 w-full text-left mt-2">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-foreground-500">
             <span className="font-medium text-foreground">Tip:</span> The link
             expires after a short time. If you don't see the email, check your
             spam folder.
@@ -78,7 +78,7 @@ export default function ForgotPasswordForm() {
 
   return (
     <div className="w-full">
-      <div className="!mb-0">
+      <div className="">
         <Link
           href="/admin"
           className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"

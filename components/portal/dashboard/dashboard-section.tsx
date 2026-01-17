@@ -133,7 +133,7 @@ const DashboardSection = () => {
           <h1 className="text-3xl font-bold text-primary">
             Welcome back, Jane Doe!
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-foreground-500">
             Manage your orders and account settings
           </p>
         </div>
@@ -144,7 +144,7 @@ const DashboardSection = () => {
               <div className="flex items-center space-x-2">
                 <LuShoppingBag className="h-8 w-8 text-primary" />
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="text-sm font-medium text-foreground-500">
                     Total Orders
                   </p>
                   <p className="text-2xl font-bold">14</p>
@@ -158,7 +158,7 @@ const DashboardSection = () => {
               <div className="flex items-center space-x-2">
                 <LuClock className="h-8 w-8 text-yellow-600" />
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="text-sm font-medium text-foreground-500">
                     Pending Orders
                   </p>
                   <p className="text-2xl font-bold">4</p>
@@ -172,7 +172,7 @@ const DashboardSection = () => {
               <div className="flex items-center space-x-2">
                 <LuCircleCheckBig className="h-8 w-8 text-green-600" />
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="text-sm font-medium text-foreground-500">
                     Completed Orders
                   </p>
                   <p className="text-2xl font-bold">5</p>
@@ -186,7 +186,7 @@ const DashboardSection = () => {
               <div className="flex items-center space-x-2">
                 <LuPackage className="h-8 w-8 text-primary" />
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="text-sm font-medium text-foreground-500">
                     Total Spent
                   </p>
                   <p className="text-2xl font-bold">
@@ -233,11 +233,11 @@ const DashboardSection = () => {
                           </div>
                           <div>
                             <p className="font-medium">{order.id}</p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-foreground-500">
                               {order.items.length} item
                               {order.items.length > 1 ? 's' : ''}
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-foreground-500">
                               {new Date(order.orderDate).toLocaleDateString()}
                             </p>
                           </div>
@@ -263,9 +263,9 @@ const DashboardSection = () => {
               </div>
             ) : (
               <div className="text-center py-8">
-                <FaShoppingBag className="mx-auto text-muted-foreground" />{' '}
-                size={40}
-                <p className="mt-2 text-muted-foreground">No orders yet</p>
+                <FaShoppingBag className="mx-auto text-foreground-500" /> size=
+                {40}
+                <p className="mt-2 text-foreground-500">No orders yet</p>
                 <Link href="/collections">
                   <Button className="mt-4 bg-primary hover:bg-blue-800">
                     Start Shopping
@@ -283,7 +283,7 @@ const DashboardSection = () => {
             </CardHeader>
             <CardBody className="text-center">
               <h3 className="font-semibold mb-2">Browse Products</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-foreground-500 mb-4">
                 Explore our wide range of medicines and health products
               </p>
             </CardBody>
@@ -304,7 +304,7 @@ const DashboardSection = () => {
             </CardHeader>
             <CardBody className="text-center">
               <h3 className="font-semibold mb-2">WhatsApp Orders</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-foreground-500 mb-4">
                 Place orders directly through WhatsApp for quick service
               </p>
             </CardBody>
@@ -321,7 +321,7 @@ const DashboardSection = () => {
             </CardHeader>
             <CardBody className="text-center">
               <h3 className="font-semibold mb-2">Order History</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-foreground-500 mb-4">
                 View and track all your previous orders and purchases
               </p>
             </CardBody>

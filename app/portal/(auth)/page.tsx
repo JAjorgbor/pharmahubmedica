@@ -13,10 +13,10 @@ export default function LoginPage() {
   return (
     <div className="h-full flex flex-col items-center justify-center md:p-6">
       <div className="w-full max-w-md space-y-8">
-        <div className="lg:hidden flex justify-center !mb-0">
+        <div className="lg:hidden flex justify-center ">
           <Link href="/">
             <Image
-              src="/logo.svg"
+              src="/png-transparent-logo.png"
               alt="PharmaHub Medica Logo"
               width={200}
               height={100}
@@ -27,21 +27,17 @@ export default function LoginPage() {
         </div>
 
         <div className="space-y-3 text-center flex flex-col items-center justify-center lg:text-left">
-          <h2 className="text-4xl font-bold tracking-tight text-foreground">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground">
             Welcome Back
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-foreground-500">
             Enter your credentials to access your portal
           </p>
         </div>
 
-        <div className="rounded-3xl shadow-xl shadow-primary/5 p-2 bg-white">
-          <div className="overflow-hidden rounded-3xl">
-            <Suspense>
-              <LoginForm />
-            </Suspense>
-          </div>
-        </div>
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   )

@@ -35,13 +35,13 @@ export default function VerifyOtpForm() {
     // Here we would typically call the verify OTP API
     await new Promise((resolve) => setTimeout(resolve, 1000))
     router.push(
-      `/admin/reset-password?email=${encodeURIComponent(email)}&otp=${data.otp}`
+      `/admin/reset-password?email=${encodeURIComponent(email)}&otp=${data.otp}`,
     )
   }
 
   return (
     <div className="w-full">
-      <div className="!mb-0">
+      <div className="">
         <Link
           href="/admin/forgot-password"
           className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"

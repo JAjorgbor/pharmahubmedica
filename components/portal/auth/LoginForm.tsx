@@ -2,7 +2,7 @@
 
 import { login } from '@/api-client/portal/requests/auth.requests'
 import InputField from '@/components/elements/input-field'
-import { addToast, Button } from '@heroui/react'
+import { addToast, Button, Card, CardBody } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
@@ -61,58 +61,62 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
-      <InputField
-        type="email"
-        label="Email Address"
-        placeholder="example@email.com"
-        controllerProps={{
-          name: 'email',
-          control,
-        }}
-        isRequired
-      />
+    <Card className="max-w-sm mx-auto">
+      <CardBody className="p-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <InputField
+            type="email"
+            label="Email Address"
+            placeholder="example@email.com"
+            controllerProps={{
+              name: 'email',
+              control,
+            }}
+            isRequired
+          />
 
-      <div>
-        <InputField
-          type="password"
-          label="Password"
-          placeholder="••••••••"
-          controllerProps={{
-            name: 'password',
-            control,
-          }}
-          isRequired
-        />
-        <div className="flex justify-end mt-2">
-          <Link
-            href="/portal/forgot-password"
-            className="text-sm font-medium text-primary hover:text-blue-700 transition-colors"
+          <div>
+            <InputField
+              type="password"
+              label="Password"
+              placeholder="••••••••"
+              controllerProps={{
+                name: 'password',
+                control,
+              }}
+              isRequired
+            />
+            <div className="flex justify-end mt-2">
+              <Link
+                href="/portal/forgot-password"
+                className="text-sm font-medium text-primary hover:text-blue-700 transition-colors"
+              >
+                Forgot your password?
+              </Link>
+            </div>
+          </div>
+
+          <Button
+            type="submit"
+            color="primary"
+            className="w-full text-base font-semibold"
+            isLoading={isSubmitting || keepLoading}
           >
-            Forgot your password?
-          </Link>
-        </div>
-      </div>
+            <LuLogIn className="mr-2 h-4 w-4" />
+            Sign In to Portal
+          </Button>
 
-      <Button
-        type="submit"
-        color="primary"
-        className="w-full py-6 text-base font-semibold"
-        isLoading={isSubmitting || keepLoading}
-      >
-        <LuLogIn className="mr-2 h-4 w-4" />
-        Sign In to Portal
-      </Button>
-
-      <div className="pt-2 text-center text-sm text-muted-foreground">
-        New to PharmaHub?{' '}
-        <Link
-          href="/portal/create-account"
-          className="font-bold text-primary hover:text-primary/80 transition-colors"
-        >
-          Create an account
-        </Link>
-      </div>
-    </form>
+          <div className="pt-2 text-center text-sm text-foreground-500">
+            New to PharmaHub?{' '}
+            <Link
+              href={`/portal/create-account${callbackUrl ? `?callback=${callbackUrl}` : ''}`}
+              className="font-bold text-primary hover:text-primary/80 transition-colors"
+            >
+              Create an account
+            </Link>
+          </div>
+        </form>
+      </CardBody>
+    </Card>
   )
 }

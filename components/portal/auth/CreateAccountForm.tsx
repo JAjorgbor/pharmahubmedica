@@ -2,7 +2,7 @@
 
 import { createAccount } from '@/api-client/portal/requests/auth.requests'
 import InputField from '@/components/elements/input-field'
-import { addToast, Button, Input } from '@heroui/react'
+import { addToast, Button, Card, CardBody, Input } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -75,107 +75,113 @@ export default function CreateAccountForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-6">
-      <div className="grid lg:grid-cols-2 gap-4">
-        <InputField
-          type="text"
-          label="First Name"
-          isName
-          placeholder="First Name"
-          controllerProps={{
-            name: 'firstName',
-            control,
-          }}
-          isRequired
-        />
+    <Card className="max-w-sm mx-auto">
+      <CardBody className="p-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid lg:grid-cols-2 gap-3">
+            <InputField
+              type="text"
+              label="First Name"
+              isName
+              placeholder="First Name"
+              controllerProps={{
+                name: 'firstName',
+                control,
+              }}
+              isRequired
+            />
 
-        <InputField
-          type="text"
-          label="Last Name"
-          placeholder="Last Name"
-          isName
-          controllerProps={{
-            name: 'lastName',
-            control,
-          }}
-          isRequired
-        />
+            <InputField
+              type="text"
+              label="Last Name"
+              placeholder="Last Name"
+              isName
+              controllerProps={{
+                name: 'lastName',
+                control,
+              }}
+              isRequired
+            />
 
-        <InputField
-          type="email"
-          label="Email Address"
-          placeholder="example@email.com"
-          controllerProps={{
-            name: 'email',
-            control,
-          }}
-          isRequired
-        />
+            <InputField
+              type="email"
+              label="Email Address"
+              placeholder="example@email.com"
+              className="md:col-span-2"
+              controllerProps={{
+                name: 'email',
+                control,
+              }}
+              isRequired
+            />
 
-        <InputField
-          type="phoneNumber"
-          label="Phone Number"
-          placeholder="+234 800 000 0000"
-          controllerProps={{
-            name: 'phoneNumber',
-            control,
-          }}
-          isRequired
-        />
+            <InputField
+              type="phoneNumber"
+              label="WhatsApp Number"
+              placeholder="+234 800 000 0000"
+              className="md:col-span-2"
+              controllerProps={{
+                name: 'phoneNumber',
+                control,
+              }}
+              isRequired
+            />
 
-        <InputField
-          type="password"
-          label="Password"
-          placeholder="••••••••"
-          className="md:col-span-2"
-          controllerProps={{
-            name: 'password',
-            control,
-          }}
-          isRequired
-        />
+            <InputField
+              type="password"
+              label="Password"
+              placeholder="••••••••"
+              className="md:col-span-2"
+              controllerProps={{
+                name: 'password',
+                control,
+              }}
+              isRequired
+            />
 
-        <div className="space-y-1 md:col-span-2">
-          <p>
-            <span className="text-primary-600 font-light relative text-sm text-nevada font-oxygen">
-              Referral Code
-            </span>
-          </p>
-          <Input
+            <div className="space-y-1 md:col-span-2">
+              <p>
+                <span className="text-primary-600 font-light relative text-sm text-nevada font-oxygen">
+                  Referral Code
+                </span>
+              </p>
+              <Input
+                color="primary"
+                variant="bordered"
+                placeholder="ENTER REFERRAL CODE"
+                value={referralCode}
+                isInvalid={!!errors.referralCode}
+                errorMessage={errors.referralCode?.message}
+                {...register('referralCode')}
+                onChange={(e) => {
+                  const value = e.target.value
+                    .toUpperCase()
+                    .replace(/[^A-Z0-9]/g, '')
+
+                  setValue('referralCode', value, { shouldValidate: true })
+                }}
+              />
+            </div>
+          </div>
+          <Button
+            type="submit"
             color="primary"
-            variant="bordered"
-            placeholder="ENTER REFERRAL CODE"
-            value={referralCode}
-            isInvalid={!!errors.referralCode}
-            errorMessage={errors.referralCode?.message}
-            {...register('referralCode')}
-            onChange={(e) => {
-              const value = e.target.value
-                .toUpperCase()
-                .replace(/[^A-Z0-9]/g, '')
-
-              setValue('referralCode', value, { shouldValidate: true })
-            }}
-          />
-        </div>
-      </div>
-      <Button
-        type="submit"
-        color="primary"
-        className="w-full py-6 text-base font-semibold"
-        isLoading={isSubmitting || keepLoading}
-      >
-        Register
-      </Button>
-      <div className="text-center text-sm">
-        Already have an account?{' '}
-        <Link
-          href="/portal"
-          className="font-semibold text-primary hover:underline"
-        >
-          Sign In
-        </Link>
-      </div>
-    </form>
+            className="w-full text-base font-semibold"
+            isLoading={isSubmitting || keepLoading}
+          >
+            Create Account
+          </Button>
+          <div className="text-center text-sm">
+            Already have an account?{' '}
+            <Link
+              href={`/portal${callbackUrl ? `?callback=${callbackUrl}` : ''}`}
+              className="font-semibold text-primary hover:underline"
+            >
+              Sign In
+            </Link>
+          </div>
+        </form>
+      </CardBody>
+    </Card>
   )
 }

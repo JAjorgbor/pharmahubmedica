@@ -60,7 +60,7 @@ axiosInstance.interceptors.response.use(
       const { data } = await refreshClient.post('admin/auth/refresh-tokens')
       if (!data?.accessToken) throw new Error('No access token returned')
 
-      Cookies.set('adminAccessToken', data.accessToken)
+      Cookies.set('adminAccessToken', data.accessToken, { expires: 60 })
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`
       original.headers.Authorization = `Bearer ${data.accessToken}`
 
@@ -70,7 +70,7 @@ axiosInstance.interceptors.response.use(
       redirectToAdminLogin()
       return Promise.reject(error.response)
     }
-  }
+  },
 )
 
 export default axiosInstance

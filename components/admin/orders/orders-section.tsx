@@ -31,6 +31,7 @@ import {
 } from 'react-icons/lu'
 import { useGetAdminOrders } from '@/hooks/requests/admin/useAdminOrders'
 import { referralPartnerProfessions } from '@/library/config'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
 
 const columnHelper = createColumnHelper<IOrder>()
 
@@ -194,18 +195,29 @@ const OrdersSection = () => {
                 Manage Order
               </DropdownItem>
               <DropdownItem
-                key="contact-customer"
+                key="chat-customer"
                 showDivider
                 onPress={() => {
                   const customer = item.customer as any
                   if (customer?.phoneNumber)
                     window.open(
-                      `https://wa.me/${customer.phoneNumber}`,
+                      `https://wa.me/${toWhatsAppNumber(customer.phoneNumber, 'NG')}`,
                       '_blank',
                     )
                 }}
               >
-                Contact Customer
+                Chat with Customer
+              </DropdownItem>
+              <DropdownItem
+                key="call-customer"
+                showDivider
+                onPress={() => {
+                  const customer = item.customer as any
+                  if (customer?.phoneNumber)
+                    window.open(`tel:${customer.phoneNumber}`, '_blank')
+                }}
+              >
+                Call Customer
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>

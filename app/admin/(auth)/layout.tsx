@@ -1,6 +1,8 @@
+'use client'
 import type { FC, ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Card, CardBody } from '@heroui/react'
 
 interface AuthLayoutProps {
   children: ReactNode
@@ -9,21 +11,21 @@ interface AuthLayoutProps {
 const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="!mb-0 flex flex-col items-center">
+      <div className="flex flex-col items-center mb-6">
         <Link href="/">
           <Image
-            src="/logo.svg"
+            src="/png-transparent-logo.png"
             alt="PharmaHub Medica Logo"
-            width={200}
+            width={180}
             height={100}
             className="w-auto"
             priority
           />
         </Link>
       </div>
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-        {children}
-      </div>
+      <Card className="max-w-sm w-full mx-auto">
+        <CardBody className="p-6">{children}</CardBody>
+      </Card>
       <p className="mt-8 text-center text-sm text-gray-400">
         © {new Date().getFullYear()} PharmaHub Medica. All rights reserved.
       </p>
