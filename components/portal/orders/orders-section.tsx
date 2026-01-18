@@ -17,6 +17,7 @@ import OrderCard from '@/components/portal/orders/order-card'
 import Link from 'next/link'
 import { useGetPortalOrders } from '@/hooks/requests/portal/useOrders'
 import Cookies from 'js-cookie'
+import { OrderCardsSkeleton } from '../PortalSkeletons'
 
 const OrdersSection = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -27,8 +28,8 @@ const OrdersSection = () => {
     (order: any) =>
       order.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.products.some((product: any) =>
-        product.productName.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+        product.productName.toLowerCase().includes(searchTerm.toLowerCase()),
+      ),
   )
 
   const getOrdersByStatus = (status: string) => {
@@ -125,9 +126,7 @@ const OrdersSection = () => {
         </Card>
 
         {ordersLoading ? (
-          <div className="flex justify-center p-12">
-            <Spinner label="Loading orders..." />
-          </div>
+          <OrderCardsSkeleton />
         ) : (
           <Tabs
             aria-label="Orders"

@@ -18,6 +18,7 @@ export interface IOrder {
   _id: string
   orderNumber: string
   customer: {
+    _id: string
     firstName: string
     lastName: string
     email: string

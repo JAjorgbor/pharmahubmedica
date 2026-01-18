@@ -1,7 +1,17 @@
 'use client'
+import { IOrder } from '@/api-client/interfaces/order.interfaces'
+import InputField from '@/components/elements/input-field'
+import TableWrapper from '@/components/elements/table-wrapper'
+import {
+  StatsSkeleton,
+  TableSkeleton,
+} from '@/components/portal/PortalSkeletons'
+import {
+  useGetPortalReferredUserDetails,
+  useGetPortalReferredUserOrders,
+} from '@/hooks/requests/portal/useReferralPartner'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import {
-  addToast,
   BreadcrumbItem,
   Breadcrumbs,
   Button,
@@ -9,28 +19,22 @@ import {
   CardBody,
   CardHeader,
   Chip,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Spinner,
+  Skeleton,
 } from '@heroui/react'
-import React, { useMemo, useState } from 'react'
-import { LuChevronLeft, LuCircleCheckBig, LuPackage } from 'react-icons/lu'
-import { IoCashOutline } from 'react-icons/io5'
-import TableWrapper from '@/components/elements/table-wrapper'
-import { FiMoreVertical } from 'react-icons/fi'
-import Link from 'next/link'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
-import InputField from '@/components/elements/input-field'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useMemo, useState } from 'react'
+import { IoCashOutline } from 'react-icons/io5'
 import {
-  useGetPortalReferredUserDetails,
-  useGetPortalReferredUserOrders,
-} from '@/hooks/requests/portal/useReferralPartner'
+  LuChevronLeft,
+  LuCircleCheckBig,
+  LuEye,
+  LuPackage,
+} from 'react-icons/lu'
 
-const columnHelper = createColumnHelper<any>()
+const columnHelper = createColumnHelper<IOrder>()
 
 const ReferralDetailsSection = () => {
   const params = useParams()
@@ -229,14 +233,42 @@ const ReferralDetailsSection = () => {
           </div>
         ),
       }),
+      columnHelper.display({
+        id: 'actions',
+        header: 'Actions',
+        cell: ({ row: { original } }) => (
+          <div className="flex items-center justify-end space-x-2">
+            <Button
+              as={Link}
+              variant="flat"
+              color="primary"
+              size="sm"
+              href={`/portal/referrals/${original.customer._id}/order?orderId=${original._id}`}
+            >
+              <LuEye className="h-4 w-4" />
+              View Order
+            </Button>
+          </div>
+        ),
+      }),
     ],
     [],
   )
 
   if (userLoading || ordersLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Spinner label="Loading referral details..." />
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto p-5 space-y-8">
+          <div className="flex gap-4 items-center">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-8 w-[200px] rounded-lg" />
+              <Skeleton className="h-4 w-[150px] rounded-lg" />
+            </div>
+          </div>
+          <StatsSkeleton />
+          <TableSkeleton />
+        </div>
       </div>
     )
   }

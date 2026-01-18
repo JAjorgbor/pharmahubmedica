@@ -1,7 +1,9 @@
+import { IOrder } from '@/api-client/interfaces/order.interfaces'
 import {
   getPortalReferralProfile,
   getPortalReferrals,
   getPortalReferredUserDetails,
+  getPortalReferredUserOrder,
   getPortalReferredUserOrders,
 } from '@/api-client/portal/requests/referral-partner.requests'
 import useSWR from 'swr'
@@ -71,5 +73,23 @@ export function useGetPortalReferredUserOrders(userId: string) {
     isLoading,
     error,
     mutate,
+  }
+}
+
+export function useGetPortalReferredUserOrder(userId: string, orderId: string) {
+  const { data, error, isLoading, mutate } = useSWR<IOrder>(
+    userId
+      ? `portal/referral-partners/referrals/${userId}/order?orderId=${orderId}`
+      : null,
+    async () => {
+      const { data } = await getPortalReferredUserOrder(userId, orderId)
+      return data.order
+    },
+  )
+  return {
+    order: data,
+    orderLoading: isLoading,
+    orderError: error,
+    mutateOrder: mutate,
   }
 }

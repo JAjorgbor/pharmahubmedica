@@ -14,3 +14,8 @@ export const getPortalReferredUserDetails = (userId: string) =>
 
 export const getPortalReferredUserOrders = (userId: string) =>
   axiosInstance.get(`portal/referral-partners/referrals/${userId}/orders`)
+
+export const getPortalReferredUserOrder = (userId: string, orderId: string) =>
+  axiosInstance.get(
+    `portal/referral-partners/referrals/${userId}/orders/${orderId}`,
+  )

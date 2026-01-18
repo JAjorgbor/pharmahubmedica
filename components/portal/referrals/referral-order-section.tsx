@@ -1,9 +1,14 @@
 'use client'
 
+import { OrderDetailSkeleton } from '@/components/portal/PortalSkeletons'
+import { useGetPortalReferredUserOrder } from '@/hooks/requests/portal/useReferralPartner'
+import { referralPartnerProfessions } from '@/library/config'
+import { cn } from '@/utils/cn'
 import { currencyFormatter } from '@/utils/currency-formatter'
-import { Button, Card, CardBody, Chip, Spinner } from '@heroui/react'
+import { Button, Card, CardBody, Chip } from '@heroui/react'
+import moment from 'moment'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { FaWhatsapp } from 'react-icons/fa'
 import {
   LuCalendar,
@@ -14,15 +19,16 @@ import {
   LuPackage,
   LuUserCheck,
 } from 'react-icons/lu'
-import { useGetPortalOrder } from '@/hooks/requests/portal/useOrders'
-import moment from 'moment'
-import { referralPartnerProfessions } from '@/library/config'
-import { OrderDetailSkeleton } from '@/components/portal/PortalSkeletons'
 
-const OrderSection = () => {
+const ReferralOrderSection = () => {
   const params = useParams()
-  const orderId = params.id as string
-  const { order, orderLoading, orderError } = useGetPortalOrder(orderId)
+  const userId = params.referralId as string
+  const searchParams = useSearchParams()
+  const orderId = searchParams.get('orderId')
+  const { order, orderLoading, orderError } = useGetPortalReferredUserOrder(
+    userId,
+    orderId,
+  )
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -38,6 +44,23 @@ const OrderSection = () => {
         return 'default'
     }
   }
+
+  const getCommissionStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'warning'
+      case 'paid':
+        return 'success'
+      case 'cancelled':
+        return 'danger'
+      default:
+        return 'default'
+    }
+  }
+
+  const commissionStatusColor = getCommissionStatusColor(
+    order?.referralDetails?.commission?.status || '',
+  )
 
   const getPaymentStatusColor = (status: string) => {
     switch (status) {
@@ -130,7 +153,7 @@ const OrderSection = () => {
                 </div>
 
                 <div className="space-y-4">
-                  {order.products.map((item: any, index: number) => (
+                  {order.products?.map((item: any, index: number) => (
                     <div
                       key={index}
                       className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 pb-4 border-b border-b-foreground-200 last:border-0"
@@ -204,23 +227,31 @@ const OrderSection = () => {
             </Card>
 
             {order.referralDetails?.referralPartner && (
-              <Card className="border-green-200 bg-green-50 shadow-sm">
+              <Card
+                className={`border-${commissionStatusColor}-200 bg-${commissionStatusColor}-50 shadow-sm`}
+              >
                 <CardBody className="p-6">
                   <div className="flex flex-col mb-4">
-                    <h1 className="flex items-center space-x-2 text-green-900 font-bold">
+                    <h1
+                      className={`flex items-center space-x-2 text-${commissionStatusColor}-900 font-bold`}
+                    >
                       <LuUserCheck className="h-5 w-5" />
                       <span>Referral Applied</span>
                     </h1>
-                    <p className="text-green-700 text-sm">
+                    <p className={`text-${commissionStatusColor}-700 text-sm`}>
                       This order was placed using a referral code
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs text-green-700 uppercase font-semibold">
+                      <p
+                        className={`text-xs text-${commissionStatusColor}-700 uppercase font-semibold`}
+                      >
                         Referrer
                       </p>
-                      <p className="font-medium text-green-900">
+                      <p
+                        className={`font-medium text-${commissionStatusColor}-900`}
+                      >
                         {
                           referralPartnerProfessions[
                             order.referralDetails.referralPartner.profession
@@ -229,6 +260,75 @@ const OrderSection = () => {
                         {order.referralDetails.referralPartner.user.firstName}{' '}
                         {order.referralDetails.referralPartner.user.lastName}
                       </p>
+                      <div>
+                        <p
+                          className={cn(
+                            'text-xs uppercase font-semibold mt-3',
+                            `text-${commissionStatusColor}-700`,
+                          )}
+                        >
+                          Commission Rate
+                        </p>
+                        <p
+                          className={`font-medium text-sm text-${commissionStatusColor}-900`}
+                        >
+                          {order.referralDetails.commission?.rate}
+                          {order.referralDetails.commission?.rateType ===
+                          'percentage'
+                            ? '%'
+                            : ''}
+                        </p>
+                        <p
+                          className={`text-xs text-${commissionStatusColor}-700`}
+                        >
+                          {order.referralDetails.commission?.rateType ===
+                          'percentage'
+                            ? 'Percentage'
+                            : 'Fixed'}
+                        </p>
+                      </div>
+                      <div>
+                        <p
+                          className={cn(
+                            'text-xs uppercase font-semibold mt-3',
+                            `text-${commissionStatusColor}-700`,
+                          )}
+                        >
+                          Commission Amount
+                        </p>
+                        <p
+                          className={cn(
+                            'uppercase font-medium text-lg ',
+                            `text-${commissionStatusColor}-900`,
+                          )}
+                        >
+                          {currencyFormatter(
+                            order.referralDetails.commission?.amount || 0,
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <p
+                        className={cn(
+                          'text-xs uppercase font-semibold',
+                          `text-${commissionStatusColor}-700`,
+                        )}
+                      >
+                        Commission Status
+                      </p>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                        {order.referralDetails?.commission?.status && (
+                          <Chip
+                            color={commissionStatusColor}
+                            variant="flat"
+                            className="uppercase font-semibold"
+                            size="sm"
+                          >
+                            {order.referralDetails.commission.status}
+                          </Chip>
+                        )}
+                      </div>
                     </div>
                     {order.transaction.discountCode && (
                       <div>
@@ -454,4 +554,4 @@ const OrderSection = () => {
   )
 }
 
-export default OrderSection
+export default ReferralOrderSection
