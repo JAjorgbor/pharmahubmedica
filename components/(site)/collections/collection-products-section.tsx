@@ -124,7 +124,7 @@ const CollectionProductsSection = ({
               description="We couldn't find any products matching your selected filters or search. Try resetting your filters."
               buttonText="Reset Filters"
               onButtonPress={() =>
-                router.replace(`/collections/${params.collectionSlug}`)
+                router.push(`/collections/${params.collectionSlug}`)
               }
             />
           ) : (
@@ -151,7 +151,7 @@ const CollectionProductsSection = ({
 
                     paramValues.delete('page')
                     paramValues.append('page', String(page))
-                    router.replace(
+                    router.push(
                       `/collections/${
                         params.collectionSlug
                       }?${paramValues.toString()}`,
@@ -204,11 +204,11 @@ const Filter: FC<FilterProps> = ({ isOpen, setIsOpen, category, maxPrice }) => {
     params.append('minPrice', String(min))
     params.append('maxPrice', String(max))
 
-    router.replace(`/collections/${category?.slug}?${params.toString()}`)
+    router.push(`/collections/${category?.slug}?${params.toString()}`)
     setIsOpen(false)
   }
   const handleReset = () => {
-    router.replace(`/collections/${category?.slug}`)
+    router.push(`/collections/${category?.slug}`)
     setIsOpen(false)
   }
 

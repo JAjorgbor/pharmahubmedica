@@ -1,14 +1,11 @@
-import {
-  IOrder,
-  IUpdateOrderStatus,
-} from '@/api-client/interfaces/order.interfaces'
 import adminRequestAdapter from '@/api-client/admin/request-adapter'
 
 export const adminOrderRequests = {
-  getOrders: () =>
+  getOrders: (params?: any) =>
     adminRequestAdapter({
       method: 'GET',
       url: '/admin/orders',
+      params,
     }),
 
   getOrder: (orderId: string) =>
@@ -26,7 +23,7 @@ export const adminOrderRequests = {
 
   updateOrderProducts: (
     orderId: string,
-    products: { productId: string; quantity: number }[]
+    products: { productId: string; quantity: number }[],
   ) =>
     adminRequestAdapter({
       method: 'PATCH',

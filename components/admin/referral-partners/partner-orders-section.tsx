@@ -1,6 +1,6 @@
 'use client'
 import TableWrapper from '@/components/elements/table-wrapper'
-import { IOrder, orders, users } from '@/library/dummy-data'
+import { IOrder } from '@/api-client/interfaces/order.interfaces'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   BreadcrumbItem,
@@ -9,6 +9,7 @@ import {
   Card,
   CardBody,
   Chip,
+  Spinner,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
@@ -16,6 +17,9 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import React, { useMemo } from 'react'
 import { LuArrowLeft } from 'react-icons/lu'
+import useGetReferralPartner from '@/hooks/requests/admin/useGetReferralPartner'
+import useGetCustomer from '@/hooks/requests/admin/useGetCustomer'
+import { useGetAdminOrders } from '@/hooks/requests/admin/useAdminOrders'
 
 const columnHelper = createColumnHelper<IOrder>()
 
@@ -23,87 +27,129 @@ const PartnerOrdersSection = ({ partnerId }: { partnerId: string }) => {
   const searchParams = useSearchParams()
   const referralId = searchParams.get('referralId')
 
-  const partner = useMemo(
-    () => users.find((u) => u.id === partnerId),
-    [partnerId]
-  )
+  const { referralPartner, referralPartnerLoading } =
+    useGetReferralPartner(partnerId)
+  const { customer: referralUser, customerLoading: referralUserLoading } =
+    useGetCustomer(referralId || '')
 
-  const referralUser = useMemo(
-    () => (referralId ? users.find((u) => u.id === referralId) : null),
-    [referralId]
-  )
-
-  // Filter orders for this referral or all referrals of this partner
-  const filteredOrders = useMemo(() => {
+  const orderParams = useMemo(() => {
+    const params: any = { referralPartner: partnerId }
     if (referralId) {
-      return orders.filter((o) => o.customerId === referralId)
+      params.customer = referralId
     }
-    // Simulate orders for the partner's network
-    return orders.slice(0, 5)
-  }, [referralId])
+    return params
+  }, [partnerId, referralId])
 
-  const commissionRate = partner?.commissionRate || 5 // fallback to 5%
+  const { orders: filteredOrders, ordersLoading } =
+    useGetAdminOrders(orderParams)
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('_id', {
-        header: 'Order ID',
+      columnHelper.accessor('orderNumber', {
+        header: 'Order #',
         cell: ({ getValue }) => (
-          <span className="font-medium">{getValue()}</span>
+          <span className="font-bold text-primary">{getValue()}</span>
         ),
       }),
-      columnHelper.accessor('customerName', {
+      columnHelper.accessor('customer', {
         header: 'Customer',
-        cell: ({ row: { original: item } }) => (
+        cell: ({ getValue }) => (
           <div className="space-y-0.5">
-            <p className="font-medium text-sm">{item.customerName}</p>
-            <p className="text-xs text-foreground-500">{item.customerEmail}</p>
+            <p className="font-medium text-sm">
+              {getValue()?.firstName} {getValue()?.lastName}
+            </p>
+            <p className="text-xs text-foreground-500">{getValue()?.email}</p>
           </div>
         ),
       }),
-      columnHelper.accessor('totalAmount', {
+      columnHelper.accessor('transaction.totalAmount', {
         header: 'Order Total',
-        cell: ({ getValue }) => currencyFormatter(getValue()),
+        cell: ({ getValue }) => currencyFormatter(getValue() || 0),
       }),
       columnHelper.display({
         id: 'commission',
-        header: `Commission (${commissionRate}%)`,
+        header: 'Commission',
         cell: ({ row: { original: item } }) => {
-          const commission = (item.totalAmount * commissionRate) / 100
+          const commission = item.referralDetails?.commission
           return (
-            <div className="font-semibold text-success">
-              {currencyFormatter(commission)}
+            <div className="space-y-1">
+              <p className="font-semibold text-success text-sm">
+                {currencyFormatter(commission?.amount || 0)}
+              </p>
+              <Chip
+                size="sm"
+                variant="flat"
+                color={
+                  commission?.status === 'paid'
+                    ? 'success'
+                    : commission?.status === 'pending'
+                      ? 'warning'
+                      : 'danger'
+                }
+                className="h-5 text-[10px] uppercase"
+              >
+                {commission?.status || 'N/A'}
+              </Chip>
             </div>
           )
         },
       }),
-      columnHelper.accessor('status', {
+      columnHelper.accessor('orderStatus', {
         header: 'Status',
         cell: ({ getValue }) => {
           const colors: Record<string, any> = {
-            fulfilled: 'success',
-            pending: 'warning',
+            delivered: 'success',
+            processing: 'warning',
             cancelled: 'danger',
-            confirmed: 'primary',
+            'in-transit': 'primary',
           }
           return (
             <Chip
               size="sm"
               variant="flat"
               color={colors[getValue()] || 'default'}
+              className="capitalize"
             >
               {getValue()}
             </Chip>
           )
         },
       }),
-      columnHelper.accessor('orderDate', {
+      columnHelper.accessor('createdAt', {
         header: 'Date',
-        cell: ({ getValue }) => moment(getValue()).format('D MMM, YYYY'),
+        cell: ({ getValue }) => (
+          <div className="text-xs text-foreground-600">
+            <p>{moment(getValue()).format('D MMM, YYYY')}</p>
+            <p className="opacity-60">{moment(getValue()).format('hh:mm A')}</p>
+          </div>
+        ),
       }),
+      {
+        id: 'actions',
+        header: 'Actions',
+        cell: ({ row }: any) => (
+          <Button
+            as={Link}
+            href={`/admin/orders/${row.original._id}`}
+            size="sm"
+            variant="flat"
+            color="primary"
+          >
+            View Details
+          </Button>
+        ),
+      },
     ],
-    [commissionRate]
+    [],
   )
+
+  if (referralPartnerLoading || (referralId && referralUserLoading)) {
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <Spinner label="Loading partner data..." />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 max-w-7xl p-5 mx-auto">
@@ -131,7 +177,8 @@ const PartnerOrdersSection = ({ partnerId }: { partnerId: string }) => {
             </BreadcrumbItem>
             <BreadcrumbItem>
               <Link href={`/admin/referral-partners/${partnerId}`}>
-                {partner?.name || 'Partner'}
+                {referralPartner?.user?.firstName}{' '}
+                {referralPartner?.user?.lastName || 'Partner'}
               </Link>
             </BreadcrumbItem>
             <BreadcrumbItem>Orders</BreadcrumbItem>
@@ -141,15 +188,16 @@ const PartnerOrdersSection = ({ partnerId }: { partnerId: string }) => {
 
       <p className="text-foreground-500">
         {referralId
-          ? `Showing orders made by ${referralUser?.name || 'referred user'}.`
-          : `Showing all orders referred by ${partner?.name}.`}
+          ? `Showing orders made by ${referralUser?.firstName} ${referralUser?.lastName}.`
+          : `Showing all orders referred by ${referralPartner?.user?.firstName} ${referralPartner?.user?.lastName}.`}
       </p>
 
       <Card className="p-3">
         <CardBody className="space-y-6">
           <TableWrapper
-            columns={columns}
+            columns={columns as any}
             items={filteredOrders}
+            isLoading={ordersLoading}
             topContent={({ searchField }) => (
               <div className="w-full lg:w-1/4">
                 {searchField('Search orders')}

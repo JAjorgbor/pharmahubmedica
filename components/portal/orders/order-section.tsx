@@ -132,8 +132,16 @@ const OrderSection = () => {
                       key={index}
                       className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 pb-4 border-b border-b-foreground-200 last:border-0"
                     >
-                      <div className="relative h-16 w-16 rounded-lg overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center border">
-                        <LuPackage className="text-gray-400" size={32} />
+                      <div className="relative h-16 w-16 rounded-lg overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center">
+                        {item.productImage ? (
+                          <img
+                            src={item.productImage?.url}
+                            alt={item.productName}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <LuPackage className="text-gray-400" size={32} />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="font-bold text-gray-900 truncate">

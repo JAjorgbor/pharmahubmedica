@@ -18,6 +18,7 @@ import {
   LuLayoutList,
   LuSettings,
 } from 'react-icons/lu'
+import useGetPortalUser from '@/hooks/requests/useGetPortalUser'
 
 const PortalSidebar = () => {
   const isMobile = useMediaQuery('md')
@@ -37,7 +38,9 @@ const PortalSidebar = () => {
   useEffect(() => {
     setIsHydrated(true)
   }, [])
-  const isActive = (path) => pathname.includes(path)
+  const { portalUser } = useGetPortalUser()
+  const isActive = (path: string) => pathname.includes(path)
+
   return (
     isHydrated && (
       <Sidebar
@@ -114,7 +117,7 @@ const PortalSidebar = () => {
                 </button>
               )
             }
-            className="py-2 !bg-white hover:!bg-white border-b border-b-foreground-200"
+            className="py-2 bg-white! hover:bg-white! border-b border-b-foreground-200"
           >
             <span className="text-primary font-semibold text-lg">
               User Portal
@@ -161,15 +164,17 @@ const PortalSidebar = () => {
             {' '}
             Orders{' '}
           </MenuItem>
-          <MenuItem
-            icon={<LuHandshake />}
-            component={<Link href="/portal/referrals" />}
-            className="text-foreground-600"
-            active={isActive('/portal/referrals')}
-          >
-            {' '}
-            Referrals
-          </MenuItem>
+          {portalUser?.isReferralPartner && (
+            <MenuItem
+              icon={<LuHandshake />}
+              component={<Link href="/portal/referrals" />}
+              className="text-foreground-600"
+              active={isActive('/portal/referrals')}
+            >
+              {' '}
+              Referrals
+            </MenuItem>
+          )}
           <MenuItem
             icon={<LuSettings />}
             component={<Link href="/portal/settings" />}

@@ -46,7 +46,7 @@ const Header = () => {
           base: cn(
             'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
             scrollHeight > 100 && 'max-w-4xl shadow-lg',
-            'md:max-w-7xl md:relative md:backdrop-blur-none md:shadow-none'
+            'md:max-w-7xl md:relative md:backdrop-blur-none md:shadow-none',
           ),
           wrapper: 'max-w-full px-0',
         }}
@@ -106,7 +106,7 @@ const Header = () => {
                 </Button>
                 <Button
                   as={Link}
-                  href={'/portal/register'}
+                  href={'/portal/create-account'}
                   size="sm"
                   color="primary"
                 >
@@ -122,7 +122,7 @@ const Header = () => {
       <Navbar
         className={cn(
           'hidden md:block mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
-          scrollHeight > 100 ? 'shadow-lg max-w-4xl' : 'max-w-7xl '
+          scrollHeight > 100 ? 'shadow-lg max-w-4xl' : 'max-w-7xl ',
         )}
         classNames={{
           wrapper: 'max-w-full px-0',

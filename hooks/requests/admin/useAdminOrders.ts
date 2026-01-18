@@ -2,17 +2,17 @@ import { adminOrderRequests } from '@/api-client/admin/requests/order.requests'
 import { IOrder } from '@/api-client/interfaces/order.interfaces'
 import useSWR from 'swr'
 
-export const useGetAdminOrders = () => {
+export const useGetAdminOrders = (params?: any) => {
   const fetcher = async () => {
     const {
       data: { orders },
-    } = await adminOrderRequests.getOrders()
+    } = await adminOrderRequests.getOrders(params)
     return orders
   }
 
   const { data, error, isLoading, mutate } = useSWR<IOrder[]>(
-    ['admin/orders'],
-    fetcher
+    ['admin/orders', params],
+    fetcher,
   )
 
   return {
@@ -32,7 +32,7 @@ export const useGetAdminOrder = (orderId: string) => {
   }
   const { data, error, isLoading, mutate } = useSWR<IOrder>(
     orderId ? ['admin/orders', orderId] : null,
-    fetcher
+    fetcher,
   )
 
   return {

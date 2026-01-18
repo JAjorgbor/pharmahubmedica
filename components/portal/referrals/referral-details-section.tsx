@@ -13,83 +13,117 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Spinner,
 } from '@heroui/react'
 import React, { useMemo, useState } from 'react'
-import {
-  LuArrowLeft,
-  LuBox,
-  LuChevronLeft,
-  LuCircleCheckBig,
-  LuClock,
-  LuCoins,
-  LuPackage,
-  LuUserCheck,
-} from 'react-icons/lu'
+import { LuChevronLeft, LuCircleCheckBig, LuPackage } from 'react-icons/lu'
 import { IoCashOutline } from 'react-icons/io5'
 import TableWrapper from '@/components/elements/table-wrapper'
 import { FiMoreVertical } from 'react-icons/fi'
 import Link from 'next/link'
 import { createColumnHelper } from '@tanstack/react-table'
-import { IOrder, orders } from '@/library/dummy-data'
 import moment from 'moment'
 import InputField from '@/components/elements/input-field'
+import { useParams } from 'next/navigation'
+import {
+  useGetPortalReferredUserDetails,
+  useGetPortalReferredUserOrders,
+} from '@/hooks/requests/portal/useReferralPartner'
 
-const columnHelper = createColumnHelper<IOrder>()
-
-const statusOptions = [
-  { value: 'pending', label: 'Pending' },
-  { value: 'confirmed', label: 'Confirmed' },
-  { value: 'fulfilled', label: 'Fulfilled' },
-  { value: 'cancelled', label: 'Cancelled' },
-]
+const columnHelper = createColumnHelper<any>()
 
 const ReferralDetailsSection = () => {
+  const params = useParams()
+  const referralId = params.referralId as string
+
+  const { user, isLoading: userLoading } =
+    useGetPortalReferredUserDetails(referralId)
+  const { orders: referredOrders, isLoading: ordersLoading } =
+    useGetPortalReferredUserOrders(referralId)
+
   const [statusFilter, setStatusFilter] = useState('all')
   const [paymentStatusFilter, setPaymentStatusFilter] = useState('all')
-  const items = orders
+  const [commissionStatusFilter, setCommissionStatusFilter] = useState('all')
+
+  const items = referredOrders || []
+
+  const stats = useMemo(() => {
+    return {
+      totalCommissions:
+        items.reduce(
+          (acc: number, order: any) =>
+            acc + (order.referralDetails?.commission?.amount || 0),
+          0,
+        ) || 0,
+      pendingCommissions:
+        items.reduce((acc: number, order: any) => {
+          if (order.referralDetails?.commission?.status === 'pending') {
+            return acc + (order.referralDetails?.commission?.amount || 0)
+          }
+          return acc
+        }, 0) || 0,
+      paidCommissions:
+        items.reduce((acc: number, order: any) => {
+          if (order.referralDetails?.commission?.status === 'paid') {
+            return acc + (order.referralDetails?.commission?.amount || 0)
+          }
+          return acc
+        }, 0) || 0,
+      totalOrders: items.length,
+    }
+  }, [items])
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('_id', {
-        id: 'id',
-        header: 'Order ID',
+      columnHelper.accessor('orderNumber', {
+        id: 'orderNumber',
+        header: 'Order #',
         cell: ({ row: { original: item } }) => (
           <div className="flex gap-2 items-center">
-            <p className="text-xs text-foreground-600">{item._id}</p>
+            <p className="text-sm font-bold text-primary">{item.orderNumber}</p>
           </div>
         ),
       }),
-      columnHelper.accessor('customerEmail', {
-        id: 'customerEmail',
+      columnHelper.display({
+        id: 'customer',
         header: 'Customer',
         cell: ({ row: { original: item } }) => (
           <div className="space-y-1">
-            <p className="text-xs">{item.customerName}</p>
-            <p className="text-xs text-foreground-600">{item.customerEmail}</p>
-            <p className="text-xs text-foreground-600">{item.customerPhone}</p>
+            <p className="text-xs font-bold">
+              {item.customer.firstName} {item.customer.lastName}
+            </p>
+            <p className="text-xs text-foreground-600">{item.customer.email}</p>
+            <p className="text-xs text-foreground-600">
+              {item.customer.phoneNumber}
+            </p>
           </div>
         ),
       }),
 
-      columnHelper.accessor('status', {
+      columnHelper.accessor('orderStatus', {
         header: 'Order Status',
-        filterFn: (row: { original: IOrder }, columnId, filterValue) => {
+        filterFn: (row, columnId, filterValue) => {
           if (typeof filterValue == 'undefined') return false
-
           return filterValue == 'all'
             ? true
-            : row.original.status == filterValue
+            : row.original.orderStatus == filterValue
         },
         cell: ({ getValue }) => {
           const statusMap = {
-            pending: 'warning',
-            fulfilled: 'success',
+            processing: 'warning',
+            delivered: 'success',
             cancelled: 'danger',
-            confirmed: 'primary',
+            'in-transit': 'primary',
           } as const
           return (
             <div className="capitalize">
-              <Chip color={statusMap[getValue()]} variant="flat" size="sm">
+              <Chip
+                color={
+                  statusMap[getValue() as keyof typeof statusMap] || 'default'
+                }
+                variant="flat"
+                size="sm"
+              >
                 {getValue()}
               </Chip>
             </div>
@@ -98,9 +132,8 @@ const ReferralDetailsSection = () => {
       }),
       columnHelper.accessor('paymentStatus', {
         header: 'Payment Status',
-        filterFn: (row: { original: IOrder }, columnId, filterValue) => {
+        filterFn: (row, columnId, filterValue) => {
           if (typeof filterValue == 'undefined') return false
-
           return filterValue == 'all'
             ? true
             : row.original.paymentStatus == filterValue
@@ -114,7 +147,13 @@ const ReferralDetailsSection = () => {
           } as const
           return (
             <div className="capitalize">
-              <Chip color={statusMap[getValue()]} variant="dot" size="sm">
+              <Chip
+                color={
+                  statusMap[getValue() as keyof typeof statusMap] || 'default'
+                }
+                variant="dot"
+                size="sm"
+              >
                 {getValue()}
               </Chip>
             </div>
@@ -122,21 +161,25 @@ const ReferralDetailsSection = () => {
         },
       }),
 
-      columnHelper.accessor((original) => `${original.items.length}`, {
-        id: 'items',
+      columnHelper.accessor((original) => `${original.products?.length || 0}`, {
+        id: 'items_count',
         header: 'Items',
-        cell: ({ getValue }) => {
-          return <div>{getValue().length}</div>
+        cell: ({ row }) => {
+          return <div>{row.original.products?.length || 0} items</div>
         },
       }),
-      columnHelper.accessor('totalAmount', {
+      columnHelper.accessor('transaction.totalAmount', {
         header: 'Total',
         cell: ({ getValue }) => {
-          return <div>{currencyFormatter(getValue())}</div>
+          return (
+            <div className="font-bold">
+              {currencyFormatter(getValue() || 0)}
+            </div>
+          )
         },
       }),
 
-      columnHelper.accessor('orderDate', {
+      columnHelper.accessor('createdAt', {
         header: 'Order Date',
         cell: ({ getValue }) => (
           <div className="text-xs text-foreground-600 space-y-1">
@@ -146,47 +189,57 @@ const ReferralDetailsSection = () => {
         ),
       }),
 
-      columnHelper.display({
-        id: 'action',
+      columnHelper.accessor('referralDetails.commission.status', {
+        id: 'commissionStatus',
+        header: 'Commission Status',
+        filterFn: (row, columnId, filterValue) => {
+          if (typeof filterValue == 'undefined') return false
+          const status = row.original.referralDetails?.commission?.status
+          return filterValue == 'all' ? true : status == filterValue
+        },
+        cell: ({ getValue }) => {
+          const status = getValue()
+          const statusMap = {
+            pending: 'warning',
+            paid: 'success',
+            cancelled: 'danger',
+          } as const
+          return (
+            <div className="capitalize">
+              <Chip
+                color={statusMap[status as keyof typeof statusMap] || 'default'}
+                variant="flat"
+                size="sm"
+              >
+                {status || 'N/A'}
+              </Chip>
+            </div>
+          )
+        },
+      }),
 
+      columnHelper.display({
+        id: 'commission',
+        header: 'Commission Amt',
         cell: ({ row: { original: item } }) => (
-          <Dropdown className="min-w-max">
-            <DropdownTrigger>
-              <button type="button">
-                <FiMoreVertical size={18} />
-              </button>
-            </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownItem
-                key="manage"
-                showDivider
-                as={Link}
-                href="#"
-                onClick={() =>
-                  addToast({
-                    title: 'This feature is currently not available',
-                    severity: 'primary',
-                    color: 'primary',
-                  })
-                }
-              >
-                View Order Details
-              </DropdownItem>
-              <DropdownItem
-                key="contact-customer"
-                showDivider
-                as={Link}
-                href={`#`}
-              >
-                Contact Customer
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <div className="space-y-1">
+            <p className="text-xs font-bold text-success">
+              {currencyFormatter(item.referralDetails?.commission?.amount || 0)}
+            </p>
+          </div>
         ),
       }),
     ],
-    [items]
+    [],
   )
+
+  if (userLoading || ordersLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner label="Loading referral details..." />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen">
@@ -203,7 +256,7 @@ const ReferralDetailsSection = () => {
             </Button>
             <div>
               <h1 className="text-3xl font-bold text-primary">
-                [Referral User Name]
+                {user?.firstName} {user?.lastName}
               </h1>
               <Breadcrumbs>
                 <BreadcrumbItem>
@@ -213,7 +266,7 @@ const ReferralDetailsSection = () => {
                   <Link href="/portal/referrals">Referrals</Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
-                  <Link href="#">[Referral Id]</Link>
+                  {user?.firstName} {user?.lastName}
                 </BreadcrumbItem>
               </Breadcrumbs>
             </div>
@@ -223,63 +276,81 @@ const ReferralDetailsSection = () => {
           Monitor orders from this referral patients and track commissions
         </p>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
-          <Card className="p-5">
+          <Card className="p-5 border-none shadow-sm">
             <CardBody>
               <div className="flex items-center space-x-2">
-                <IoCashOutline
-                  className="h-8 w-8 text-success"
-                  //   strokeWidth={0.5}
-                />
+                <IoCashOutline className="h-8 w-8 text-primary" />
                 <div>
                   <p className="text-sm font-medium">Total Commissions</p>
                   <p className="text-2xl font-bold">
-                    {currencyFormatter(140000)}
+                    {currencyFormatter(stats.totalCommissions)}
                   </p>
                 </div>
               </div>
             </CardBody>
           </Card>
 
-          <Card className="p-5">
+          <Card className="p-5 border-none shadow-sm shadow-success/5">
             <CardBody>
               <div className="flex items-center space-x-2">
-                <LuPackage className="h-8 w-8 text-primary" strokeWidth={1} />
+                <LuCircleCheckBig className="h-8 w-8 text-success" />
                 <div>
-                  <p className="text-sm font-medium">Total Orders</p>
-                  <p className="text-2xl font-bold">4</p>
+                  <p className="text-sm font-medium">Paid Commissions</p>
+                  <p className="text-2xl font-bold text-success">
+                    {currencyFormatter(stats.paidCommissions)}
+                  </p>
                 </div>
               </div>
             </CardBody>
           </Card>
 
-          <Card className="p-5">
+          <Card className="p-5 border-none shadow-sm shadow-warning/5">
             <CardBody>
               <div className="flex items-center space-x-2">
                 <IoCashOutline className="h-8 w-8 text-warning" />
                 <div>
                   <p className="text-sm font-medium">Pending Commission</p>
-                  <p className="text-2xl font-bold">
-                    {currencyFormatter(10000)}
+                  <p className="text-2xl font-bold text-warning">
+                    {currencyFormatter(stats.pendingCommissions)}
                   </p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+
+          <Card className="p-5 border-none shadow-sm shadow-primary/5">
+            <CardBody>
+              <div className="flex items-center space-x-2">
+                <LuPackage className="h-8 w-8 text-primary" />
+                <div>
+                  <p className="text-sm font-medium">Total Orders</p>
+                  <p className="text-2xl font-bold">{stats.totalOrders}</p>
                 </div>
               </div>
             </CardBody>
           </Card>
         </div>
         <Card>
-          <CardHeader>Referral's Orders</CardHeader>
+          <CardHeader className="font-bold text-lg">
+            Referral's Orders
+          </CardHeader>
           <CardBody>
             <TableWrapper
               columns={columns}
               items={items}
-              allowsSortingFor={['orderDate', 'items']}
+              allowsSortingFor={[
+                'createdAt',
+                'items_count',
+                'transaction.totalAmount',
+              ]}
               topContent={({ table, searchField }) => {
                 const getStatusCount = (status: string) => {
                   if (items) {
                     if (status == 'all') return items.length
                     else
-                      return items.filter((each) => each.status == status)
-                        .length
+                      return items.filter(
+                        (each: any) => each.orderStatus == status,
+                      ).length
                   }
                   return '-'
                 }
@@ -288,7 +359,18 @@ const ReferralDetailsSection = () => {
                     if (status == 'all') return items.length
                     else
                       return items.filter(
-                        (each) => each.paymentStatus == status
+                        (each: any) => each.paymentStatus == status,
+                      ).length
+                  }
+                  return '-'
+                }
+                const getCommissionStatusCount = (status: string) => {
+                  if (items) {
+                    if (status == 'all') return items.length
+                    else
+                      return items.filter(
+                        (each: any) =>
+                          each.referralDetails?.commission?.status == status,
                       ).length
                   }
                   return '-'
@@ -299,7 +381,7 @@ const ReferralDetailsSection = () => {
                     <div className="w-full md:w-1/3 lg:w-1/4">
                       {searchField('Search orders')}
                     </div>
-                    <div className="gap-3 grid grid-cols-2 w-full md:w-1/2 lg:w-1/3">
+                    <div className="gap-3 grid grid-cols-3 w-full md:w-2/3 lg:w-1/2">
                       <InputField
                         type="select"
                         controllerProps={{
@@ -312,16 +394,16 @@ const ReferralDetailsSection = () => {
                             value: 'all',
                           },
                           {
-                            label: `Pending (${getStatusCount('pending')})`,
-                            value: 'pending',
+                            label: `Processing (${getStatusCount('processing')})`,
+                            value: 'processing',
                           },
                           {
-                            label: `Confirmed (${getStatusCount('confirmed')})`,
-                            value: 'confirmed',
+                            label: `In Transit (${getStatusCount('in-transit')})`,
+                            value: 'in-transit',
                           },
                           {
-                            label: `Fulfilled (${getStatusCount('fulfilled')})`,
-                            value: 'fulfilled',
+                            label: `Delivered (${getStatusCount('delivered')})`,
+                            value: 'delivered',
                           },
                           {
                             label: `Cancelled (${getStatusCount('cancelled')})`,
@@ -329,7 +411,7 @@ const ReferralDetailsSection = () => {
                           },
                         ]}
                         onChange={(value) => {
-                          table.getColumn('status')?.setFilterValue(value)
+                          table.getColumn('orderStatus')?.setFilterValue(value)
                           setStatusFilter(value)
                         }}
                       />
@@ -342,13 +424,13 @@ const ReferralDetailsSection = () => {
                         options={[
                           {
                             label: `All Payment Status(${getPaymentStatusCount(
-                              'all'
+                              'all',
                             )})`,
                             value: 'all',
                           },
                           {
                             label: `Pending (${getPaymentStatusCount(
-                              'pending'
+                              'pending',
                             )})`,
                             value: 'pending',
                           },
@@ -357,15 +439,7 @@ const ReferralDetailsSection = () => {
                             value: 'paid',
                           },
                           {
-                            label: `Refunded (${getPaymentStatusCount(
-                              'refunded'
-                            )})`,
-                            value: 'refunded',
-                          },
-                          {
-                            label: `Failed (${getPaymentStatusCount(
-                              'failed'
-                            )})`,
+                            label: `Failed (${getPaymentStatusCount('failed')})`,
                             value: 'failed',
                           },
                         ]}
@@ -376,8 +450,44 @@ const ReferralDetailsSection = () => {
                           setPaymentStatusFilter(value)
                         }}
                       />
+                      <InputField
+                        type="select"
+                        controllerProps={{
+                          name: 'commission status filter',
+                          defaultValue: commissionStatusFilter,
+                        }}
+                        options={[
+                          {
+                            label: `All Commission Status(${getCommissionStatusCount(
+                              'all',
+                            )})`,
+                            value: 'all',
+                          },
+                          {
+                            label: `Pending (${getCommissionStatusCount(
+                              'pending',
+                            )})`,
+                            value: 'pending',
+                          },
+                          {
+                            label: `Paid (${getCommissionStatusCount('paid')})`,
+                            value: 'paid',
+                          },
+                          {
+                            label: `Cancelled (${getCommissionStatusCount(
+                              'cancelled',
+                            )})`,
+                            value: 'cancelled',
+                          },
+                        ]}
+                        onChange={(value) => {
+                          table
+                            .getColumn('commissionStatus')
+                            ?.setFilterValue(value)
+                          setCommissionStatusFilter(value)
+                        }}
+                      />
                     </div>
-                    {/* </div> */}
                   </div>
                 )
               }}

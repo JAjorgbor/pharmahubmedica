@@ -45,6 +45,12 @@ export interface IOrder {
   trackingId?: string
   referralDetails?: {
     referralPartner: IReferralPartner
+    accountDetails: {
+      bankName: string
+      accountNumber: string
+      accountName: string
+      bankCode: string
+    }
     commission: {
       rate: number
       rateType: 'percentage' | 'fixed'

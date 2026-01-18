@@ -24,7 +24,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   LuCircleCheckBig,
   LuCircleX,
@@ -34,36 +34,12 @@ import {
   LuPlus,
   LuUserCheck,
 } from 'react-icons/lu'
-
-const referrals = [
-  {
-    id: 'REF-001',
-    referee: 'Dr. Sarah Johnson',
-    email: 'doctor@example.com',
-    phoneNo: '+1234567892',
-    status: 'active',
-    createdOn: '2024-01-10T09:30:00Z',
-    usedOn: '2024-01-15T09:00:00Z',
-    commission: 150.28,
-  },
-  {
-    id: 'REF-002',
-    referee: 'Jane Smith',
-    email: 'jane@example.com',
-    phoneNo: '+1234567891',
-    status: 'active',
-    createdOn: '2024-02-05T14:20:00Z',
-  },
-  {
-    id: 'REF-003',
-    referee: 'Mary Wilson',
-    email: 'mary@example.com',
-    phoneNo: '+1234567893',
-    status: 'inactive',
-    createdOn: '2024-03-12T11:00:00Z',
-    commission: 235.45,
-  },
-]
+import {
+  useGetPortalReferralProfile,
+  useGetPortalReferrals,
+} from '@/hooks/requests/portal/useReferralPartner'
+import { Spinner } from '@heroui/react'
+import moment from 'moment'
 
 const getStatusIcon = (status: any) => {
   switch (status) {
@@ -87,62 +63,92 @@ const getStatusColor = (status: any) => {
   }
 }
 
+const getCommissionStatusColor = (status: string) => {
+  switch (status) {
+    case 'paid':
+      return 'success'
+    case 'pending':
+      return 'warning'
+    case 'cancelled':
+      return 'danger'
+    default:
+      return 'default'
+  }
+}
+
 const ReferralsSection = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const [commissionStatusFilter, setCommissionStatusFilter] = useState('all')
+  const [tableData, setTableData] = useState<any[]>([])
+  const { referrals, isLoading: referralsLoading } = useGetPortalReferrals()
+  const { profile, isLoading: profileLoading } = useGetPortalReferralProfile()
 
-  const filteredReferrals = referrals.filter(
-    (referral) =>
-      referral.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      referral.referee.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      referral.status.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const filteredReferrals = useMemo(() => {
+    return (referrals || []).filter((referral) => {
+      const matchesSearch =
+        referral.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        referral.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        referral.lastName.toLowerCase().includes(searchTerm.toLowerCase())
 
-  const getReferralsByStatus = (status) => {
-    return filteredReferrals.filter((referral) => referral.status === status)
+      const matchesCommission =
+        commissionStatusFilter === 'all' ||
+        referral.commissionStatus === commissionStatusFilter
+
+      return matchesSearch && matchesCommission
+    })
+  }, [referrals, searchTerm, commissionStatusFilter])
+
+  const getReferralsByStatus = (status: string) => {
+    return filteredReferrals?.filter((referral) => referral.status === status)
   }
 
-  const tabs = [
-    {
-      key: 'all',
-      label: `All (${filteredReferrals.length})`,
-      referrals: filteredReferrals,
-      emptyIcon: (
-        <LuPackage className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
-      ),
-      emptyText: 'No referrals found',
-    },
-    {
-      key: 'active',
-      label: `Active (${getReferralsByStatus('active').length})`,
-      referrals: getReferralsByStatus('active'),
-      emptyIcon: (
-        <LuClock className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
-      ),
-      emptyText: 'No active referrals',
-    },
-    {
-      key: 'inactive',
-      label: `Inactive (${getReferralsByStatus('inactive').length})`,
-      referrals: getReferralsByStatus('inactive'),
-      emptyIcon: (
-        <LuPackage className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
-      ),
-      emptyText: 'No inactive referrals',
-    },
-  ]
+  const tabs = useMemo(
+    () => [
+      {
+        key: 'all',
+        label: `All (${filteredReferrals?.length || 0})`,
+        referrals: filteredReferrals,
+        emptyIcon: (
+          <LuPackage className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
+        ),
+        emptyText: 'No referrals found',
+      },
+      {
+        key: 'active',
+        label: `Active (${getReferralsByStatus('active')?.length || 0})`,
+        referrals: getReferralsByStatus('active'),
+        emptyIcon: (
+          <LuClock className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
+        ),
+        emptyText: 'No active referrals',
+      },
+      {
+        key: 'inactive',
+        label: `Inactive (${getReferralsByStatus('inactive')?.length || 0})`,
+        referrals: getReferralsByStatus('inactive'),
+        emptyIcon: (
+          <LuPackage className="mx-auto h-12 w-12 text-foreground-500 mb-4" />
+        ),
+        emptyText: 'No inactive referrals',
+      },
+    ],
+    [filteredReferrals],
+  )
 
   const columns = useMemo(
     () => [
       {
         accessorKey: 'referee',
         header: 'Referee',
-        cell: ({ row }) => (
+        cell: ({ row }: any) => (
           <div>
-            <p className="font-medium">{row.original.referee}</p>
+            <p className="font-medium">
+              {row.original.firstName} {row.original.lastName}
+            </p>
             <p className="text-sm text-foreground-500">{row.original.email}</p>
-            {row.original.phoneNo && (
+            {row.original.phoneNumber && (
               <p className="text-sm text-foreground-500">
-                {row.original.phoneNo}
+                {row.original.phoneNumber}
               </p>
             )}
           </div>
@@ -151,7 +157,7 @@ const ReferralsSection = () => {
       {
         accessorKey: 'status',
         header: 'Status',
-        cell: ({ row }) => (
+        cell: ({ row }: any) => (
           <Chip
             color={getStatusColor(row.original.status)}
             startContent={getStatusIcon(row.original.status)}
@@ -163,59 +169,84 @@ const ReferralsSection = () => {
         ),
       },
       {
-        accessorKey: 'createdOn',
-        header: 'Created On',
-        cell: ({ row }) => (
-          <div className="text-sm">
-            <p>{new Date(row.original.createdOn).toLocaleDateString()}</p>
-            {row.original.usedOn && (
-              <p className="text-foreground-500">
-                Used: {new Date(row.original.usedOn).toLocaleDateString()}
-              </p>
-            )}
+        accessorKey: 'commissionStatus',
+        header: 'Comm. Status',
+        cell: ({ row }: any) => (
+          <Chip
+            color={getCommissionStatusColor(row.original.commissionStatus)}
+            size="sm"
+            variant="dot"
+            className="capitalize"
+          >
+            {row.original.commissionStatus || 'None'}
+          </Chip>
+        ),
+      },
+      {
+        accessorKey: 'createdAt',
+        header: 'Joined On',
+        cell: ({ row }: any) => (
+          <div className="text-sm text-foreground-600">
+            <p>{moment(row.original.createdAt).format('MMM DD, YYYY')}</p>
           </div>
         ),
       },
       {
-        accessorKey: 'commission',
-        header: 'Total Commission',
-        cell: ({ row }) =>
-          row.original.commission ? (
-            <div className="font-medium text-green-600">
-              {currencyFormatter(row.original.commission)}
-            </div>
-          ) : (
-            <span className="text-foreground-500">-</span>
-          ),
+        accessorKey: 'orderCount',
+        header: 'Orders',
+        cell: ({ row }: any) => (
+          <div className="font-medium text-foreground-700">
+            {row.original.orderCount || 0} orders
+          </div>
+        ),
       },
       {
-        accessorKey: 'commission',
         id: 'actions',
         header: () => <div className="text-right">Actions</div>,
-        cell: () => (
+        cell: ({ row }: any) => (
           <div className="flex items-center justify-end space-x-2">
             <Button
               as={Link}
-              variant="light"
+              variant="flat"
+              color="primary"
               size="sm"
-              href={`/portal/referrals/${'referral-id'}`}
+              href={`/portal/referrals/${row.original._id}`}
             >
               <LuEye className="h-4 w-4" />
+              View Details
             </Button>
           </div>
         ),
       },
     ],
-    []
+    [],
   )
 
-  const [tableData, setTableData] = useState(tabs[0].referrals)
+  useEffect(() => {
+    if (referrals) {
+      setTableData(filteredReferrals)
+    }
+  }, [referrals, searchTerm, commissionStatusFilter])
 
   const table = useReactTable({
-    data: tableData,
+    data: tableData || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  if (referralsLoading || profileLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner label="Loading referrals..." />
+      </div>
+    )
+  }
+
+  const getCommissionFilterCount = (status: string) => {
+    if (!referrals) return 0
+    if (status === 'all') return referrals.length
+    return referrals.filter((r: any) => r.commissionStatus === status).length
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -231,58 +262,78 @@ const ReferralsSection = () => {
             </Breadcrumbs>
           </div>
 
-          <Button size="md" startContent={<LuPlus />} color="primary">
-            Create Referral
-          </Button>
+          <div className="flex gap-2">
+            <Card
+              shadow="none"
+              className="bg-primary/5 border border-primary/10"
+            >
+              <CardBody className="py-2 px-4">
+                <p className="text-[10px] uppercase font-bold text-primary opacity-70">
+                  Your Referral Code
+                </p>
+                <p className="text-lg font-bold text-primary tracking-wider">
+                  {profile?.referralCode}
+                </p>
+              </CardBody>
+            </Card>
+          </div>
         </div>
         <p className="text-foreground-500">
           Create and manage referrals to earn commission
         </p>
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
-          <Card className="p-5">
+          <Card className="p-5 border-none shadow-sm shadow-primary/5">
             <CardBody>
               <div className="flex items-center space-x-2">
                 <LuUserCheck className="h-8 w-8 text-primary" />
                 <div>
                   <p className="text-sm font-medium">Total Referrals</p>
-                  <p className="text-2xl font-bold">14</p>
+                  <p className="text-2xl font-bold">
+                    {profile?.referralsCount || 0}
+                  </p>
                 </div>
               </div>
             </CardBody>
           </Card>
 
-          <Card className="p-5">
+          <Card className="p-5 border-none shadow-sm shadow-success/5">
             <CardBody>
               <div className="flex items-center space-x-2">
-                <LuClock className="h-8 w-8 text-yellow-600" />
+                <LuCircleCheckBig className="h-8 w-8 text-success" />
                 <div>
-                  <p className="text-sm font-medium">Active</p>
-                  <p className="text-2xl font-bold">4</p>
+                  <p className="text-sm font-medium">Total Earned</p>
+                  <p className="text-2xl font-bold text-success">
+                    {currencyFormatter(profile?.commissionTotal || 0)}
+                  </p>
                 </div>
               </div>
             </CardBody>
           </Card>
 
-          <Card className="p-5">
+          <Card className="p-5 border-none shadow-sm shadow-warning/5">
             <CardBody>
               <div className="flex items-center space-x-2">
-                <LuCircleCheckBig className="h-8 w-8 text-green-600" />
+                <LuClock className="h-8 w-8 text-warning" />
                 <div>
-                  <p className="text-sm font-medium">Used</p>
-                  <p className="text-2xl font-bold">5</p>
+                  <p className="text-sm font-medium">Pending Pay</p>
+                  <p className="text-2xl font-bold text-warning">
+                    {currencyFormatter(profile?.pendingCommissions || 0)}
+                  </p>
                 </div>
               </div>
             </CardBody>
           </Card>
 
-          <Card className="p-5">
+          <Card className="p-5 border-none shadow-sm shadow-primary/5">
             <CardBody>
               <div className="flex items-center space-x-2">
                 <LuPackage className="h-8 w-8 text-primary" />
                 <div>
-                  <p className="text-sm font-medium">Expired</p>
-                  <p className="text-2xl font-bold">1</p>
+                  <p className="text-sm font-medium">Paid Commissions</p>
+                  <p className="text-2xl font-bold text-primary">
+                    {currencyFormatter(profile?.paidCommissions || 0)}
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -300,23 +351,56 @@ const ReferralsSection = () => {
                     type="search"
                     placeholder="Search referrals..."
                     controllerProps={{ name: 'search' }}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+                <div className="min-w-44">
+                  <InputField
+                    type="select"
+                    placeholder="Comm. Status"
+                    controllerProps={{ name: 'commissionStatus' }}
+                    options={[
+                      {
+                        label: `All Comm. Status (${getCommissionFilterCount('all')})`,
+                        value: 'all',
+                      },
+                      {
+                        label: `Pending (${getCommissionFilterCount('pending')})`,
+                        value: 'pending',
+                      },
+                      {
+                        label: `Paid (${getCommissionFilterCount('paid')})`,
+                        value: 'paid',
+                      },
+                      {
+                        label: `None (${getCommissionFilterCount('none')})`,
+                        value: 'none',
+                      },
+                    ]}
+                    onChange={(e) => setCommissionStatusFilter(e.target.value)}
                   />
                 </div>
                 <Chip
                   color="danger"
-                  className="text-sm text-white rounded-md text-center"
+                  variant="flat"
+                  className="text-sm rounded-md text-center"
                 >
-                  {filteredReferrals.length} referrals
+                  {filteredReferrals?.length || 0} referrals
                 </Chip>
               </div>
             </div>
 
             <Tabs
               aria-label="Referrals"
-              defaultSelectedKey="all"
-              onSelectionChange={(value) =>
-                setTableData(tabs.find((each) => each.key == value).referrals)
+              selectedKey={
+                tabs.find((tab) => tab.referrals === tableData)?.key || 'all'
               }
+              onSelectionChange={(value) => {
+                const selectedTab = tabs.find((each) => each.key == value)
+                if (selectedTab) {
+                  setTableData(selectedTab.referrals || [])
+                }
+              }}
               classNames={{ tabList: 'max-w-4/5 flex-wrap', tab: 'w-20' }}
             >
               {tabs.map((tab) => (
@@ -339,10 +423,10 @@ const ReferralsSection = () => {
                             >
                               {flexRender(
                                 header.column.columnDef.header,
-                                header.getContext()
+                                header.getContext(),
                               )}
                             </TableColumn>
-                          ))
+                          )),
                         )}
                       </TableHeader>
                       <TableBody
@@ -365,7 +449,7 @@ const ReferralsSection = () => {
                               >
                                 {flexRender(
                                   cell.column.columnDef.cell,
-                                  cell.getContext()
+                                  cell.getContext(),
                                 )}
                               </TableCell>
                             ))}

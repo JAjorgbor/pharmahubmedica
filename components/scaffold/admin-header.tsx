@@ -6,6 +6,7 @@ import {
   Avatar,
   Badge,
   Button,
+  Chip,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -53,8 +54,20 @@ export const UserPanel = () => {
                 <Skeleton className="h-4 w-5/6 rounded-lg block" />
               </div>
             ) : (
-              <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2">
-                {adminUser?.firstName} {adminUser?.lastName}
+              <div className="py-2 bg-foreground-100 rounded-xl p-2">
+                <Chip
+                  className="text-xs"
+                  classNames={{ base: 'py-0.5 h-5' }}
+                  variant="flat"
+                  color="primary"
+                  size="sm"
+                  radius="lg"
+                >
+                  Admin
+                </Chip>
+                <p>
+                  {adminUser?.firstName} {adminUser?.lastName}
+                </p>
                 <p className="text-sm text-foreground-500">
                   {adminUser?.email}
                 </p>
@@ -131,7 +144,7 @@ const AdminHeader = () => {
             'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
             scrollHeight > 100
               ? 'md:max-w-4xl shadow-lg'
-              : 'md:max-w-[77.5rem] bg-white shadow'
+              : 'md:max-w-[77.5rem] bg-white shadow',
           ),
           wrapper: 'max-w-full px-0',
         }}

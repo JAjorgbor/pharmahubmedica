@@ -97,7 +97,7 @@ const CartSection = () => {
             <div className="space-y-4">
               <div className="space-y-2 text-sm">
                 {items.map((item, index) => (
-                  <div className="flex justify-between">
+                  <div className="flex justify-between" key={index}>
                     {item.product.name} x {item.quantity}
                     <span>{currencyFormatter(item.amount)}</span>
                   </div>

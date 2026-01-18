@@ -47,7 +47,7 @@ const CollectionsSection: FC<{
             title="No categories found"
             description="We can't find any categories matching your criteria. Try clearing your search."
             buttonText="View all categories"
-            onButtonPress={() => router.replace('/collections')}
+            onButtonPress={() => router.push('/collections')}
           />
         ) : (
           <>
@@ -61,9 +61,7 @@ const CollectionsSection: FC<{
               <Pagination
                 total={meta.totalPages}
                 page={paramsFilter.page}
-                onChange={(value) =>
-                  router.replace(`/collections?page=${value}`)
-                }
+                onChange={(value) => router.push(`/collections?page=${value}`)}
               />
             </div>
           </>
