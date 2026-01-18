@@ -51,7 +51,7 @@ const ReferralPartnersSection = () => {
         acc.pending += curr.pendingCommissions || 0
         return acc
       },
-      { active: 0, inactive: 0, paid: 0, pending: 0 }
+      { active: 0, inactive: 0, paid: 0, pending: 0 },
     )
   }, [items])
 
@@ -107,7 +107,7 @@ const ReferralPartnersSection = () => {
         filterFn: (
           row: { original: IReferralPartner },
           columnId,
-          filterValue
+          filterValue,
         ) => {
           if (typeof filterValue == 'undefined' || filterValue == 'all')
             return true
@@ -175,7 +175,7 @@ const ReferralPartnersSection = () => {
                   href={`/admin/referral-partners/${item._id}`}
                   as={Link}
                 >
-                  View Referrals
+                  View Details
                 </DropdownItem>
                 <DropdownItem
                   key="update"
@@ -207,7 +207,7 @@ const ReferralPartnersSection = () => {
         ),
       }),
     ],
-    [items]
+    [items],
   )
 
   return (

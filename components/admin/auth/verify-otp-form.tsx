@@ -77,7 +77,7 @@ export default function VerifyOtpForm() {
         <Button
           type="submit"
           color="primary"
-          className="w-full py-6 text-base font-semibold"
+          className="w-full text-base font-semibold"
           isLoading={isSubmitting}
         >
           Verify Code

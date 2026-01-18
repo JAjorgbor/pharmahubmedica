@@ -533,9 +533,8 @@ const InputField = <T extends FieldValues>({
             isDisabled={disabled}
             listboxProps={{ color: 'primary', variant: 'flat' }}
             startContent={startContent}
-            defaultSelectedKey={defaultValue || controllerField?.value}
             isInvalid={!!controllerFieldState.error?.message}
-            selectedKey={value as string}
+            selectedKey={controllerField?.value || (value as string)}
             onSelectionChange={(value: any) => {
               controllerField.onChange(value)
               if (onChange) onChange(value)
@@ -659,7 +658,6 @@ const InputField = <T extends FieldValues>({
               ]
             }
             onValueChange={(value) => {
-              console.log(value)
               const newValue = value
               const parsedValue = parseFloat(newValue)
               if (!isNaN(parsedValue)) {

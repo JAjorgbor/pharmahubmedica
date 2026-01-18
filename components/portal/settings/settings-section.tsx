@@ -12,10 +12,11 @@ import {
   Tabs,
 } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Cookies from 'js-cookie'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import {
   LuCreditCard,
-  LuFileText,
   LuLock,
   LuMail,
   LuMapPin,
@@ -23,8 +24,8 @@ import {
   LuUser,
 } from 'react-icons/lu'
 import z from 'zod'
-import InputField from '../../elements/input-field'
-import Link from 'next/link'
+import InputField from '@/components/elements/input-field'
+import DeliveryAddressSettings from '@/components/portal/settings/delivery-address-settings'
 
 const profileSchema = z.object({
   firstName: z.string({ error: 'First name is required' }),
@@ -192,72 +193,6 @@ const SettingsSection = () => {
 
             {isDoctor && (
               <>
-                <Tab key="professional" title="Professional">
-                  <Card>
-                    <CardHeader className="pt-6 px-6 mb-0">
-                      <div>
-                        <p className="text-primary text-md font-semibold">
-                          Professional Details
-                        </p>
-                        <p className="text-small text-default-500">
-                          Manage your medical credentials
-                        </p>
-                      </div>
-                    </CardHeader>
-                    <CardBody className="space-y-4 px-6">
-                      <div className="space-y-2">
-                        <InputField
-                          label="Medical License Number"
-                          type="text"
-                          placeholder="Enter your license number"
-                          controllerProps={{
-                            control: professionalFormMethods.control,
-                            name: 'licenseNumber',
-                          }}
-                          color="primary"
-                          startContent={
-                            <LuFileText className="h-5 w-5 text-gray-400" />
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <InputField
-                          label="Specialization"
-                          type="text"
-                          placeholder="e.g., General Medicine, Cardiology"
-                          controllerProps={{
-                            control: professionalFormMethods.control,
-                            name: 'specialization',
-                          }}
-                          color="primary"
-                          startContent={
-                            <LuUser className="h-5 w-5 text-gray-400" />
-                          }
-                        />
-                      </div>
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <h4 className="font-medium text-blue-900 mb-2">
-                          Commission Rate
-                        </h4>
-                        <p className="text-sm text-blue-700">
-                          Your current commission rate is{' '}
-                          <span className="font-semibold">5%</span> on all
-                          referral orders.
-                        </p>
-                      </div>
-                    </CardBody>
-                    <CardFooter className="px-6 pb-6">
-                      <Button
-                        onClick={handleProfileSave}
-                        size="md"
-                        color="primary"
-                      >
-                        Save Changes
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </Tab>
-
                 <Tab key="payout" title="Payout">
                   <Card>
                     <CardHeader className="pt-6 px-6 mb-0">
@@ -342,6 +277,10 @@ const SettingsSection = () => {
                 </Tab>
               </>
             )}
+
+            <Tab key="addresses" title="Addresses">
+              <DeliveryAddressSettings />
+            </Tab>
 
             <Tab key="security" title="Security">
               <Card>

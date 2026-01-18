@@ -14,6 +14,12 @@ export interface IReferralPartner {
     rate: number
     rateType: 'percentage' | 'fixed'
   }
+  accountDetails: {
+    bankName: string
+    accountNumber: string
+    accountName: string
+    bankCode: string
+  }
   // Virtual fields
   commissionTotal?: number
   pendingCommissions?: number

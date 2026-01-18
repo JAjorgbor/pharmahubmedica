@@ -3,9 +3,11 @@ import { addReferralPartner } from '@/api-client/admin/requests/referral.request
 import InputField from '@/components/elements/input-field'
 import ModalWrapper from '@/components/elements/modal-wrapper'
 import useGetCustomersNotReferralPartners from '@/hooks/requests/admin/useGetCustomersNotReferralPartners'
+import { useGetBanks, useVerifyAccountDetails } from '@/hooks/requests/useBank'
+import customValidation from '@/utils/custom-validation'
 import { addToast, Button, Skeleton } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { z } from 'zod'
@@ -16,12 +18,45 @@ interface IProps {
   onSuccess: () => void
 }
 
+const schema = z.object({
+  user: z.string().min(1, 'Please select a user'),
+  profession: z.enum([
+    'doctor',
+    'nurse',
+    'pharmacist',
+    'chemist',
+    'lab technician',
+    'other',
+  ]),
+  commissionRate: z.coerce.number().min(0, 'Commission rate must be positive'),
+  accountDetails: z.object({
+    accountName: customValidation.required(
+      z.string(),
+      'Account name is required',
+    ),
+    bankName: customValidation.required(z.string(), 'Bank name is required'),
+    accountNumber: customValidation.required(
+      z.string(),
+      'Account number is required',
+    ),
+    bankCode: customValidation.required(z.string(), 'Bank code is required'),
+  }),
+})
+
 const AddReferralPartnerModal = ({ isOpen, setIsOpen, onSuccess }: IProps) => {
   const {
     customersNotReferrals,
     customersNotReferralsLoading,
     mutateCustomersNotReferrals,
   } = useGetCustomersNotReferralPartners()
+
+  const [completeAccountQuery, setCompleteAccountQuery] = useState<{
+    account_number: string | undefined
+    bank_code: string | undefined
+  }>({
+    account_number: undefined,
+    bank_code: undefined,
+  })
 
   const customerOptions = useMemo(() => {
     return (
@@ -34,25 +69,12 @@ const AddReferralPartnerModal = ({ isOpen, setIsOpen, onSuccess }: IProps) => {
     )
   }, [customersNotReferrals])
 
-  const schema = z.object({
-    user: z.string().min(1, 'Please select a user'),
-    profession: z.enum([
-      'doctor',
-      'nurse',
-      'pharmacist',
-      'chemist',
-      'lab technician',
-      'other',
-    ]),
-    commissionRate: z.coerce
-      .number()
-      .min(0, 'Commission rate must be positive'),
-  })
-
   const {
     control,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { isSubmitting },
   } = useForm({
     resolver: zodResolver(schema),
@@ -86,6 +108,45 @@ const AddReferralPartnerModal = ({ isOpen, setIsOpen, onSuccess }: IProps) => {
     }
   }
 
+  const { banks } = useGetBanks()
+  const {
+    accountDetails: verifiedAccountDetails,
+    accountDetailsLoading,
+    accountDetailsRevalidating,
+  } = useVerifyAccountDetails(completeAccountQuery)
+
+  const watchedBankName = watch('accountDetails.bankName')
+  const watchedAccountNumber = watch('accountDetails.accountNumber')
+  useEffect(() => {
+    const account_number = watchedAccountNumber
+    const bankCode = watch('accountDetails.bankCode')
+    if (account_number?.length === 10 && bankCode) {
+      setCompleteAccountQuery({ account_number, bank_code: bankCode })
+      setValue(
+        'accountDetails.accountName',
+        verifiedAccountDetails?.account_name,
+      )
+    } else if (
+      !accountDetailsRevalidating &&
+      watchedAccountNumber?.length < 10
+    ) {
+      setValue('accountDetails.accountName', '')
+    }
+  }, [
+    watchedAccountNumber,
+    watch('accountDetails.bankCode'),
+    accountDetailsRevalidating,
+    verifiedAccountDetails?.account_name,
+  ])
+
+  useEffect(() => {
+    if (watchedBankName) {
+      const bank = banks?.find((each) => each.name === watchedBankName)
+      if (bank) {
+        setValue('accountDetails.bankCode', bank.code)
+      }
+    }
+  }, [watchedBankName])
   const handleClose = () => {
     reset()
     setIsOpen(false)
@@ -117,37 +178,71 @@ const AddReferralPartnerModal = ({ isOpen, setIsOpen, onSuccess }: IProps) => {
         id="addReferralPartnerForm"
         className="space-y-4"
       >
-        {customersNotReferralsLoading ? (
-          <Skeleton className="rounded-xl h-10 w-full" />
-        ) : (
+        <div className="grid md:grid-cols-2 gap-4">
+          {customersNotReferralsLoading ? (
+            <Skeleton className="rounded-xl h-10 w-full" />
+          ) : (
+            <InputField
+              type="autocomplete"
+              label="Select User"
+              placeholder="Search and select user"
+              className="md:col-span-2"
+              options={customerOptions}
+              controllerProps={{ control, name: 'user' }}
+            />
+          )}
+          <InputField
+            type="select"
+            label="Profession"
+            options={[
+              { label: 'Doctor', value: 'doctor' },
+              { label: 'Nurse', value: 'nurse' },
+              { label: 'Pharmacist', value: 'pharmacist' },
+              { label: 'Chemist', value: 'chemist' },
+              { label: 'Lab Technician', value: 'lab technician' },
+              { label: 'Other', value: 'other' },
+            ]}
+            controllerProps={{ control, name: 'profession' }}
+          />
+
+          <InputField
+            type="number"
+            label="Commission Rate (%)"
+            placeholder="Enter commission rate"
+            controllerProps={{ control, name: 'commissionRate' }}
+          />
           <InputField
             type="autocomplete"
-            label="Select User"
-            placeholder="Search and select user"
-            options={customerOptions}
-            controllerProps={{ control, name: 'user' }}
+            label="Bank Name"
+            options={banks?.map((each, index) => ({
+              label: each.name,
+              value: each.name,
+            }))}
+            placeholder="Search and select bank"
+            className="md:col-span-2"
+            controllerProps={{ control, name: 'accountDetails.bankName' }}
           />
-        )}
-        <InputField
-          type="select"
-          label="Profession"
-          options={[
-            { label: 'Doctor', value: 'doctor' },
-            { label: 'Nurse', value: 'nurse' },
-            { label: 'Pharmacist', value: 'pharmacist' },
-            { label: 'Chemist', value: 'chemist' },
-            { label: 'Lab Technician', value: 'lab technician' },
-            { label: 'Other', value: 'other' },
-          ]}
-          controllerProps={{ control, name: 'profession' }}
-        />
-
-        <InputField
-          type="number"
-          label="Commission Rate (%)"
-          placeholder="Enter commission rate"
-          controllerProps={{ control, name: 'commissionRate' }}
-        />
+          <InputField
+            type="text"
+            label="Account Number"
+            noWhiteSpace
+            className="md:col-span-2"
+            placeholder="0000000000"
+            controllerProps={{ control, name: 'accountDetails.accountNumber' }}
+          />
+          <InputField
+            type="text"
+            label="Account Name"
+            placeholder={
+              accountDetailsRevalidating || watchedAccountNumber?.length > 0
+                ? 'Fetching Account Name...'
+                : 'Account name will show here'
+            }
+            className="md:col-span-2"
+            disabled
+            controllerProps={{ control, name: 'accountDetails.accountName' }}
+          />
+        </div>
       </form>
     </ModalWrapper>
   )

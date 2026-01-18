@@ -105,7 +105,7 @@ const AddEditAddressModal = ({
         <InputField
           type="phoneNumber"
           label="Phone Number"
-          placeholder="080..."
+          placeholder="0800 000 0000"
           controllerProps={{ control, name: 'phoneNumber' }}
         />
         <div className="md:col-span-2">

@@ -12,14 +12,17 @@ import {
   CardBody,
   Chip,
   Skeleton,
+  Tooltip,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound, useRouter } from 'next/navigation'
-import React, { useEffect, useMemo } from 'react'
-import { LuArrowLeft, LuPackage } from 'react-icons/lu'
+import React, { useEffect, useMemo, useState } from 'react'
+import { LuArrowLeft, LuBanknote, LuPackage, LuPencil } from 'react-icons/lu'
+import UpdateReferralPartnerModal from './UpdateReferralPartnerModal'
+import ReferralPartnerAccountDetailsModal from './ReferralPartnerAccountDetailsModal'
 
 const columnHelper = createColumnHelper<IReferralUser>()
 
@@ -29,6 +32,10 @@ const PartnerDetailssSection = ({ partnerId }: { partnerId: string }) => {
     useGetReferralPartner(partnerId)
   const { referrals, referralsLoading } =
     useGetReferralPartnerReferrals(partnerId)
+
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
+  const [isAccountDetailsModalOpen, setIsAccountDetailsModalOpen] =
+    useState(false)
 
   useEffect(() => {
     if (referralPartnerError?.response?.status === 404) {
@@ -62,7 +69,7 @@ const PartnerDetailssSection = ({ partnerId }: { partnerId: string }) => {
               </div>
             </div>
           ),
-        }
+        },
       ),
       columnHelper.accessor('phoneNumber', {
         header: 'Phone Number',
@@ -91,7 +98,7 @@ const PartnerDetailssSection = ({ partnerId }: { partnerId: string }) => {
               {moment(getValue()).format('D MMM, YYYY')}
             </div>
           ),
-        }
+        },
       ),
       columnHelper.display({
         id: 'actions',
@@ -110,7 +117,7 @@ const PartnerDetailssSection = ({ partnerId }: { partnerId: string }) => {
         ),
       }),
     ],
-    [partnerId]
+    [partnerId],
   )
 
   const StatCard = ({
@@ -169,7 +176,7 @@ const PartnerDetailssSection = ({ partnerId }: { partnerId: string }) => {
               <LuArrowLeft size={20} />
             </Button>
             <h1 className="text-3xl text-primary font-semibold">
-              {referralPartner?.user?.firstName}'s Referrals
+              Partner Details & Referrals
             </h1>
           </div>
           <Breadcrumbs>
@@ -179,7 +186,10 @@ const PartnerDetailssSection = ({ partnerId }: { partnerId: string }) => {
             <BreadcrumbItem>
               <Link href="/admin/referral-partners">Referral Partners</Link>
             </BreadcrumbItem>
-            <BreadcrumbItem>Referrals</BreadcrumbItem>
+            <BreadcrumbItem>
+              {referralPartner?.user?.firstName}{' '}
+              {referralPartner?.user?.lastName}
+            </BreadcrumbItem>
           </Breadcrumbs>
         </div>
       </div>
@@ -226,14 +236,42 @@ const PartnerDetailssSection = ({ partnerId }: { partnerId: string }) => {
                     Code: {referralPartner?.referralCode}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-foreground-500">Commission Rate</p>
-                  <p className="text-xl font-bold text-primary">
-                    {referralPartner?.commission?.rate}
-                    {referralPartner?.commission?.rateType === 'percentage'
-                      ? '%'
-                      : ' NGN'}
-                  </p>
+                <div className="flex flex-col items-end gap-3">
+                  <div className="flex gap-2">
+                    <Tooltip content="Account Details">
+                      <Button
+                        isIconOnly
+                        variant="flat"
+                        color="secondary"
+                        size="sm"
+                        onPress={() => setIsAccountDetailsModalOpen(true)}
+                      >
+                        <LuBanknote size={16} />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip content="Update Partner">
+                      <Button
+                        isIconOnly
+                        variant="flat"
+                        color="primary"
+                        size="sm"
+                        onPress={() => setIsUpdateModalOpen(true)}
+                      >
+                        <LuPencil size={16} />
+                      </Button>
+                    </Tooltip>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-foreground-500">
+                      Commission Rate
+                    </p>
+                    <p className="text-xl font-bold text-primary">
+                      {referralPartner?.commission?.rate}
+                      {referralPartner?.commission?.rateType === 'percentage'
+                        ? '%'
+                        : ' NGN'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -292,6 +330,19 @@ const PartnerDetailssSection = ({ partnerId }: { partnerId: string }) => {
           />
         </CardBody>
       </Card>
+
+      <UpdateReferralPartnerModal
+        isOpen={isUpdateModalOpen}
+        setIsOpen={setIsUpdateModalOpen}
+        onSuccess={() => {}}
+        referralPartner={referralPartner || null}
+      />
+
+      <ReferralPartnerAccountDetailsModal
+        isOpen={isAccountDetailsModalOpen}
+        setIsOpen={setIsAccountDetailsModalOpen}
+        referralPartner={referralPartner || null}
+      />
     </div>
   )
 }
