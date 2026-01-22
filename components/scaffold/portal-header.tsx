@@ -66,10 +66,10 @@ export const UserPanel = () => {
                 >
                   Portal
                 </Chip>
-                <p>
+                <p className="truncate max-w-44">
                   {portalUser?.firstName} {portalUser?.lastName}
                 </p>
-                <p className="text-sm text-foreground-500">
+                <p className="text-sm text-foreground-500 truncate max-w-44">
                   {portalUser?.email}
                 </p>
               </div>

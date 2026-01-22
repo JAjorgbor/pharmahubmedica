@@ -27,6 +27,7 @@ import {
 import { z } from 'zod'
 import UpdateOrderProductsModal from './update-order-products-modal'
 import OrderReferralDetails from '@/components/admin/orders/order-referral-details'
+import PrintInvoiceButton from '@/components/shared/print-invoice-button'
 
 const orderUpdateSchema = z.object({
   orderStatus: z.enum(['processing', 'in-transit', 'delivered', 'cancelled']),
@@ -128,7 +129,7 @@ const OrderDetailSection = () => {
     )
   }
 
-  if (orderError || !order) {
+  if (orderError?.status === 404 && !order) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
         <p className="text-xl font-semibold text-danger">Order not found</p>
@@ -168,18 +169,7 @@ const OrderDetailSection = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" startContent={<LuPrinter />}>
-              Print Invoice
-            </Button>
-            <Button
-              color="primary"
-              startContent={<LuSave />}
-              onPress={() => handleSubmit(handleUpdateOrder)()}
-              isLoading={isUpdating}
-              isDisabled={!isDirty}
-            >
-              Save Changes
-            </Button>
+            <PrintInvoiceButton order={order} />
           </div>
         </div>
 
@@ -403,6 +393,15 @@ const OrderDetailSection = () => {
                   rows={3}
                   controllerProps={{ control, name: 'note' }}
                 />
+                <Button
+                  color="primary"
+                  startContent={<LuSave />}
+                  onPress={() => handleSubmit(handleUpdateOrder)()}
+                  isLoading={isUpdating}
+                  isDisabled={!isDirty}
+                >
+                  Save Changes
+                </Button>
               </CardBody>
             </Card>
 

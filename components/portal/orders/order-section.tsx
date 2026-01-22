@@ -18,6 +18,7 @@ import { useGetPortalOrder } from '@/hooks/requests/portal/useOrders'
 import moment from 'moment'
 import { referralPartnerProfessions } from '@/library/config'
 import { OrderDetailSkeleton } from '@/components/portal/PortalSkeletons'
+import PrintInvoiceButton from '@/components/shared/print-invoice-button'
 
 const OrderSection = () => {
   const params = useParams()
@@ -96,6 +97,7 @@ const OrderSection = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <PrintInvoiceButton order={order} />
             <Chip
               color={getStatusColor(order.orderStatus)}
               size="sm"

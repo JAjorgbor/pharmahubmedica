@@ -32,6 +32,7 @@ import {
 import { useGetAdminOrders } from '@/hooks/requests/admin/useAdminOrders'
 import { referralPartnerProfessions } from '@/library/config'
 import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+import { sentenceCase } from 'change-case'
 
 const columnHelper = createColumnHelper<IOrder>()
 
@@ -89,7 +90,7 @@ const OrdersSection = () => {
                 variant="flat"
                 size="sm"
               >
-                {getValue()}
+                {sentenceCase(getValue())}
               </Chip>
             </div>
           )
@@ -112,7 +113,7 @@ const OrdersSection = () => {
                 variant="dot"
                 size="sm"
               >
-                {getValue()}
+                {sentenceCase(getValue())}
               </Chip>
             </div>
           )
@@ -140,7 +141,7 @@ const OrdersSection = () => {
             <div className="space-y-1">
               {getValue()?.referralPartner ? (
                 <>
-                  <p className="text-xs font-semibold">
+                  <p className="text-xs font-semibold max-w-44 truncate">
                     {
                       referralPartnerProfessions[
                         getValue()?.referralPartner.profession
@@ -149,11 +150,8 @@ const OrdersSection = () => {
                     {getValue()?.referralPartner.user.firstName}{' '}
                     {getValue()?.referralPartner.user.lastName}
                   </p>
-                  <p className="text-xs text-foreground-600">
-                    Code: {getValue()?.referralPartner.referralCode}
-                  </p>
                   {getValue()?.commission && (
-                    <p className="text-xs text-success">
+                    <p className="text-xs text-success max-w-44 truncate">
                       Comm: {currencyFormatter(getValue()?.commission.amount)}
                     </p>
                   )}
@@ -233,6 +231,16 @@ const OrdersSection = () => {
       inTransit: orders.filter((o) => o.orderStatus === 'in-transit').length,
       delivered: orders.filter((o) => o.orderStatus === 'delivered').length,
       cancelled: orders.filter((o) => o.orderStatus === 'cancelled').length,
+    }
+  }, [orders])
+
+  const paymentStatusCounts = useMemo(() => {
+    return {
+      paid: orders.filter((o) => o.paymentStatus === 'paid').length,
+      pending: orders.filter((o) => o.paymentStatus === 'pending').length,
+      reversed: orders.filter((o) => o.paymentStatus === 'reversed').length,
+      failed: orders.filter((o) => o.paymentStatus === 'failed').length,
+      abandoneed: orders.filter((o) => o.paymentStatus === 'abandoned').length,
     }
   }, [orders])
 
@@ -353,10 +361,22 @@ const OrdersSection = () => {
                           }}
                           options={[
                             { label: 'All Order Status', value: 'all' },
-                            { label: 'Processing', value: 'processing' },
-                            { label: 'In-Transit', value: 'in-transit' },
-                            { label: 'Delivered', value: 'delivered' },
-                            { label: 'Cancelled', value: 'cancelled' },
+                            {
+                              label: `Processing (${counts.processing})`,
+                              value: 'processing',
+                            },
+                            {
+                              label: `In Transit (${counts.inTransit})`,
+                              value: 'in-transit',
+                            },
+                            {
+                              label: `Delivered (${counts.delivered})`,
+                              value: 'delivered',
+                            },
+                            {
+                              label: `Cancelled (${counts.cancelled})`,
+                              value: 'cancelled',
+                            },
                           ]}
                           onChange={(value) => {
                             table
@@ -375,10 +395,22 @@ const OrdersSection = () => {
                           }}
                           options={[
                             { label: 'All Payment Status', value: 'all' },
-                            { label: 'Pending', value: 'pending' },
-                            { label: 'Paid', value: 'paid' },
-                            { label: 'Failed', value: 'failed' },
-                            { label: 'Reversed', value: 'reversed' },
+                            {
+                              label: `Pending (${paymentStatusCounts.pending})`,
+                              value: 'pending',
+                            },
+                            {
+                              label: `Paid (${paymentStatusCounts.paid})`,
+                              value: 'paid',
+                            },
+                            {
+                              label: `Failed (${paymentStatusCounts.failed})`,
+                              value: 'failed',
+                            },
+                            {
+                              label: `Reversed (${paymentStatusCounts.reversed})`,
+                              value: 'reversed',
+                            },
                           ]}
                           onChange={(value) => {
                             table
