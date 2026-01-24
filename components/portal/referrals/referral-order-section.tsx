@@ -349,44 +349,6 @@ const ReferralOrderSection = () => {
                 </CardBody>
               </Card>
             )}
-
-            <Card>
-              <CardBody className="p-6 space-y-4">
-                <div>
-                  <h3 className="font-semibold text-lg">
-                    Delivery Information
-                  </h3>
-                  <p className="text-sm text-foreground-500">
-                    Shipping details
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <p className="text-xs text-foreground-500 uppercase font-bold mb-1">
-                      Address
-                    </p>
-                    <p className="text-sm font-medium">
-                      {order.deliveryAddress.street}
-                    </p>
-                    <p className="text-sm font-medium">
-                      {order.deliveryAddress.city},{' '}
-                      {order.deliveryAddress.state}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-foreground-500 uppercase font-bold mb-1">
-                      Method
-                    </p>
-                    <p className="text-sm font-medium">
-                      {order.deliveryMethod.name}
-                    </p>
-                    <p className="text-sm text-foreground-400">
-                      {order.deliveryMethod.description}
-                    </p>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
           </div>
 
           <div className="space-y-6">

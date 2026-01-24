@@ -83,7 +83,7 @@ interface InputFieldPropsBase<T extends FieldValues> {
   maxLength?: number
   switchSize?: 'sm' | 'md'
   showSwitchIcon?: boolean
-  autoCompleteAllowCustomVallue?: boolean
+  autoCompleteAllowCustomValue?: boolean
   codeLength?: number
   rows?: number
   allowShowPassword?: boolean
@@ -153,7 +153,7 @@ const InputField = <T extends FieldValues>({
   radius = 'md',
   color = 'primary',
   startContentPlacement = 'inside',
-  autoCompleteAllowCustomVallue = false,
+  autoCompleteAllowCustomValue = false,
   onChange = () => null,
   switchSize = 'sm',
   showSwitchIcon = true,
@@ -536,21 +536,29 @@ const InputField = <T extends FieldValues>({
             aria-label={(label as string) || 'select  field'}
             placeholder={placeholder as string}
             variant={variant}
-            allowsCustomValue={autoCompleteAllowCustomVallue}
+            allowsCustomValue={autoCompleteAllowCustomValue}
             color={color}
             isDisabled={disabled}
             listboxProps={{ color: 'primary', variant: 'flat' }}
             startContent={startContent}
             isInvalid={!!controllerFieldState.error?.message}
-            inputValue={controllerField?.value || (value as string)}
-            // selectedKey={controllerField?.value || (value as string)}
+            inputValue={
+              autoCompleteAllowCustomValue
+                ? controllerField?.value || (value as string)
+                : undefined
+            }
+            selectedKey={
+              !autoCompleteAllowCustomValue
+                ? controllerField?.value || (value as string)
+                : undefined
+            }
             onSelectionChange={(value: any) => {
               console.log('selection', value)
               controllerField.onChange(value)
               if (onChange) onChange(value)
             }}
             onInputChange={(value: any) => {
-              if (autoCompleteAllowCustomVallue) {
+              if (autoCompleteAllowCustomValue) {
                 console.log('value', value)
                 controllerField.onChange(value)
                 if (onChange) onChange(value)

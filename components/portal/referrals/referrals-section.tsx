@@ -90,7 +90,7 @@ const ReferralsSection = () => {
   const [commissionStatusFilter, setCommissionStatusFilter] = useState('all')
   const [tableData, setTableData] = useState<any[]>([])
   const { referrals, isLoading: referralsLoading } = useGetPortalReferrals()
-  console.log(referrals)
+
   const {
     profile: referralPartner,
     isLoading: referralPartnerLoading,

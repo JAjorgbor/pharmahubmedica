@@ -151,13 +151,7 @@ const PortalHeader = () => {
             >
               <LuMenu size={20} />
             </button>
-            <img
-              src="/png-transparent-logo.png"
-              alt="logo"
-              className="w-32 md:hidden"
-              width={100}
-              height={100}
-            />
+            <h1 className="text-primary text-xl font-semibold">User Portal</h1>
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="flex gap-6 items-center" justify="end">

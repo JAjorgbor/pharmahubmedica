@@ -88,31 +88,14 @@ const AdminSidebar = () => {
         >
           <MenuItem
             icon={
-              !isMobile ? (
-                !collapsed ? (
-                  <Image
-                    src="/logo-mark.png"
-                    height={40}
-                    width={40}
-                    alt="logo"
-                    className="w-8 rounded-lg ml-4"
-                  />
-                ) : (
-                  <button
-                    type="button"
-                    className="p-2 rounded-full hover:bg-foreground-100 cursor-pointer"
-                  >
-                    <LuChevronRight size={20} />
-                  </button>
-                )
-              ) : (
-                <Image
-                  src="/logo-mark.png"
-                  height={40}
-                  width={40}
-                  alt="logo"
-                  className="w-8 rounded-lg ml-4"
-                />
+              !isMobile &&
+              collapsed && (
+                <button
+                  type="button"
+                  className="p-2 rounded-full hover:bg-foreground-100 cursor-pointer"
+                >
+                  <LuChevronRight size={20} />
+                </button>
               )
             }
             onClick={() => setCollapsed(!collapsed)}
@@ -128,9 +111,13 @@ const AdminSidebar = () => {
             }
             className="py-2 bg-white! hover:bg-white! border-b border-b-foreground-200"
           >
-            <span className="text-primary font-semibold text-lg">
-              Admin Console
-            </span>
+            <Image
+              src="/png-transparent-logo.png"
+              height={100}
+              width={150}
+              alt="logo"
+              className="w-36 rounded-lg ml-4"
+            />
           </MenuItem>
         </Menu>
         <Menu

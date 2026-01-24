@@ -165,8 +165,10 @@ const TeamSection = () => {
                   <div className="grid grid-cols-3 items-center gap-3">
                     <Avatar
                       radius="lg"
-                      className="size-full"
+                      className="h-32 w-full"
+                      classNames={{ img: 'object-cover max-h-full w-full' }}
                       name={`${member.firstName} ${member.lastName}`}
+                      src={member?.avatar?.url}
                     />
                     <div className="space-y-3 col-span-2 ">
                       <div className="space-y-1 ">

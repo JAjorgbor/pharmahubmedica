@@ -7,4 +7,8 @@ export interface IAdminUser {
   role: string
   gender: string
   phoneNumber?: string
+  avatar?: {
+    url: string
+    key?: string
+  }
 }

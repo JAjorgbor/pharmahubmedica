@@ -1,11 +1,9 @@
 'use client'
-import { useScroll } from 'framer-motion'
-import PhoneNumberDisplay from '@/components/scaffold/phone-number-display'
-import MobileMenu from '@/components/scaffold/mobile-menu'
+import useGetAdminUser from '@/hooks/requests/admin/useGetAdminUser'
+import { useSidebarStore } from '@/stores/useSidebarStore'
+import { cn } from '@/utils/cn'
 import {
   Avatar,
-  Badge,
-  Button,
   Chip,
   Dropdown,
   DropdownItem,
@@ -16,23 +14,12 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Tooltip,
+  Skeleton,
 } from '@heroui/react'
-import Image from 'next/image'
-import {
-  LuChevronDown,
-  LuLayoutDashboard,
-  LuLogOut,
-  LuMenu,
-  LuSettings,
-  LuShoppingCart,
-} from 'react-icons/lu'
-import { useEffect, useState } from 'react'
-import { cn } from '@/utils/cn'
+import { useScroll } from 'framer-motion'
 import Link from 'next/link'
-import { useSidebarStore } from '@/stores/useSidebarStore'
-import useGetAdminUser from '@/hooks/requests/admin/useGetAdminUser'
-import { Skeleton } from '@heroui/react'
+import { useEffect, useState } from 'react'
+import { LuLayoutDashboard, LuLogOut, LuMenu, LuSettings } from 'react-icons/lu'
 import LogoutConfirmationModal from './logout-confirmation-modal'
 
 export const UserPanel = () => {
@@ -42,7 +29,11 @@ export const UserPanel = () => {
     <>
       <Dropdown>
         <DropdownTrigger>
-          <Avatar size="sm" className="cursor-pointer" />
+          <Avatar
+            size="sm"
+            className="cursor-pointer"
+            src={adminUser?.avatar?.url}
+          />
         </DropdownTrigger>
         <DropdownMenu
           topContent={
@@ -155,13 +146,9 @@ const AdminHeader = () => {
             >
               <LuMenu size={20} />
             </button>
-            <img
-              src="/png-transparent-logo.png"
-              alt="logo"
-              className="w-32 md:hidden"
-              width={100}
-              height={100}
-            />
+            <h1 className="text-primary text-xl font-semibold">
+              Admin Console
+            </h1>
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="flex gap-6 items-center" justify="end">

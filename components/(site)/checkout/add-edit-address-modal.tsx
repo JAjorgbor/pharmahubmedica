@@ -107,7 +107,7 @@ const AddEditAddressModal = ({
           label="Label"
           placeholder="Home"
           controllerProps={{ control, name: 'label' }}
-          autoCompleteAllowCustomVallue
+          autoCompleteAllowCustomValue
           options={[
             { value: 'Home', label: 'Home' },
             { value: 'Office', label: 'Office' },
