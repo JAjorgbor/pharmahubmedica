@@ -15,6 +15,7 @@ export interface IPortalUser {
   deliveryAddresses: any[]
   isReferralPartner: boolean
   orderCount?: number
+  totalSpent?: number
 }
 
 export interface Security {

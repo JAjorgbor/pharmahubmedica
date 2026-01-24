@@ -35,7 +35,7 @@ const CustomersSection = () => {
   const { customers, customersLoading, mutateCustomers } = useGetCustomers()
   const items = useMemo(() => customers || [], [customers])
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer | null>(
-    null
+    null,
   )
   const [isUpdateOpen, setIsUpdateOpen] = useState(false)
 
@@ -68,7 +68,7 @@ const CustomersSection = () => {
               </div>
             </div>
           ),
-        }
+        },
       ),
       columnHelper.accessor('phoneNumber', {
         id: 'phone',
@@ -88,8 +88,8 @@ const CustomersSection = () => {
             status === 'active'
               ? 'success'
               : status === 'pending'
-              ? 'warning'
-              : 'default'
+                ? 'warning'
+                : 'default'
           return (
             <div className="capitalize">
               <Chip color={color} variant="dot" size="sm">
@@ -103,6 +103,10 @@ const CustomersSection = () => {
         header: 'Total Spent',
         cell: ({ getValue }) =>
           getValue() ? currencyFormatter(getValue()) : '—',
+      }),
+      columnHelper.accessor('orderCount', {
+        header: 'Orders',
+        cell: ({ getValue }) => getValue() || 0,
       }),
       columnHelper.accessor('referredBy', {
         header: 'Referred By',
@@ -162,7 +166,7 @@ const CustomersSection = () => {
         ),
       }),
     ],
-    [items]
+    [items],
   )
 
   return (
@@ -202,7 +206,12 @@ const CustomersSection = () => {
             columns={columns}
             items={items}
             isLoading={customersLoading}
-            allowsSortingFor={['createdAt', 'updatedAt', 'totalSpent']}
+            allowsSortingFor={[
+              'createdAt',
+              'updatedAt',
+              'totalSpent',
+              'orderCount',
+            ]}
             topContent={({ table, searchField }) => {
               const getStatusCount = (status: string) => {
                 if (items) {

@@ -13,6 +13,7 @@ export interface ICustomer {
   isReferralPartner: boolean
   referredBy?: IReferralPartner
   totalSpent?: number
+  orderCount?: number
   createdAt: string
   updatedAt: string
 }
