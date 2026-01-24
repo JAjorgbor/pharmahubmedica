@@ -88,21 +88,6 @@ const ReferralDetailsSection = () => {
           </div>
         ),
       }),
-      columnHelper.display({
-        id: 'customer',
-        header: 'Customer',
-        cell: ({ row: { original: item } }) => (
-          <div className="space-y-1">
-            <p className="text-xs font-bold">
-              {item.customer.firstName} {item.customer.lastName}
-            </p>
-            <p className="text-xs text-foreground-600">{item.customer.email}</p>
-            <p className="text-xs text-foreground-600">
-              {item.customer.phoneNumber}
-            </p>
-          </div>
-        ),
-      }),
 
       columnHelper.accessor('orderStatus', {
         header: 'Order Status',
@@ -174,9 +159,22 @@ const ReferralDetailsSection = () => {
       }),
       columnHelper.accessor('transaction.totalAmount', {
         header: 'Total',
-        cell: ({ getValue }) => {
+        cell: ({ getValue, row: { original: item } }) => {
+          const statusMap = {
+            pending: 'warning',
+            paid: 'success',
+            refunded: 'primary',
+            failed: 'danger',
+          } as const
           return (
-            <div className="font-bold">
+            <div
+              className={`font-bold text-${
+                statusMap[
+                  item.referralDetails?.commission
+                    ?.status as keyof typeof statusMap
+                ] || 'default'
+              }`}
+            >
               {currencyFormatter(getValue() || 0)}
             </div>
           )
@@ -237,7 +235,7 @@ const ReferralDetailsSection = () => {
         id: 'actions',
         header: 'Actions',
         cell: ({ row: { original } }) => (
-          <div className="flex items-center justify-end space-x-2">
+          <div className="flex items-center space-x-2">
             <Button
               as={Link}
               variant="flat"
@@ -305,8 +303,61 @@ const ReferralDetailsSection = () => {
           </div>
         </div>
         <p className="text-foreground-500">
-          Monitor orders from this referral patients and track commissions
+          Monitor orders from this referral and track commissions
         </p>
+
+        <Card className="shadow-sm">
+          <CardBody>
+            <div className="flex flex-col lg:flex-row gap-6 lg:items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold shrink-0">
+                  {user?.firstName?.[0]}
+                  {user?.lastName?.[0]}
+                </div>
+                <div className="space-y-1">
+                  <h2 className="text-xl font-bold">
+                    {user?.firstName} {user?.lastName}
+                  </h2>
+                  <div className="flex gap-2 items-center">
+                    <Chip
+                      size="sm"
+                      color={
+                        user?.status === 'active'
+                          ? 'success'
+                          : user?.status === 'inactive'
+                            ? 'danger'
+                            : 'warning'
+                      }
+                      variant="flat"
+                      className="capitalize"
+                    >
+                      {user?.status}
+                    </Chip>
+                    {/* <span className="text-xs text-foreground-500">•</span> */}
+                    <span className="text-xs text-foreground-500">
+                      Joined {moment(user?.createdAt).format('MMM D, YYYY')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-x-8 gap-y-4 lg:justify-end">
+                <div>
+                  <p className="text-xs text-foreground-500 uppercase font-semibold mb-1">
+                    Email Address
+                  </p>
+                  <p className="text-sm font-medium">{user?.email}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-foreground-500 uppercase font-semibold mb-1">
+                    Phone Number
+                  </p>
+                  <p className="text-sm font-medium">{user?.phoneNumber}</p>
+                </div>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
           <Card className="p-5 border-none shadow-sm">
             <CardBody>

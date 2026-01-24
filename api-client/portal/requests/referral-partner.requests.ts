@@ -7,15 +7,15 @@ export const updatePortalReferralProfile = (data: any) =>
   axiosInstance.patch('portal/referral-partners/me', data)
 
 export const getPortalReferrals = () =>
-  axiosInstance.get('portal/referral-partners/referrals')
+  axiosInstance.get('portal/referral-partners/me/referrals')
 
 export const getPortalReferredUserDetails = (userId: string) =>
-  axiosInstance.get(`portal/referral-partners/referrals/${userId}`)
+  axiosInstance.get(`portal/referral-partners/me/referrals/${userId}`)
 
 export const getPortalReferredUserOrders = (userId: string) =>
-  axiosInstance.get(`portal/referral-partners/referrals/${userId}/orders`)
+  axiosInstance.get(`portal/referral-partners/me/referrals/${userId}/orders`)
 
 export const getPortalReferredUserOrder = (userId: string, orderId: string) =>
   axiosInstance.get(
-    `portal/referral-partners/referrals/${userId}/orders/${orderId}`,
+    `portal/referral-partners/me/referrals/${userId}/orders/${orderId}`,
   )

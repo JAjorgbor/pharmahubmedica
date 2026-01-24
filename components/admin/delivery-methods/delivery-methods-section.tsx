@@ -64,7 +64,9 @@ const DeliveryMethodsSection = () => {
       columnHelper.accessor('estimatedDeliveryTime', {
         id: 'estimatedDeliveryTime',
         header: 'Delivery Time',
-        cell: ({ getValue }) => getValue(),
+        cell: ({ getValue }) => (
+          <div className="max-w-56 truncate">{getValue()}</div>
+        ),
       }),
       columnHelper.accessor('isActive', {
         id: 'isActive',

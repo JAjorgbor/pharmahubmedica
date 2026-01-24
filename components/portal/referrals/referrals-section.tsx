@@ -1,7 +1,7 @@
 'use client'
 
 import InputField from '@/components/elements/input-field'
-import { currencyFormatter } from '@/utils/currency-formatter'
+import TableWrapper from '@/components/elements/table-wrapper'
 import {
   BreadcrumbItem,
   Breadcrumbs,
@@ -10,19 +10,12 @@ import {
   CardBody,
   Chip,
   Tab,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   Tabs,
   useDisclosure,
-  Spinner,
   Tooltip,
 } from '@heroui/react'
 import {
-  flexRender,
+  createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
@@ -52,6 +45,8 @@ import {
   StatsSkeleton,
   TableSkeleton,
 } from '@/components/portal/PortalSkeletons'
+import { IPortalUser } from '@/api-client/interfaces/portal.user.interfaces'
+import { currencyFormatter } from '@/utils/currency-formatter'
 
 const getStatusIcon = (status: any) => {
   switch (status) {
@@ -88,11 +83,14 @@ const getCommissionStatusColor = (status: string) => {
   }
 }
 
+const columnHelper = createColumnHelper<IPortalUser>()
+
 const ReferralsSection = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [commissionStatusFilter, setCommissionStatusFilter] = useState('all')
   const [tableData, setTableData] = useState<any[]>([])
   const { referrals, isLoading: referralsLoading } = useGetPortalReferrals()
+  console.log(referrals)
   const {
     profile: referralPartner,
     isLoading: referralPartnerLoading,
@@ -120,13 +118,9 @@ const ReferralsSection = () => {
         referral.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         referral.lastName.toLowerCase().includes(searchTerm.toLowerCase())
 
-      const matchesCommission =
-        commissionStatusFilter === 'all' ||
-        referral.commissionStatus === commissionStatusFilter
-
-      return matchesSearch && matchesCommission
+      return matchesSearch
     })
-  }, [referrals, searchTerm, commissionStatusFilter])
+  }, [referrals, searchTerm])
 
   const getReferralsByStatus = (status: string) => {
     return filteredReferrals?.filter((referral) => referral.status === status)
@@ -167,10 +161,10 @@ const ReferralsSection = () => {
 
   const columns = useMemo(
     () => [
-      {
-        accessorKey: 'referee',
+      columnHelper.accessor((row) => `${row.firstName} ${row.lastName}`, {
+        id: 'referee',
         header: 'Referee',
-        cell: ({ row }: any) => (
+        cell: ({ row }) => (
           <div>
             <p className="font-medium">
               {row.original.firstName} {row.original.lastName}
@@ -183,11 +177,10 @@ const ReferralsSection = () => {
             )}
           </div>
         ),
-      },
-      {
-        accessorKey: 'status',
+      }),
+      columnHelper.accessor('status', {
         header: 'Status',
-        cell: ({ row }: any) => (
+        cell: ({ row }) => (
           <Chip
             color={getStatusColor(row.original.status)}
             startContent={getStatusIcon(row.original.status)}
@@ -197,44 +190,28 @@ const ReferralsSection = () => {
             <span className="capitalize">{row.original.status}</span>
           </Chip>
         ),
-      },
-      {
-        accessorKey: 'commissionStatus',
-        header: 'Comm. Status',
-        cell: ({ row }: any) => (
-          <Chip
-            color={getCommissionStatusColor(row.original.commissionStatus)}
-            size="sm"
-            variant="dot"
-            className="capitalize"
-          >
-            {row.original.commissionStatus || 'None'}
-          </Chip>
-        ),
-      },
-      {
-        accessorKey: 'createdAt',
+      }),
+      columnHelper.accessor('createdAt', {
         header: 'Joined On',
-        cell: ({ row }: any) => (
+        cell: ({ row }) => (
           <div className="text-sm text-foreground-600">
-            <p>{moment(row.original.createdAt).format('MMM DD, YYYY')}</p>
+            <p>{moment(row.original.createdAt).format('MMMM DD, YYYY')}</p>
           </div>
         ),
-      },
-      {
-        accessorKey: 'orderCount',
+      }),
+      columnHelper.accessor('orderCount', {
         header: 'Orders',
-        cell: ({ row }: any) => (
+        cell: ({ getValue }) => (
           <div className="font-medium text-foreground-700">
-            {row.original.orderCount || 0} orders
+            {getValue() || 0} orders
           </div>
         ),
-      },
-      {
+      }),
+      columnHelper.display({
         id: 'actions',
         header: () => <div className="text-right">Actions</div>,
-        cell: ({ row }: any) => (
-          <div className="flex items-center justify-end space-x-2">
+        cell: ({ row }) => (
+          <div className="flex items-center">
             <Button
               as={Link}
               variant="flat"
@@ -247,7 +224,7 @@ const ReferralsSection = () => {
             </Button>
           </div>
         ),
-      },
+      }),
     ],
     [],
   )
@@ -466,7 +443,7 @@ const ReferralsSection = () => {
                       onChange={(value) => setSearchTerm(value)}
                     />
                   </div>
-                  <div className="min-w-44">
+                  {/* <div className="min-w-44">
                     <InputField
                       type="select"
                       placeholder="Comm. Status"
@@ -491,7 +468,7 @@ const ReferralsSection = () => {
                       ]}
                       onChange={(value) => setCommissionStatusFilter(value)}
                     />
-                  </div>
+                  </div> */}
                   <Chip
                     color="danger"
                     variant="flat"
@@ -517,59 +494,17 @@ const ReferralsSection = () => {
               >
                 {tabs.map((tab) => (
                   <Tab key={tab.key} title={tab.label}>
-                    {
-                      <Table
-                        aria-label="Referral table"
-                        removeWrapper
-                        shadow="none"
-                        classNames={{
-                          base: 'min-w-full max-w-0 overflow-x-auto',
-                        }}
-                      >
-                        <TableHeader>
-                          {table.getHeaderGroups().flatMap((headerGroup) =>
-                            headerGroup.headers.map((header) => (
-                              <TableColumn
-                                key={header.id}
-                                className="text-xs font-bold uppercase"
-                              >
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext(),
-                                )}
-                              </TableColumn>
-                            )),
-                          )}
-                        </TableHeader>
-                        <TableBody
-                          items={tab.referrals || []}
-                          emptyContent={
-                            <div className="text-center py-12">
-                              {tab.emptyIcon}
-                              <p className="text-foreground-500">
-                                {tab.emptyText}
-                              </p>
-                            </div>
-                          }
-                        >
-                          {table.getRowModel().rows.map((row) => (
-                            <TableRow key={row.id}>
-                              {row.getVisibleCells().map((cell) => (
-                                <TableCell
-                                  key={cell.id}
-                                  className="text-sm px-2 py-2"
-                                >
-                                  {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext(),
-                                  )}
-                                </TableCell>
-                              ))}
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    }
+                    <TableWrapper
+                      columns={columns}
+                      items={tab.referrals || []}
+                      isLoading={referralsLoading}
+                      emptyContent={
+                        <div className="text-center py-12">
+                          {tab.emptyIcon}
+                          <p className="text-foreground-500">{tab.emptyText}</p>
+                        </div>
+                      }
+                    />
                   </Tab>
                 ))}
               </Tabs>

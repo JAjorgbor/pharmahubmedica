@@ -1,4 +1,5 @@
 import { IOrder } from '@/api-client/interfaces/order.interfaces'
+import { IPortalUser } from '@/api-client/interfaces/portal.user.interfaces'
 import {
   getPortalReferralProfile,
   getPortalReferrals,
@@ -26,8 +27,8 @@ export function useGetPortalReferralProfile() {
 }
 
 export function useGetPortalReferrals() {
-  const { data, error, isLoading, mutate } = useSWR(
-    'portal/referral-partners/referrals',
+  const { data, error, isLoading, mutate } = useSWR<IPortalUser[]>(
+    'portal/referral-partners/me/referrals',
     async () => {
       const { data } = await getPortalReferrals()
       return data.referrals

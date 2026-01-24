@@ -93,8 +93,8 @@ const ReferralOrderSection = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
         <p className="text-xl font-semibold text-danger">Order not found</p>
-        <Button as={Link} href="/portal/orders" variant="flat">
-          Back to Orders
+        <Button as={Link} href={`/portal/referrals/${userId}`} variant="flat">
+          Back to Referrals
         </Button>
       </div>
     )
@@ -105,7 +105,12 @@ const ReferralOrderSection = () => {
       <div className="max-w-7xl mx-auto p-5 space-y-8">
         <div className="flex items-center justify-between">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <Button isIconOnly as={Link} href="/portal/orders" variant="light">
+            <Button
+              isIconOnly
+              as={Link}
+              href={`/portal/referrals/${userId}`}
+              variant="light"
+            >
               <LuChevronLeft size={25} />
             </Button>
             <div>
