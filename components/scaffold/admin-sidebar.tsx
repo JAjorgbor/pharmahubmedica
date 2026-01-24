@@ -219,6 +219,15 @@ const AdminSidebar = () => {
             {' '}
             Orders{' '}
           </MenuItem>
+          <MenuItem
+            icon={<LuTruck />}
+            component={<Link href="/admin/delivery-methods" />}
+            className="text-foreground-600"
+            active={isActive('/admin/delivery-methods')}
+          >
+            {' '}
+            Delivery Methods
+          </MenuItem>
           <SubMenu
             label="Contacts"
             icon={<LuContactRound />}
@@ -263,15 +272,6 @@ const AdminSidebar = () => {
           >
             {' '}
             Team
-          </MenuItem>
-          <MenuItem
-            icon={<LuTruck />}
-            component={<Link href="/admin/delivery-methods" />}
-            className="text-foreground-600"
-            active={isActive('/admin/delivery-methods')}
-          >
-            {' '}
-            Delivery Methods
           </MenuItem>
           <MenuItem
             icon={<LuSettings />}

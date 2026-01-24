@@ -3,8 +3,8 @@
 import { IDeliveryMethod } from '@/api-client/interfaces/delivery-method.interfaces'
 import TableWrapper from '@/components/elements/table-wrapper'
 import { useGetAdminDeliveryMethods } from '@/hooks/requests/admin/useGetAdminDeliveryMethods'
-import AddEditDeliveryMethodModal from './add-edit-delivery-method-modal'
-import DeleteDeliveryMethodModal from './delete-delivery-method-modal'
+import AddEditDeliveryMethodModal from '@/components/admin/delivery-methods/add-edit-delivery-method-modal'
+import DeleteDeliveryMethodModal from '@/components/admin/delivery-methods/delete-delivery-method-modal'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import InputField from '@/components/elements/input-field'
 import {
@@ -16,6 +16,9 @@ import {
   DropdownTrigger,
   Breadcrumbs,
   BreadcrumbItem,
+  CardBody,
+  CardHeader,
+  Card,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
@@ -173,53 +176,57 @@ const DeliveryMethodsSection = () => {
         Manage shipping options and delivery fees.
       </p>
 
-      <TableWrapper
-        columns={columns}
-        items={deliveryMethods}
-        isLoading={deliveryMethodsLoading}
-        ariaLabel="Delivery Methods Table"
-        topContent={({ table, searchField }) => (
-          <div className="flex justify-between items-center w-full gap-3 flex-wrap">
-            <div className="w-full lg:w-1/4">
-              {searchField('Search methods...')}
-            </div>
-            <div className="gap-3 grid grid-cols-2 w-full lg:w-1/2">
-              <InputField
-                type="select"
-                controllerProps={{
-                  name: 'status filter',
-                  defaultValue: statusFilter,
-                }}
-                options={[
-                  { label: 'All Status', value: 'all' },
-                  { label: 'Active', value: 'active' },
-                  { label: 'Inactive', value: 'inactive' },
-                ]}
-                onChange={(value) => {
-                  table.getColumn('isActive')?.setFilterValue(value)
-                  setStatusFilter(value)
-                }}
-              />
-              <InputField
-                type="select"
-                controllerProps={{
-                  name: 'visibility filter',
-                  defaultValue: visibilityFilter,
-                }}
-                options={[
-                  { label: 'All Visibility', value: 'all' },
-                  { label: 'Visible', value: 'visible' },
-                  { label: 'Hidden', value: 'hidden' },
-                ]}
-                onChange={(value) => {
-                  table.getColumn('visibility')?.setFilterValue(value)
-                  setVisibilityFilter(value)
-                }}
-              />
-            </div>
-          </div>
-        )}
-      />
+      <Card>
+        <CardBody>
+          <TableWrapper
+            columns={columns}
+            items={deliveryMethods}
+            isLoading={deliveryMethodsLoading}
+            ariaLabel="Delivery Methods Table"
+            topContent={({ table, searchField }) => (
+              <div className="flex justify-between items-center w-full gap-3 flex-wrap">
+                <div className="w-full lg:w-1/4">
+                  {searchField('Search methods...')}
+                </div>
+                <div className="gap-3 grid grid-cols-2 w-full lg:w-1/3">
+                  <InputField
+                    type="select"
+                    controllerProps={{
+                      name: 'status filter',
+                      defaultValue: statusFilter,
+                    }}
+                    options={[
+                      { label: 'All Status', value: 'all' },
+                      { label: 'Active', value: 'active' },
+                      { label: 'Inactive', value: 'inactive' },
+                    ]}
+                    onChange={(value) => {
+                      table.getColumn('isActive')?.setFilterValue(value)
+                      setStatusFilter(value)
+                    }}
+                  />
+                  <InputField
+                    type="select"
+                    controllerProps={{
+                      name: 'visibility filter',
+                      defaultValue: visibilityFilter,
+                    }}
+                    options={[
+                      { label: 'All Visibility', value: 'all' },
+                      { label: 'Visible', value: 'visible' },
+                      { label: 'Hidden', value: 'hidden' },
+                    ]}
+                    onChange={(value) => {
+                      table.getColumn('visibility')?.setFilterValue(value)
+                      setVisibilityFilter(value)
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          />
+        </CardBody>
+      </Card>
 
       <AddEditDeliveryMethodModal
         isOpen={isModalOpen}
