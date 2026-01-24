@@ -166,7 +166,7 @@ const TeamSection = () => {
                     <Avatar
                       radius="lg"
                       className="h-32 w-full"
-                      classNames={{ img: 'object-cover max-h-full w-full' }}
+                      classNames={{ name: 'text-2xl' }}
                       name={`${member.firstName} ${member.lastName}`}
                       src={member?.avatar?.url}
                     />

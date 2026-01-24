@@ -41,6 +41,11 @@ const PersonalDetailsSettings: FC<PersonalDetailsSettingsProps> = ({}) => {
 
   const { getImageFileFromUrl, isFetching: isImageFetching } =
     useGetImageFileFromUrl(adminUser)
+  const isLoading = adminUser
+    ? adminUser?.avatar?.url
+      ? isImageFetching
+      : false
+    : true
   useEffect(() => {
     console.log(adminUser)
     if (adminUser) {
@@ -107,7 +112,7 @@ const PersonalDetailsSettings: FC<PersonalDetailsSettingsProps> = ({}) => {
             className="grid md:grid-cols-2 gap-4"
             onSubmit={formMethods.handleSubmit(handleSubmit)}
           >
-            {isImageFetching ? (
+            {isLoading ? (
               <>
                 <Skeleton className="h-10 rounded-lg w-full" />
                 <Skeleton className="h-10 rounded-lg w-full" />
