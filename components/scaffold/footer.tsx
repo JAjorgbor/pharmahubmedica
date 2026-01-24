@@ -1,5 +1,4 @@
 'use client'
-import useGetContactInfo from '@/hooks/useGetContactInfo'
 import logo from '@/public/png-transparent-logo.png'
 import { Button } from '@heroui/react'
 import Image from 'next/image'
@@ -7,11 +6,9 @@ import Link from 'next/link'
 import { LuFacebook, LuInstagram } from 'react-icons/lu'
 
 const Footer = () => {
-  const { contactInfo } = useGetContactInfo()
-
   return (
     <footer className="bg-foreground-100 text-gray-800 py-8">
-      <div className="max-w-7xl px-5  mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         {/* Top section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 pt-5">
           {/* Logo */}
@@ -75,16 +72,12 @@ const Footer = () => {
                 Social Media
               </h6>
               <div className="flex space-x-3 text-foreground-500">
-                <Link
-                  target="_blank"
-                  href={contactInfo?.facebookAccount ?? '#'}
-                  className="hover:text-primary"
-                >
+                <Link target="_blank" href="#" className="hover:text-primary">
                   <LuFacebook className="w-6 h-6" />
                 </Link>
                 <Link
                   target="_blank"
-                  href={contactInfo?.instagramAccount ?? '#'}
+                  href={'#'}
                   className="hover:text-pink-500"
                 >
                   <LuInstagram className="w-6 h-6" />
