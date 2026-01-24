@@ -99,7 +99,7 @@ export default function LoginForm() {
           <Button
             type="submit"
             color="primary"
-            className="w-full text-base font-semibold"
+            className="w-full text-base"
             isLoading={isSubmitting || keepLoading}
           >
             <LuLogIn className="mr-2 h-4 w-4" />

@@ -1,5 +1,4 @@
 import PartnerDetailssSection from '@/components/admin/referral-partners/partner-details-section'
-import SetHeaderTitle from '@/components/scaffold/set-header-title'
 
 export const metadata = {
   title: 'Partner Referrals',
@@ -13,7 +12,6 @@ export default async function PartnerReferralsPage({
   const { id } = await params
   return (
     <>
-      <SetHeaderTitle title="Partner Referrals" />
       <PartnerDetailssSection partnerId={id} />
     </>
   )

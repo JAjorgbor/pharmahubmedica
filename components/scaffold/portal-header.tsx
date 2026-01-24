@@ -31,8 +31,7 @@ import {
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils/cn'
 import Link from 'next/link'
-import { useAppDispatch, useAppSelector } from '@/features/store'
-import { setOpenSidebar } from '@/features/sidebarSlice'
+import { useSidebarStore } from '@/stores/useSidebarStore'
 import LogoutConfirmationModal from '@/components/scaffold/portal-logout-confirmation-modal'
 import useGetPortalUser from '@/hooks/requests/useGetPortalUser'
 
@@ -121,9 +120,7 @@ export const UserPanel = () => {
 const PortalHeader = () => {
   const { scrollY } = useScroll() // reactive MotionValue
   const [scrollHeight, setScrollHeight] = useState(0)
-
-  const dispatch = useAppDispatch()
-  const { openSidebar } = useAppSelector((state) => state.sidebar)
+  const { setOpenSidebar } = useSidebarStore()
 
   useEffect(() => {
     // subscribe to changes
@@ -150,11 +147,17 @@ const PortalHeader = () => {
           <NavbarBrand className="flex gap-4 items-center">
             <button
               className="p-1 md:hidden rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer"
-              onClick={() => dispatch(setOpenSidebar(true))}
+              onClick={() => setOpenSidebar(true)}
             >
               <LuMenu size={20} />
             </button>
-            <h1 className="text-xl font-semibold text-primary">Dashboard</h1>
+            <img
+              src="/png-transparent-logo.png"
+              alt="logo"
+              className="w-32 md:hidden"
+              width={100}
+              height={100}
+            />
           </NavbarBrand>
         </NavbarContent>
         <NavbarContent className="flex gap-6 items-center" justify="end">

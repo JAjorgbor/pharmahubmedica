@@ -38,6 +38,7 @@ const AddEditAddressModal = ({
     control,
     handleSubmit,
     reset,
+    watch,
     formState: { isSubmitting },
   } = useForm<AddressFormData>({
     resolver: zodResolver(addressSchema),
@@ -63,6 +64,11 @@ const AddEditAddressModal = ({
       }
     }
   }, [isOpen, initialData, reset])
+
+  useEffect(() => {
+    const subscribe = watch((values) => console.log(values))
+    return () => subscribe.unsubscribe()
+  }, [])
 
   const onFormSubmit = async (data: AddressFormData) => {
     await onSubmit({ ...initialData, ...data }) // Maintain ID if editing
@@ -97,10 +103,23 @@ const AddEditAddressModal = ({
         className="grid md:grid-cols-2 gap-4"
       >
         <InputField
-          type="text"
-          label="Label (e.g., Home, Office)"
+          type="autocomplete"
+          label="Label"
           placeholder="Home"
           controllerProps={{ control, name: 'label' }}
+          autoCompleteAllowCustomVallue
+          options={[
+            { value: 'Home', label: 'Home' },
+            { value: 'Office', label: 'Office' },
+            { value: 'Hospital', label: 'Hospital' },
+            { value: 'Apartment', label: 'Apartment' },
+            { value: 'Hotel', label: 'Hotel' },
+            { value: 'Business', label: 'Business' },
+            { value: 'Pharmarcy', label: 'Pharmarcy' },
+            { value: 'Clinic', label: 'Clinic' },
+            { value: 'Patient', label: 'Patient' },
+            { value: 'Other', label: 'Other' },
+          ]}
         />
         <InputField
           type="phoneNumber"

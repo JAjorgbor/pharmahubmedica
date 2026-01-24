@@ -8,6 +8,7 @@ export interface IPortalUser {
   phoneNumber: string
   isEmailVerified: boolean
   status: string
+  dateOfBirth: string | undefined
   createdAt: Date
   updatedAt: Date
   __v: number

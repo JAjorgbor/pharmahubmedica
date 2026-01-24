@@ -8,8 +8,6 @@ import {
   SubMenu,
 } from 'react-pro-sidebar'
 
-import { setOpenSidebar } from '@/features/sidebarSlice'
-import { useAppDispatch, useAppSelector } from '@/features/store'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import { theme } from '@/library/config'
 import Image from 'next/image'
@@ -29,23 +27,24 @@ import {
   LuLayoutList,
   LuPackage,
   LuSettings,
+  LuTruck,
   LuUsers,
 } from 'react-icons/lu'
+import { useSidebarStore } from '@/stores/useSidebarStore'
 
 const AdminSidebar = () => {
   const isMobile = useMediaQuery('md')
   const [collapsed, setCollapsed] = useState(false)
-  const { openSidebar } = useAppSelector((state) => state.sidebar)
-  const dispatch = useAppDispatch()
+  const { openSidebar, setOpenSidebar } = useSidebarStore()
   const pathname = usePathname()
   const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
-    if (!isMobile && openSidebar) dispatch(setOpenSidebar(false))
+    if (!isMobile && openSidebar) setOpenSidebar(false)
   }, [isMobile, openSidebar, pathname])
 
   useEffect(() => {
-    dispatch(setOpenSidebar(false))
+    setOpenSidebar(false)
   }, [pathname])
   useEffect(() => {
     setIsHydrated(true)
@@ -55,7 +54,7 @@ const AdminSidebar = () => {
     isHydrated && (
       <Sidebar
         collapsed={!isMobile && collapsed}
-        onBackdropClick={() => dispatch(setOpenSidebar(false))}
+        onBackdropClick={() => setOpenSidebar(false)}
         toggled={openSidebar}
         breakPoint="md"
         rootStyles={{
@@ -264,6 +263,15 @@ const AdminSidebar = () => {
           >
             {' '}
             Team
+          </MenuItem>
+          <MenuItem
+            icon={<LuTruck />}
+            component={<Link href="/admin/delivery-methods" />}
+            className="text-foreground-600"
+            active={isActive('/admin/delivery-methods')}
+          >
+            {' '}
+            Delivery Methods
           </MenuItem>
           <MenuItem
             icon={<LuSettings />}

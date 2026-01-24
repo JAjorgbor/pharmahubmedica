@@ -75,7 +75,7 @@ export default function ForgotPasswordForm() {
             <div className="space-y-3 w-full">
               <Button
                 href="/login"
-                className="w-full bg-primary hover:bg-primary/90 text-white font-semiboldh-11"
+                className="w-full bg-primary hover:bg-primary/90 text-white"
               >
                 Back to login
               </Button>
@@ -97,7 +97,7 @@ export default function ForgotPasswordForm() {
             <Button
               type="submit"
               color="primary"
-              className="w-full text-base font-semibold"
+              className="w-full text-base"
               isLoading={isSubmitting}
             >
               Send Reset Link

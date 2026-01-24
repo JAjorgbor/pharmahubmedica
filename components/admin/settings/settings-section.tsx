@@ -1,5 +1,4 @@
 'use client'
-import DeliveryMethodsSettings from './delivery-methods-settings'
 import InputField from '@/components/elements/input-field'
 import SingleImageDropzone from '@/components/elements/single-image-dropzone'
 import {
@@ -254,7 +253,7 @@ const SettingsSection = () => {
                 </Card>
               </div>
             </Tab>
-            <Tab title="Delivery Methods">
+            {/* <Tab title="Delivery Methods">
               <div className="space-y-6">
                 <Card>
                   <CardBody>
@@ -262,7 +261,7 @@ const SettingsSection = () => {
                   </CardBody>
                 </Card>
               </div>
-            </Tab>
+            </Tab> */}
           </Tabs>
         </div>
       </div>

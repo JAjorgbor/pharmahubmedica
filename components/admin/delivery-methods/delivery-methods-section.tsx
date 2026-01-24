@@ -8,24 +8,26 @@ import DeleteDeliveryMethodModal from './delete-delivery-method-modal'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import InputField from '@/components/elements/input-field'
 import {
-  addToast,
   Button,
   Chip,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Breadcrumbs,
+  BreadcrumbItem,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
 import { useMemo, useState } from 'react'
 import { FiMoreVertical } from 'react-icons/fi'
-import { LuPlus, LuSettings2 } from 'react-icons/lu'
+import { LuPlus, LuSettings2, LuTruck } from 'react-icons/lu'
 import { adminDeliveryMethodRequests } from '@/api-client/admin/requests/admin.delivery-method.requests'
+import Link from 'next/link'
 
 const columnHelper = createColumnHelper<IDeliveryMethod>()
 
-const DeliveryMethodsSettings = () => {
+const DeliveryMethodsSection = () => {
   const { deliveryMethods, deliveryMethodsLoading, mutateDeliveryMethods } =
     useGetAdminDeliveryMethods()
 
@@ -139,15 +141,23 @@ const DeliveryMethodsSettings = () => {
         ),
       }),
     ],
-    [deliveryMethods]
+    [deliveryMethods],
   )
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center mb-4 gap-4 flex-wrap">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
-          <LuSettings2 size={20} className="text-primary" /> Delivery Methods
-        </h3>
+    <div className="space-y-6 max-w-7xl p-5 mx-auto">
+      <div className="flex justify-between gap-6 items-center flex-wrap">
+        <div className="space-y-1">
+          <h1 className="text-3xl text-primary font-semibold">
+            Delivery Methods
+          </h1>
+          <Breadcrumbs>
+            <BreadcrumbItem>
+              <Link href="/admin/dashboard">Dashboard</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>Delivery Methods</BreadcrumbItem>
+          </Breadcrumbs>
+        </div>
         <Button
           color="primary"
           startContent={<LuPlus size={18} />}
@@ -155,11 +165,13 @@ const DeliveryMethodsSettings = () => {
             setSelectedMethod(undefined)
             setIsModalOpen(true)
           }}
-          size="sm"
         >
           Add New Method
         </Button>
       </div>
+      <p className="text-foreground-500">
+        Manage shipping options and delivery fees.
+      </p>
 
       <TableWrapper
         columns={columns}
@@ -226,4 +238,4 @@ const DeliveryMethodsSettings = () => {
   )
 }
 
-export default DeliveryMethodsSettings
+export default DeliveryMethodsSection

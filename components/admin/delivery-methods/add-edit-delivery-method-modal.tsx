@@ -69,7 +69,7 @@ const AddEditDeliveryMethodModal = ({
       if (isEdit && initialData?._id) {
         await adminDeliveryMethodRequests.updateDeliveryMethod(
           initialData._id,
-          data
+          data,
         )
         addToast({
           title: 'Delivery method updated successfully',

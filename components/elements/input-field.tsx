@@ -1,10 +1,11 @@
 'use client'
 import parsePhoneNumberFromString from 'libphonenumber-js'
-
+import { parseDate } from '@internationalized/date'
 import {
   Autocomplete,
   AutocompleteItem,
   Checkbox,
+  DatePicker,
   Divider,
   Input,
   InputOtp,
@@ -27,6 +28,7 @@ import 'react-phone-input-2/lib/style.css'
 
 import { cn } from '@/utils/cn'
 import { currencyFormatter } from '@/utils/currency-formatter'
+import moment from 'moment'
 
 // const westAfrica = [
 //   'BJ',
@@ -81,6 +83,7 @@ interface InputFieldPropsBase<T extends FieldValues> {
   maxLength?: number
   switchSize?: 'sm' | 'md'
   showSwitchIcon?: boolean
+  autoCompleteAllowCustomVallue?: boolean
   codeLength?: number
   rows?: number
   allowShowPassword?: boolean
@@ -150,6 +153,7 @@ const InputField = <T extends FieldValues>({
   radius = 'md',
   color = 'primary',
   startContentPlacement = 'inside',
+  autoCompleteAllowCustomVallue = false,
   onChange = () => null,
   switchSize = 'sm',
   showSwitchIcon = true,
@@ -294,27 +298,30 @@ const InputField = <T extends FieldValues>({
         )
       case 'date':
         return (
-          <Input
+          <DatePicker
             classNames={{ inputWrapper: `${baseClass} ` }}
             radius={radius}
             variant={variant}
             color={color}
-            disabled={disabled}
             isDisabled={disabled}
-            type="date"
             startContent={startContent}
             isInvalid={!!controllerFieldState.error?.message}
+            showMonthAndYearPickers
             className={`${baseClass} `}
             ref={controllerField.ref}
-            value={controllerField.value}
+            value={
+              controllerField.value
+                ? parseDate(controllerField.value)
+                : undefined
+            }
             defaultValue={
               controllerFormState?.defaultValues?.[
                 controllerProps?.name as string
               ]
             }
-            onValueChange={(value) => {
-              controllerField.onChange(value)
-              if (onChange) onChange(value)
+            onChange={(value) => {
+              controllerField.onChange(value.toString())
+              if (onChange) onChange(value.toString())
             }}
           />
         )
@@ -529,15 +536,25 @@ const InputField = <T extends FieldValues>({
             aria-label={(label as string) || 'select  field'}
             placeholder={placeholder as string}
             variant={variant}
+            allowsCustomValue={autoCompleteAllowCustomVallue}
             color={color}
             isDisabled={disabled}
             listboxProps={{ color: 'primary', variant: 'flat' }}
             startContent={startContent}
             isInvalid={!!controllerFieldState.error?.message}
-            selectedKey={controllerField?.value || (value as string)}
+            inputValue={controllerField?.value || (value as string)}
+            // selectedKey={controllerField?.value || (value as string)}
             onSelectionChange={(value: any) => {
+              console.log('selection', value)
               controllerField.onChange(value)
               if (onChange) onChange(value)
+            }}
+            onInputChange={(value: any) => {
+              if (autoCompleteAllowCustomVallue) {
+                console.log('value', value)
+                controllerField.onChange(value)
+                if (onChange) onChange(value)
+              }
             }}
             size={size}
             inputProps={{

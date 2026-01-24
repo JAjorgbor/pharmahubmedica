@@ -142,7 +142,7 @@ export default function CreateAccountForm() {
             <div className="space-y-1 md:col-span-2">
               <p>
                 <span className="text-primary-600 font-light relative text-sm text-nevada font-oxygen">
-                  Referral Code
+                  Referral Code (Optional)
                 </span>
               </p>
               <Input
@@ -166,7 +166,7 @@ export default function CreateAccountForm() {
           <Button
             type="submit"
             color="primary"
-            className="w-full text-base font-semibold"
+            className="w-full text-base"
             isLoading={isSubmitting || keepLoading}
           >
             Create Account

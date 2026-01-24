@@ -1,5 +1,5 @@
 import PartnerOrdersSection from '@/components/admin/referral-partners/partner-orders-section'
-import SetHeaderTitle from '@/components/scaffold/set-header-title'
+
 import { Suspense } from 'react'
 
 export const metadata = {
@@ -14,7 +14,6 @@ export default async function ReferralOrdersPage({
   const { id } = await params
   return (
     <>
-      <SetHeaderTitle title="Referral Orders" />
       <Suspense>
         <PartnerOrdersSection partnerId={id} />
       </Suspense>
