@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/alt-text */
+import { IApp } from '@/api-client/interfaces/app.interfaces'
 import { IOrder } from '@/api-client/interfaces/order.interfaces'
 import { theme } from '@/library/config'
 import { currencyFormatter } from '@/utils/currency-formatter'
@@ -33,10 +33,18 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     alignItems: 'flex-start',
   },
+  logoContainer: {
+    gap: 4,
+  },
   logo: {
     width: 150,
     height: 70,
     objectFit: 'contain',
+  },
+  appAddress: {
+    fontSize: 8,
+    color: '#666',
+    maxWidth: 200,
   },
   titleContainer: {
     alignItems: 'flex-end',
@@ -158,16 +166,27 @@ const styles = StyleSheet.create({
 
 interface InvoicePDFProps {
   order: IOrder
+  app?: IApp
 }
 
-const InvoicePDF = ({ order }: InvoicePDFProps) => {
+const InvoicePDF = ({ order, app }: InvoicePDFProps) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
-          <Image src="/logo.png" style={styles.logo} />
+          <View style={styles.logoContainer}>
+            <Image src="/logo.png" style={styles.logo} />
+            {app?.address && (
+              <Text style={styles.appAddress}>{app.address}</Text>
+            )}
+            {app?.phoneNumber && (
+              <Text style={styles.appAddress}>Phone: {app.phoneNumber}</Text>
+            )}
+            {app?.email && (
+              <Text style={styles.appAddress}>Email: {app.email}</Text>
+            )}
+          </View>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Invoice</Text>
             <Text style={styles.invoiceId}>#{order.orderNumber}</Text>

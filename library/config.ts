@@ -10,6 +10,7 @@ export const adminUserRolesPermissions = {
     'getUsers',
     'getAdminUsers',
     'getInventory',
+    'updateApp',
     'updateInventory',
     'updateAdminUser',
     'updateAdminUserRole',
@@ -27,6 +28,7 @@ export const adminUserRolesPermissions = {
     'getUsers',
     'getInventory',
     'updateInventory',
+    'updateApp',
     'getAdminUsers',
     'updateAdminUser',
     'updateAdminUserRole',
@@ -42,6 +44,7 @@ export const adminUserRolesPermissions = {
   operations: [
     'getUsers',
     'getAdminUsers',
+    'updateApp',
     'getInventory',
     'updateInventory',
     'updateAdminUser',
@@ -84,7 +87,7 @@ export const referralPartnerProfessions = {
 } as const
 
 export const normalizedReferralPartnerProfessions = Object.keys(
-  referralPartnerProfessions
+  referralPartnerProfessions,
 )
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB

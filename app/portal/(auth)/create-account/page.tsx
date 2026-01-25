@@ -32,7 +32,7 @@ export default function CreateAccountPage() {
             Create Account
           </h2>
           <p className="text-foreground-500 ">
-            Join PharmaHub and take control of your health today
+            Join PharmaHub Medica and take control of your health today
           </p>
         </div>
 

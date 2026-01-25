@@ -107,7 +107,7 @@ export default function LoginForm() {
           </Button>
 
           <div className="pt-2 text-center text-sm text-foreground-500">
-            New to PharmaHub?{' '}
+            New to PharmaHub Medica?{' '}
             <Link
               href={`/portal/create-account${callbackUrl ? `?callback=${callbackUrl}` : ''}`}
               className="font-bold text-primary hover:text-primary/80 transition-colors"

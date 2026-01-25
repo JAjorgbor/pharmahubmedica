@@ -1,6 +1,6 @@
 'use client'
-
 import { IOrder } from '@/api-client/interfaces/order.interfaces'
+import useGetApp from '@/hooks/requests/admin/useGetApp'
 import { Button } from '@heroui/react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { useEffect, useState } from 'react'
@@ -13,6 +13,7 @@ interface PrintInvoiceButtonProps {
 
 const PrintInvoiceButton = ({ order }: PrintInvoiceButtonProps) => {
   const [isClient, setIsClient] = useState(false)
+  const { app, appLoading } = useGetApp()
 
   // PDFDownloadLink should only render on client side to avoid hydration mismatches
   useEffect(() => {
@@ -29,7 +30,7 @@ const PrintInvoiceButton = ({ order }: PrintInvoiceButtonProps) => {
 
   return (
     <PDFDownloadLink
-      document={<InvoicePDF order={order} />}
+      document={<InvoicePDF order={order} app={app} />}
       fileName={`PharmaHub Medica Invoice-${order.orderNumber}.pdf`}
     >
       {({ loading }) => (

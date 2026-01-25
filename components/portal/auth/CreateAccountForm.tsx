@@ -51,8 +51,6 @@ export default function CreateAccountForm() {
     },
   })
 
-  const referralCode = watch('referralCode')
-
   const onSubmit = async (data: RegisterFormValues) => {
     try {
       const { data: res } = await createAccount(data)
@@ -75,7 +73,7 @@ export default function CreateAccountForm() {
   }
 
   return (
-    <Card className="max-w-sm mx-auto">
+    <Card className="max-w-md mx-auto">
       <CardBody className="p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid lg:grid-cols-2 gap-3">
@@ -139,29 +137,18 @@ export default function CreateAccountForm() {
               isRequired
             />
 
-            <div className="space-y-1 md:col-span-2">
-              <p>
-                <span className="text-primary-600 font-light relative text-sm text-nevada font-oxygen">
-                  Referral Code (Optional)
-                </span>
-              </p>
-              <Input
-                color="primary"
-                variant="bordered"
-                placeholder="ENTER REFERRAL CODE"
-                value={referralCode}
-                isInvalid={!!errors.referralCode}
-                errorMessage={errors.referralCode?.message}
-                {...register('referralCode')}
-                onChange={(e) => {
-                  const value = e.target.value
-                    .toUpperCase()
-                    .replace(/[^A-Z0-9]/g, '')
-
-                  setValue('referralCode', value, { shouldValidate: true })
-                }}
-              />
-            </div>
+            <InputField
+              label="Referral Code (Optional)"
+              type="text"
+              noWhiteSpace
+              className="md:col-span-2"
+              controllerProps={{ name: 'referralCode', control }}
+              onChange={(value) =>
+                setValue('referralCode', value.toUpperCase())
+              }
+              maxLength={8}
+              placeholder="Enter referral code"
+            />
           </div>
           <Button
             type="submit"

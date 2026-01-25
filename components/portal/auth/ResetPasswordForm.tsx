@@ -80,7 +80,7 @@ export default function ResetPasswordForm() {
   }
 
   return (
-    <Card className="max-w-sm mx-auto">
+    <Card className="max-w-md mx-auto">
       <CardBody className="p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <InputField

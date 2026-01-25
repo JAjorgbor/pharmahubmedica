@@ -1,7 +1,15 @@
 'use client'
 
 import { currencyFormatter } from '@/utils/currency-formatter'
-import { Button, Card, CardBody, Chip, Spinner } from '@heroui/react'
+import {
+  BreadcrumbItem,
+  Breadcrumbs,
+  Button,
+  Card,
+  CardBody,
+  Chip,
+  Spinner,
+} from '@heroui/react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { FaWhatsapp } from 'react-icons/fa'
@@ -87,6 +95,15 @@ const OrderSection = () => {
               <LuChevronLeft size={25} />
             </Button>
             <div>
+              <Breadcrumbs className="mb-2">
+                <BreadcrumbItem>
+                  <Link href="/portal/dashboard">Dashboard</Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                  <Link href="/portal/orders">Orders</Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem>Order Details</BreadcrumbItem>
+              </Breadcrumbs>
               <h1 className="text-3xl font-bold text-primary">
                 Order {order.orderNumber}
               </h1>

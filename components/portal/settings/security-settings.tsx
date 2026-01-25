@@ -76,11 +76,20 @@ const SecuritySettings: FC<SecuritySettingsProps> = ({}) => {
 
   const newPassword = formMethods.watch('newPassword')
   const confirmNewPassword = formMethods.watch('confirmNewPassword')
-
+  const isNewPasswordDirty = formMethods.formState.dirtyFields.newPassword
+  const isConfirmNewPasswordDirty =
+    formMethods.formState.dirtyFields.confirmNewPassword
   useEffect(() => {
     // Revalidate both fields whenever either changes
-    void formMethods.trigger(['newPassword', 'confirmNewPassword'])
-  }, [newPassword, confirmNewPassword, formMethods.trigger])
+    if (isNewPasswordDirty || isConfirmNewPasswordDirty) {
+      void formMethods.trigger(['confirmNewPassword', 'newPassword'])
+    }
+  }, [
+    newPassword,
+    confirmNewPassword,
+    isNewPasswordDirty,
+    isConfirmNewPasswordDirty,
+  ])
 
   return (
     <>

@@ -80,6 +80,7 @@ interface InputFieldPropsBase<T extends FieldValues> {
   value?: string | number | boolean
   disabled?: boolean
   defaultValue?: string | number
+  description?: string
   maxLength?: number
   switchSize?: 'sm' | 'md'
   showSwitchIcon?: boolean
@@ -149,6 +150,7 @@ const InputField = <T extends FieldValues>({
   defaultChecked = false,
   placeholder,
   defaultValue,
+  description,
   variant = 'bordered',
   radius = 'md',
   color = 'primary',
@@ -261,6 +263,7 @@ const InputField = <T extends FieldValues>({
       case 'text':
         return (
           <Input
+            description={description}
             classNames={{ inputWrapper: `${baseClass} ` }}
             isInvalid={!!controllerFieldState.error?.message}
             radius={radius}
@@ -300,6 +303,7 @@ const InputField = <T extends FieldValues>({
         return (
           <DatePicker
             classNames={{ inputWrapper: `${baseClass} ` }}
+            description={description}
             radius={radius}
             variant={variant}
             color={color}
@@ -330,6 +334,7 @@ const InputField = <T extends FieldValues>({
           <div className="flex items-center gap-2 w-full">
             <Input
               classNames={{ inputWrapper: `${baseClass} ` }}
+              description={description}
               radius={radius}
               variant={variant}
               color={color}
@@ -364,6 +369,7 @@ const InputField = <T extends FieldValues>({
         return (
           <Input
             classNames={{ inputWrapper: `${baseClass} ` }}
+            description={description}
             radius={radius}
             variant={variant}
             color={color}
@@ -398,6 +404,7 @@ const InputField = <T extends FieldValues>({
         return (
           <Textarea
             classNames={{ inputWrapper: `${baseClass} ` }}
+            description={description}
             className={`${baseClass} `}
             variant={variant}
             color={color}
@@ -425,6 +432,7 @@ const InputField = <T extends FieldValues>({
         return (
           <InputOtp
             radius={radius}
+            description={description}
             variant={variant}
             color={color}
             isDisabled={disabled}
@@ -449,6 +457,7 @@ const InputField = <T extends FieldValues>({
         return (
           <Input
             classNames={{ inputWrapper: `${baseClass} ` }}
+            description={description}
             radius={radius}
             variant={variant}
             color={color}
@@ -490,6 +499,7 @@ const InputField = <T extends FieldValues>({
         return (
           <Select
             aria-label={(label as string) || 'select field'}
+            description={description}
             disabledKeys={disabledKeys}
             variant={variant}
             color={color}
@@ -534,6 +544,7 @@ const InputField = <T extends FieldValues>({
         return (
           <Autocomplete
             aria-label={(label as string) || 'select  field'}
+            description={description}
             placeholder={placeholder as string}
             variant={variant}
             allowsCustomValue={autoCompleteAllowCustomValue}
@@ -665,6 +676,7 @@ const InputField = <T extends FieldValues>({
         return (
           <Input
             classNames={{ inputWrapper: `${baseClass} ` }}
+            description={description}
             radius={radius}
             variant={variant}
             color={color}
@@ -705,6 +717,7 @@ const InputField = <T extends FieldValues>({
           <>
             <Input
               type="tel"
+              description={description}
               placeholder={placeholder}
               maxLength={14} // matches (xxx) xxx-xxxx
               classNames={{ inputWrapper: `${baseClass} ` }}
@@ -744,6 +757,7 @@ const InputField = <T extends FieldValues>({
       case 'amount':
         return (
           <Input
+            description={description}
             classNames={{ inputWrapper: `${baseClass} ` }}
             radius={radius}
             variant={variant}

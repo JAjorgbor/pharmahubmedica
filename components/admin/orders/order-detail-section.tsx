@@ -5,7 +5,16 @@ import InputField from '@/components/elements/input-field'
 import { useGetAdminOrder } from '@/hooks/requests/admin/useAdminOrders'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
-import { Button, Card, CardBody, Chip, Spinner, addToast } from '@heroui/react'
+import {
+  BreadcrumbItem,
+  Breadcrumbs,
+  Button,
+  Card,
+  CardBody,
+  Chip,
+  Spinner,
+  addToast,
+} from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { capitalCase } from 'change-case'
 import moment from 'moment'
@@ -149,15 +158,24 @@ const OrderDetailSection = () => {
               <LuChevronLeft size={25} />
             </Button>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-3xl font-bold text-primary">
+              <Breadcrumbs className="mb-2">
+                <BreadcrumbItem>
+                  <Link href="/admin/dashboard">Dashboard</Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                  <Link href="/admin/orders">Orders</Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem>Order Details</BreadcrumbItem>
+              </Breadcrumbs>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-2xl font-bold text-primary">
                   Order {order.orderNumber}
                 </h1>
                 <Chip
                   color={getStatusColor(order.orderStatus)}
                   size="sm"
                   variant="flat"
-                  className="font-semibold uppercase"
+                  className="font-semibold"
                 >
                   {capitalCase(order.orderStatus)}
                 </Chip>

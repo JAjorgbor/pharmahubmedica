@@ -145,6 +145,8 @@ const AddEditAddressModal = ({
           type="text"
           label="State"
           placeholder="Abuja"
+          disabled
+          description="We only delivery in Abuja"
           controllerProps={{ control, name: 'state' }}
         />
 

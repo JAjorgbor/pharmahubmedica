@@ -176,6 +176,14 @@ const PersonalDetailsSettings: FC<PersonalDetailsSettingsProps> = ({}) => {
           <div className="grid grid-cols-2 gap-4 w-full md:w-1/2">
             <Button
               size="sm"
+              variant="light"
+              color="danger"
+              onPress={() => formMethods.reset()}
+            >
+              Reset
+            </Button>
+            <Button
+              size="sm"
               color="primary"
               type="submit"
               form="admin-personal-details-form"

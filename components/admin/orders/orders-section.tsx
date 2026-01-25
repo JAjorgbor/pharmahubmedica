@@ -55,24 +55,28 @@ const OrdersSection = () => {
           </div>
         ),
       }),
-      columnHelper.accessor('customer', {
-        id: 'customer',
-        header: 'Customer',
-        cell: ({ row: { original: item } }) => {
-          const customer = item.customer as any
-          return (
-            <div className="space-y-1">
-              <p className="text-xs font-semibold">
-                {customer?.firstName} {customer?.lastName}
-              </p>
-              <p className="text-xs text-foreground-600">{customer?.email}</p>
-              <p className="text-xs text-foreground-600">
-                {customer?.phoneNumber}
-              </p>
-            </div>
-          )
+      columnHelper.accessor(
+        (row) =>
+          `${row.customer.firstName} ${row.customer.lastName} ${row.customer.phoneNumber} ${row.customer.email}`,
+        {
+          id: 'customer',
+          header: 'Customer',
+          cell: ({ row: { original: item } }) => {
+            const customer = item.customer as any
+            return (
+              <div className="space-y-1">
+                <p className="text-xs font-semibold">
+                  {customer?.firstName} {customer?.lastName}
+                </p>
+                <p className="text-xs text-foreground-600">{customer?.email}</p>
+                <p className="text-xs text-foreground-600">
+                  {customer?.phoneNumber}
+                </p>
+              </div>
+            )
+          },
         },
-      }),
+      ),
 
       columnHelper.accessor('orderStatus', {
         header: 'Status',
