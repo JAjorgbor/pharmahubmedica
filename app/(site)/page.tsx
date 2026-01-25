@@ -2,8 +2,12 @@
 import { Image, Button } from '@heroui/react'
 import { LuArrowRight, LuClock, LuShield, LuTruck } from 'react-icons/lu'
 import { FaWhatsapp } from 'react-icons/fa'
+import Link from 'next/link'
+import useGetApp from '@/hooks/requests/useGetApp'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
 
 export default function HomePage() {
+  const { app } = useGetApp()
   return (
     <>
       <div className="bg-primary-gradient">
@@ -20,10 +24,12 @@ export default function HomePage() {
               optio nam perferendis numquam rem ducimus enim dicta tenetur
               dolores expedita, sequi animi unde officiis!
             </p>
-            <div className="flex gap-4 flex-wrap md:w-4/5">
+            <div className="grid sm:flex gap-4 flex-wrap md:w-4/5">
               <Button
                 className="bg-white text-primary flex-1"
                 endContent={<LuArrowRight size={18} />}
+                as={Link}
+                href="/collections"
               >
                 Shop Now
               </Button>
@@ -31,6 +37,12 @@ export default function HomePage() {
                 className="border-white text-white flex-1"
                 variant="bordered"
                 endContent={<FaWhatsapp size={18} />}
+                as={Link}
+                href={
+                  app?.whatsAppNumber
+                    ? `https://wa.me/${toWhatsAppNumber(app?.whatsAppNumber, 'NG')}`
+                    : '#'
+                }
               >
                 Search with a Pharmarcist
               </Button>
@@ -40,7 +52,7 @@ export default function HomePage() {
             src="/hero.jpg"
             className="rounded-2xl flex-1 h-96 w-full object-cover object-center"
             alt="hero image"
-            width={'100%'}
+            width={600}
             height={400}
           />
         </div>

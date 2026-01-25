@@ -119,7 +119,13 @@ const CartSection = () => {
                 >
                   Proceed to Checkout
                 </Button>
-                <Button fullWidth color="primary" variant="bordered">
+                <Button
+                  fullWidth
+                  color="primary"
+                  variant="bordered"
+                  as={Link}
+                  href="/collections"
+                >
                   Continue Shopping
                 </Button>
               </div>

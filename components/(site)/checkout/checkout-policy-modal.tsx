@@ -7,6 +7,9 @@ import ModalWrapper from '@/components/elements/modal-wrapper'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
+import useGetApp from '@/hooks/requests/useGetApp'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+
 interface CheckoutPolicyModalProps {
   isOpen: boolean
   setIsOpen: (value: boolean) => void
@@ -19,6 +22,7 @@ const CheckoutPolicyModal = ({
   orderNumber,
 }: CheckoutPolicyModalProps) => {
   const [copied, setCopied] = useState(false)
+  const { app } = useGetApp()
 
   const handleCopy = () => {
     navigator.clipboard.writeText(orderNumber)
@@ -26,9 +30,12 @@ const CheckoutPolicyModal = ({
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const PHARMAHUB_PHONE = '2349035784325' // Placeholder
-  const whatsappUrl = `https://wa.me/${PHARMAHUB_PHONE}?text=${encodeURIComponent(
-    `Hello, I would like to place an order. Order Number: ${orderNumber}`
+  const whatsappNumber = app?.whatsAppNumber
+    ? toWhatsAppNumber(app.whatsAppNumber, 'NG')
+    : '2349035784325'
+
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    `Hello, I would like to place an order. Order Number: ${orderNumber}`,
   )}`
 
   return (

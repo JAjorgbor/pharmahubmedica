@@ -44,8 +44,8 @@ const Header = () => {
       <Navbar
         classNames={{
           base: cn(
-            'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
-            scrollHeight > 100 && 'max-w-4xl shadow-lg',
+            'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-2',
+            scrollHeight > 100 && 'max-w-4xl shadow-lg px-5 ',
             'md:max-w-7xl md:relative md:backdrop-blur-none md:shadow-none',
           ),
           wrapper: 'max-w-full px-0',

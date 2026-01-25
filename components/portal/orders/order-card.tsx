@@ -12,6 +12,8 @@ import {
 } from 'react-icons/lu'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import moment from 'moment'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+import useGetApp from '@/hooks/requests/useGetApp'
 
 const getStatusIcon = (status: string) => {
   switch (status) {
@@ -61,6 +63,7 @@ const getPaymentStatusColor = (status: string) => {
 }
 
 const OrderCard = ({ order }: { order: IOrder }) => {
+  const { app } = useGetApp()
   return (
     <Card>
       <CardBody className="p-6">
@@ -143,7 +146,13 @@ const OrderCard = ({ order }: { order: IOrder }) => {
             Total: {currencyFormatter(order.transaction.totalAmount)}
           </div>
           <div className="flex flex-wrap justify-center sm:justify-end gap-2">
-            <Button variant="ghost" size="sm">
+            <Button
+              variant="ghost"
+              size="sm"
+              as={Link}
+              href={`https://wa.me/${toWhatsAppNumber(app?.whatsAppNumber, 'NG')}`}
+              target="_blank"
+            >
               <FaWhatsapp className="mr-2 h-4 w-4 text-medium font-bold" />
               Contact Support
             </Button>

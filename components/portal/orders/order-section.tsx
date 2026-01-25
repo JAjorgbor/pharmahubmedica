@@ -28,10 +28,18 @@ import { referralPartnerProfessions } from '@/library/config'
 import { OrderDetailSkeleton } from '@/components/portal/PortalSkeletons'
 import PrintInvoiceButton from '@/components/shared/print-invoice-button'
 
+import useGetApp from '@/hooks/requests/useGetApp'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+
 const OrderSection = () => {
   const params = useParams()
   const orderId = params.id as string
   const { order, orderLoading, orderError } = useGetPortalOrder(orderId)
+  const { app } = useGetApp()
+
+  const whatsappNumber = app?.whatsAppNumber
+    ? toWhatsAppNumber(app.whatsAppNumber, 'NG')
+    : '2349132172737'
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -104,7 +112,7 @@ const OrderSection = () => {
                 </BreadcrumbItem>
                 <BreadcrumbItem>Order Details</BreadcrumbItem>
               </Breadcrumbs>
-              <h1 className="text-3xl font-bold text-primary">
+              <h1 className="text-2xl font-bold text-primary">
                 Order {order.orderNumber}
               </h1>
               <p className="text-gray-600">
@@ -367,7 +375,7 @@ const OrderSection = () => {
                   fullWidth
                   className="text-white font-bold"
                   as="a"
-                  href={`https://wa.me/2349132172737?text=Hello, I have a question about my order ${order.orderNumber}`}
+                  href={`https://wa.me/${whatsappNumber}?text=Hello, I have a question about my order ${order.orderNumber}`}
                   target="_blank"
                 >
                   Contact Support

@@ -20,6 +20,8 @@ import {
   LuPackage,
   LuShoppingBag,
 } from 'react-icons/lu'
+import useGetApp from '@/hooks/requests/useGetApp'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
 
 const recentOrders = [
   {
@@ -96,6 +98,11 @@ const recentOrders = [
 ]
 
 const DashboardSection = () => {
+  const { app } = useGetApp()
+  const whatsappNumber = app?.whatsAppNumber
+    ? toWhatsAppNumber(app.whatsAppNumber, 'NG')
+    : '2348000000000'
+
   const getStatusIcon = (status: any) => {
     switch (status) {
       case 'pending':
@@ -309,7 +316,13 @@ const DashboardSection = () => {
               </p>
             </CardBody>
             <CardFooter>
-              <Button variant="ghost" className="border w-full shadow-xs">
+              <Button
+                variant="ghost"
+                className="border w-full shadow-xs"
+                as={'a'}
+                href={`https://wa.me/${whatsappNumber}`}
+                target="_blank"
+              >
                 Contact Us
               </Button>
             </CardFooter>

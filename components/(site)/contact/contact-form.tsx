@@ -6,12 +6,14 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addToast, Button } from '@heroui/react'
 import { LuSend } from 'react-icons/lu'
+import axios from 'axios'
+import customValidation from '@/utils/custom-validation'
 
 const schema = z.object({
   firstName: z.string({ error: 'First name is required' }),
   lastName: z.string({ error: 'Last name is required' }),
-  email: z.email().nonempty({ error: 'Email address is required' }),
-  message: z
+  email: customValidation.email,
+  Message: z
     .string({ error: 'Message is required' })
     .nonempty({ error: 'Message is required' }),
 })
@@ -23,8 +25,12 @@ const ContactForm = () => {
   const handleSubmit = async (formData: FormFields) => {
     try {
       //   const res = await request(formData)
-      console.log(formData)
+      const res = await axios.post(
+        'https://api.linkpane.com/v2/mailer/42770272/form/website-contact-form',
+        formData,
+      )
       addToast({ title: 'Message sent successfully.', color: 'success' })
+      formMethods.reset({ firstName: '', lastName: '', email: '', Message: '' })
     } catch (error: any) {
       addToast({
         title:
@@ -68,10 +74,16 @@ const ContactForm = () => {
         label="Message"
         type="textarea"
         placeholder="Type your message here..."
-        controllerProps={{ control: formMethods.control, name: 'message' }}
+        controllerProps={{ control: formMethods.control, name: 'Message' }}
         color="primary"
       />
-      <Button fullWidth endContent={<LuSend />} type="submit" color="primary">
+      <Button
+        fullWidth
+        endContent={<LuSend />}
+        type="submit"
+        color="primary"
+        isLoading={formMethods.formState.isSubmitting}
+      >
         Submit
       </Button>
     </form>

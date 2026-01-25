@@ -1,11 +1,21 @@
 'use client'
-import React from 'react'
+import React, { type FC } from 'react'
 import ContactForm from '@/components/(site)/contact/contact-form'
-import { Button, Card, CardBody, CardHeader } from '@heroui/react'
+import { Button, Card, CardBody, CardHeader, Skeleton } from '@heroui/react'
 import { FaWhatsapp } from 'react-icons/fa'
 import { LuMail, LuMapPin, LuPhone } from 'react-icons/lu'
+import { IApp } from '@/api-client/interfaces/app.interfaces'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
 
-const ContactSection = () => {
+interface ContactSectionProps {
+  app?: IApp
+}
+
+const ContactSection: FC<ContactSectionProps> = ({ app }) => {
+  const whatsappNumber = app?.whatsAppNumber
+    ? toWhatsAppNumber(app.whatsAppNumber, 'NG')
+    : '2348000000000'
+
   return (
     <>
       <div className="space-y-8">
@@ -36,7 +46,7 @@ const ContactSection = () => {
                   <div className="space-y-1">
                     <p className="font-semibold">Address</p>
                     <p className="text-foreground-500">
-                      23 Healthcare Avenue Medical District,
+                      {app?.address || '23 Healthcare Avenue Medical District'}
                     </p>
                   </div>
                 </div>
@@ -44,14 +54,18 @@ const ContactSection = () => {
                   <LuPhone className="text-primary" size={25} />
                   <div className="space-y-1">
                     <p className="font-semibold">Phone</p>
-                    <p className="text-foreground-500">+234 800 000 0000</p>
+                    <p className="text-foreground-500">
+                      {app?.phoneNumber || '+234 800 000 0000'}
+                    </p>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <FaWhatsapp className="text-primary" size={25} />
                   <div className="space-y-1">
                     <p className="font-semibold">WhatsApp</p>
-                    <p className="text-foreground-500">+234 800 000 0000</p>
+                    <p className="text-foreground-500">
+                      {app?.whatsAppNumber || '+234 800 000 0000'}
+                    </p>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -59,7 +73,7 @@ const ContactSection = () => {
                   <div className="space-y-1">
                     <p className="font-semibold">Email</p>
                     <p className="text-foreground-500">
-                      contact@pharmahubmedica.ng
+                      {app?.email || 'contact@pharmahubmedica.ng'}
                     </p>
                   </div>
                 </div>
@@ -76,7 +90,10 @@ const ContactSection = () => {
                   color="success"
                   startContent={<FaWhatsapp size={20} />}
                   fullWidth
-                  className="text-white"
+                  className="text-white font-bold"
+                  as={'a'}
+                  href={`https://wa.me/${whatsappNumber}`}
+                  target="_blank"
                 >
                   Chat on WhatsApp
                 </Button>
@@ -92,36 +109,49 @@ const ContactSection = () => {
             </CardHeader>
             <CardBody>
               <ul className="pl-0">
-                <li className="flex gap-2 items-center">
-                  <span className="text-primary text-xl">●</span>
-                  Prescription Medications
-                </li>
-                <li className="flex gap-2 items-center">
-                  <span className="text-primary text-xl">●</span>
-                  Over-the-Counter Products
-                </li>
-                <li className="flex gap-2 items-center">
-                  <span className="text-primary text-xl">●</span>
-                  Health Supplements
-                </li>
-                <li className="flex gap-2 items-center">
-                  <span className="text-primary text-xl">●</span>
-                  Medical Equipment
-                </li>
-                <li className="flex gap-2 items-center">
-                  <span className="text-primary text-xl">●</span>
-                  Pharmacy Consultations
-                </li>
-                <li className="flex gap-2 items-center">
-                  <span className="text-primary text-xl">●</span>
-                  Home Delivery
-                </li>
+                {[
+                  'Prescription Medications',
+                  'Over-the-Counter Products',
+                  'Health Supplements',
+                  'Medical Equipment',
+                  'Pharmacy Consultations',
+                  'Home Delivery',
+                ].map((service) => (
+                  <li key={service} className="flex gap-2 items-center">
+                    <span className="text-primary text-xl">●</span>
+                    {service}
+                  </li>
+                ))}
               </ul>
             </CardBody>
           </Card>
         </div>
       </div>
     </>
+  )
+}
+
+export const ContactSkeleton = () => {
+  return (
+    <div className="space-y-8">
+      <div className="max-w-xl p-5 pb-0 text-center mx-auto space-y-2">
+        <Skeleton className="h-10 w-48 mx-auto rounded-lg" />
+        <Skeleton className="h-4 w-full rounded-lg" />
+      </div>
+      <div className="grid md:grid-cols-2 gap-6 max-w-7xl px-5 mx-auto">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i} className="md:p-4">
+            <CardHeader>
+              <Skeleton className="h-8 w-40 rounded-lg" />
+            </CardHeader>
+            <CardBody className="space-y-4">
+              <Skeleton className="h-20 w-full rounded-lg" />
+              <Skeleton className="h-20 w-full rounded-lg" />
+            </CardBody>
+          </Card>
+        ))}
+      </div>
+    </div>
   )
 }
 

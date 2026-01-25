@@ -20,6 +20,9 @@ import {
   LuUserCheck,
 } from 'react-icons/lu'
 
+import useGetApp from '@/hooks/requests/useGetApp'
+import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+
 const ReferralOrderSection = () => {
   const params = useParams()
   const userId = params.referralId as string
@@ -29,6 +32,11 @@ const ReferralOrderSection = () => {
     userId,
     orderId,
   )
+  const { app } = useGetApp()
+
+  const whatsappNumber = app?.whatsAppNumber
+    ? toWhatsAppNumber(app.whatsAppNumber, 'NG')
+    : '2349132172737'
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -415,7 +423,7 @@ const ReferralOrderSection = () => {
                   fullWidth
                   className="text-white font-bold"
                   as="a"
-                  href={`https://wa.me/2349132172737?text=Hello, I have a question about my order ${order.orderNumber}`}
+                  href={`https://wa.me/${whatsappNumber}?text=Hello, I have a question about my order ${order.orderNumber}`}
                   target="_blank"
                 >
                   Contact Support
