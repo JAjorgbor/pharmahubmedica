@@ -30,6 +30,7 @@ import PrintInvoiceButton from '@/components/shared/print-invoice-button'
 
 import useGetApp from '@/hooks/requests/useGetApp'
 import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
+import { sentenceCase } from 'change-case'
 
 const OrderSection = () => {
   const params = useParams()
@@ -129,7 +130,7 @@ const OrderSection = () => {
               variant="flat"
             >
               <span className="uppercase font-semibold text-xs">
-                {order.orderStatus}
+                {sentenceCase(order.orderStatus)}
               </span>
             </Chip>
             <Chip
@@ -238,9 +239,6 @@ const OrderSection = () => {
                       <LuUserCheck className="h-5 w-5" />
                       <span>Referral Applied</span>
                     </h1>
-                    <p className="text-green-700 text-sm">
-                      This order was placed using a referral code
-                    </p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -320,7 +318,7 @@ const OrderSection = () => {
                   </h1>
                   <div className="flex items-center justify-between">
                     <p className="text-gray-900 font-semibold capitalize">
-                      {order.orderStatus}
+                      {sentenceCase(order.orderStatus)}
                     </p>
                     <div className="flex flex-col items-end gap-1">
                       <Chip
@@ -342,7 +340,7 @@ const OrderSection = () => {
                             <LuCircleX size={14} />
                           )}
                           <span className="capitalize text-xs font-semibold">
-                            {order.orderStatus}
+                            {sentenceCase(order.orderStatus)}
                           </span>
                         </div>
                       </Chip>

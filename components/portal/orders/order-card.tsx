@@ -14,6 +14,7 @@ import { currencyFormatter } from '@/utils/currency-formatter'
 import moment from 'moment'
 import { toWhatsAppNumber } from '@/utils/to-whatsapp-number'
 import useGetApp from '@/hooks/requests/useGetApp'
+import { sentenceCase } from 'change-case'
 
 const getStatusIcon = (status: string) => {
   switch (status) {
@@ -88,7 +89,9 @@ const OrderCard = ({ order }: { order: IOrder }) => {
             >
               <div className="flex items-center space-x-1">
                 {getStatusIcon(order.orderStatus)}
-                <span className="capitalize">{order.orderStatus}</span>
+                <span className="capitalize">
+                  {sentenceCase(order.orderStatus)}
+                </span>
               </div>
             </Chip>
             <Chip
@@ -149,7 +152,6 @@ const OrderCard = ({ order }: { order: IOrder }) => {
             <Button
               variant="ghost"
               size="sm"
-              as={Link}
               href={`https://wa.me/${toWhatsAppNumber(app?.whatsAppNumber, 'NG')}?text=Hello, I have a question about my order ${order.orderNumber}`}
               target="_blank"
             >

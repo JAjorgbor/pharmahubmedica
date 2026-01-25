@@ -5,7 +5,14 @@ import { useGetPortalReferredUserOrder } from '@/hooks/requests/portal/useReferr
 import { referralPartnerProfessions } from '@/library/config'
 import { cn } from '@/utils/cn'
 import { currencyFormatter } from '@/utils/currency-formatter'
-import { Button, Card, CardBody, Chip } from '@heroui/react'
+import {
+  BreadcrumbItem,
+  Breadcrumbs,
+  Button,
+  Card,
+  CardBody,
+  Chip,
+} from '@heroui/react'
 import moment from 'moment'
 import Link from 'next/link'
 import { useParams, useSearchParams } from 'next/navigation'
@@ -111,7 +118,21 @@ const ReferralOrderSection = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-5 space-y-8">
-        <div className="flex items-center justify-between">
+        <Breadcrumbs className="mb-2">
+          <BreadcrumbItem>
+            <Link href="/portal/dashboard">Dashboard</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Link href="/portal/referrals">Referrals</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Link href={`/portal/referrals/${userId}`}>
+              {order?.customer?.firstName} {order?.customer?.lastName}
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>Order Details</BreadcrumbItem>
+        </Breadcrumbs>
+        <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <Button
               isIconOnly
@@ -249,11 +270,8 @@ const ReferralOrderSection = () => {
                       className={`flex items-center space-x-2 text-${commissionStatusColor}-900 font-bold`}
                     >
                       <LuUserCheck className="h-5 w-5" />
-                      <span>Referral Applied</span>
+                      <span>Referral Partner Details</span>
                     </h1>
-                    <p className={`text-${commissionStatusColor}-700 text-sm`}>
-                      This order was placed using a referral code
-                    </p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -423,7 +441,7 @@ const ReferralOrderSection = () => {
                   fullWidth
                   className="text-white font-bold"
                   as="a"
-                  href={`https://wa.me/${whatsappNumber}?text=Hello, I have a question about my order ${order.orderNumber}`}
+                  href={`https://wa.me/${whatsappNumber}?text=Hello, I have a question for this referral's order ${order.orderNumber}`}
                   target="_blank"
                 >
                   Contact Support

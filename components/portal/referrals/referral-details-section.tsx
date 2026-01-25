@@ -160,21 +160,8 @@ const ReferralDetailsSection = () => {
       columnHelper.accessor('transaction.totalAmount', {
         header: 'Total',
         cell: ({ getValue, row: { original: item } }) => {
-          const statusMap = {
-            pending: 'warning',
-            paid: 'success',
-            refunded: 'primary',
-            failed: 'danger',
-          } as const
           return (
-            <div
-              className={`font-bold text-${
-                statusMap[
-                  item.referralDetails?.commission
-                    ?.status as keyof typeof statusMap
-                ] || 'default'
-              }`}
-            >
+            <div className={`font-bold text-primary`}>
               {currencyFormatter(getValue() || 0)}
             </div>
           )
@@ -223,13 +210,26 @@ const ReferralDetailsSection = () => {
       columnHelper.display({
         id: 'commission',
         header: 'Commission Amt',
-        cell: ({ row: { original: item } }) => (
-          <div className="space-y-1">
-            <p className="text-xs font-bold text-success">
-              {currencyFormatter(item.referralDetails?.commission?.amount || 0)}
-            </p>
-          </div>
-        ),
+        cell: ({ row: { original: item } }) => {
+          const statusMap = {
+            pending: 'warning',
+            paid: 'success',
+            refunded: 'primary',
+            failed: 'danger',
+          } as const
+
+          return (
+            <div className="space-y-1">
+              <p
+                className={`text-xs font-bold text-${statusMap[item.referralDetails.commission.status]}`}
+              >
+                {currencyFormatter(
+                  item.referralDetails?.commission?.amount || 0,
+                )}
+              </p>
+            </div>
+          )
+        },
       }),
       columnHelper.display({
         id: 'actions',

@@ -208,11 +208,9 @@ const DashboardSection = () => {
         <Card className="md:p-5">
           <CardHeader className="flex flex-row items-center justify-between">
             <h2 className="text-lg font-semibold">Recent Orders</h2>
-            <Link href="/portal/orders">
-              <Button size="sm" variant="ghost">
-                View All Orders
-              </Button>
-            </Link>
+            <Button size="sm" variant="ghost" as={Link} href="/portal/orders">
+              View All Orders
+            </Button>
           </CardHeader>
           <CardBody>
             {recentOrders.length > 0 ? (

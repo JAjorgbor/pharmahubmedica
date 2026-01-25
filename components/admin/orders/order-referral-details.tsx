@@ -116,7 +116,7 @@ const OrderReferralDetails: FC<OrderReferralDetailsProps> = ({ orderId }) => {
             )}
           >
             <LuUserCheck className="h-5 w-5" />
-            <span>Referral Applied</span>
+            <span>Referral Partner Details</span>
           </h1>
           <p className={cn('font-medium', `text-${statusColor}-900`)}>
             {

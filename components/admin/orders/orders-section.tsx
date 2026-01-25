@@ -39,6 +39,7 @@ const columnHelper = createColumnHelper<IOrder>()
 const OrdersSection = () => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [paymentStatusFilter, setPaymentStatusFilter] = useState('all')
+  const [commissionStatusFilter, setCommissionStatusFilter] = useState('all')
 
   const { orders, ordersLoading } = useGetAdminOrders()
 
@@ -141,6 +142,12 @@ const OrdersSection = () => {
         id: 'referrer',
         header: 'Referrer',
         cell: ({ getValue }) => {
+          const statusMap = {
+            pending: 'warning',
+            paid: 'success',
+            refunded: 'primary',
+            failed: 'danger',
+          } as const
           return (
             <div className="space-y-1">
               {getValue()?.referralPartner ? (
@@ -155,7 +162,9 @@ const OrdersSection = () => {
                     {getValue()?.referralPartner.user.lastName}
                   </p>
                   {getValue()?.commission && (
-                    <p className="text-xs text-success max-w-44 truncate">
+                    <p
+                      className={`text-xs text-${statusMap[getValue()?.commission.status]} max-w-44 truncate`}
+                    >
                       Comm: {currencyFormatter(getValue()?.commission.amount)}
                     </p>
                   )}
@@ -245,6 +254,22 @@ const OrdersSection = () => {
       reversed: orders.filter((o) => o.paymentStatus === 'reversed').length,
       failed: orders.filter((o) => o.paymentStatus === 'failed').length,
       abandoneed: orders.filter((o) => o.paymentStatus === 'abandoned').length,
+    }
+  }, [orders])
+
+  const commissionStatusCounts = useMemo(() => {
+    return {
+      paid: orders.filter(
+        (o) => o.referralDetails?.commission?.status === 'paid',
+      ).length,
+      pending: orders.filter(
+        (o) =>
+          o.referralDetails?.referralPartner &&
+          o.referralDetails?.commission?.status === 'pending',
+      ).length,
+      failed: orders.filter(
+        (o) => o.referralDetails?.commission?.status === 'cancelled',
+      ).length,
     }
   }, [orders])
 
@@ -353,10 +378,10 @@ const OrdersSection = () => {
                 topContent={({ table, searchField }) => {
                   return (
                     <div className="flex justify-between items-center w-full gap-3 flex-wrap">
-                      <div className="w-full md:w-1/3 lg:w-1/4">
+                      <div className="w-full md:w-1/4">
                         {searchField('Search orders')}
                       </div>
-                      <div className="gap-3 grid grid-cols-2 w-full md:w-1/2 lg:w-1/3">
+                      <div className="gap-3 grid grid-cols-2 lg:grid-cols-3 w-full md:w-1/2 lg:w-1/2">
                         <InputField
                           type="select"
                           controllerProps={{
@@ -423,6 +448,36 @@ const OrdersSection = () => {
                                 value === 'all' ? undefined : value,
                               )
                             setPaymentStatusFilter(value)
+                          }}
+                        />
+                        <InputField
+                          type="select"
+                          controllerProps={{
+                            name: 'commission status filter',
+                            defaultValue: commissionStatusFilter,
+                          }}
+                          options={[
+                            { label: 'All Commission Status', value: 'all' },
+                            {
+                              label: `Pending (${commissionStatusCounts.pending})`,
+                              value: 'pending',
+                            },
+                            {
+                              label: `Paid (${commissionStatusCounts.paid})`,
+                              value: 'paid',
+                            },
+                            {
+                              label: `Failed (${commissionStatusCounts.failed})`,
+                              value: 'failed',
+                            },
+                          ]}
+                          onChange={(value) => {
+                            table
+                              .getColumn('commissionStatus')
+                              ?.setFilterValue(
+                                value === 'all' ? undefined : value,
+                              )
+                            setCommissionStatusFilter(value)
                           }}
                         />
                       </div>
