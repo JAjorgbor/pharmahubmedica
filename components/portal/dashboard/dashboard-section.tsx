@@ -101,7 +101,7 @@ const DashboardSection = () => {
   const { app } = useGetApp()
   const whatsappNumber = app?.whatsAppNumber
     ? toWhatsAppNumber(app.whatsAppNumber, 'NG')
-    : '2348000000000'
+    : ''
 
   const getStatusIcon = (status: any) => {
     switch (status) {

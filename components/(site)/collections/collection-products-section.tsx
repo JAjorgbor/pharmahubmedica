@@ -130,9 +130,9 @@ const CollectionProductsSection = ({
           ) : (
             <>
               <div
-                className={`grid gap-6 ${
+                className={`grid py-10 gap-6 ${
                   products?.length > 3
-                    ? 'grid-cols-[repeat(auto-fit,minmax(200px,1fr))] '
+                    ? 'grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] '
                     : 'grid-cols-2 md:grid-cols-4'
                 }`}
               >

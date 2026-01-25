@@ -35,11 +35,11 @@ const CollectionsSection: FC<{
           <h2 className="text-2xl font-semibold text-primary">
             Shop by Category
           </h2>
-          <InputField
+          {/* <InputField
             type="search"
             controllerProps={{ name: 'search' }}
             placeholder="Search categories..."
-          />
+          /> */}
         </div>
 
         {categories?.length === 0 ? (

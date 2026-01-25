@@ -26,7 +26,7 @@ const ContactForm = () => {
     try {
       //   const res = await request(formData)
       const res = await axios.post(
-        'https://api.linkpane.com/v2/mailer/42770272/form/website-contact-form',
+        process.env.NEXT_PUBLIC_CONTACT_FORM_ENDPOINT,
         formData,
       )
       addToast({ title: 'Message sent successfully.', color: 'success' })
