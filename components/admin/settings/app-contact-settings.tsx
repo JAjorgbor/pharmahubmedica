@@ -1,7 +1,7 @@
 'use client'
 import { updateAppContact } from '@/api-client/admin/requests/app.requests'
 import InputField from '@/components/elements/input-field'
-import useGetApp from '@/hooks/requests/usegetapp'
+import useGetApp from '@/hooks/requests/useGetApp'
 import customValidation from '@/utils/custom-validation'
 import {
   addToast,

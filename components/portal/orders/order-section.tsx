@@ -97,7 +97,7 @@ const OrderSection = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-5 space-y-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <Button isIconOnly as={Link} href="/portal/orders" variant="light">
               <LuChevronLeft size={25} />

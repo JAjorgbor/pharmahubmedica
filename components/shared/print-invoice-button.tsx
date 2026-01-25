@@ -1,6 +1,6 @@
 'use client'
 import { IOrder } from '@/api-client/interfaces/order.interfaces'
-import useGetApp from '@/hooks/requests/usegetapp'
+import useGetApp from '@/hooks/requests/useGetApp'
 import { Button } from '@heroui/react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { useEffect, useState } from 'react'

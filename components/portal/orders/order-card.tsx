@@ -150,7 +150,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
               variant="ghost"
               size="sm"
               as={Link}
-              href={`https://wa.me/${toWhatsAppNumber(app?.whatsAppNumber, 'NG')}`}
+              href={`https://wa.me/${toWhatsAppNumber(app?.whatsAppNumber, 'NG')}?text=Hello, I have a question about my order ${order.orderNumber}`}
               target="_blank"
             >
               <FaWhatsapp className="mr-2 h-4 w-4 text-medium font-bold" />
