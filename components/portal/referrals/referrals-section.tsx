@@ -387,11 +387,26 @@ const ReferralsSection = () => {
             <Card className="p-5 border-none shadow-sm shadow-success/5">
               <CardBody>
                 <div className="flex items-center space-x-2">
-                  <LuCircleCheckBig className="h-8 w-8 text-success" />
+                  <LuPackage className="h-8 w-8 text-primary" />
+
                   <div>
                     <p className="text-sm font-medium">Total Earned</p>
-                    <p className="text-2xl font-bold text-success">
+                    <p className="text-2xl font-bold text-primary">
                       {currencyFormatter(referralPartner?.commissionTotal || 0)}
+                    </p>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+
+            <Card className="p-5 border-none shadow-sm shadow-primary/5">
+              <CardBody>
+                <div className="flex items-center space-x-2">
+                  <LuCircleCheckBig className="h-8 w-8 text-success" />
+                  <div>
+                    <p className="text-sm font-medium">Paid Commissions</p>
+                    <p className="text-2xl font-bold text-success">
+                      {currencyFormatter(referralPartner?.paidCommissions || 0)}
                     </p>
                   </div>
                 </div>
@@ -408,20 +423,6 @@ const ReferralsSection = () => {
                       {currencyFormatter(
                         referralPartner?.pendingCommissions || 0,
                       )}
-                    </p>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-
-            <Card className="p-5 border-none shadow-sm shadow-primary/5">
-              <CardBody>
-                <div className="flex items-center space-x-2">
-                  <LuPackage className="h-8 w-8 text-primary" />
-                  <div>
-                    <p className="text-sm font-medium">Paid Commissions</p>
-                    <p className="text-2xl font-bold text-primary">
-                      {currencyFormatter(referralPartner?.paidCommissions || 0)}
                     </p>
                   </div>
                 </div>

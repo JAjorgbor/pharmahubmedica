@@ -17,7 +17,7 @@ import OrderCard from '@/components/portal/orders/order-card'
 import Link from 'next/link'
 import { useGetPortalOrders } from '@/hooks/requests/portal/useOrders'
 import Cookies from 'js-cookie'
-import { OrderCardsSkeleton } from '../PortalSkeletons'
+import { OrderCardsSkeleton } from '@/components/portal/PortalSkeletons'
 
 const OrdersSection = () => {
   const [searchTerm, setSearchTerm] = useState('')

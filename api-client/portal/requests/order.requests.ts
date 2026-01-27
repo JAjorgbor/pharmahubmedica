@@ -15,6 +15,16 @@ export const orderRequests = {
       url: '/portal/orders',
       params,
     }),
+  getRecentOrders: () =>
+    axiosInstance({
+      method: 'GET',
+      url: '/portal/orders/recent',
+    }),
+  getOrderStats: () =>
+    axiosInstance({
+      method: 'GET',
+      url: '/portal/orders/stats',
+    }),
 
   getOrder: (orderId: string) =>
     axiosInstance({

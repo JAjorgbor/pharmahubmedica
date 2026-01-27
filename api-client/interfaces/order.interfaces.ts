@@ -79,3 +79,12 @@ export interface IUpdateOrderStatus {
   referralCommissionStatus?: 'paid' | 'pending' | 'cancelled'
   referralCommissionNote?: string
 }
+
+export interface IOrderStats {
+  totalOrders: number
+  processing: number
+  cancelled: number
+  inTransit: number
+  totalSpent: number
+  delivered: number
+}
