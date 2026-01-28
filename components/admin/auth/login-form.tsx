@@ -10,6 +10,7 @@ import InputField from '@/components/elements/input-field'
 import { login } from '@/api-client/admin/requests/auth.requests'
 import { useState } from 'react'
 import Link from 'next/link'
+import getCookieDomain from '@/utils/get-cookie-domain'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),

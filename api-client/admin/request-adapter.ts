@@ -1,3 +1,4 @@
+import getCookieDomain from '@/utils/get-cookie-domain'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
