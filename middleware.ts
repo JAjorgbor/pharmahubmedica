@@ -24,6 +24,7 @@ export default function middleware(request: NextRequest) {
 
   if (
     !portalAccessToken &&
+    pathname.startsWith('/portal') &&
     !whiteListedPortalRoutes.some((route) => pathname.startsWith(route)) &&
     pathname !== '/portal'
   ) {
@@ -38,6 +39,7 @@ export default function middleware(request: NextRequest) {
 
   if (
     !adminAccessToken &&
+    pathname.startsWith('/admin') &&
     !whiteListedAdminRoutes.some((route) => pathname.startsWith(route)) &&
     pathname !== '/admin'
   ) {
