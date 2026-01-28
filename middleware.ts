@@ -19,7 +19,6 @@ export default function middleware(request: NextRequest) {
   const whiteListedAdminRoutes = [
     '/admin/reset-password',
     '/admin/forgot-password',
-    '/admin',
   ]
 
   if (

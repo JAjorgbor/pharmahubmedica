@@ -65,7 +65,7 @@ const CollectionsSection = () => {
       }),
       columnHelper.accessor('productsCount', {
         id: 'products',
-        header: 'products',
+        header: 'Products',
         cell: ({ getValue }) => getValue(),
       }),
       columnHelper.accessor('subcategories', {
@@ -84,8 +84,8 @@ const CollectionsSection = () => {
           return filterValue == 'all'
             ? true
             : filterValue == 'visible'
-            ? row.original.visible == true
-            : row.original.visible == false
+              ? row.original.visible == true
+              : row.original.visible == false
         },
         cell: ({ getValue }) => {
           return (
@@ -160,7 +160,7 @@ const CollectionsSection = () => {
         ),
       }),
     ],
-    []
+    [],
   )
 
   return (
@@ -246,19 +246,19 @@ const CollectionsSection = () => {
                         options={[
                           {
                             label: `All Visibility (${getVisibilityStatusCount(
-                              'all'
+                              'all',
                             )})`,
                             value: 'all',
                           },
                           {
                             label: `Visible (${getVisibilityStatusCount(
-                              'visible'
+                              'visible',
                             )})`,
                             value: 'visible',
                           },
                           {
                             label: `Hidden (${getVisibilityStatusCount(
-                              'hidden'
+                              'hidden',
                             )})`,
                             value: 'hidden',
                           },
