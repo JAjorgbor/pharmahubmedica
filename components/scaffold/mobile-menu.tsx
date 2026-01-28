@@ -21,6 +21,10 @@ export default function MobileMenu() {
   React.useEffect(() => {
     setIsOpen(false)
   }, [pathname])
+
+  const isActive = (href: string, startsWith?: boolean) =>
+    startsWith ? pathname.startsWith(href) : pathname == href
+
   return (
     <Drawer.Root direction="bottom" open={isOpen} onOpenChange={setIsOpen}>
       {/* Trigger Button */}
@@ -58,25 +62,25 @@ export default function MobileMenu() {
             <nav className="flex-1 py-4 space-y-2 divide-y divide-foreground-200 text-sm ">
               <Link
                 href="/"
-                className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
+                className={`${isActive('/') ? 'bg-primary text-white' : ''} block rounded-xl p-2 hover:bg-gray-100 hover:text-primary`}
               >
                 Home
               </Link>
               <Link
                 href="/collections"
-                className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
+                className={`${isActive('/collections', true) ? 'bg-primary text-white' : ''} block rounded-xl p-2 hover:bg-gray-100 hover:text-primary`}
               >
                 Collections{' '}
               </Link>
               <Link
                 href="/about"
-                className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
+                className={`${isActive('/about') ? 'bg-primary text-white' : ''} block rounded-xl p-2 hover:bg-gray-100 hover:text-primary`}
               >
                 About Us
               </Link>
               <Link
                 href="contact"
-                className="block rounded-md p-2 hover:bg-gray-100 hover:text-primary"
+                className={`${isActive('contact"') ? 'bg-primary text-white' : ''} block rounded-xl p-2 hover:bg-gray-100 hover:text-primary`}
               >
                 Contact Us
               </Link>

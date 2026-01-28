@@ -63,10 +63,16 @@ const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
 
         <div className="z-10 relative flex items-center gap-6 text-sm opacity-80 mt-auto">
           <span>© 2026 PharmaHub Medica</span>
-          <Link href="#" className="hover:text-primary transition-colors">
+          <Link
+            href="/privacy-policy"
+            className="hover:text-primary transition-colors"
+          >
             Privacy
           </Link>
-          <Link href="#" className="hover:text-primary transition-colors">
+          <Link
+            href="/terms-and-conditions"
+            className="hover:text-primary transition-colors"
+          >
             Terms
           </Link>
         </div>
