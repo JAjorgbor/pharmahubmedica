@@ -1,5 +1,5 @@
 import { adminOrderRequests } from '@/api-client/admin/requests/order.requests'
-import { IOrder } from '@/api-client/interfaces/order.interfaces'
+import { IOrder, IOrderStats } from '@/api-client/interfaces/order.interfaces'
 import useSWR from 'swr'
 
 export const useGetAdminOrders = (params?: any) => {
@@ -40,5 +40,26 @@ export const useGetAdminOrder = (orderId: string) => {
     orderLoading: isLoading,
     orderError: error,
     mutateOrder: mutate,
+  }
+}
+
+export const useGetAdminOrderStats = () => {
+  const fetcher = async () => {
+    const {
+      data: { stats },
+    } = await adminOrderRequests.getOrderStats()
+    return stats
+  }
+
+  const { data, error, isLoading, mutate } = useSWR<IOrderStats>(
+    ['admin/orders/stats'],
+    fetcher,
+  )
+
+  return {
+    orderStats: data,
+    orderStatsLoading: isLoading,
+    orderStatsError: error,
+    mutateOrderStats: mutate,
   }
 }

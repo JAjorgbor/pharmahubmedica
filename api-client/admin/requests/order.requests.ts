@@ -14,6 +14,12 @@ export const adminOrderRequests = {
       url: `/admin/orders/${orderId}`,
     }),
 
+  getOrderStats: () =>
+    adminRequestAdapter({
+      method: 'GET',
+      url: `/admin/orders/stats`,
+    }),
+
   updateOrderStatus: (orderId: string, data: any) =>
     adminRequestAdapter({
       method: 'PATCH',

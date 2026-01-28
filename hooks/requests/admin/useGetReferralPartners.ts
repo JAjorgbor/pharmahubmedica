@@ -1,6 +1,6 @@
 'use client'
 import { IReferralPartner } from '@/api-client/admin/interfaces/referral.interfaces'
-import { getReferralPartners } from '@/api-client/admin/requests/referral.requests'
+import { getReferralPartners } from '@/api-client/admin/requests/referral-partner.requests'
 import useSWR from 'swr'
 
 export default function useGetReferralPartners(params?: any) {
@@ -13,7 +13,7 @@ export default function useGetReferralPartners(params?: any) {
 
   const { data, error, isLoading, mutate } = useSWR<IReferralPartner[]>(
     ['admin/referral-partners', params],
-    fetcher
+    fetcher,
   )
 
   return {

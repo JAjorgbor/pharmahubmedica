@@ -42,3 +42,11 @@ interface Subcategory {
   createdAt: Date
   updatedAt: Date
 }
+export interface IProductStats {
+  total: number
+  visible: number
+  invisible: number
+  instock: number
+  outofstock: number
+  totalInventoryUnitCost: number
+}

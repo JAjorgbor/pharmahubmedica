@@ -17,3 +17,9 @@ export interface ICustomer {
   createdAt: string
   updatedAt: string
 }
+export interface ICustomerStats {
+  totalUsers: number
+  activeUsers: number
+  inactiveUsers: number
+  pendingUsers: number
+}

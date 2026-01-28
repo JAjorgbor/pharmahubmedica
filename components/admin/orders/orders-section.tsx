@@ -139,8 +139,17 @@ const OrdersSection = () => {
         },
       }),
       columnHelper.accessor('referralDetails', {
-        id: 'referrer',
         header: 'Referrer',
+        filterFn: (row: { original: IOrder }, columnId, filterValue) => {
+          if (typeof filterValue == 'undefined') return false
+
+          return filterValue == 'all'
+            ? true
+            : Boolean(
+                row.original.referralDetails?.commission?.status ==
+                  filterValue && row.original.referralDetails?.referralPartner,
+              )
+        },
         cell: ({ getValue }) => {
           const statusMap = {
             pending: 'warning',
@@ -456,6 +465,7 @@ const OrdersSection = () => {
                             name: 'commission status filter',
                             defaultValue: commissionStatusFilter,
                           }}
+                          className="col-span-2 md:col-span-1"
                           options={[
                             { label: 'All Commission Status', value: 'all' },
                             {
@@ -473,10 +483,8 @@ const OrdersSection = () => {
                           ]}
                           onChange={(value) => {
                             table
-                              .getColumn('commissionStatus')
-                              ?.setFilterValue(
-                                value === 'all' ? undefined : value,
-                              )
+                              .getColumn('referralDetails')
+                              ?.setFilterValue(value)
                             setCommissionStatusFilter(value)
                           }}
                         />

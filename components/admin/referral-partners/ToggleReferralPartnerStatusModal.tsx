@@ -1,5 +1,5 @@
 'use client'
-import { toggleReferralPartnerStatus } from '@/api-client/admin/requests/referral.requests'
+import { toggleReferralPartnerStatus } from '@/api-client/admin/requests/referral-partner.requests'
 import ModalWrapper from '@/components/elements/modal-wrapper'
 import { addToast, Button } from '@heroui/react'
 import React, { useState } from 'react'

@@ -1,5 +1,5 @@
 'use client'
-import { updateReferralPartner } from '@/api-client/admin/requests/referral.requests'
+import { updateReferralPartner } from '@/api-client/admin/requests/referral-partner.requests'
 import InputField from '@/components/elements/input-field'
 import ModalWrapper from '@/components/elements/modal-wrapper'
 import { addToast, Button } from '@heroui/react'

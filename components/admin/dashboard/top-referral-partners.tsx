@@ -1,10 +1,15 @@
 'use client'
+import { useGetTopReferralPartners } from '@/hooks/requests/admin/useGetTopReferrals'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import { Button, Card, CardBody, CardHeader, Chip } from '@heroui/react'
 import Link from 'next/link'
 import React from 'react'
+import { TopPartnersSkeleton } from '@/components/admin/AdminSkeletons'
+import { LuUsers } from 'react-icons/lu'
 
 const TopReferralPartners = () => {
+  const { topReferralPartners, topReferralPartnersLoading } =
+    useGetTopReferralPartners()
   return (
     <Card shadow="sm" className="p-3">
       <CardHeader className="justify-between items-center">
@@ -21,10 +26,11 @@ const TopReferralPartners = () => {
         </Button>
       </CardHeader>
       <CardBody>
-        <div className="space-y-4 h-72  overflow-y-auto">
-          {Array(5)
-            .fill(null)
-            .map((each, index) => (
+        <div className="space-y-4 h-96 overflow-y-auto">
+          {topReferralPartnersLoading ? (
+            <TopPartnersSkeleton />
+          ) : topReferralPartners?.length > 0 ? (
+            topReferralPartners?.map((each, index) => (
               <Card
                 shadow="none"
                 className="border border-foreground-200"
@@ -38,18 +44,38 @@ const TopReferralPartners = () => {
                           {index + 1}
                         </span>
                         <div className="space-y-2">
-                          <p className="font-semibold">John Doe</p>
-                          <p>{currencyFormatter((index + 1) * 10000)}</p>
+                          <p className="font-semibold">
+                            {each?.user?.firstName} {each?.user?.lastName}
+                          </p>
+                          <p>{currencyFormatter(each?.commissionTotal)}</p>
                         </div>
                       </div>
-                      <p className="text-foreground-500 text-sm">
-                        {(index + 1) * 10} Referrals
-                      </p>
+                      <div className="space-y-2">
+                        <span className="text-secondary text-sm font-semibold block">
+                          {each?.referralsCount} Referrals
+                        </span>
+                        <Button
+                          size="sm"
+                          color="primary"
+                          variant="light"
+                          as={Link}
+                          href={`/admin/referral-partners/${each?._id}`}
+                          className="h-6"
+                        >
+                          View Profile
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardBody>
               </Card>
-            ))}
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-foreground-500">
+              <LuUsers size={40} className="mb-2" />
+              <p>No referral partners yet</p>
+            </div>
+          )}
         </div>
       </CardBody>
     </Card>

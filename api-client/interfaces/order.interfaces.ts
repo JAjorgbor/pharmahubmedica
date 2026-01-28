@@ -85,6 +85,7 @@ export interface IOrderStats {
   processing: number
   cancelled: number
   inTransit: number
-  totalSpent: number
+  totalSpent?: number // for Customer
+  totalRevenue?: number // for admin
   delivered: number
 }

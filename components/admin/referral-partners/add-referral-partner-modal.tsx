@@ -1,5 +1,5 @@
 'use client'
-import { addReferralPartner } from '@/api-client/admin/requests/referral.requests'
+import { addReferralPartner } from '@/api-client/admin/requests/referral-partner.requests'
 import InputField from '@/components/elements/input-field'
 import ModalWrapper from '@/components/elements/modal-wrapper'
 import useGetCustomersNotReferralPartners from '@/hooks/requests/admin/useGetCustomersNotReferralPartners'

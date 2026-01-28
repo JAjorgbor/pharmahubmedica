@@ -1,12 +1,12 @@
 'use client'
 import { Card, CardBody, CardHeader } from '@heroui/react'
-import React, { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import { IconType } from 'react-icons/lib'
 
 interface StatCardProps {
   title: string
   icon: IconType
-  value: string
+  value: ReactNode
 }
 
 const StatCard: FC<StatCardProps> = ({ title, icon, value }) => {

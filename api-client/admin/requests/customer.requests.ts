@@ -14,3 +14,6 @@ export const deleteCustomer = (userId: string) =>
 
 export const getCustomersNotReferralPartners = () =>
   axiosInstance.get(`admin/customers/non-referral-partners`)
+
+export const getCustomersStats = () =>
+  axiosInstance.get('admin/customers/stats')

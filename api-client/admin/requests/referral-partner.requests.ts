@@ -1,5 +1,5 @@
 import axiosInstance from '@/api-client/admin/request-adapter'
-import { IReferralPartner } from '../interfaces/referral.interfaces'
+import { IReferralPartner } from '@/api-client/admin/interfaces/referral.interfaces'
 
 export const getReferralPartners = (params?: any) =>
   axiosInstance.get(`admin/referral-partners`, { params })
@@ -18,7 +18,7 @@ export const updateReferralPartner = (
   data: {
     commissionRate?: number
     profession?: string
-  }
+  },
 ) => axiosInstance.patch(`admin/referral-partners/${id}`, data)
 
 export const toggleReferralPartnerStatus = (id: string) =>
@@ -26,3 +26,6 @@ export const toggleReferralPartnerStatus = (id: string) =>
 
 export const getReferralPartnerReferrals = (id: string) =>
   axiosInstance.get(`admin/referral-partners/referrals/${id}`)
+
+export const getTopReferralPartners = () =>
+  axiosInstance.get(`admin/referral-partners/top`)

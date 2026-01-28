@@ -96,7 +96,7 @@ export default function LoginForm() {
         className="w-full text-base font-semibold"
         isLoading={isSubmitting || keepLoading}
       >
-        Sign in
+        Sign In
       </Button>
     </form>
   )

@@ -20,3 +20,5 @@ export const deleteProduct = (id: string) =>
 export const getProducts = () => axiosInstance.get('admin/products')
 export const getProduct = (id: string) =>
   axiosInstance.get(`admin/products/${id}`)
+
+export const getProductsStats = () => axiosInstance.get('admin/products/stats')
