@@ -27,8 +27,8 @@ export const adminUserRolesPermissions = {
   administrator: [
     'getUsers',
     'getInventory',
-    'updateInventory',
     'updateApp',
+    'updateInventory',
     'getAdminUsers',
     'updateAdminUser',
     'updateAdminUserRole',
@@ -63,6 +63,7 @@ export const adminUserRolesPermissions = {
     'getAdminUsers',
     'getInventory',
     'updateInventory',
+    'getReferralPartners',
     'manageOrders',
     'getOrders',
   ],
@@ -70,10 +71,17 @@ export const adminUserRolesPermissions = {
     'getUsers',
     'getAdminUsers',
     'getInventory',
+    'getReferralPartners',
     'updateInventory',
     'getOrders',
   ],
-  accountant: ['getUsers', 'getAdminUsers', 'getInventory', 'getOrders'],
+  accountant: [
+    'getUsers',
+    'getAdminUsers',
+    'getReferralPartners',
+    'getInventory',
+    'getOrders',
+  ],
   driver: ['getUsers', 'getAdminUsers', 'getInventory', 'getOrders'],
 } as const
 
