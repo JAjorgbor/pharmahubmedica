@@ -5,7 +5,6 @@ function getHost(request: NextRequest) {
 }
 
 function isAdminSubdomain(host: string) {
-  // Works for production (admin.example.com) and localhost dev (admin.localhost:3000)
   return host.startsWith('admin.') || host.startsWith('admin.localhost:')
 }
 
@@ -16,33 +15,28 @@ export default function middleware(request: NextRequest) {
   const portalAccessToken = request.cookies.get('portalAccessToken')?.value
   const adminAccessToken = request.cookies.get('adminAccessToken')?.value
 
+  const url = request.nextUrl.clone()
+  const originalPathname = url.pathname
+
   // 0) Canonicalize: admin subdomain should NOT show /admin prefix in the URL
   // admin.example.com/admin/dashboard -> admin.example.com/dashboard
   if (
     onAdminSubdomain &&
-    (request.nextUrl.pathname === '/admin' ||
-      request.nextUrl.pathname.startsWith('/admin/'))
+    (originalPathname === '/admin' || originalPathname.startsWith('/admin/'))
   ) {
-    const url = request.nextUrl.clone()
-    url.pathname = request.nextUrl.pathname.replace(/^\/admin(\/|$)/, '/')
+    url.pathname = originalPathname.replace(/^\/admin(\/|$)/, '/')
     return NextResponse.redirect(url)
   }
 
-  // --- 1) Rewrite admin subdomain requests to /admin/*
-  // admin.example.com/foo -> /admin/foo
-  if (onAdminSubdomain && !request.nextUrl.pathname.startsWith('/admin')) {
-    const url = request.nextUrl.clone()
-    url.pathname = `/admin${url.pathname === '/' ? '' : url.pathname}`
-    return NextResponse.rewrite(url)
-  }
-
-  // --- Existing logic below (works on rewritten pathname too)
-  const searchParams = new URLSearchParams(request.nextUrl.searchParams)
-
-  let callback = searchParams.get('callback')
-  searchParams.delete('callback')
-
-  const { pathname } = request.nextUrl
+  /**
+   * Compute the INTERNAL pathname that Next should serve.
+   * On admin subdomain:
+   *   /dashboard  -> /admin/dashboard
+   *   /           -> /admin
+   */
+  const internalPathname = onAdminSubdomain
+    ? `/admin${originalPathname === '/' ? '' : originalPathname}`
+    : originalPathname
 
   const whiteListedPortalRoutes = [
     '/portal/forgot-password',
@@ -58,55 +52,69 @@ export default function middleware(request: NextRequest) {
   // ---------- PORTAL (unchanged; stays on main domain /portal/*) ----------
   if (
     !portalAccessToken &&
-    pathname.startsWith('/portal') &&
-    !whiteListedPortalRoutes.some((route) => pathname.startsWith(route)) &&
-    pathname !== '/portal'
+    internalPathname.startsWith('/portal') &&
+    !whiteListedPortalRoutes.some((route) =>
+      internalPathname.startsWith(route),
+    ) &&
+    internalPathname !== '/portal'
   ) {
-    callback = pathname
-    return NextResponse.redirect(
-      new URL(`/portal?${callback ? 'callback=' + callback : ''}`, request.url),
-    )
+    const callback = internalPathname
+    const redirectUrl = new URL(`/portal`, request.url)
+    redirectUrl.searchParams.set('callback', callback)
+    return NextResponse.redirect(redirectUrl)
   } else if (
     portalAccessToken &&
-    (whiteListedPortalRoutes.some((route) => pathname.startsWith(route)) ||
-      pathname === '/portal')
+    (whiteListedPortalRoutes.some((route) =>
+      internalPathname.startsWith(route),
+    ) ||
+      internalPathname === '/portal')
   ) {
     return NextResponse.redirect(new URL(`/portal/dashboard`, request.url))
   }
 
   // ---------- ADMIN (subdomain-aware redirects) ----------
+  // External (what user should see)
   const adminLoginPath = onAdminSubdomain ? '/' : '/admin'
   const adminDashboardPath = onAdminSubdomain
     ? '/dashboard'
     : '/admin/dashboard'
 
+  // If user is NOT authenticated and trying to access protected admin routes
   if (
     !adminAccessToken &&
-    pathname.startsWith('/admin') &&
-    !whiteListedAdminRoutes.some((route) => pathname.startsWith(route)) &&
-    pathname !== '/admin'
+    internalPathname.startsWith('/admin') &&
+    !whiteListedAdminRoutes.some((route) =>
+      internalPathname.startsWith(route),
+    ) &&
+    internalPathname !== '/admin'
   ) {
-    // internal callback will be like "/admin/orders"
-    callback = pathname
-
-    // If on admin subdomain, the user-visible path is without "/admin"
-    // so callback should be "/orders" instead of "/admin/orders"
+    // callback should be external path on subdomain (strip /admin)
     const externalCallback = onAdminSubdomain
-      ? callback.replace(/^\/admin/, '') || '/'
-      : callback
+      ? internalPathname.replace(/^\/admin/, '') || '/'
+      : internalPathname
 
     const redirectUrl = new URL(adminLoginPath, request.url)
     if (externalCallback && externalCallback !== '/') {
       redirectUrl.searchParams.set('callback', externalCallback)
     }
-
     return NextResponse.redirect(redirectUrl)
-  } else if (
+  }
+
+  // If user IS authenticated and tries to access admin login or whitelisted routes
+  if (
     adminAccessToken &&
-    (whiteListedAdminRoutes.some((route) => pathname.startsWith(route)) ||
-      pathname === '/admin')
+    (whiteListedAdminRoutes.some((route) =>
+      internalPathname.startsWith(route),
+    ) ||
+      internalPathname === '/admin')
   ) {
     return NextResponse.redirect(new URL(adminDashboardPath, request.url))
+  }
+
+  // 1) Finally, do the rewrite for admin subdomain if needed (no redirect happened)
+  if (onAdminSubdomain) {
+    url.pathname = internalPathname
+    return NextResponse.rewrite(url)
   }
 
   return NextResponse.next()
