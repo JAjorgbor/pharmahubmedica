@@ -46,7 +46,11 @@ export default function LoginForm() {
         path: '/',
         domain: getCookieDomain(),
       })
-      Cookies.set('adminUserId', res.user._id, { expires: 60 })
+      Cookies.set('adminUserId', res.user._id, {
+        expires: 60,
+        path: '/',
+        domain: getCookieDomain(),
+      })
 
       router.push(callbackUrl)
       setKeepLoading(true)
