@@ -195,6 +195,15 @@ const OrdersSection = () => {
           </div>
         ),
       }),
+      columnHelper.accessor('updatedAt', {
+        header: 'Last Updated',
+        cell: ({ getValue }) => (
+          <div className="text-xs text-foreground-600 space-y-1">
+            <p>{moment(getValue()).format('D MMMM, YYYY')}</p>
+            <p>at {moment(getValue()).format('hh:mm A')}</p>
+          </div>
+        ),
+      }),
 
       columnHelper.display({
         id: 'action',
@@ -383,7 +392,7 @@ const OrdersSection = () => {
               <TableWrapper
                 columns={columns}
                 items={orders}
-                allowsSortingFor={['createdAt', 'items']}
+                allowsSortingFor={['createdAt', 'items', 'updatedAt']}
                 topContent={({ table, searchField }) => {
                   return (
                     <div className="flex justify-between items-center w-full gap-3 flex-wrap">
