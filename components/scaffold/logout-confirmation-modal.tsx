@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 import ModalWrapper from '@/components/elements/modal-wrapper'
 import { LuLogOut } from 'react-icons/lu'
 import { logout } from '@/api-client/admin/requests/auth.requests'
+import getCookieDomain from '@/utils/get-cookie-domain'
 
 interface LogoutConfirmationModalProps {
   isOpen: boolean
@@ -30,8 +31,14 @@ export default function LogoutConfirmationModal({
       setIsLoading(false)
       setIsOpen(false)
       // Clear admin cookies
-      Cookies.remove('adminAccessToken')
-      Cookies.remove('adminUserId')
+      Cookies.remove('adminAccessToken', {
+        path: '/',
+        domain: getCookieDomain(),
+      })
+      Cookies.remove('adminUserId', {
+        path: '/',
+        domain: getCookieDomain(),
+      })
 
       // Redirect to admin login
       window.location.href = '/admin'

@@ -17,7 +17,12 @@ const refreshClient = axios.create({
 })
 
 const clearAllCookies = () => {
-  Object.keys(Cookies.get()).forEach((k) => Cookies.remove(k))
+  Object.keys(Cookies.get()).forEach((k) =>
+    Cookies.remove(k, {
+      path: '/',
+      domain: getCookieDomain(),
+    }),
+  )
 }
 
 const redirectToAdminLogin = () => {
