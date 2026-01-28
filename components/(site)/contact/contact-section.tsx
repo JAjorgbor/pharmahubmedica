@@ -45,36 +45,28 @@ const ContactSection: FC<ContactSectionProps> = ({ app }) => {
                   <LuMapPin className="text-primary" size={25} />
                   <div className="space-y-1">
                     <p className="font-semibold">Address</p>
-                    <p className="text-foreground-500">
-                      {app?.address || '23 Healthcare Avenue Medical District'}
-                    </p>
+                    <p className="text-foreground-500">{app?.address}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <LuPhone className="text-primary" size={25} />
                   <div className="space-y-1">
                     <p className="font-semibold">Phone</p>
-                    <p className="text-foreground-500">
-                      {app?.phoneNumber || '+234 800 000 0000'}
-                    </p>
+                    <p className="text-foreground-500">{app?.phoneNumber}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <FaWhatsapp className="text-primary" size={25} />
                   <div className="space-y-1">
                     <p className="font-semibold">WhatsApp</p>
-                    <p className="text-foreground-500">
-                      {app?.whatsAppNumber || '+234 800 000 0000'}
-                    </p>
+                    <p className="text-foreground-500">{app?.whatsAppNumber}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <LuMail className="text-primary" size={25} />
                   <div className="space-y-1">
                     <p className="font-semibold">Email</p>
-                    <p className="text-foreground-500">
-                      {app?.email || 'contact@pharmahubmedica.ng'}
-                    </p>
+                    <p className="text-foreground-500">{app?.email}</p>
                   </div>
                 </div>
               </div>

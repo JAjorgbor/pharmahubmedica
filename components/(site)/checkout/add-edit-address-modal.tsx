@@ -44,6 +44,7 @@ const AddEditAddressModal = ({
     resolver: zodResolver(addressSchema),
     defaultValues: {
       country: 'Nigeria',
+      state:'Abuja'
     },
   })
 
@@ -58,7 +59,7 @@ const AddEditAddressModal = ({
           phoneNumber: '',
           street: '',
           city: '',
-          state: '',
+          state: 'Abuja',
           postalCode: '',
         })
       }

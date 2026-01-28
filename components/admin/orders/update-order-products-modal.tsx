@@ -45,7 +45,7 @@ const UpdateOrderProductsModal = ({
   useEffect(() => {
     if (isOpen && currentProducts) {
       const initialKeys = new Set(
-        currentProducts.map((item) => item.productId.toString())
+        currentProducts.map((item) => item.productId.toString()),
       )
       const initialQuantities: Record<string, number> = {}
       currentProducts.forEach((item) => {
@@ -63,15 +63,15 @@ const UpdateOrderProductsModal = ({
     return filtered.filter(
       (product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category.name.toLowerCase().includes(searchQuery.toLowerCase())
+        product.category.name.toLowerCase().includes(searchQuery.toLowerCase()),
     )
   }, [products, searchQuery])
 
-  const handleQuantityChange = (productId: string, value: string) => {
-    const quantity = parseInt(value) || 1
+  const handleQuantityChange = (productId: string, value: string | number) => {
+    const quantity = typeof value === 'string' ? parseInt(value) : value
     setQuantities((prev) => ({
       ...prev,
-      [productId]: Math.max(1, quantity),
+      [productId]: Math.max(0, quantity),
     }))
   }
 
@@ -92,7 +92,7 @@ const UpdateOrderProductsModal = ({
             (productId) => ({
               productId,
               quantity: quantities[productId] || 1,
-            })
+            }),
           )
         : Array.from(selectedKeys).map((productId) => ({
             productId,
@@ -142,10 +142,8 @@ const UpdateOrderProductsModal = ({
             <Input
               type="number"
               size="sm"
-              min={1}
-              value={quantities[product._id]?.toString() || '1'}
+              value={quantities[product._id]?.toString()}
               onValueChange={(value) => {
-                console.log(value)
                 handleQuantityChange(product._id, value)
               }}
               className="w-20"
@@ -204,6 +202,7 @@ const UpdateOrderProductsModal = ({
             aria-label="Product selection table"
             selectionMode="multiple"
             selectedKeys={selectedKeys}
+            isKeyboardNavigationDisabled
             onSelectionChange={(keys) => {
               setSelectedKeys(keys as Set<string>)
               setIsAllSelected(keys == 'all')

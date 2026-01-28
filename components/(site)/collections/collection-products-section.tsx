@@ -259,10 +259,8 @@ const Filter: FC<FilterProps> = ({ isOpen, setIsOpen, category, maxPrice }) => {
       setIsOpen={setIsOpen}
       footer={
         <div className="flex justify-end gap-4">
-          <Button size="sm" onPress={handleReset}>
-            Reset
-          </Button>
-          <Button size="sm" color="primary" onPress={handleFilterApply}>
+          <Button onPress={handleReset}>Reset</Button>
+          <Button color="primary" onPress={handleFilterApply}>
             Apply
           </Button>
         </div>
