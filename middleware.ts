@@ -16,6 +16,18 @@ export default function middleware(request: NextRequest) {
   const portalAccessToken = request.cookies.get('portalAccessToken')?.value
   const adminAccessToken = request.cookies.get('adminAccessToken')?.value
 
+  // 0) Canonicalize: admin subdomain should NOT show /admin prefix in the URL
+  // admin.example.com/admin/dashboard -> admin.example.com/dashboard
+  if (
+    onAdminSubdomain &&
+    (request.nextUrl.pathname === '/admin' ||
+      request.nextUrl.pathname.startsWith('/admin/'))
+  ) {
+    const url = request.nextUrl.clone()
+    url.pathname = request.nextUrl.pathname.replace(/^\/admin(\/|$)/, '/')
+    return NextResponse.redirect(url)
+  }
+
   // --- 1) Rewrite admin subdomain requests to /admin/*
   // admin.example.com/foo -> /admin/foo
   if (onAdminSubdomain && !request.nextUrl.pathname.startsWith('/admin')) {
