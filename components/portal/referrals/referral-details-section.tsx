@@ -464,7 +464,7 @@ const ReferralDetailsSection = () => {
                     <div className="w-full md:w-1/3 lg:w-1/4">
                       {searchField('Search orders')}
                     </div>
-                    <div className="gap-3 grid grid-cols-3 w-full md:w-2/3 lg:w-1/2">
+                    <div className="gap-3 grid grid-cols-2 lg:grid-cols-3 w-full md:w-1/2 lg:w-1/2">
                       <InputField
                         type="select"
                         controllerProps={{
@@ -539,6 +539,7 @@ const ReferralDetailsSection = () => {
                           name: 'commission status filter',
                           defaultValue: commissionStatusFilter,
                         }}
+                        className="col-span-2 md:col-span-1"
                         options={[
                           {
                             label: `All Commission Status(${getCommissionStatusCount(

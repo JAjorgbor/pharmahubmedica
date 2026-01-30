@@ -9,9 +9,13 @@ import InvoicePDF from './invoice-pdf'
 
 interface PrintInvoiceButtonProps {
   order: IOrder
+  label?: string
 }
 
-const PrintInvoiceButton = ({ order }: PrintInvoiceButtonProps) => {
+const PrintInvoiceButton = ({
+  order,
+  label = 'Download Invoice',
+}: PrintInvoiceButtonProps) => {
   const [isClient, setIsClient] = useState(false)
   const { app, appLoading } = useGetApp()
 
@@ -41,7 +45,7 @@ const PrintInvoiceButton = ({ order }: PrintInvoiceButtonProps) => {
           isLoading={loading}
           isDisabled={loading}
         >
-          {loading ? 'Generating...' : 'Download Invoice'}
+          {loading ? 'Generating...' : label}
         </Button>
       )}
     </PDFDownloadLink>

@@ -1,5 +1,7 @@
 'use client'
 import { IReferralPartner } from '@/api-client/admin/interfaces/referral.interfaces'
+import ToggleReferralPartnerStatusModal from '@/components/admin/referral-partners/ToggleReferralPartnerStatusModal'
+import UpdateReferralPartnerModal from '@/components/admin/referral-partners/UpdateReferralPartnerModal'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
 import useGetReferralPartners from '@/hooks/requests/admin/useGetReferralPartners'
@@ -24,10 +26,8 @@ import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { FiCheck, FiCopy, FiMoreVertical } from 'react-icons/fi'
 import { IoCashOutline } from 'react-icons/io5'
-import { LuExternalLink, LuHandshake, LuPlus } from 'react-icons/lu'
+import { LuHandshake, LuLink, LuPlus } from 'react-icons/lu'
 import AddReferralPartnerModal from './add-referral-partner-modal'
-import ToggleReferralPartnerStatusModal from '@/components/admin/referral-partners/ToggleReferralPartnerStatusModal'
-import UpdateReferralPartnerModal from '@/components/admin/referral-partners/UpdateReferralPartnerModal'
 
 const columnHelper = createColumnHelper<IReferralPartner>()
 
@@ -321,7 +321,7 @@ const ReferralPartnersSection = () => {
               variant="light"
               as={Link}
               href="/admin/customers"
-              endContent={<LuExternalLink />}
+              endContent={<LuLink />}
               size="sm"
             >
               View Customers

@@ -1,31 +1,30 @@
 'use client'
 import { ICategory } from '@/api-client/interfaces/category.interfaces'
 import AddCollectionDrawer from '@/components/admin/collections/add-collection-drawer'
-import UpdateCollectionDrawer from '@/components/admin/collections/update-collection-drawer'
 import DeleteCollectionModal from '@/components/admin/collections/delete-collection-modal'
+import UpdateCollectionDrawer from '@/components/admin/collections/update-collection-drawer'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
 import useGetCategories from '@/hooks/requests/admin/useGetAdminCategories'
 import {
+  BreadcrumbItem,
+  Breadcrumbs,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
   Chip,
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  Card,
-  CardBody,
-  CardHeader,
   DropdownTrigger,
-  Button,
-  Breadcrumbs,
-  BreadcrumbItem,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
-import Image from 'next/image'
 import Link from 'next/link'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FiMoreVertical } from 'react-icons/fi'
-import { LuExternalLink, LuPlus } from 'react-icons/lu'
+import { LuLink, LuPlus } from 'react-icons/lu'
 
 const columnHelper = createColumnHelper<ICategory>()
 
@@ -200,7 +199,7 @@ const CollectionsSection = () => {
               variant="light"
               as={Link}
               href="/admin/products"
-              endContent={<LuExternalLink />}
+              endContent={<LuLink />}
               size="sm"
             >
               View All Products

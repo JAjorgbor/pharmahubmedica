@@ -170,6 +170,7 @@ interface InvoicePDFProps {
 }
 
 const InvoicePDF = ({ order, app }: InvoicePDFProps) => {
+  const paymentStatus = order.paymentStatus
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -188,7 +189,9 @@ const InvoicePDF = ({ order, app }: InvoicePDFProps) => {
             )}
           </View>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Invoice</Text>
+            <Text style={styles.title}>
+              {paymentStatus === 'paid' ? 'Receipt' : 'Invoice'}
+            </Text>
             <Text style={styles.invoiceId}>#{order.orderNumber}</Text>
           </View>
         </View>

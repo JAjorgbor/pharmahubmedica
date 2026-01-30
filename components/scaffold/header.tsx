@@ -33,7 +33,7 @@ const Header = () => {
     })
   }, [scrollY])
   const { categoriesData, categoriesLoading } = useGetCategories({
-    params: { page: 1, limit: 10 },
+    params: { page: 1, limit: 11 },
   })
   const { categories, meta } = categoriesData || {}
   const { items } = useCart()

@@ -96,7 +96,7 @@ const PrivacyPolicyPage: FC = () => {
           </h2>
           <p>
             If you have any questions about this privacy policy or our privacy
-            practices, please contact us at: support@pharmahubmedica.ng
+            practices, please contact us at: contact@pharmahubmedica.ng
           </p>
         </section>
       </div>

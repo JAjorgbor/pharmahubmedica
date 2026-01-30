@@ -103,7 +103,7 @@ const TermsAndConditionsPage: FC = () => {
           <p>
             In order to resolve a complaint regarding the Site or to receive
             further information regarding use of the Site, please contact us at:
-            support@pharmahubmedica.ng
+            contact@pharmahubmedica.ng
           </p>
         </section>
       </div>

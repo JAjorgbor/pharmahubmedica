@@ -48,7 +48,9 @@ const CategoryCard: FC<CategoryCardProps> = ({ category }) => {
           <h5 className="font-semibold text-lg text-primary">
             {category.name}
           </h5>
-          <p className="text-foreground-500">{category.description}</p>
+          <p className="text-foreground-500 line-clamp-2">
+            {category.description}
+          </p>
         </div>
       </CardBody>
     </Card>

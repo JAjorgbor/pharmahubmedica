@@ -79,13 +79,12 @@ const ReferralPartnerAccountDetailsModal = ({
         </div>
       }
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-2">
+      <div className="space-y-6 py-2">
         <DetailItem
           label="Bank Name"
           value={accountDetails?.bankName}
           copyable
         />
-        <DetailItem label="Bank Code" value={accountDetails?.bankCode} />
         <DetailItem
           label="Account Number"
           value={accountDetails?.accountNumber}

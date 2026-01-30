@@ -123,7 +123,9 @@ const OrderSection = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <PrintInvoiceButton order={order} />
+            {order?.paymentStatus == 'paid' && (
+              <PrintInvoiceButton order={order} label="Donwload Receipt" />
+            )}
             <Chip
               color={getStatusColor(order.orderStatus)}
               size="sm"

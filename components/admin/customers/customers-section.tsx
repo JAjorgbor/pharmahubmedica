@@ -1,7 +1,10 @@
 'use client'
-import InputField from '@/components/elements/input-field'
 import { ICustomer } from '@/api-client/admin/interfaces/customer.interfaces'
+import InputField from '@/components/elements/input-field'
+import TableWrapper from '@/components/elements/table-wrapper'
 import useGetCustomers from '@/hooks/requests/admin/useGetCustomers'
+import { referralPartnerProfessions } from '@/library/config'
+import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   BreadcrumbItem,
   Breadcrumbs,
@@ -14,19 +17,15 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Skeleton,
 } from '@heroui/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FiMoreVertical } from 'react-icons/fi'
-import { LuExternalLink, LuPlus, LuPencil, LuTrash } from 'react-icons/lu'
-import { currencyFormatter } from '@/utils/currency-formatter'
-import TableWrapper from '@/components/elements/table-wrapper'
+import { LuLink, LuPencil } from 'react-icons/lu'
 import UpdateCustomerModal from './update-customer-modal'
-import { referralPartnerProfessions } from '@/library/config'
 
 const columnHelper = createColumnHelper<ICustomer>()
 
@@ -195,7 +194,7 @@ const CustomersSection = () => {
             variant="light"
             as={Link}
             href="/admin/referral-partners"
-            endContent={<LuExternalLink />}
+            endContent={<LuLink />}
             size="sm"
           >
             View Referral Partners

@@ -1,10 +1,10 @@
 'use client'
 import { IProduct } from '@/api-client/interfaces/product.interfaces'
+import DeleteProductModal from '@/components/admin/products/delete-product-modal'
 import InputField from '@/components/elements/input-field'
 import TableWrapper from '@/components/elements/table-wrapper'
 import useGetAdminCategories from '@/hooks/requests/admin/useGetAdminCategories'
 import useGetAdminProducts from '@/hooks/requests/admin/useGetAdminProducts'
-import DeleteProductModal from '@/components/admin/products/delete-product-modal'
 import { currencyFormatter } from '@/utils/currency-formatter'
 import {
   BreadcrumbItem,
@@ -25,7 +25,7 @@ import moment from 'moment'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { FiMoreVertical } from 'react-icons/fi'
-import { LuExternalLink, LuPlus } from 'react-icons/lu'
+import { LuLink, LuPlus } from 'react-icons/lu'
 
 const columnHelper = createColumnHelper<IProduct>()
 
@@ -58,7 +58,7 @@ const ProductsSection = () => {
 
             <div className="space-y-1">
               <h3 className="font-bold flex flex-col">{`${item.name}`}</h3>
-              <p className="text-xs text-foreground-600">ID:[Product ID]</p>
+              {/* <p className="text-xs text-foreground-600">ID:[Product ID]</p> */}
             </div>
           </div>
         ),
@@ -77,8 +77,8 @@ const ProductsSection = () => {
           return filterValue == 'all'
             ? true
             : filterValue == 'visible'
-            ? row.original.inStock == true
-            : row.original.inStock == false
+              ? row.original.inStock == true
+              : row.original.inStock == false
         },
         cell: ({ getValue }) => {
           return (
@@ -103,8 +103,8 @@ const ProductsSection = () => {
           return filterValue == 'all'
             ? true
             : filterValue == 'inStock'
-            ? row.original.inStock == true
-            : row.original.inStock == false
+              ? row.original.inStock == true
+              : row.original.inStock == false
         },
         cell: ({ getValue }) => {
           return (
@@ -189,7 +189,7 @@ const ProductsSection = () => {
         ),
       }),
     ],
-    [items]
+    [items],
   )
 
   return (
@@ -229,7 +229,7 @@ const ProductsSection = () => {
               variant="light"
               as={Link}
               href="/admin/collections"
-              endContent={<LuExternalLink />}
+              endContent={<LuLink />}
               size="sm"
             >
               View Collections
@@ -291,19 +291,19 @@ const ProductsSection = () => {
                         options={[
                           {
                             label: `All Visibility (${getVisibilityStatusCount(
-                              'all'
+                              'all',
                             )})`,
                             value: 'all',
                           },
                           {
                             label: `Visible (${getVisibilityStatusCount(
-                              'visible'
+                              'visible',
                             )})`,
                             value: 'visible',
                           },
                           {
                             label: `Hidden (${getVisibilityStatusCount(
-                              'hidden'
+                              'hidden',
                             )})`,
                             value: 'hidden',
                           },
@@ -326,13 +326,13 @@ const ProductsSection = () => {
                           },
                           {
                             label: `In Stock (${getInStockStatusCount(
-                              'inStock'
+                              'inStock',
                             )})`,
                             value: 'inStock',
                           },
                           {
                             label: `Out of Stock (${getInStockStatusCount(
-                              'outOfStock'
+                              'outOfStock',
                             )})`,
                             value: 'outOfStock',
                           },
@@ -356,14 +356,14 @@ const ProductsSection = () => {
                           options={[
                             {
                               label: `All Categories (${getCategoryCount(
-                                'all'
+                                'all',
                               )})`,
                               value: 'all',
                             },
 
                             ...(categories?.map((each) => ({
                               label: `${each.name} (${getCategoryCount(
-                                each.name
+                                each.name,
                               )})`,
                               value: each._id,
                             })) || ([] as any)),
