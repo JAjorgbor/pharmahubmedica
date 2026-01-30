@@ -1,0 +1,180 @@
+'use client'
+import { useScroll } from 'framer-motion'
+import PhoneNumberDisplay from '@/components/scaffold/phone-number-display'
+import MobileMenu from '@/components/scaffold/mobile-menu'
+import {
+  Avatar,
+  Badge,
+  Button,
+  Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Skeleton,
+  Tooltip,
+} from '@heroui/react'
+import Image from 'next/image'
+import {
+  LuChevronDown,
+  LuLayoutDashboard,
+  LuLogOut,
+  LuMenu,
+  LuSettings,
+  LuShoppingCart,
+} from 'react-icons/lu'
+import { useEffect, useState } from 'react'
+import { cn } from '@/utils/cn'
+import Link from 'next/link'
+import { useSidebarStore } from '@/stores/useSidebarStore'
+import LogoutConfirmationModal from '@/components/scaffold/portal-logout-confirmation-modal'
+import useGetPortalUser from '@/hooks/requests/useGetPortalUser'
+
+export const UserPanel = () => {
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
+  const { portalUser, portalUserLoading } = useGetPortalUser()
+
+  return (
+    <>
+      <Dropdown>
+        <DropdownTrigger>
+          <Avatar size="sm" />
+        </DropdownTrigger>
+        <DropdownMenu
+          topContent={
+            portalUserLoading ? (
+              <div className="space-y-1 py-2 bg-foreground-100 rounded-xl p-2 space-x-2">
+                <Skeleton className="h-4 w-2/5 rounded-lg inline-block" />
+                <Skeleton className="h-4 w-1/3 rounded-lg inline-block" />
+                <Skeleton className="h-4 w-5/6 rounded-lg block" />
+              </div>
+            ) : (
+              <div className="py-2 bg-foreground-100 rounded-xl p-2">
+                <Chip
+                  className="text-xs"
+                  classNames={{ base: 'py-0.5 h-5' }}
+                  variant="flat"
+                  color="primary"
+                  size="sm"
+                  radius="lg"
+                >
+                  Portal
+                </Chip>
+                <p className="truncate max-w-44">
+                  {portalUser?.firstName} {portalUser?.lastName}
+                </p>
+                <p className="text-sm text-foreground-500 truncate max-w-44">
+                  {portalUser?.email}
+                </p>
+              </div>
+            )
+          }
+        >
+          <DropdownSection showDivider>
+            <DropdownItem
+              key="name"
+              startContent={<LuLayoutDashboard />}
+              variant="flat"
+              color="primary"
+              as={Link}
+              href="/portal/dashboard"
+            >
+              Dashboard
+            </DropdownItem>
+            <DropdownItem
+              as={Link}
+              href="/portal/settings"
+              key="settings"
+              startContent={<LuSettings />}
+              variant="flat"
+              color="primary"
+            >
+              Settings
+            </DropdownItem>
+          </DropdownSection>
+          <DropdownItem
+            key="logout"
+            color="danger"
+            variant="flat"
+            startContent={<LuLogOut />}
+            onPress={() => setIsLogoutModalOpen(true)}
+          >
+            Log Out
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+
+      <LogoutConfirmationModal
+        isOpen={isLogoutModalOpen}
+        setIsOpen={setIsLogoutModalOpen}
+      />
+    </>
+  )
+}
+
+const PortalHeader = () => {
+  const { scrollY } = useScroll() // reactive MotionValue
+  const [scrollHeight, setScrollHeight] = useState(0)
+  const { setOpenSidebar } = useSidebarStore()
+
+  useEffect(() => {
+    // subscribe to changes
+    return scrollY.on('change', (latest) => {
+      setScrollHeight(latest)
+    })
+  }, [scrollY])
+  return (
+    <>
+      <div className="pt-3" />
+      <Navbar
+        classNames={{
+          base: cn(
+            'w-[calc(100%-40px)] mx-auto rounded-xl top-3 transition-all duration-300 ease-in-out px-5',
+            scrollHeight > 100
+              ? 'md:max-w-4xl shadow-lg'
+              : 'md:max-w-[77.5rem] bg-white shadow',
+          ),
+          wrapper: 'max-w-full px-0',
+        }}
+      >
+        {/* <div className="flex justify-between gap-4 border-b max-w-7xl px-5  mx-auto items-center px-5 py-3"> */}
+        <NavbarContent className="flex gap-3 items-center">
+          <NavbarBrand className="flex gap-4 items-center">
+            <button
+              className="p-1 md:hidden rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer"
+              onClick={() => setOpenSidebar(true)}
+            >
+              <LuMenu size={20} />
+            </button>
+            <h1 className="text-primary text-xl font-semibold">User Portal</h1>
+          </NavbarBrand>
+        </NavbarContent>
+        <NavbarContent className="flex gap-6 items-center" justify="end">
+          <NavbarItem>
+            <PhoneNumberDisplay className="hidden md:flex" />
+          </NavbarItem>
+          <NavbarItem>
+            <Badge content={2} color="danger">
+              <Link
+                href="/cart"
+                className="bg-white rounded-xl p-1.5 hover:text-primary shadow text-foreground-600"
+              >
+                <LuShoppingCart size={18} />
+              </Link>
+            </Badge>
+          </NavbarItem>
+          <NavbarItem>
+            <UserPanel />
+          </NavbarItem>
+        </NavbarContent>
+        {/* </div> */}
+      </Navbar>
+    </>
+  )
+}
+export default PortalHeader
