@@ -49,7 +49,8 @@ const AdminSidebar = () => {
   useEffect(() => {
     setIsHydrated(true)
   }, [])
-  const isActive = (path: string) => pathname.includes(path)
+  const isActive = (path: string) =>
+    pathname.includes(path) || pathname.includes(path.replace(/^\/admin/, ''))
   return (
     isHydrated && (
       <Sidebar

@@ -282,6 +282,7 @@ const TeamSection = () => {
                                   setSelectedMember(member)
                                   addToast({
                                     title: `Resending invite, Please wait...`,
+                                    color: 'default',
                                     promise: handleResendInvite(member._id),
                                   })
                                 }}
