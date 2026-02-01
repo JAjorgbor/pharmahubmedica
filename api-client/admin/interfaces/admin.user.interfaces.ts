@@ -3,7 +3,7 @@ export interface IAdminUser {
   firstName: string
   lastName: string
   email: string
-  status: string
+  status: 'active' | 'inactive' | 'pending'
   role: string
   gender: string
   phoneNumber?: string

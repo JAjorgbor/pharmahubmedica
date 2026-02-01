@@ -31,6 +31,7 @@ import {
   LuUsers,
 } from 'react-icons/lu'
 import { useSidebarStore } from '@/stores/useSidebarStore'
+import { getDomain } from 'tldts'
 
 const AdminSidebar = () => {
   const isMobile = useMediaQuery('md')
@@ -38,6 +39,14 @@ const AdminSidebar = () => {
   const { openSidebar, setOpenSidebar } = useSidebarStore()
   const pathname = usePathname()
   const [isHydrated, setIsHydrated] = useState(false)
+
+  const [rootDomain, setRootDomain] = useState('/')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setRootDomain(getDomain(window.location.hostname))
+    }
+  }, [])
 
   useEffect(() => {
     if (!isMobile && openSidebar) setOpenSidebar(false)
@@ -49,7 +58,8 @@ const AdminSidebar = () => {
   useEffect(() => {
     setIsHydrated(true)
   }, [])
-  const isActive = (path: string) => pathname.includes(path)
+  const isActive = (path: string) =>
+    pathname.includes(path) || pathname.includes(path.replace(/^\/admin/, ''))
   return (
     isHydrated && (
       <Sidebar
@@ -291,7 +301,7 @@ const AdminSidebar = () => {
           <MenuItem
             icon={<LuHouse size={20} />}
             className="text-foreground-600"
-            component={<Link href="/" />}
+            component={<Link href={rootDomain || '/'} />}
           >
             Back to Store
           </MenuItem>

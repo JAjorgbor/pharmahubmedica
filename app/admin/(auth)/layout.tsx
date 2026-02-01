@@ -1,18 +1,27 @@
 'use client'
-import type { FC, ReactNode } from 'react'
+import { Card, CardBody } from '@heroui/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Card, CardBody } from '@heroui/react'
+import { useEffect, useState, type FC, type ReactNode } from 'react'
+import { getDomain } from 'tldts'
 
 interface AuthLayoutProps {
   children: ReactNode
 }
 
 const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
+  const [rootDomain, setRootDomain] = useState('/')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setRootDomain(getDomain(window.location.hostname))
+    }
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center mb-6">
-        <Link href="/">
+        <Link href={rootDomain || '/'}>
           <Image
             src="/png-transparent-logo.png"
             alt="PharmaHub Medica Logo"

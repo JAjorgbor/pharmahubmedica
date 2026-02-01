@@ -1,6 +1,7 @@
 'use client'
 import InputField from '@/components/elements/input-field'
 import {
+  addToast,
   Avatar,
   BreadcrumbItem,
   Breadcrumbs,
@@ -8,6 +9,10 @@ import {
   Card,
   CardBody,
   Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Skeleton,
 } from '@heroui/react'
 import Link from 'next/link'
@@ -19,6 +24,8 @@ import UpdateTeamMemberDrawer from './UpdateTeamMemberDrawer'
 import { IAdminUser } from '@/api-client/admin/interfaces/admin.user.interfaces'
 import useGetAdminUser from '@/hooks/requests/admin/useGetAdminUser'
 import { adminUserRolesPermissions } from '@/library/config'
+import { FiEdit, FiEdit2, FiEdit3, FiMoreVertical } from 'react-icons/fi'
+import { resendTeamMemberInvite } from '@/api-client/admin/requests/admin.team.requests'
 
 const TeamSection = () => {
   const { teamMembers, teamMembersLoading, mutateTeamMembers } =
@@ -33,7 +40,7 @@ const TeamSection = () => {
 
   const { adminUser } = useGetAdminUser()
 
-  const filteredMembers = teamMembers
+  const filteredMembers: IAdminUser[] = teamMembers
     ?.filter((member) => {
       const matchesSearch =
         member.firstName.toLowerCase().includes(search.toLowerCase()) ||
@@ -59,6 +66,27 @@ const TeamSection = () => {
         return 'danger'
       default:
         return 'warning'
+    }
+  }
+
+  const handleResendInvite = async (memberId: string) => {
+    try {
+      await resendTeamMemberInvite(memberId)
+      addToast({
+        title: 'Invite resent successfully',
+        color: 'success',
+        severity: 'success',
+      })
+    } catch (error) {
+      console.log(error)
+      addToast({
+        title:
+          error?.data?.message ||
+          error?.message ||
+          'Something went wrong. Please try again later',
+        color: 'danger',
+        severity: 'danger',
+      })
     }
   }
 
@@ -228,7 +256,7 @@ const TeamSection = () => {
                             )
 
                           return true
-                        })() && (
+                        })() && member.status !== 'pending' ? (
                           <Button
                             isIconOnly
                             size="sm"
@@ -238,8 +266,40 @@ const TeamSection = () => {
                               setIsUpdateOpen(true)
                             }}
                           >
-                            <LuSettings size={15} />
+                            <FiEdit size={15} />
                           </Button>
+                        ) : (
+                          <Dropdown>
+                            <DropdownTrigger>
+                              <Button isIconOnly size="sm" variant="light">
+                                <FiMoreVertical size={15} />
+                              </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu>
+                              <DropdownItem
+                                key="resend"
+                                onPress={() => {
+                                  setSelectedMember(member)
+                                  addToast({
+                                    title: `Resending invite, Please wait...`,
+                                    color: 'default',
+                                    promise: handleResendInvite(member._id),
+                                  })
+                                }}
+                              >
+                                Resend Invite
+                              </DropdownItem>
+                              <DropdownItem
+                                key="update"
+                                onPress={() => {
+                                  setSelectedMember(member)
+                                  setIsUpdateOpen(true)
+                                }}
+                              >
+                                Update
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
                         )}
                       </div>
                     </div>

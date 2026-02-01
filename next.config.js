@@ -1,5 +1,8 @@
 // @ts-check
 
+const enableAdminSubdomain = process.env.ENABLE_ADMIN_SUBDOMAIN === 'true'
+const adminSubdomain = process.env.ADMIN_SUBDOMAIN
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -29,6 +32,22 @@ const nextConfig = {
             value: 'index, follow',
           },
         ],
+      },
+    ]
+  },
+  async redirects() {
+    if (!enableAdminSubdomain) return []
+
+    return [
+      {
+        source: '/admin',
+        destination: String(adminSubdomain),
+        permanent: false,
+      },
+      {
+        source: '/admin/:path*',
+        destination: `${adminSubdomain}/:path*`,
+        permanent: false,
       },
     ]
   },

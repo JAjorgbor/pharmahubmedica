@@ -146,7 +146,7 @@ export default function UpdateTeamMemberDrawer({
             options={[
               { label: 'Active', value: 'active' },
               { label: 'Inactive', value: 'inactive' },
-              { label: 'Pending', value: 'pending' },
+              { label: 'Pending', value: 'pending', disabled: true },
             ]}
             controllerProps={{ name: 'status', control }}
             isRequired
