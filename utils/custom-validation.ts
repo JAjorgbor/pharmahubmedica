@@ -20,7 +20,7 @@ const imageFileSchema = (message?: string, isRequired = true) =>
       )
     : z
         .instanceof(File)
-        .refine((file) => file.size <= 5 * 1024 * 1024, 'Max file size is 5MB')
+        .refine((file) => file.size <= 5 * 1024 * 1024, 'Max file size is 10MB')
         .refine(
           (file) =>
             ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(
