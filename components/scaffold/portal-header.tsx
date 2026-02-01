@@ -161,7 +161,7 @@ const PortalHeader = () => {
           <NavbarItem>
             <PhoneNumberDisplay className="hidden md:flex" />
           </NavbarItem>
-          <NavbarItem className="md:hidden">
+          <NavbarItem>
             <Badge content={items.length || undefined} color="danger">
               <Link
                 href="/cart"
