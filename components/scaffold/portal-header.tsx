@@ -34,6 +34,7 @@ import Link from 'next/link'
 import { useSidebarStore } from '@/stores/useSidebarStore'
 import LogoutConfirmationModal from '@/components/scaffold/portal-logout-confirmation-modal'
 import useGetPortalUser from '@/hooks/requests/useGetPortalUser'
+import useCart from '@/hooks/useCart'
 
 export const UserPanel = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
@@ -122,6 +123,8 @@ const PortalHeader = () => {
   const [scrollHeight, setScrollHeight] = useState(0)
   const { setOpenSidebar } = useSidebarStore()
 
+  const { items } = useCart()
+
   useEffect(() => {
     // subscribe to changes
     return scrollY.on('change', (latest) => {
@@ -158,8 +161,8 @@ const PortalHeader = () => {
           <NavbarItem>
             <PhoneNumberDisplay className="hidden md:flex" />
           </NavbarItem>
-          <NavbarItem>
-            <Badge content={2} color="danger">
+          <NavbarItem className="md:hidden">
+            <Badge content={items.length || undefined} color="danger">
               <Link
                 href="/cart"
                 className="bg-white rounded-xl p-1.5 hover:text-primary shadow text-foreground-600"
