@@ -44,7 +44,7 @@ const AdminSidebar = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setRootDomain(getDomain(window.location.hostname))
+      setRootDomain(`https://${getDomain(window.location.hostname)}`)
     }
   }, [])
 
