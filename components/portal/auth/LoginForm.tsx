@@ -101,8 +101,8 @@ export default function LoginForm() {
             color="primary"
             className="w-full text-base"
             isLoading={isSubmitting || keepLoading}
+            startContent={<LuLogIn className="h-4 w-4" />}
           >
-            <LuLogIn className="mr-2 h-4 w-4" />
             Sign In to Portal
           </Button>
 

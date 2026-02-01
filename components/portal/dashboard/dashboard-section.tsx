@@ -241,11 +241,14 @@ const DashboardSection = () => {
                   size={40}
                 />
                 <p className="mt-2 text-foreground-500">No orders yet</p>
-                <Link href="/collections">
-                  <Button className="mt-4 bg-primary hover:bg-blue-800">
-                    Start Shopping
-                  </Button>
-                </Link>
+                <Button
+                  className="mt-4"
+                  color="primary"
+                  as={Link}
+                  href="/collections"
+                >
+                  Start Shopping
+                </Button>
               </div>
             )}
           </CardBody>
