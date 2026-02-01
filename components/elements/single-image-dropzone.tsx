@@ -42,7 +42,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
     fieldState: controllerFieldState,
     formState: controllerFormState,
   } = useController(
-    controllerProps?.control ? controllerProps : defaultControllerProps
+    controllerProps?.control ? controllerProps : defaultControllerProps,
   )
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
         controllerField.onChange(selectedFile)
       }
     },
-    [controllerField]
+    [controllerField],
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -83,7 +83,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
       if (fileRejections && fileRejections.length > 0) {
         const reason = fileRejections[0]?.errors?.[0]?.code
         if (reason === 'file-too-large') {
-          setLocalError('File is too large. Maximum size is 5mb.')
+          setLocalError('File is too large. Maximum size is 10mb.')
         } else {
           setLocalError('Invalid file. Please provide an image file.')
         }
@@ -125,7 +125,7 @@ export default function SingleImageDropzone<T extends FieldValues>({
             : 'border-foreground-300 hover:border-primary',
           localError || controllerFieldState.error?.message
             ? 'border-danger'
-            : ''
+            : '',
         )}
       >
         <input {...getInputProps()} className="hidden" />
@@ -139,14 +139,14 @@ export default function SingleImageDropzone<T extends FieldValues>({
                 'text-foreground-500 group-hover:text-primary',
                 localError || controllerFieldState.error?.message
                   ? 'text-danger'
-                  : ''
+                  : '',
               )}
             />
             <p className="text-foreground-500 text-xs">
               Drag & drop an image here, or{' '}
               <span className="text-primary">browse</span>
               <br />
-              Max file size of 5mb applies.
+              Max file size of 10mb applies.
             </p>
           </div>
         ) : (

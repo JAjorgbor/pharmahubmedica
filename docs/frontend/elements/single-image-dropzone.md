@@ -4,7 +4,7 @@ A streamlined drag-and-drop component for uploading single image files. It handl
 
 ## Features
 
-- **Validation**: Rejects files > 5MB.
+- **Validation**: Rejects files > 10MB.
 - **Preview**: Shows the selected image immediately.
 - **Reset**: Allows the user to remove the selected image.
 - **Validation Message**: Shows error text if the file is invalid or if the form validation fails.

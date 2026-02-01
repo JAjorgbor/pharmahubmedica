@@ -6,8 +6,8 @@ const imageFileSchema = (message?: string, isRequired = true) =>
         z
           .instanceof(File)
           .refine(
-            (file) => file.size <= 5 * 1024 * 1024,
-            'Max file size is 5MB',
+            (file) => file.size <= 10 * 1024 * 1024,
+            'Max file size is 10MB',
           )
           .refine(
             (file) =>
