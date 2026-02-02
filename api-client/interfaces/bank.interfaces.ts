@@ -1,18 +1,17 @@
 export interface IBank {
-  id: number
+  id?: number
   name: string
+  slug?: string
   code: string
-  slug: string
-  created_at: Date
-  updated_at: Date
-  longcode: string
-  gateway: string
-  pay_with_bank: number
-  active: number
-  country: string
-  currency: string
-  type: string
-  is_deleted: number
+  longcode?: string
+  country?: string
+  currency?: string
+  gateway?: string
+  type?: string
+  active?: boolean
+  is_deleted?: boolean
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface IAccountDetails {
