@@ -3,7 +3,10 @@ import { addReferralPartner } from '@/api-client/admin/requests/referral-partner
 import InputField from '@/components/elements/input-field'
 import ModalWrapper from '@/components/elements/modal-wrapper'
 import useGetCustomersNotReferralPartners from '@/hooks/requests/admin/useGetCustomersNotReferralPartners'
-import { useGetBanks, useVerifyAccountDetails } from '@/hooks/requests/useBank'
+import {
+  useGetBanks,
+  useVerifyAccountDetails,
+} from '@/hooks/requests/admin/useBank'
 import customValidation from '@/utils/custom-validation'
 import { addToast, Button, Skeleton } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -51,11 +54,11 @@ const AddReferralPartnerModal = ({ isOpen, setIsOpen, onSuccess }: IProps) => {
   } = useGetCustomersNotReferralPartners()
 
   const [completeAccountQuery, setCompleteAccountQuery] = useState<{
-    account_number: string | undefined
-    bank_code: string | undefined
+    accountNumber: string | undefined
+    bankCode: string | undefined
   }>({
-    account_number: undefined,
-    bank_code: undefined,
+    accountNumber: undefined,
+    bankCode: undefined,
   })
 
   const customerOptions = useMemo(() => {
@@ -118,10 +121,10 @@ const AddReferralPartnerModal = ({ isOpen, setIsOpen, onSuccess }: IProps) => {
   const watchedBankName = watch('accountDetails.bankName')
   const watchedAccountNumber = watch('accountDetails.accountNumber')
   useEffect(() => {
-    const account_number = watchedAccountNumber
+    const accountNumber = watchedAccountNumber
     const bankCode = watch('accountDetails.bankCode')
-    if (account_number?.length === 10 && bankCode) {
-      setCompleteAccountQuery({ account_number, bank_code: bankCode })
+    if (accountNumber?.length === 10 && bankCode) {
+      setCompleteAccountQuery({ accountNumber, bankCode })
       setValue(
         'accountDetails.accountName',
         verifiedAccountDetails?.account_name,
@@ -229,6 +232,7 @@ const AddReferralPartnerModal = ({ isOpen, setIsOpen, onSuccess }: IProps) => {
             className="md:col-span-2"
             placeholder="0000000000"
             controllerProps={{ control, name: 'accountDetails.accountNumber' }}
+            maxLength={10}
           />
           <InputField
             type="text"

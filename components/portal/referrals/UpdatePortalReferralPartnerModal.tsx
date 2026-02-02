@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { IReferralPartner } from '@/api-client/interfaces/referral-partner.interfaces'
 import customValidation from '@/utils/custom-validation'
-import { useGetBanks, useVerifyAccountDetails } from '@/hooks/requests/useBank'
+import { useGetBanks, useVerifyAccountDetails } from '@/hooks/requests/portal/useBank'
 
 interface IProps {
   isOpen: boolean
@@ -61,11 +61,11 @@ const UpdatePortalReferralPartnerModal = ({
   })
 
   const [completeAccountQuery, setCompleteAccountQuery] = useState<{
-    account_number: string | undefined
-    bank_code: string | undefined
+    accountNumber: string | undefined
+    bankCode: string | undefined
   }>({
-    account_number: undefined,
-    bank_code: undefined,
+    accountNumber: undefined,
+    bankCode: undefined,
   })
 
   useEffect(() => {
@@ -119,10 +119,10 @@ const UpdatePortalReferralPartnerModal = ({
   const watchedAccountNumber = watch('accountDetails.accountNumber')
 
   useEffect(() => {
-    const account_number = watchedAccountNumber
+    const accountNumber = watchedAccountNumber
     const bankCode = watch('accountDetails.bankCode')
-    if (account_number?.length === 10 && bankCode) {
-      setCompleteAccountQuery({ account_number, bank_code: bankCode })
+    if (accountNumber?.length === 10 && bankCode) {
+      setCompleteAccountQuery({ accountNumber, bankCode })
     } else if (
       !accountDetailsRevalidating &&
       watchedAccountNumber?.length < 10
@@ -251,6 +251,7 @@ const UpdatePortalReferralPartnerModal = ({
           className="md:col-span-2"
           placeholder="0000000000"
           controllerProps={{ control, name: 'accountDetails.accountNumber' }}
+          maxLength={10}
         />
         <InputField
           type="text"
