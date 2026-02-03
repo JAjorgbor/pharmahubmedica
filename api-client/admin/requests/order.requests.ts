@@ -36,6 +36,13 @@ export const adminOrderRequests = {
       url: `/admin/orders/${orderId}/products`,
       data: { products },
     }),
+
+  createOrder: (data: any) =>
+    adminRequestAdapter({
+      method: 'POST',
+      url: '/admin/orders',
+      data,
+    }),
 }
 
 export default adminOrderRequests

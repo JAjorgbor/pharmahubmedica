@@ -307,14 +307,14 @@ const OrdersSection = () => {
             </Breadcrumbs>
           </div>
 
-          {/* <Button
+          <Button
             color="primary"
             startContent={<LuPlus size={15} />}
             as={Link}
             href="/admin/orders/create" // Changed from add to create to match common pattern if needed
           >
             Create Order
-          </Button> */}
+          </Button>
         </div>
         <p className="text-foreground-500">Manage and track customer orders.</p>
 
