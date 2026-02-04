@@ -1,8 +1,10 @@
 import Providers from '@/app/providers'
+import ReferralCodeSaver from '@/app/referral-code-saver'
 import logo from '@/public/logo.png'
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
 import { Lato } from 'next/font/google'
+import { Suspense } from 'react'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -62,6 +64,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={lato.className}>
+        <Suspense>
+          <ReferralCodeSaver />
+        </Suspense>
         <Providers>{children}</Providers>
       </body>
     </html>
