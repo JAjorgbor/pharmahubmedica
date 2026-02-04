@@ -6,7 +6,7 @@ import { addToast, Button, Card, CardBody, Input } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Cookies from 'js-cookie'
@@ -56,7 +56,7 @@ export default function CreateAccountForm() {
       const { data: res } = await createAccount(data)
       Cookies.set('portalAccessToken', res.accessToken)
       Cookies.set('portalUserId', res.user._id, { expires: 60 })
-      console.log(res)
+      localStorage.removeItem('referralCode')
 
       router.push(callbackUrl)
       setKeepLoading(true)
@@ -71,6 +71,13 @@ export default function CreateAccountForm() {
       })
     }
   }
+
+  useEffect(() => {
+    const referralCode = localStorage.getItem('referralCode')
+    if (referralCode) {
+      setValue('referralCode', referralCode)
+    }
+  }, [])
 
   return (
     <Card className="max-w-md mx-auto">
