@@ -18,6 +18,15 @@ export default function middleware(request: NextRequest) {
   const url = request.nextUrl.clone()
   const originalPathname = url.pathname
 
+  // Skip real static assets in /public (prevents breaking images, fonts, etc.)
+  if (
+    originalPathname.match(
+      /\.(png|jpg|jpeg|gif|webp|svg|ico|css|js|map|txt|xml|woff2?|ttf|eot)$/i,
+    )
+  ) {
+    return NextResponse.next()
+  }
+
   // 0) Canonicalize: admin subdomain should NOT show /admin prefix in the URL
   // admin.example.com/admin/dashboard -> admin.example.com/dashboard
   if (
@@ -122,5 +131,5 @@ export default function middleware(request: NextRequest) {
 
 export const config = {
   // matcher: ['/((?!api|_next/static|_next/image|.*\\.[^/]+$).*)'],
-  matcher: ['/admin/:path*', '/portal/:path*'],
+  matcher: ['/((?!api|_next/static|_next/image).*)'],
 }
