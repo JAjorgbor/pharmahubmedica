@@ -56,10 +56,8 @@ export const viewport = {
 
 export default function RootLayout({
   children,
-  searchParams,
 }: {
   children: React.ReactNode
-  searchParams: any
 }) {
   return (
     <html lang="en">
