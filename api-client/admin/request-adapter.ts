@@ -23,6 +23,7 @@ const clearAllCookies = () => {
       domain: getCookieDomain(),
     }),
   )
+  Object.keys(Cookies.get()).forEach((k) => Cookies.remove(k))
 }
 
 const redirectToAdminLogin = () => {
