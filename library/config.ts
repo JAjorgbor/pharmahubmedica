@@ -94,6 +94,9 @@ export const referralPartnerProfessions = {
   other: '',
 } as const
 
+export type AdminUserPermissions =
+  (typeof adminUserRolesPermissions)[keyof typeof adminUserRolesPermissions][number]
+
 export const normalizedReferralPartnerProfessions = Object.keys(
   referralPartnerProfessions,
 )

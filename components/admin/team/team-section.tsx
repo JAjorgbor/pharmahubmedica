@@ -26,6 +26,7 @@ import useGetAdminUser from '@/hooks/requests/admin/useGetAdminUser'
 import { adminUserRolesPermissions } from '@/library/config'
 import { FiEdit, FiEdit2, FiEdit3, FiMoreVertical } from 'react-icons/fi'
 import { resendTeamMemberInvite } from '@/api-client/admin/requests/admin.team.requests'
+import hasRequiredRights from '@/library/hasRequiredRights'
 
 const TeamSection = () => {
   const { teamMembers, teamMembersLoading, mutateTeamMembers } =
@@ -240,10 +241,10 @@ const TeamSection = () => {
                           const currentUserRole = adminUser?.role
                           if (!currentUserRole) return false
 
-                          const hasBasePermission =
-                            adminUserRolesPermissions[
-                              currentUserRole
-                            ]?.includes('updateAdminUser')
+                          const hasBasePermission = hasRequiredRights(
+                            currentUserRole,
+                            ['updateAdminUser'],
+                          )
                           if (!hasBasePermission) return false
 
                           if (currentUserRole === 'devOps') return true
@@ -256,51 +257,53 @@ const TeamSection = () => {
                             )
 
                           return true
-                        })() && member.status !== 'pending' ? (
-                          <Button
-                            isIconOnly
-                            size="sm"
-                            variant="light"
-                            onPress={() => {
-                              setSelectedMember(member)
-                              setIsUpdateOpen(true)
-                            }}
-                          >
-                            <FiEdit size={15} />
-                          </Button>
-                        ) : (
-                          <Dropdown>
-                            <DropdownTrigger>
-                              <Button isIconOnly size="sm" variant="light">
-                                <FiMoreVertical size={15} />
-                              </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu>
-                              <DropdownItem
-                                key="resend"
-                                onPress={() => {
-                                  setSelectedMember(member)
-                                  addToast({
-                                    title: `Resending invite, Please wait...`,
-                                    color: 'default',
-                                    promise: handleResendInvite(member._id),
-                                  })
-                                }}
-                              >
-                                Resend Invite
-                              </DropdownItem>
-                              <DropdownItem
-                                key="update"
-                                onPress={() => {
-                                  setSelectedMember(member)
-                                  setIsUpdateOpen(true)
-                                }}
-                              >
-                                Update
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </Dropdown>
-                        )}
+                        })() ? (
+                          member.status !== 'pending' ? (
+                            <Button
+                              isIconOnly
+                              size="sm"
+                              variant="light"
+                              onPress={() => {
+                                setSelectedMember(member)
+                                setIsUpdateOpen(true)
+                              }}
+                            >
+                              <FiEdit size={15} />
+                            </Button>
+                          ) : (
+                            <Dropdown>
+                              <DropdownTrigger>
+                                <Button isIconOnly size="sm" variant="light">
+                                  <FiMoreVertical size={15} />
+                                </Button>
+                              </DropdownTrigger>
+                              <DropdownMenu>
+                                <DropdownItem
+                                  key="resend"
+                                  onPress={() => {
+                                    setSelectedMember(member)
+                                    addToast({
+                                      title: `Resending invite, Please wait...`,
+                                      color: 'default',
+                                      promise: handleResendInvite(member._id),
+                                    })
+                                  }}
+                                >
+                                  Resend Invite
+                                </DropdownItem>
+                                <DropdownItem
+                                  key="update"
+                                  onPress={() => {
+                                    setSelectedMember(member)
+                                    setIsUpdateOpen(true)
+                                  }}
+                                >
+                                  Update
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </Dropdown>
+                          )
+                        ) : null}
                       </div>
                     </div>
                   </div>
