@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import InputField from '@/components/elements/input-field'
 import { setNewPassword } from '@/api-client/admin/requests/auth.requests'
 import { useState } from 'react'
+import getCookieDomain from '@/utils/get-cookie-domain'
 
 const resetPasswordSchema = z
   .object({
@@ -57,8 +58,16 @@ export default function ResetPasswordForm() {
       setkeepLoading(true)
 
       // Save auth details
-      Cookies.set('adminAccessToken', res.accessToken, { expires: 60 })
-      Cookies.set('adminUserId', res.user._id, { expires: 60 })
+      Cookies.set('adminAccessToken', res.accessToken, {
+        expires: 60,
+        path: '/',
+        domain: getCookieDomain(),
+      })
+      Cookies.set('adminUserId', res.user._id, {
+        expires: 60,
+        path: '/',
+        domain: getCookieDomain(),
+      })
 
       addToast({
         title: 'Password reset successfully!',

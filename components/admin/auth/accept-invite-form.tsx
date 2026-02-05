@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import InputField from '@/components/elements/input-field'
 import { acceptInvite } from '@/api-client/admin/requests/admin.team.requests'
 import { useState } from 'react'
+import getCookieDomain from '@/utils/get-cookie-domain'
 
 const acceptInviteSchema = z
   .object({
@@ -49,8 +50,16 @@ export default function AcceptInviteForm() {
         password: data.password,
       })
 
-      Cookies.set('adminAccessToken', res.accessToken, { expires: 60 })
-      Cookies.set('adminUserId', res.user._id, { expires: 60 })
+      Cookies.set('adminAccessToken', res.accessToken, {
+        expires: 60,
+        path: '/',
+        domain: getCookieDomain(),
+      })
+      Cookies.set('adminUserId', res.user._id, {
+        expires: 60,
+        path: '/',
+        domain: getCookieDomain(),
+      })
 
       addToast({
         title: 'Invite accepted successfully! Welcome aboard.',

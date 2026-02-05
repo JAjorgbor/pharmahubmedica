@@ -35,10 +35,12 @@ export default function LogoutConfirmationModal({
         path: '/',
         domain: getCookieDomain(),
       })
+      Cookies.remove('adminAccessToken')
       Cookies.remove('adminUserId', {
         path: '/',
         domain: getCookieDomain(),
       })
+      Cookies.remove('adminUserId')
 
       // Redirect to admin login
       window.location.href = '/admin'
