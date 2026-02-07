@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Portal Reset Password | PharmaHub Medica',
+  title: 'Forgot Password',
   description: 'Reset your password for the PharmaHub Medica portal',
 }
 

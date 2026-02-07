@@ -1,6 +1,6 @@
 import AddProductSection from '@/components/admin/products/add-product-section'
 
-export const metadata = { title: 'Products' }
+export const metadata = { title: 'Add Product' }
 
 export default function AddProductPage() {
   return (

@@ -2,7 +2,7 @@ import DeliveryMethodsSection from '@/components/admin/delivery-methods/delivery
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Delivery Methods | PharmaHub Medica Admin',
+  title: 'Delivery Methods',
   description: 'Manage delivery methods and shipping fees',
 }
 

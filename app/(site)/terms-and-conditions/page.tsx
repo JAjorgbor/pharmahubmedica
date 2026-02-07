@@ -1,6 +1,8 @@
 import { FC } from 'react'
 import Link from 'next/link'
 
+export const metadata = { title: 'Terms and Conditions' }
+
 const TermsAndConditionsPage: FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 md:py-20">
