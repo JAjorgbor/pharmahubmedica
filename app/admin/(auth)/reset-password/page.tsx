@@ -3,7 +3,7 @@ import ResetPasswordForm from '@/components/admin/auth/reset-password-form'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Reset Password | PharmaHub Medica',
+  title: 'Reset Password',
   description: 'Set a new password for your admin account',
 }
 

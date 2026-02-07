@@ -3,7 +3,7 @@ import LoginForm from '@/components/admin/auth/login-form'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Admin Login | PharmaHub Medica',
+  title: 'Admin Login',
   description: 'Login to the PharmaHub Medica admin dashboard',
 }
 

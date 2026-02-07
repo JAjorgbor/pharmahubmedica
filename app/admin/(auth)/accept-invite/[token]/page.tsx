@@ -3,7 +3,7 @@ import AcceptInviteForm from '@/components/admin/auth/accept-invite-form'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Accept Team Invitation | PharmaHub Medica',
+  title: 'Accept Team Invitation',
   description: 'Join the PharmaHub Medica team',
 }
 

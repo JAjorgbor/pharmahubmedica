@@ -3,7 +3,7 @@ import VerifyOtpForm from '@/components/admin/auth/verify-otp-form'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Verify OTP | PharmaHub Medica',
+  title: 'Verify OTP',
   description: 'Verify your identity with OTP',
 }
 
