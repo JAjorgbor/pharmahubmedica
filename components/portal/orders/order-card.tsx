@@ -152,6 +152,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
             <Button
               variant="ghost"
               size="sm"
+              as="a"
               href={`https://wa.me/${toWhatsAppNumber(app?.whatsAppNumber, 'NG')}?text=Hello, I have a question about my order ${order.orderNumber}`}
               target="_blank"
             >
