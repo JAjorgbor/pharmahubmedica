@@ -56,6 +56,7 @@ export default function middleware(request: NextRequest) {
   const whiteListedAdminRoutes = [
     '/admin/reset-password',
     '/admin/forgot-password',
+    '/admin/accept-invite',
   ]
 
   // ---------- PORTAL (unchanged; stays on main domain /portal/*) ----------
