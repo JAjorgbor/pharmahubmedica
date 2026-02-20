@@ -4,6 +4,8 @@ import { Suspense } from 'react'
 
 export const metadata = { title: 'Contact Us' }
 
+export const dynamic = 'force-dynamic'
+
 export default async function ContactPage() {
   return (
     <Suspense fallback={<ContactSkeleton />}>
