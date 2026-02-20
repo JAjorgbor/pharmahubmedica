@@ -18,7 +18,7 @@ const ContactSection: FC<ContactSectionProps> = ({ app }) => {
 
   return (
     <>
-      <div className="space-y-8">
+      <div className="space-y-8 py-10">
         <div className="max-w-xl p-5 pb-0 text-center mx-auto">
           <h2 className="text-primary font-bold text-4xl">Contact Us</h2>
           <p>
