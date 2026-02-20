@@ -22,7 +22,11 @@ const clearAllCookies = () => {
 const redirectToPortalLogin = () => {
   if (typeof window === 'undefined') return
   const path = window.location.pathname
-  if (['/portal', '/portal/reset-password'].includes(path)) return
+  if (
+    ['/portal', '/portal/reset-password'].includes(path) ||
+    !path.startsWith('/portal')
+  )
+    return
   window.location.replace(`/portal?callback=${encodeURIComponent(path)}`)
 }
 
@@ -67,7 +71,7 @@ axiosInstance.interceptors.response.use(
       redirectToPortalLogin()
       return Promise.reject(error.response)
     }
-  }
+  },
 )
 
 export default axiosInstance
